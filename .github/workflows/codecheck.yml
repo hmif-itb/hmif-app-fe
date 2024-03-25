@@ -1,7 +1,10 @@
 name: codecheck
 
 on:
-  push:
+  pull_request:
+    branches:
+      - develop
+    types: [opened, synchronize]
 
 jobs:
   code-check:
