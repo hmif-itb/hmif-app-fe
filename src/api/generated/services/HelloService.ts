@@ -13,10 +13,8 @@ export class HelloService {
    */
   public getUser({
     id,
-    test,
   }: {
     id: string,
-    test?: string,
   }): CancelablePromise<User> {
     return this.httpRequest.request({
       method: 'GET',
@@ -24,8 +22,8 @@ export class HelloService {
       path: {
         'id': id,
       },
-      query: {
-        'test': test,
+      errors: {
+        400: `Bad request: validation error`,
       },
     });
   }
