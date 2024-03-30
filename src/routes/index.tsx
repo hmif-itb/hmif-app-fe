@@ -1,4 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
+import { setupNotification } from '~/lib/push';
 
 export const Route = createFileRoute('/')({
   component: Index,
@@ -6,8 +7,11 @@ export const Route = createFileRoute('/')({
 
 function Index() {
   return (
-    <div className="p-2 text-2xl font-bold">
-      <h3>Welcome Home!</h3>
+    <div className="">
+      <h3 className="p-2 text-2xl font-bold">Welcome Home!</h3>
+      <button onClick={setupNotification} className="bg-blue-400 rounded p-2">
+        Subscribe to push notif
+      </button>
     </div>
   );
 }
