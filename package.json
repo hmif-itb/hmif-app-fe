@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "api": "openapi --input http://127.0.0.1:5000/doc --output src/api/generated --indent 2 --useUnionTypes --useOptions --name ApiClient",
-    "api-staging": "openapi --input https://api-staging.hmif.cloud/doc --output src/api/generated --indent 2 --useUnionTypes --useOptions --name ApiClient",
+    "api-staging": "openapi --input https://api.app-staging.hmif.dev/doc --output src/api/generated --indent 2 --useUnionTypes --useOptions --name ApiClient",
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx",
