@@ -1,12 +1,8 @@
 {
   "rewrites": [
     {
-      "rewrites": [
-        {
-          "source": "/sparta/:path*",
-          "destination": "https://sparta.hmif.dev/:path*"
-        }
-      ]
+      "source": "/sparta/:path*",
+      "destination": "https://sparta.hmif.dev/:path*"
     },
     {
       "source": "/(.*)",
