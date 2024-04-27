@@ -5,30 +5,33 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '~/lib/utils';
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
+  'inline-flex size-fit items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {
       variant: {
-        default: 'bg-primary text-primary-foreground hover:bg-primary/90',
-        destructive:
-          'bg-destructive text-destructive-foreground hover:bg-destructive/90',
-        outline:
-          'border border-input bg-background hover:bg-accent hover:text-accent-foreground',
-        secondary:
-          'bg-secondary text-secondary-foreground hover:bg-secondary/80',
-        ghost: 'hover:bg-accent hover:text-accent-foreground',
-        link: 'text-primary underline-offset-4 hover:underline',
+        solid: 'rounded-full bg-neutral-black text-neutral-light',
+        outlined:
+          'rounded-full border border-solid border-neutral-darker text-neutral-black',
+        link: 'text-neutral-black',
       },
       size: {
-        default: 'h-10 px-4 py-2',
-        sm: 'h-9 rounded-md px-3',
-        lg: 'h-11 rounded-md px-8',
-        icon: 'size-10',
+        sm: 'px-4 py-2 text-sm',
+        md: 'px-6 py-3 text-base',
+        lg: 'gap-2 px-7 py-4 text-lg',
+        'icon-l-sm': 'gap-1 py-2 pl-3 pr-4 text-sm',
+        'icon-l-md': 'gap-[6px] py-3 pl-5 pr-6 text-base',
+        'icon-l-lg': 'gap-2 py-4 pl-6 pr-7 text-lg',
+        'icon-r-sm': 'gap-1 py-2 pl-4 pr-3 text-sm',
+        'icon-r-md': 'gap-[6px] py-3 pl-6 pr-5 text-base',
+        'icon-r-lg': 'gap-2 py-3 pl-7 pr-6 text-lg',
+        'icon-c-sm': 'p-2 text-sm',
+        'icon-c-md': 'p-3 text-base',
+        'icon-c-lg': 'p-4 text-lg',
       },
     },
     defaultVariants: {
-      variant: 'default',
-      size: 'default',
+      variant: 'solid',
+      size: 'md',
     },
   },
 );
