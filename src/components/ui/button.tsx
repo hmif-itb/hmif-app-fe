@@ -15,18 +15,12 @@ const buttonVariants = cva(
         link: 'text-neutral-black',
       },
       size: {
-        sm: 'px-4 py-2 text-sm',
-        md: 'px-6 py-3 text-base',
-        lg: 'gap-2 px-7 py-4 text-lg',
-        'icon-l-sm': 'gap-1 py-2 pl-3 pr-4 text-sm',
-        'icon-l-md': 'gap-[6px] py-3 pl-5 pr-6 text-base',
-        'icon-l-lg': 'gap-2 py-4 pl-6 pr-7 text-lg',
-        'icon-r-sm': 'gap-1 py-2 pl-4 pr-3 text-sm',
-        'icon-r-md': 'gap-[6px] py-3 pl-6 pr-5 text-base',
-        'icon-r-lg': 'gap-2 py-3 pl-7 pr-6 text-lg',
-        'icon-c-sm': 'p-2 text-sm',
-        'icon-c-md': 'p-3 text-base',
-        'icon-c-lg': 'p-4 text-lg',
+        sm: 'gap-[6px] px-4 py-2 text-sm',
+        md: 'gap-2 px-6 py-3 text-base',
+        lg: 'gap-[10px] px-7 py-4 text-lg',
+        'icon-sm': 'p-2 text-sm',
+        'icon-md': 'p-3 text-base',
+        'icon-lg': 'p-4 text-lg',
       },
     },
     defaultVariants: {
@@ -42,6 +36,12 @@ export interface ButtonProps
   asChild?: boolean;
 }
 
+/**
+ * A button component used to trigger an action or event
+ * @component
+ * @param variant - "solid", "outlined", or "link"
+ * @param size - "sm", "md", "lg", "icon-sm", "icon-md", "icon-lg"
+ */
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : 'button';
