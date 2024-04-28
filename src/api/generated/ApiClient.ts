@@ -5,11 +5,17 @@
 import type { BaseHttpRequest } from './core/BaseHttpRequest';
 import type { OpenAPIConfig } from './core/OpenAPI';
 import { FetchHttpRequest } from './core/FetchHttpRequest';
-import { HelloService } from './services/HelloService';
+import { AuthService } from './services/AuthService';
+import { InfoService } from './services/InfoService';
+import { MediaService } from './services/MediaService';
+import { OpenGraphService } from './services/OpenGraphService';
 import { PushService } from './services/PushService';
 type HttpRequestConstructor = new (config: OpenAPIConfig) => BaseHttpRequest;
 export class ApiClient {
-  public readonly hello: HelloService;
+  public readonly auth: AuthService;
+  public readonly info: InfoService;
+  public readonly media: MediaService;
+  public readonly openGraph: OpenGraphService;
   public readonly push: PushService;
   public readonly request: BaseHttpRequest;
   constructor(config?: Partial<OpenAPIConfig>, HttpRequest: HttpRequestConstructor = FetchHttpRequest) {
@@ -24,7 +30,10 @@ export class ApiClient {
       HEADERS: config?.HEADERS,
       ENCODE_PATH: config?.ENCODE_PATH,
     });
-    this.hello = new HelloService(this.request);
+    this.auth = new AuthService(this.request);
+    this.info = new InfoService(this.request);
+    this.media = new MediaService(this.request);
+    this.openGraph = new OpenGraphService(this.request);
     this.push = new PushService(this.request);
   }
 }

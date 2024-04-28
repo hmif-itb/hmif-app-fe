@@ -2,26 +2,29 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { User } from '../models/User';
+import type { PresignedURL } from '../models/PresignedURL';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import type { BaseHttpRequest } from '../core/BaseHttpRequest';
-export class HelloService {
+export class MediaService {
   constructor(public readonly httpRequest: BaseHttpRequest) {}
   /**
-   * @returns User Retrieve the user
+   * Creates presigned URL for file upload to S3
+   * @returns PresignedURL Returns created presigned URL
    * @throws ApiError
    */
-  public getUser({
-    id,
+  public createPresignedUrl({
+    requestBody,
   }: {
-    id: string,
-  }): CancelablePromise<User> {
+    requestBody: {
+      fileName: string;
+      fileType: string;
+    },
+  }): CancelablePromise<PresignedURL> {
     return this.httpRequest.request({
-      method: 'GET',
-      url: '/api/users/{id}',
-      path: {
-        'id': id,
-      },
+      method: 'POST',
+      url: '/api/media/upload',
+      body: requestBody,
+      mediaType: 'application/json',
       errors: {
         400: `Bad request: validation error`,
       },
