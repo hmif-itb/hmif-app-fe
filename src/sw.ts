@@ -31,3 +31,29 @@ self.addEventListener('push', (e) => {
     console.error(err);
   }
 });
+
+self.addEventListener('fetch', (event) => {
+  const url = new URL(event.request.url);
+  if (
+    event.request.method !== 'POST' ||
+    url.pathname !== '/share-file-handler'
+  ) {
+    return;
+  }
+
+  event.respondWith(
+    (async () => {
+      // Get the data from the submitted form.
+      const formData = await event.request.formData();
+
+      // Get the submitted files.
+      const imageFiles = formData.get('images');
+
+      // Send the files to the frontend app.
+      postMessage({ type: 'imageData', data: imageFiles });
+
+      // TODO: Redirect the user to a URL that shows the imported files.
+      return Response.redirect('/display-new-files', 303);
+    })(),
+  );
+});

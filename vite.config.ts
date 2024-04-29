@@ -49,6 +49,22 @@ export default defineConfig({
         theme_color: '#FFFFFF',
         background_color: '#ffffff',
         display: 'standalone',
+        share_target: {
+          action: '/share-file-handler',
+          method: 'POST',
+          enctype: 'multipart/form-data',
+          params: {
+            title: 'title',
+            text: 'text',
+            url: 'url',
+            files: [
+              {
+                name: 'images',
+                accept: ['image/jpg'],
+              },
+            ],
+          },
+        },
       },
       workbox: {
         runtimeCaching: [
