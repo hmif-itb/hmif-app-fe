@@ -10,9 +10,15 @@ export { CancelablePromise, CancelError } from './core/CancelablePromise';
 export { OpenAPI } from './core/OpenAPI';
 export type { OpenAPIConfig } from './core/OpenAPI';
 
+export type { Error } from './models/Error';
+export type { Info } from './models/Info';
+export type { OgObject } from './models/OgObject';
+export type { PresignedURL } from './models/PresignedURL';
 export type { PushSubscription } from './models/PushSubscription';
-export type { User } from './models/User';
 export type { ValidationError } from './models/ValidationError';
 
-export { HelloService } from './services/HelloService';
+export { AuthService } from './services/AuthService';
+export { InfoService } from './services/InfoService';
+export { MediaService } from './services/MediaService';
+export { OpenGraphService } from './services/OpenGraphService';
 export { PushService } from './services/PushService';
