@@ -24,6 +24,12 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': 'warn',
     'tailwindcss/classnames-order': 'off',
     'react-refresh/only-export-components': 'off',
+    'prettier/prettier': [
+      'error',
+      {
+        endOfLine: 'auto',
+      },
+    ],
   },
   parserOptions: {
     ecmaVersion: 'latest',
