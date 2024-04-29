@@ -3,9 +3,9 @@ import * as React from 'react';
 
 import { cn } from '~/lib/utils';
 
-import SearchIcon from '~/assets/icons/textfield/search.svg';
 import AlertIcon from '~/assets/icons/textfield/alert.svg';
 import CheckIcon from '~/assets/icons/textfield/check.svg';
+import SearchIcon from '~/assets/icons/textfield/search.svg';
 import WarningIcon from '~/assets/icons/textfield/warning.svg';
 
 const textFieldVariants = cva(
@@ -36,6 +36,8 @@ export interface TextFieldProps
     VariantProps<typeof textFieldVariants> {
   error?: string;
   success?: boolean;
+  inputClassName?: string;
+  inputContainerClassName?: string;
 }
 
 /**
@@ -49,16 +51,33 @@ export interface TextFieldProps
  */
 const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
   (
-    { className, variant, fieldSize, type, children, success, error, ...props },
+    {
+      className,
+      variant,
+      fieldSize,
+      type,
+      children,
+      success,
+      error,
+      inputClassName,
+      inputContainerClassName,
+      ...props
+    },
     ref,
   ) => {
     return (
       <div className={cn('flex flex-col gap-2 font-inter', className)}>
-        <div className={cn(props.disabled && '!border-[#E2E8F0]', 'relative')}>
+        <div
+          className={cn(
+            props.disabled && '!border-[#E2E8F0]',
+            'relative',
+            inputContainerClassName,
+          )}
+        >
           {variant === 'search' && (
             <img
               src={SearchIcon}
-              className="absolute left-4 top-1/2 size-4 -translate-y-1/2"
+              className="absolute left-4 top-1/2 size-4 -translate-y-1/2 pointer-events-none"
             />
           )}
           <input
@@ -71,11 +90,12 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                   ? 'pr-16'
                   : 'pr-9'
                 : '',
+              inputClassName,
             )}
             ref={ref}
             {...props}
           />
-          <div className="absolute right-3 top-1/2 flex -translate-y-1/2 items-center gap-2">
+          <div className="absolute right-3 top-1/2 flex -translate-y-1/2 items-center gap-2 pointer-events-none">
             {(props.disabled || error || success) && (
               <img
                 src={
