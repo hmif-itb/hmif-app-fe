@@ -1,4 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
+import { TextField } from '~/components/ui/textfield';
 import { setupNotification } from '~/lib/push';
 
 export const Route = createFileRoute('/')({
@@ -16,6 +17,10 @@ function Index() {
         <a className="rounded bg-blue-400 p-2" href="/sparta">
           SPARTA
         </a>
+        <TextField />
+        <TextField error={'Required'} />
+        <TextField variant={'search'} />
+        <TextField variant={'default'} success />
       </div>
     </div>
   );
