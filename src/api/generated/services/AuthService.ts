@@ -2,6 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { User } from '../models/User';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import type { BaseHttpRequest } from '../core/BaseHttpRequest';
 export class AuthService {
@@ -10,7 +11,7 @@ export class AuthService {
    * @returns void
    * @throws ApiError
    */
-  public loginRoute(): CancelablePromise<void> {
+  public loginWeb(): CancelablePromise<void> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/api/login',
@@ -20,25 +21,37 @@ export class AuthService {
     });
   }
   /**
-   * @returns any Login succesful
+   * Login with access token
+   * @returns User Login succesful
    * @throws ApiError
    */
-  public loginRoute1({
+  public loginAccessToken({
+    requestBody,
+  }: {
+    requestBody?: {
+      accessToken: string;
+    },
+  }): CancelablePromise<User> {
+    return this.httpRequest.request({
+      method: 'POST',
+      url: '/api/auth/login/accesstoken',
+      body: requestBody,
+      mediaType: 'application/json',
+      errors: {
+        400: `Bad request: validation error`,
+        401: `Bad request: authorization (not logged in) error`,
+      },
+    });
+  }
+  /**
+   * @returns User Login succesful
+   * @throws ApiError
+   */
+  public loginCallback({
     code,
   }: {
     code: string,
-  }): CancelablePromise<{
-    id: string;
-    nim: string;
-    email: string;
-    full_name: string | null;
-    jurusan: string | null;
-    asal_kampus: string | null;
-    angkatan: number | null;
-    jenis_kelamin: string | null;
-    status_keanggotaan: string | null;
-    picture: string;
-  }> {
+  }): CancelablePromise<User> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/api/auth/google/callback',
@@ -56,7 +69,7 @@ export class AuthService {
    * @returns any Logout successful
    * @throws ApiError
    */
-  public logoutRoute(): CancelablePromise<any> {
+  public logout(): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'POST',
       url: '/api/logout',
@@ -67,21 +80,10 @@ export class AuthService {
     });
   }
   /**
-   * @returns any Login succesful
+   * @returns User Login succesful
    * @throws ApiError
    */
-  public selfRoute(): CancelablePromise<{
-    id: string;
-    nim: string;
-    email: string;
-    full_name: string | null;
-    jurusan: string | null;
-    asal_kampus: string | null;
-    angkatan: number | null;
-    jenis_kelamin: string | null;
-    status_keanggotaan: string | null;
-    picture: string;
-  }> {
+  public getMe(): CancelablePromise<User> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/api/me',

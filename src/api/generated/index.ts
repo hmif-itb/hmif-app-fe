@@ -11,9 +11,11 @@ export { OpenAPI } from './core/OpenAPI';
 export type { OpenAPIConfig } from './core/OpenAPI';
 
 export type { Error } from './models/Error';
+export type { Info } from './models/Info';
 export type { OgObject } from './models/OgObject';
 export type { PresignedURL } from './models/PresignedURL';
 export type { PushSubscription } from './models/PushSubscription';
+export type { User } from './models/User';
 export type { ValidationError } from './models/ValidationError';
 
 export { AuthService } from './services/AuthService';
