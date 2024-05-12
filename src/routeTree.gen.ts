@@ -16,6 +16,7 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as AboutImport } from './routes/about'
 import { Route as NavbarImport } from './routes/_navbar'
 import { Route as IndexImport } from './routes/index'
+import { Route as InfoDetailIndexImport } from './routes/info-detail/index'
 
 // Create Virtual Routes
 
@@ -38,6 +39,11 @@ const NavbarRoute = NavbarImport.update({
 
 const IndexRoute = IndexImport.update({
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const InfoDetailIndexRoute = InfoDetailIndexImport.update({
+  path: '/info-detail/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -72,6 +78,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutImport
       parentRoute: typeof rootRoute
     }
+    '/info-detail/': {
+      preLoaderRoute: typeof InfoDetailIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/_navbar/contoh/': {
       preLoaderRoute: typeof NavbarContohIndexLazyImport
       parentRoute: typeof NavbarImport
@@ -92,6 +102,7 @@ export const routeTree = rootRoute.addChildren([
     NavbarContohContohIdIndexLazyRoute,
   ]),
   AboutRoute,
+  InfoDetailIndexRoute,
 ])
 
 /* prettier-ignore-end */
