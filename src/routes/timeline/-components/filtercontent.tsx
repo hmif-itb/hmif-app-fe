@@ -32,9 +32,13 @@ export default function FilterContent({
   return (
     <DrawerContent onInteractOutside={onInteractOutside}>
       <div className="mx-10">
-        <DrawerHeader className="flex justify-between px-0">
-          <DrawerTitle>Filter</DrawerTitle>
-          <DrawerDescription>Reset</DrawerDescription>
+        <DrawerHeader className="flex justify-between items-baseline px-0">
+          <h1 className="text-green-400 font-bold text-[24px]">Filters</h1>
+          <button type="button">
+            <DrawerDescription className="text-green-400 text-[16px]">
+              Reset
+            </DrawerDescription>
+          </button>
         </DrawerHeader>
         <form action="">
           <RadioGroup>
