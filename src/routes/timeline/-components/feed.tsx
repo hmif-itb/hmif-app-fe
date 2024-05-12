@@ -91,7 +91,7 @@ function ImageSection({ images }: { images: Post['image'] }) {
         className="size-full  object-cover rounded-lg shadow-md "
         src={images[1]}
       ></img>
-      {images.length <= 2 ? (
+      {images.length <= 3 ? (
         <img
           alt=""
           className="size-full  object-cover rounded-lg shadow-md "
