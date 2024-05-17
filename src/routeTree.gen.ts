@@ -19,6 +19,7 @@ import { Route as IndexImport } from './routes/index'
 
 // Create Virtual Routes
 
+const AddAnnouncementIndexLazyImport = createFileRoute('/add-announcement/')()
 const NavbarContohIndexLazyImport = createFileRoute('/_navbar/contoh/')()
 const NavbarContohContohIdIndexLazyImport = createFileRoute(
   '/_navbar/contoh/$contohId/',
@@ -40,6 +41,13 @@ const IndexRoute = IndexImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any)
+
+const AddAnnouncementIndexLazyRoute = AddAnnouncementIndexLazyImport.update({
+  path: '/add-announcement/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/add-announcement/index.lazy').then((d) => d.Route),
+)
 
 const NavbarContohIndexLazyRoute = NavbarContohIndexLazyImport.update({
   path: '/contoh/',
@@ -72,6 +80,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutImport
       parentRoute: typeof rootRoute
     }
+    '/add-announcement/': {
+      preLoaderRoute: typeof AddAnnouncementIndexLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/_navbar/contoh/': {
       preLoaderRoute: typeof NavbarContohIndexLazyImport
       parentRoute: typeof NavbarImport
@@ -92,6 +104,7 @@ export const routeTree = rootRoute.addChildren([
     NavbarContohContohIdIndexLazyRoute,
   ]),
   AboutRoute,
+  AddAnnouncementIndexLazyRoute,
 ])
 
 /* prettier-ignore-end */

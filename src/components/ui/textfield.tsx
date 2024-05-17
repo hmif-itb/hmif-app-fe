@@ -46,6 +46,7 @@ export interface TextFieldProps
  * @component
  * @param variant - "default" or "search"
  * @param fieldSize - "default", "m", or "xl
+ * @param maxLength - Maximum length of the input.
  * @param [success] - Indicates if the input is successfully submitted.
  * @param [error] - Error message.
  */
