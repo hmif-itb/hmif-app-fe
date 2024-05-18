@@ -8,56 +8,72 @@ export const Route = createLazyFileRoute('/login/')({
 });
 
 function LoginPage(): JSX.Element {
-  const { flow, setFlow } = useLogin();
+  const { flow, setFlow, login } = useLogin();
 
   return (
-    <main className="w-full h-screen bg-cover bg-[url(/images/login/login-bg.png)] overflow-hidden font-inter px-10 pt-[112px] pb-[95px] flex flex-col justify-between">
-      {flow === 0 ? (
-        <h1 className="text-white text-3xl">
-          Welcome to <br />{' '}
-          <span className="text-4xl font-bold">HMIF Super App</span>
-        </h1>
-      ) : (
-        <h1 className="text-white italic">
-          <span className="text-heading-2 not-italic">
-            Hello, <span className="font-bold italic">Pips!</span>
-          </span>
-          <br />
-          Log in with your std email to get you in
-        </h1>
-      )}
+    <main className="h-screen w-full overflow-hidden bg-[url(/images/login/login-bg.png)] bg-cover font-inter lg:flex lg:bg-none">
+      <aside className="hidden h-full w-[65%] bg-[url(/images/login/login-bg-desktop.png)] bg-cover lg:block" />
 
-      {flow === 0 ? (
-        <div className="flex flex-col gap-4 w-full">
-          <Button
-            onClick={() => setFlow(1)}
-            variant="solid"
-            className="w-full bg-white text-black font-medium"
-          >
-            Log in
-          </Button>
+      <section className="flex h-full flex-auto flex-col justify-between px-10 pb-[95px] pt-[112px] lg:px-14">
+        {flow === 0 ? (
+          <h1 className="text-3xl text-white lg:text-black">
+            Welcome to <br />{' '}
+            <span className="text-4xl font-bold">HMIF Super App</span>
+          </h1>
+        ) : (
+          <h1 className="italic text-white lg:text-black">
+            <span className="text-heading-2 not-italic">
+              Hello, <span className="font-bold italic">Pips!</span>
+            </span>
+            <br />
+            Log in with your std email to get you in
+          </h1>
+        )}
 
-          <div className="flex flex-col gap-1">
-            <p className="text-white text-xs font-light w-full text-center">
-              Are you a SPARTAN?
-            </p>
+        {flow === 0 ? (
+          <div className="flex w-full flex-col gap-4">
             <Button
-              variant="outlined"
-              className="w-full border-white text-white"
+              onClick={() => setFlow(1)}
+              variant="solid"
+              className="w-full font-medium max-lg:bg-white  max-lg:text-black"
             >
-              LOGO SPARTA
+              Log in
             </Button>
+
+            <div className="flex flex-col gap-1">
+              <p className="w-full text-center text-xs font-light max-lg:text-white">
+                Are you a SPARTAN?
+              </p>
+              <Button
+                variant="outlined"
+                className="w-full max-lg:border-white max-lg:text-white"
+              >
+                LOGO SPARTA
+              </Button>
+            </div>
           </div>
-        </div>
-      ) : (
-        <Button
-          className="w-full bg-white text-black font-medium flex items-center gap-3"
-          size="icon-md"
-        >
-          <img src={GoogleLogo} className="size-5" alt="" />
-          Log in with Google
-        </Button>
-      )}
+        ) : (
+          <>
+            <Button
+              onClick={() => login()}
+              className="flex w-full items-center gap-3 bg-white font-medium text-black lg:hidden"
+              size="icon-md"
+            >
+              <img src={GoogleLogo} className="size-5" alt="" />
+              Log in with Google
+            </Button>
+            <Button
+              onClick={() => login()}
+              variant="outlined"
+              className="hidden w-full items-center gap-3 font-medium lg:flex"
+              size="icon-md"
+            >
+              <img src={GoogleLogo} className="size-5" alt="" />
+              Log in with Google
+            </Button>
+          </>
+        )}
+      </section>
     </main>
   );
 }
