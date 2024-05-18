@@ -1,6 +1,6 @@
 import { useGoogleLogin } from '@react-oauth/google';
 import { useMutation } from '@tanstack/react-query';
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, redirect } from '@tanstack/react-router';
 import { api } from '~/api/client';
 import { ApiError } from '~/api/generated';
 import { Button } from '~/components/ui/button';
@@ -9,6 +9,9 @@ import { setupNotification } from '~/lib/push';
 
 export const Route = createFileRoute('/')({
   component: Index,
+  loader: () => {
+    redirect({ to: '/login', throw: true });
+  },
 });
 
 function Index() {
