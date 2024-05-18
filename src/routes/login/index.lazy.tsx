@@ -47,8 +47,9 @@ function LoginPage(): JSX.Element {
               <Button
                 variant="outlined"
                 className="w-full max-lg:border-white max-lg:text-white"
+                asChild
               >
-                LOGO SPARTA
+                <a href="/sparta">LOGO SPARTA</a>
               </Button>
             </div>
           </div>
