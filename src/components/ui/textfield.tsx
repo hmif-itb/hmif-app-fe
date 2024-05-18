@@ -77,7 +77,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
           {variant === 'search' && (
             <img
               src={SearchIcon}
-              className="absolute left-4 top-1/2 size-4 -translate-y-1/2 pointer-events-none"
+              className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2"
             />
           )}
           <input
@@ -95,7 +95,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
             ref={ref}
             {...props}
           />
-          <div className="absolute right-3 top-1/2 flex -translate-y-1/2 items-center gap-2 pointer-events-none">
+          <div className="pointer-events-none absolute right-3 top-1/2 flex -translate-y-1/2 items-center gap-2">
             {(props.disabled || error || success) && (
               <img
                 src={
