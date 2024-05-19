@@ -3,14 +3,19 @@ function BottomNavigationItem({
   alt,
   title,
   isSelected,
+  onClick,
 }: {
   src: string;
   alt: string;
   title: string;
   isSelected: boolean;
+  onClick: () => void;
 }) {
   return (
-    <div className="flex flex-col text-center gap-3">
+    <button
+      className="flex flex-col text-center gap-3"
+      onClick={() => onClick()}
+    >
       <div
         className={`border border-black border-solid rounded-full size-[4.5625rem] flex flex-col items-center justify-center ${isSelected ? 'bg-yellow-75 border-green-300' : ''}`}
       >
@@ -25,7 +30,7 @@ function BottomNavigationItem({
           {title}
         </p>
       </div>
-    </div>
+    </button>
   );
 }
 

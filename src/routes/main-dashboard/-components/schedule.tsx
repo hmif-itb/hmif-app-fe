@@ -4,9 +4,11 @@ import { Separator } from '~/components/ui/separator';
 function Schedule({
   info,
   isLastIndex,
+  isSecondLastIndex,
 }: {
   info: Schedule;
   isLastIndex: boolean;
+  isSecondLastIndex: boolean;
 }) {
   return (
     <div className="flex justify-between">
@@ -24,7 +26,7 @@ function Schedule({
         <div className="absolute bg-[#D9D9D9] size-2 rounded-full top-2 -left-0 -translate-x-1/2 -translate-y-1/2"></div>
         <Separator
           orientation="vertical"
-          className={`bg-[#525352] ${isLastIndex ? 'invisible' : ''}`}
+          className={`bg-[#525352] ${isLastIndex ? 'invisible' : ''} ${isSecondLastIndex ? 'bg-[#B0B3B0]' : ''}`}
         />
       </div>
 
