@@ -1,13 +1,10 @@
 import { useGoogleLogin } from '@react-oauth/google';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
-import { useState } from 'react';
 import { api } from '~/api/client';
 import { ApiError } from '~/api/generated';
 
 export default function useLogin() {
-  const [flow, setFlow] = useState(0);
-
   const navigate = useNavigate();
 
   const loginCallbackMutation = useMutation({
@@ -29,5 +26,5 @@ export default function useLogin() {
     },
   });
 
-  return { flow, setFlow, login };
+  return { login };
 }
