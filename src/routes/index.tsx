@@ -1,52 +1,40 @@
-import { useGoogleLogin } from '@react-oauth/google';
-import { useMutation } from '@tanstack/react-query';
-import { createFileRoute, redirect } from '@tanstack/react-router';
-import { api } from '~/api/client';
-import { ApiError } from '~/api/generated';
+import { Link, createFileRoute } from '@tanstack/react-router';
 import { Button } from '~/components/ui/button';
-import { TextField } from '~/components/ui/textfield';
-import { setupNotification } from '~/lib/push';
+import LoginLayout from './login/-components/LoginLayout';
 
 export const Route = createFileRoute('/')({
   component: Index,
-  loader: () => {
-    redirect({ to: '/login', throw: true });
-  },
 });
 
 function Index() {
-  const loginCallbackMutation = useMutation({
-    mutationFn: api.auth.loginAccessToken.bind(api.auth),
-    onError(error) {
-      if (error instanceof ApiError && error.status === 401) {
-        alert('User not registered in HMIF.');
-      }
-    },
-  });
-  const login = useGoogleLogin({
-    onSuccess(tokenResponse) {
-      loginCallbackMutation.mutate({
-        requestBody: { accessToken: tokenResponse.access_token },
-      });
-    },
-  });
-
   return (
-    <div className="">
-      <h3 className="p-2 text-2xl font-bold">Welcome Home!</h3>
-      <div className="flex flex-col items-start space-y-2">
-        <Button onClick={() => login()}>Login google</Button>
-        <button onClick={setupNotification} className="rounded bg-blue-400 p-2">
-          Subscribe to push notif
-        </button>
-        <a className="rounded bg-blue-400 p-2" href="/sparta">
-          SPARTA
-        </a>
-        <TextField />
-        <TextField error={'Required'} />
-        <TextField variant={'search'} />
-        <TextField variant={'default'} success />
+    <LoginLayout>
+      <h1 className="text-3xl text-white lg:text-black">
+        Welcome to <br />{' '}
+        <span className="text-4xl font-bold">HMIF Super App</span>
+      </h1>
+      <div className="flex w-full flex-col gap-4">
+        <Button
+          asChild
+          variant="solid"
+          className="w-full font-medium max-lg:bg-white  max-lg:text-black"
+        >
+          <Link to="/login">Log in</Link>
+        </Button>
+
+        <div className="flex flex-col gap-1">
+          <p className="w-full text-center text-xs font-light max-lg:text-white">
+            Are you a SPARTAN?
+          </p>
+          <Button
+            variant="outlined"
+            className="w-full max-lg:border-white max-lg:text-white"
+            asChild
+          >
+            <a href="/sparta">LOGO SPARTA</a>
+          </Button>
+        </div>
       </div>
-    </div>
+    </LoginLayout>
   );
 }
