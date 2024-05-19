@@ -2,14 +2,26 @@ import { useGoogleLogin } from '@react-oauth/google';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { api } from '~/api/client';
-import { ApiError } from '~/api/generated';
+import { ApiError, PushSubscription } from '~/api/generated';
+import { setupNotification } from '~/lib/push';
 
 export default function useLogin() {
   const navigate = useNavigate();
+  const pushNotifMutation = useMutation({
+    mutationFn: async () => {
+      const subscription = await setupNotification();
+      if (subscription) {
+        return await api.push.registerPush({
+          requestBody: subscription.toJSON() as PushSubscription,
+        });
+      }
+    },
+  });
 
   const loginCallbackMutation = useMutation({
     mutationFn: api.auth.loginAccessToken.bind(api.auth),
     onSuccess: () => {
+      pushNotifMutation.mutate();
       navigate({ to: '/' });
     },
     onError(error) {
