@@ -12,16 +12,16 @@ export default function SearchBar() {
   const [readState, setRead] = useState(false);
 
   return (
-    <form className="w-full relative flex flex-row justify-center my-10 items-center gap-5">
-      <div className="relative text-[11.25px] w-[70%]">
+    <form className="relative my-10 flex w-full flex-row items-center justify-center gap-5">
+      <div className="relative w-[70%] text-[11.25px]">
         <input
           type="text"
           placeholder="Search..."
-          className="w-full pl-4 py-1 rounded-full outline-none border-[.8px] border-black shadow-sm"
+          className="w-full rounded-full border-[.8px] border-black py-1 pl-4 shadow-sm outline-none"
           name=""
           id=""
         />
-        <button className="absolute right-0 top-[49%] -translate-y-1/2 p-[.57rem] bg-green-900 rounded-full">
+        <button className="absolute right-0 top-[49%] -translate-y-1/2 rounded-full bg-green-900 p-[.57rem]">
           <img alt="Search Button" src={SearchIcon} className="size-2" />
         </button>
       </div>
@@ -61,7 +61,7 @@ function ThumbToggle({
 }) {
   return (
     <button
-      className={`${isPressed ? `bg-green-900` : `bg-white `} rounded-[14.4px] p-[.6rem] shadow-sm border-[.8px] border-black`}
+      className={`${isPressed ? `bg-green-900` : `bg-white `} rounded-[14.4px] border-[.8px] border-black p-[.6rem] shadow-sm`}
       type="button"
       onClick={onClick}
     >

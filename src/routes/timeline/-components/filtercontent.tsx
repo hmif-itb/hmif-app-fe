@@ -4,7 +4,6 @@ import {
   DrawerDescription,
   DrawerFooter,
   DrawerHeader,
-  DrawerTitle,
 } from '~/components/ui/drawer';
 import Options from './options';
 import { RadioGroup } from '@radix-ui/react-radio-group';
@@ -32,10 +31,10 @@ export default function FilterContent({
   return (
     <DrawerContent onInteractOutside={onInteractOutside}>
       <div className="mx-10">
-        <DrawerHeader className="flex justify-between items-baseline px-0">
-          <h1 className="text-green-400 font-bold text-[24px]">Filters</h1>
+        <DrawerHeader className="flex items-baseline justify-between px-0">
+          <h1 className="text-[24px] font-bold text-green-400">Filters</h1>
           <button type="button">
-            <DrawerDescription className="text-green-400 text-[16px]">
+            <DrawerDescription className="text-[16px] text-green-400">
               Reset
             </DrawerDescription>
           </button>

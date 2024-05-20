@@ -13,13 +13,13 @@ export default function Feed({ posts }: { posts: Post[] }) {
 function UserPost({ PostData }: { PostData: Post }) {
   return (
     <div className="my-10">
-      <div className="font-bold text-neutral-dark text-[14px] mb-5">
+      <div className="mb-5 text-[14px] font-bold text-neutral-dark">
         ## Day Ago
       </div>
       <ProfileSection ProfileData={PostData.profile} />
       <TextSection textData={PostData.TextData} />
       <ImageSection images={PostData.image} />
-      <div className="mt-5 font-bold text-green-300 text-[18px]">
+      <div className="mt-5 text-[18px] font-bold text-green-300">
         <a href="">Show more</a>
       </div>
       <TagSection tags={PostData.TagData} />
@@ -29,17 +29,17 @@ function UserPost({ PostData }: { PostData: Post }) {
 
 function ProfileSection({ ProfileData }: { ProfileData: Post['profile'] }) {
   return (
-    <div className="flex items-center gap-5 mb-5">
+    <div className="mb-5 flex items-center gap-5">
       <img
         src={ProfileData.picture}
         alt=""
         className="size-[52px] rounded-full shadow-sm"
       />
       <div className="flex flex-col items-baseline">
-        <h1 className="font-semibold text-[16px] m-0">
+        <h1 className="m-0 text-[16px] font-semibold">
           <a href="">{ProfileData.name}</a>
         </h1>
-        <span className="text-neutral-dark-active text-[12px] font-[400] leading-6">
+        <span className="text-[12px] font-[400] leading-6 text-neutral-dark-active">
           <a href="">{ProfileData.email}</a>
         </span>
       </div>
@@ -57,7 +57,7 @@ function TextSection({
 }) {
   return (
     <div>
-      <h1 className="font-semibold text-[20px] mb-2">{textData.title}</h1>
+      <h1 className="mb-2 text-[20px] font-semibold">{textData.title}</h1>
       <span className="text-[16px]">{textData.content}</span>
     </div>
   );
@@ -69,7 +69,7 @@ function TagSection({ tags }: { tags: string[] }) {
       {tags.map((tag) => (
         <a
           href=""
-          className="px-4 py-1 bg-neutral-normal rounded-[80px] font-medium hover:bg-neutral-normal-hover"
+          className="rounded-[80px] bg-neutral-normal px-4 py-1 font-medium hover:bg-neutral-normal-hover"
         >
           {tag}
         </a>
@@ -80,31 +80,31 @@ function TagSection({ tags }: { tags: string[] }) {
 
 function ImageSection({ images }: { images: Post['image'] }) {
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 mt-5">
+    <div className="mt-5 grid grid-cols-2 gap-2 lg:grid-cols-3">
       <img
         alt=""
-        className="size-full  object-cover rounded-lg shadow-md row-span-2"
+        className="row-span-2  size-full rounded-lg object-cover shadow-md"
         src={images[0]}
       ></img>
       <img
         alt=""
-        className="size-full  object-cover rounded-lg shadow-md "
+        className="size-full  rounded-lg object-cover shadow-md "
         src={images[1]}
       ></img>
       {images.length <= 3 ? (
         <img
           alt=""
-          className="size-full  object-cover rounded-lg shadow-md "
+          className="size-full  rounded-lg object-cover shadow-md "
           src={images[2]}
         ></img>
       ) : (
         <div className="relative text-center">
           <img
             alt=""
-            className="size-full object-cover rounded-lg shadow-md brightness-50"
+            className="size-full rounded-lg object-cover shadow-md brightness-50"
             src={images[2]}
           ></img>
-          <div className="absolute top-[42%] left-[45%] text-white font-medium text-lg">
+          <div className="absolute left-[45%] top-[42%] text-lg font-medium text-white">
             2+
           </div>
         </div>

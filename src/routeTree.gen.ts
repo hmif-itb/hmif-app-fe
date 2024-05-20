@@ -16,6 +16,7 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as AboutImport } from './routes/about'
 import { Route as NavbarImport } from './routes/_navbar'
 import { Route as IndexImport } from './routes/index'
+import { Route as TimelineIndexImport } from './routes/timeline/index'
 import { Route as MainDashboardIndexImport } from './routes/main-dashboard/index'
 
 // Create Virtual Routes
@@ -47,6 +48,11 @@ const LoginIndexLazyRoute = LoginIndexLazyImport.update({
   path: '/login/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/login/index.lazy').then((d) => d.Route))
+
+const TimelineIndexRoute = TimelineIndexImport.update({
+  path: '/timeline/',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const MainDashboardIndexRoute = MainDashboardIndexImport.update({
   path: '/main-dashboard/',
@@ -88,6 +94,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainDashboardIndexImport
       parentRoute: typeof rootRoute
     }
+    '/timeline/': {
+      preLoaderRoute: typeof TimelineIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/login/': {
       preLoaderRoute: typeof LoginIndexLazyImport
       parentRoute: typeof rootRoute
@@ -113,6 +123,7 @@ export const routeTree = rootRoute.addChildren([
   ]),
   AboutRoute,
   MainDashboardIndexRoute,
+  TimelineIndexRoute,
   LoginIndexLazyRoute,
 ])
 
