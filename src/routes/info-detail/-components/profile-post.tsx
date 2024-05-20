@@ -21,7 +21,7 @@ const ProfilePost = ({
       </div>
       <div className="ml-3">
         <p className="text-base font-semibold leading-6">{profile.name}</p>
-        <p className="text-xs text-neutral-dark">{profile.email}</p>
+        <p className="text-xs text-neutral-dark-active">{profile.email}</p>
       </div>
     </div>
   );

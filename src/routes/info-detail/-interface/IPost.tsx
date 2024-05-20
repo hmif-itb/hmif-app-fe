@@ -11,5 +11,6 @@ export interface IPost {
   TagData: string[];
   image: string[];
   ReactionData: string[];
+  UserReaction: string;
   comments: IComment[];
 }

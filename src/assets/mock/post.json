@@ -10,8 +10,9 @@
       "content": "Selamat pagi, Byte! 👋 <br /><br /> Pemilihan Ketua SPARTA HMIF 2023 sudah ditutup pada 21 April 2024(23.59) dengan total suara sah sebanyak 188 suara. <br /><br /> Pengumuman Zeus terpilih akan dilaksanakan pada <strong>HARI INI </strong> (12.00) melalui <em>broadcast</em> ke grupByte dan grup PIPS (WA)."
     },
     "TagData": ["SPARTA", "BYTE", "Pemilu", "2023", "Voting", "Zeus", "IF23", "STI23", "SUDO"],
-    "image": ["android-chrome-192x192.png", "android-chrome-192x192.png", "android-chrome-192x192.png"],
+    "image": ["android-chrome-192x192.png", "android-chrome-192x192.png", "android-chrome-192x192.png", "android-chrome-192x192.png"],
     "ReactionData": ["heart-eyes", "heart-eyes", "fire", "heart-eyes", "party", "party", "party"],
+    "UserReaction": null,
     "comments": [
       {
         "ProfileData": {
@@ -21,7 +22,8 @@
         },
         "comment": "Wowww, congrats Zeus!!!!",
         "datetime": "2024-05-20 15:15:21",
-        "ReactionData": ["heart-eyes", "heart-eyes"]
+        "ReactionData": ["heart-eyes", "heart-eyes"],
+        "UserRaction": null
       },
       {
         "ProfileData": {
@@ -31,7 +33,8 @@
         },
         "comment": "Keren banget 🤩",
         "datetime": "2024-05-20 11:37:32",
-        "ReactionData": []
+        "ReactionData": [],
+        "UserRaction": null
       }
     ]
   }

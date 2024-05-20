@@ -12,7 +12,10 @@ const Comment = ({ commentData }: { commentData: IComment }) => {
       ></ProfilePost>
       <p>{commentData.comment}</p>
       <div className="flex space-x-1 items-center">
-        <Reaction reactionData={commentData.ReactionData}></Reaction>
+        <Reaction
+          reactionData={commentData.ReactionData}
+          initialUserReaction={commentData.UserReaction}
+        ></Reaction>
         <div className="text-xs font-semibold text-gray-400">
           {formatDate(commentData.datetime)}
         </div>
