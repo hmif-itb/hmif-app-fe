@@ -8,12 +8,12 @@ import { User } from '~/api/generated';
 
 function MobileView({ user }: { user: User }) {
   return (
-    <div className="font-inter flex flex-col gap-12 items-center lg:hidden">
+    <div className="flex flex-col items-center gap-12 font-inter lg:hidden">
       {/* Profile Section */}
       <Profile user={user} />
 
       {/* Top Navigation Section */}
-      <section className="px-4 flex gap-4 justify-between max-w-[500px] w-full">
+      <section className="flex w-full max-w-[500px] justify-between gap-4 px-4">
         <NavigationItem
           src="/main-dashboard/folder.svg"
           alt="Ding Dong"
@@ -40,7 +40,7 @@ function MobileView({ user }: { user: User }) {
       </section>
 
       {/* Calendar Section */}
-      <section className="px-4 flex justify-center size-full">
+      <section className="flex size-full justify-center px-4">
         <Calendar />
       </section>
 

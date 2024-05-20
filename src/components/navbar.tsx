@@ -2,7 +2,7 @@ import BottomNavigationItem from './bottom-navigation-item';
 import { useState } from 'react';
 
 function Navbar() {
-  const [isSelected, setIsSelected] = useState(true);
+  const [isSelected] = useState(true);
 
   function handleSelected() {
     // setIsSelected(!isSelected);
@@ -10,8 +10,8 @@ function Navbar() {
   }
 
   return (
-    <section className="px-8 pb-4 flex justify-between max-w-[400px] w-full">
-      <section className="px-8 pb-4 flex justify-between max-w-[400px] w-full">
+    <section className="flex w-full max-w-[400px] justify-between px-8 pb-4">
+      <section className="flex w-full max-w-[400px] justify-between px-8 pb-4">
         <BottomNavigationItem
           src="/main-dashboard/question-mark.svg"
           alt="Info"

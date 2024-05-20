@@ -8,8 +8,8 @@ function NavigationItem({
   title: string;
 }) {
   return (
-    <div className="flex flex-col items-center text-center gap-3">
-      <button className="border border-black border-solid rounded-full size-[4.5rem] flex flex-col items-center justify-center">
+    <div className="flex flex-col items-center gap-3 text-center">
+      <button className="flex size-[4.5rem] flex-col items-center justify-center rounded-full border border-solid border-black">
         <img src={src} alt={alt} className="size-[2.625rem]" />
       </button>
       <p>{title}</p>

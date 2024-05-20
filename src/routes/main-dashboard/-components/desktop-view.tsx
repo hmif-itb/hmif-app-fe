@@ -4,7 +4,6 @@ import Timeline from './timeline';
 import Calendar from '~/components/calendar';
 import HeaderTitle from '~/components/header-title';
 import NavigationItem from './navigation-item';
-import { Separator } from '@radix-ui/react-separator';
 
 function DesktopView({ user }: { user: User }) {
   return (
@@ -14,9 +13,9 @@ function DesktopView({ user }: { user: User }) {
       <div className="size-full">
         <HeaderTitle />
         <div className="flex h-full justify-between">
-          <div className="flex flex-col min-h-screen items-center size-full gap-12 py-8 border-r border-gray-300">
+          <div className="flex size-full min-h-screen flex-col items-center gap-12 border-r border-gray-300 py-8">
             {/* Top Navigation Section */}
-            <section className="px-4 flex gap-4 justify-between max-w-[500px] size-full">
+            <section className="flex size-full max-w-[500px] justify-between gap-4 px-4">
               <NavigationItem
                 src="/main-dashboard/folder.svg"
                 alt="Ding Dong"
@@ -49,7 +48,7 @@ function DesktopView({ user }: { user: User }) {
           </div>
 
           {/* Schedule Section */}
-          <div className="flex flex-col min-w-[450px] min-h-screen h-full py-8">
+          <div className="flex h-full min-h-screen min-w-[450px] flex-col py-8">
             <Timeline />
           </div>
         </div>

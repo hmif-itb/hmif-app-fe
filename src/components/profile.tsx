@@ -2,8 +2,8 @@ import { User } from '~/api/generated';
 
 function Profile({ user }: { user: User }) {
   return (
-    <section className="px-4 pt-4 flex justify-between items-center w-full max-w-[500px] lg:max-w-full">
-      <div className="flex gap-4 items-center">
+    <section className="flex w-full max-w-[500px] items-center justify-between px-4 pt-4 lg:max-w-full">
+      <div className="flex items-center gap-4">
         <img
           src={user.picture}
           alt="User Profile"
@@ -15,7 +15,7 @@ function Profile({ user }: { user: User }) {
           <p className="font-bold">Good Morning</p>
         </div>
       </div>
-      <button className="bg-yellow-100 p-2 rounded-[18px] border border-black border-solid">
+      <button className="rounded-[18px] border border-solid border-black bg-yellow-100 p-2">
         <img src="/main-dashboard/bell.svg" alt="Bell" className="size-6" />
       </button>
     </section>

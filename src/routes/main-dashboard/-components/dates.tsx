@@ -11,7 +11,7 @@ function Dates({
 }) {
   return (
     <button
-      className={`flex flex-col items-center ${currentDate === date.date ? 'bg-yellow-100' : ''} py-2 px-3 sm:px-4 rounded-xl font-inter`}
+      className={`flex flex-col items-center ${currentDate === date.date ? 'bg-yellow-100' : ''} rounded-xl px-3 py-2 font-inter sm:px-4`}
       onClick={() => onClick(date.date)}
     >
       <p

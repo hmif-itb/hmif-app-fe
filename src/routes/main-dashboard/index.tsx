@@ -22,7 +22,7 @@ function MainDashboard() {
   }
 
   return (
-    <main className="min-h-screen h-full">
+    <main className="h-full min-h-screen">
       {/* Show mobile view if the window size <= lg */}
       <MobileView user={user} />
 

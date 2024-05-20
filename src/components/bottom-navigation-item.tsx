@@ -13,11 +13,11 @@ function BottomNavigationItem({
 }) {
   return (
     <button
-      className="flex flex-col text-center gap-3"
+      className="flex flex-col gap-3 text-center"
       onClick={() => onClick()}
     >
       <div
-        className={`border border-black border-solid rounded-full size-[4.5625rem] flex flex-col items-center justify-center ${isSelected ? 'bg-yellow-75 border-green-300' : ''}`}
+        className={`flex size-[4.5625rem] flex-col items-center justify-center rounded-full border border-solid border-black ${isSelected ? 'border-green-300 bg-yellow-75' : ''}`}
       >
         <img
           src={src}

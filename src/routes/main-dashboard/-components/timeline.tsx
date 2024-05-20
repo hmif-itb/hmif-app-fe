@@ -16,7 +16,7 @@ function Timeline() {
   return (
     <>
       {/* Date Section */}
-      <section className="px-4 grid grid-cols-7 gap-1 sm:gap-4 justify-between max-w-[500px] size-full">
+      <section className="grid size-full max-w-[500px] grid-cols-7 justify-between gap-1 px-4 sm:gap-4">
         {dates.map((date) => (
           <Dates
             key={date.date}
@@ -28,10 +28,10 @@ function Timeline() {
       </section>
 
       {/* Schedule Section */}
-      <section className="px-6 flex flex-col gap-4 max-w-[500px] w-full">
+      <section className="flex w-full max-w-[500px] flex-col gap-4 px-6">
         <p className="self-start font-semibold">Schedule Today</p>
 
-        <div className="px-2 flex justify-between text-[#BCC1CD]">
+        <div className="flex justify-between px-2 text-[#BCC1CD]">
           <div className="flex gap-8">
             <p>Time</p>
             <p>Agenda</p>

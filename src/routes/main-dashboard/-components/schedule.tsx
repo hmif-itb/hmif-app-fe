@@ -21,9 +21,9 @@ function Schedule({
       {/* Schedule Separator and Dots */}
       <div className="relative">
         <div
-          className={`absolute bg-[#245236] size-[1.125rem] rounded-full top-2 left-0 -translate-x-1/2 -translate-y-1/2 ${isLastIndex ? 'bg-[#B0B3B0]' : ''}`}
+          className={`absolute left-0 top-2 size-[1.125rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#245236] ${isLastIndex ? 'bg-[#B0B3B0]' : ''}`}
         ></div>
-        <div className="absolute bg-[#D9D9D9] size-2 rounded-full top-2 -left-0 -translate-x-1/2 -translate-y-1/2"></div>
+        <div className="absolute -left-0 top-2 size-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#D9D9D9]"></div>
         <Separator
           orientation="vertical"
           className={`bg-[#525352] ${isLastIndex ? 'invisible' : ''} ${isSecondLastIndex ? 'bg-[#B0B3B0]' : ''}`}
@@ -32,7 +32,7 @@ function Schedule({
 
       {/* Schedule Info */}
       <div
-        className={`flex flex-col min-h-36 text-white rounded-2xl p-4 gap-2 min-w-[250px] max-w-[300px] mb-4 ${info.category === 'Himpunan' ? 'bg-green-300' : 'bg-yellow-300'}`}
+        className={`mb-4 flex min-h-36 min-w-[250px] max-w-[300px] flex-col gap-2 rounded-2xl p-4 text-white ${info.category === 'Himpunan' ? 'bg-green-300' : 'bg-yellow-300'}`}
       >
         <div className="flex justify-between">
           <p className="font-semibold">{info.title}</p>
@@ -41,7 +41,7 @@ function Schedule({
 
         <p className="text-sm">{info.description}</p>
 
-        <div className="flex gap-1 items-center">
+        <div className="flex items-center gap-1">
           <img
             src="/main-dashboard/location.svg"
             alt="Location"
@@ -50,11 +50,11 @@ function Schedule({
           <p className="text-sm">{info.location}</p>
         </div>
 
-        <div className="flex gap-2 items-center bg-white w-fit px-2 py-1 rounded-xl">
+        <div className="flex w-fit items-center gap-2 rounded-xl bg-white px-2 py-1">
           <div
             className={`size-2 rounded-full ${info.category === 'Himpunan' ? 'bg-green-300' : 'bg-yellow-300'}`}
           ></div>
-          <p className="text-black text-xs">{info.category}</p>
+          <p className="text-xs text-black">{info.category}</p>
         </div>
       </div>
     </div>

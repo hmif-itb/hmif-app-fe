@@ -10,12 +10,12 @@ export default function Calendar() {
   const [today, setToday] = useState(currentDate);
   const [selectDate, setSelectDate] = useState(currentDate);
   return (
-    <div className="flex justify-center items-center sm:flex-row flex-col size-full">
-      <div className="flex flex-col bg-green-300 p-8 rounded-xl gap-4">
-        <div className="flex justify-between items-center">
-          <div className="flex gap-10 items-center justify-around w-full">
+    <div className="flex size-full flex-col items-center justify-center sm:flex-row">
+      <div className="flex flex-col gap-4 rounded-xl bg-green-300 p-8">
+        <div className="flex items-center justify-between">
+          <div className="flex w-full items-center justify-around gap-10">
             <ChevronLeft
-              className="cursor-pointer hover:scale-105 transition-all text-yellow-300"
+              className="cursor-pointer text-yellow-300 transition-all hover:scale-105"
               onClick={() => {
                 setToday(today.month(today.month() - 1));
               }}
@@ -32,7 +32,7 @@ export default function Calendar() {
               {months[today.month()]} {today.year()}
             </h1>
             <ChevronRight
-              className="cursor-pointer hover:scale-105 transition-all text-yellow-300"
+              className="cursor-pointer text-yellow-300 transition-all hover:scale-105"
               onClick={() => {
                 setToday(today.month(today.month() + 1));
               }}
@@ -44,7 +44,7 @@ export default function Calendar() {
             return (
               <h1
                 key={index}
-                className="text-sm text-center grid place-content-center text-gray-300 select-none font-semibold"
+                className="grid select-none place-content-center text-center text-sm font-semibold text-gray-300"
               >
                 {day}
               </h1>
@@ -58,7 +58,7 @@ export default function Calendar() {
               return (
                 <div
                   key={index}
-                  className="p-1 text-center grid place-content-center text-sm text-gray-300"
+                  className="grid place-content-center p-1 text-center text-sm text-gray-300"
                 >
                   <h1
                     className={cn(
