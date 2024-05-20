@@ -1,27 +1,30 @@
-function ProfilePost({ type }) {
+import { IProfile } from '../-interface/IProfile';
+
+const ProfilePost = ({
+  type,
+  profile,
+}: {
+  type: string;
+  profile: IProfile;
+}) => {
+  if (!profile) {
+    return null;
+  }
   return (
-    // <div className="flex">
-    //   <img src="../../../public/favicon-32x32.png"></img>
-    //   <div>
-    //     <p>name</p>
-    //     <p>email</p>
-    //   </div>
-    // </div>
     <div className="flex items-center">
       <div className="relative">
         <img
-          src="../../../public/favicon-32x32.png"
+          src={profile.picture}
           alt="Avatar"
-          // className="size-12 rounded-full"
           className={`rounded-full ${type == 'poster' ? 'size-12' : 'size-9'}`}
         />
       </div>
       <div className="ml-3">
-        <p className="text-base font-semibold leading-6">HMIF</p>
-        <p className="text-xs text-neutral-dark">13521xxx@std.stei.itb.ac.id</p>
+        <p className="text-base font-semibold leading-6">{profile.name}</p>
+        <p className="text-xs text-neutral-dark">{profile.email}</p>
       </div>
     </div>
   );
-}
+};
 
 export default ProfilePost;

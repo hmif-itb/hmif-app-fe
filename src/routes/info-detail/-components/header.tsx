@@ -6,7 +6,7 @@ function Header() {
     // </div>
     <header className="flex justify-between items-center p-4 text-white border-b border-gray-300">
       <button className="flex items-center px-3 py-1 text-{black} rounded">
-        <img src="../../../public/icons/back.svg" />
+        <img src="/icons/back.svg" />
       </button>
       <h1 className="flex-auto text-xl text-center text-black font-bold pr-9">
         Post

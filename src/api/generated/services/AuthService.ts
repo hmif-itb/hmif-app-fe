@@ -66,6 +66,26 @@ export class AuthService {
     });
   }
   /**
+   * @returns User Login bypass successful
+   * @throws ApiError
+   */
+  public loginBypass({
+    token,
+  }: {
+    token: string,
+  }): CancelablePromise<User> {
+    return this.httpRequest.request({
+      method: 'GET',
+      url: '/api/auth/login/bypass/{token}',
+      path: {
+        'token': token,
+      },
+      errors: {
+        400: `Bad request`,
+      },
+    });
+  }
+  /**
    * @returns any Logout successful
    * @throws ApiError
    */

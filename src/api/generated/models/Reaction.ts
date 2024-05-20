@@ -2,14 +2,12 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type Info = {
+export type Reaction = {
   id: string;
   creatorId: string;
-  content: string;
-  category: string | null;
-  forAngkatan: number | null;
-  forMatakuliah: string | null;
-  forClass: string | null;
+  infoId: string | null;
+  commentId: string | null;
+  reaction: string;
   createdAt: string;
 };
 

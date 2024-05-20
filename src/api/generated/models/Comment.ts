@@ -2,14 +2,11 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type Info = {
+export type Comment = {
   id: string;
+  repliedInfoId: string;
   creatorId: string;
   content: string;
-  category: string | null;
-  forAngkatan: number | null;
-  forMatakuliah: string | null;
-  forClass: string | null;
   createdAt: string;
 };
 
