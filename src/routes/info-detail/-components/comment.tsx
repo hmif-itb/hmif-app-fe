@@ -11,7 +11,7 @@ const Comment = ({ commentData }: { commentData: IComment }) => {
         profile={commentData.ProfileData}
       ></ProfilePost>
       <p>{commentData.comment}</p>
-      <div className="flex space-x-1 items-center">
+      <div className="flex items-center space-x-1">
         <Reaction
           reactionData={commentData.ReactionData}
           initialUserReaction={commentData.UserReaction}

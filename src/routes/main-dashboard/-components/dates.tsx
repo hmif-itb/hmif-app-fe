@@ -11,16 +11,26 @@ function Dates({
 }) {
   return (
     <button
-      className={`flex flex-col items-center ${currentDate === date.date ? 'bg-yellow-100' : ''} rounded-xl px-3 py-2 font-inter sm:px-4`}
+      className={`flex flex-col items-center ${
+        currentDate === date.date ? 'bg-yellow-100' : ''
+      } rounded-xl px-3 py-2 font-inter sm:px-4`}
       onClick={() => onClick(date.date)}
     >
       <p
-        className={`${currentDate === date.date ? 'font-bold text-green-400' : 'font-semibold'} text-lg`}
+        className={`${
+          currentDate === date.date
+            ? 'font-bold text-green-400'
+            : 'font-semibold'
+        } text-lg`}
       >
         {date.date}
       </p>
       <p
-        className={`${currentDate === date.date ? 'font-medium text-green-400' : 'font-normal text-[#94A3B8]'} text-base`}
+        className={`${
+          currentDate === date.date
+            ? 'font-medium text-green-400'
+            : 'font-normal text-[#94A3B8]'
+        } text-base`}
       >
         {date.day}
       </p>

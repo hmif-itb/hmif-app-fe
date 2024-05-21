@@ -61,7 +61,9 @@ function ThumbToggle({
 }) {
   return (
     <button
-      className={`${isPressed ? `bg-green-900` : `bg-white `} rounded-[14.4px] border-[.8px] border-black p-[.6rem] shadow-sm`}
+      className={`${
+        isPressed ? `bg-green-900` : `bg-white `
+      } rounded-[14.4px] border-[.8px] border-black p-[.6rem] shadow-sm`}
       type="button"
       onClick={onClick}
     >

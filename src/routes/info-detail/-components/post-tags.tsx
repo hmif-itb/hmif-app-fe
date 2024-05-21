@@ -14,7 +14,7 @@ const PostTags = ({ tags }: { tags: IPost['TagData'] }) => {
   };
 
   return (
-    <div className="flex flex-wrap justify-start gap-2.5 items-center">
+    <div className="flex flex-wrap items-center justify-start gap-2.5">
       {(showAll ? tags : tags.slice(0, 6)).map((tagData, index) => (
         <Tag key={index} tag={tagData} />
       ))}

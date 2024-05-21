@@ -7,23 +7,23 @@ const PostPhotos = ({ images }: { images: IPost['image'] }) => {
         <img
           src={images[0]}
           alt="Post"
-          className="absolute inset-0 size-full object-cover rounded-lg"
+          className="absolute inset-0 size-full rounded-lg object-cover"
         />
       </div>
     </div>
   ) : images.length === 2 ? (
     <div
-      className="flex gap-2 rounded-lg overflow-hidden"
+      className="flex gap-2 overflow-hidden rounded-lg"
       style={{ height: '75vw' }}
     >
-      <div className="relative w-1/2 h-full">
+      <div className="relative h-full w-1/2">
         <img
           src={images[0]}
           alt="Post"
           className="absolute inset-0 size-full object-cover"
         />
       </div>
-      <div className="relative w-1/2 h-full">
+      <div className="relative h-full w-1/2">
         <img
           src={images[1]}
           alt="Post"
@@ -32,10 +32,10 @@ const PostPhotos = ({ images }: { images: IPost['image'] }) => {
       </div>
     </div>
   ) : (
-    <div className="grid grid-cols-2 lg:grid-cols-3 gap-2 mt-5 rounded-lg overflow-hidden">
+    <div className="mt-5 grid grid-cols-2 gap-2 overflow-hidden rounded-lg lg:grid-cols-3">
       <img
         alt="Post"
-        className="size-full object-cover shadow-md row-span-2"
+        className="row-span-2 size-full object-cover shadow-md"
         src={images[0]}
       />
       <img
@@ -56,7 +56,7 @@ const PostPhotos = ({ images }: { images: IPost['image'] }) => {
             className="size-full object-cover shadow-md brightness-50"
             src={images[2]}
           />
-          <div className="absolute top-[42%] left-[45%] text-white font-medium text-lg">
+          <div className="absolute left-[45%] top-[42%] text-lg font-medium text-white">
             {images.length - 2}+
           </div>
         </div>

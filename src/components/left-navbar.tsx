@@ -14,12 +14,18 @@ function LeftNavbar({ user }: { user: User }) {
       <section className="flex flex-col gap-8 ">
         <Link
           to="/main-dashboard"
-          className={`flex items-center gap-8 p-4 ${!isSelected ? 'bg-yellow-75' : ''}`}
+          className={`flex items-center gap-8 p-4 ${
+            !isSelected ? 'bg-yellow-75' : ''
+          }`}
         >
           <img
             src="/main-dashboard/house.svg"
             alt="Home"
-            className={`size-[2.625rem] ${!isSelected ? '[filter:invert(26%)_sepia(14%)_saturate(1090%)_hue-rotate(82deg)_brightness(98%)_contrast(92%)]' : ''}`}
+            className={`size-[2.625rem] ${
+              !isSelected
+                ? '[filter:invert(26%)_sepia(14%)_saturate(1090%)_hue-rotate(82deg)_brightness(98%)_contrast(92%)]'
+                : ''
+            }`}
           />
           <p className={`${!isSelected ? 'font-bold text-green-300' : ''}`}>
             Home
@@ -27,12 +33,18 @@ function LeftNavbar({ user }: { user: User }) {
         </Link>
         <Link
           to="/main-dashboard"
-          className={`flex items-center gap-8 p-4 ${isSelected ? 'bg-yellow-75' : ''}`}
+          className={`flex items-center gap-8 p-4 ${
+            isSelected ? 'bg-yellow-75' : ''
+          }`}
         >
           <img
             src="/main-dashboard/question-mark.svg"
             alt="Info"
-            className={`size-[2.625rem] ${isSelected ? '[filter:invert(26%)_sepia(14%)_saturate(1090%)_hue-rotate(82deg)_brightness(98%)_contrast(92%)]' : ''}`}
+            className={`size-[2.625rem] ${
+              isSelected
+                ? '[filter:invert(26%)_sepia(14%)_saturate(1090%)_hue-rotate(82deg)_brightness(98%)_contrast(92%)]'
+                : ''
+            }`}
           />
           <p className={`${isSelected ? 'font-bold text-green-300' : ''}`}>
             Info
@@ -40,12 +52,18 @@ function LeftNavbar({ user }: { user: User }) {
         </Link>
         <Link
           to="/main-dashboard"
-          className={`flex items-center gap-8 p-4 ${!isSelected ? 'bg-yellow-75' : ''}`}
+          className={`flex items-center gap-8 p-4 ${
+            !isSelected ? 'bg-yellow-75' : ''
+          }`}
         >
           <img
             src="/main-dashboard/settings.svg"
             alt="Settings"
-            className={`size-[2.625rem] ${!isSelected ? '[filter:invert(26%)_sepia(14%)_saturate(1090%)_hue-rotate(82deg)_brightness(98%)_contrast(92%)]' : ''}`}
+            className={`size-[2.625rem] ${
+              !isSelected
+                ? '[filter:invert(26%)_sepia(14%)_saturate(1090%)_hue-rotate(82deg)_brightness(98%)_contrast(92%)]'
+                : ''
+            }`}
           />
           <p className={`${!isSelected ? 'font-bold text-green-300' : ''}`}>
             Settings

@@ -68,7 +68,7 @@ export default function Calendar() {
                         date.toDate().toDateString()
                         ? 'bg-[#FBBC05]'
                         : '',
-                      'size-8 rounded-full grid place-content-center hover:bg-green-500 transition-all cursor-pointer select-none font-bold',
+                      'grid size-8 cursor-pointer select-none place-content-center rounded-full font-bold transition-all hover:bg-green-500',
                     )}
                     onClick={() => {
                       setSelectDate(date);
