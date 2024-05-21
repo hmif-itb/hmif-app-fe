@@ -33,7 +33,7 @@ export default function useSession<ForceLogin extends boolean = true>(
     queryFn: () =>
       api.auth.getMe().catch((error) => {
         if (error instanceof ApiError && error.status === 401) {
-          localStorage.removeItem('user');
+          invalidateSession();
           if (forceLogin) {
             navigate({ to: '/login' });
           } else {
