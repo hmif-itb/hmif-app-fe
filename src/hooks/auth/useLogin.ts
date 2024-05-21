@@ -12,7 +12,7 @@ export default function useLogin() {
     mutationFn: api.auth.loginAccessToken.bind(api.auth),
     onSuccess(data: User) {
       invalidateSession(data);
-      navigate({ to: '/main-dashboard' });
+      navigate({ to: '/home' });
     },
     onError(error) {
       if (error instanceof ApiError && error.status === 401) {
