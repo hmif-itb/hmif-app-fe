@@ -17,6 +17,7 @@ export const queryClient = new QueryClient({
         }
         return true;
       },
+      gcTime: 1000 * 60 * 60 * 24, // 1 days
     },
   },
 });

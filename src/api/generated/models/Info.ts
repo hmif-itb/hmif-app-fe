@@ -2,14 +2,55 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { Course } from './Course';
 export type Info = {
   id: string;
   creatorId: string;
+  title: string;
   content: string;
-  category: string | null;
-  forAngkatan: number | null;
-  forMatakuliah: string | null;
-  forClass: string | null;
   createdAt: string;
+  infoMedias?: Array<{
+    infoId: string;
+    mediaId: string;
+    media: {
+      id: string;
+      creatorId: string;
+      name: string;
+      type: string;
+      url: string;
+      createdAt: string;
+    };
+  }>;
+  infoCategories?: Array<{
+    infoId: string;
+    categoryId: string;
+    category: {
+      id: string;
+      name: string;
+      requiredPush: boolean;
+    };
+  }>;
+  infoCourses?: Array<{
+    infoId: string;
+    courseId: string;
+    class: number | null;
+    course: Course;
+  }>;
+  infoAngkatan?: Array<{
+    infoId: string;
+    angkatanId: string;
+    angkatan: {
+      id: string;
+      year: number;
+      name: string;
+    };
+  }>;
+  reactions?: {
+    totalReactions: number;
+    reactionsCount: Array<{
+      reaction: string;
+      count: number;
+    }>;
+  };
 };
 
