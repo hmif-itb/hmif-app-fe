@@ -4,7 +4,7 @@
     "profile": {
       "name": "Bond James",
       "email": "jamesbownd@gmail.com",
-      "picture": "android-chrome-192x192.png"
+      "picture": "/android-chrome-192x192.png"
     },
     "TextData": {
       "title": "PEMILU SPARTA HMIF 2023",
@@ -22,10 +22,10 @@
       "SUDO"
     ],
     "image": [
-      "android-chrome-192x192.png",
-      "android-chrome-192x192.png",
-      "android-chrome-192x192.png",
-      "android-chrome-192x192.png"
+      "/android-chrome-192x192.png",
+      "/android-chrome-192x192.png",
+      "/android-chrome-192x192.png",
+      "/android-chrome-192x192.png"
     ],
     "ReactionData": [
       "heart-eyes",
@@ -42,7 +42,7 @@
         "ProfileData": {
           "name": "Sudo",
           "email": "13521xxx@std.stei.itb.ac.id",
-          "picture": "android-chrome-192x192.png"
+          "picture": "/android-chrome-192x192.png"
         },
         "comment": "Wowww, congrats Zeus!!!!",
         "datetime": "2024-05-20 15:15:21",
@@ -53,7 +53,7 @@
         "ProfileData": {
           "name": "Byte",
           "email": "13522xxx@std.stei.itb.ac.id",
-          "picture": "android-chrome-192x192.png"
+          "picture": "/android-chrome-192x192.png"
         },
         "comment": "Keren banget 🤩",
         "datetime": "2024-05-20 11:37:32",

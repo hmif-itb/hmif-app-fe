@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router';
 import { Post } from '../-interface/IPost';
 
 export default function Feed({ posts }: { posts: Post[] }) {
@@ -20,7 +21,12 @@ function UserPost({ PostData }: { PostData: Post }) {
       <TextSection textData={PostData.TextData} />
       <ImageSection images={PostData.image} />
       <div className="mt-5 text-[18px] font-bold text-green-300">
-        <a href="">Show more</a>
+        <Link
+          to="/timeline/$infoId"
+          params={{ infoId: PostData.id.toString() }}
+        >
+          Show more
+        </Link>
       </div>
       <TagSection tags={PostData.TagData} />
     </div>
@@ -65,7 +71,7 @@ function TextSection({
 
 function TagSection({ tags }: { tags: string[] }) {
   return (
-    <div className="mt-2 flex gap-3">
+    <div className="mt-2 flex flex-wrap gap-3">
       {tags.map((tag) => (
         <a
           href=""
