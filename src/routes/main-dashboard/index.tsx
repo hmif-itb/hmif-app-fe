@@ -1,11 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router';
-import useSession from '~/hooks/auth/useSession';
+import useSessionForce from '~/hooks/auth/useSession';
 import DesktopView from './-components/desktop-view';
 import MobileView from './-components/mobile-view';
 import infos from './-dummy/info';
 
 function MainDashboard() {
-  const user = useSession();
+  const user = useSessionForce();
 
   if (!infos) {
     return <div>Error</div>;

@@ -1,8 +1,9 @@
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { useNavigate } from '@tanstack/react-router';
 import { useEffect } from 'react';
 import { z } from 'zod';
 import { api, queryClient } from '~/api/client';
-import { User } from '~/api/generated';
+import { ApiError, User } from '~/api/generated';
 import { setupNotification } from '~/lib/push';
 
 const userSchema = z.object({
@@ -18,10 +19,29 @@ const userSchema = z.object({
   picture: z.string(),
 });
 
-export default function useSession() {
-  const data = useSuspenseQuery<User>({
+/**
+ *
+ * @param forceLogin force the session to be not null, if forceLogin true and user is not logged in, it will redirect to login page
+ * @returns User not null if forceLogin is true, User | null if forceLogin is false
+ */
+export default function useSession<ForceLogin extends boolean = true>(
+  forceLogin: ForceLogin = true as ForceLogin,
+): ForceLogin extends true ? User : User | null {
+  const navigate = useNavigate();
+  const data = useSuspenseQuery<User | null>({
     queryKey: ['me'],
-    queryFn: () => api.auth.getMe(),
+    queryFn: () =>
+      api.auth.getMe().catch((error) => {
+        if (error instanceof ApiError && error.status === 401) {
+          localStorage.removeItem('user');
+          if (forceLogin) {
+            navigate({ to: '/login' });
+          } else {
+            return null;
+          }
+        }
+        throw error;
+      }),
     initialData: () => {
       try {
         const user = localStorage.getItem('user');
@@ -50,6 +70,7 @@ export default function useSession() {
     refetchOnMount: false,
     refetchOnReconnect: false,
     refetchOnWindowFocus: false,
+    enabled: forceLogin,
   });
 
   useEffect(() => {
@@ -58,7 +79,7 @@ export default function useSession() {
     }
   }, [data.data]);
 
-  return data.data;
+  return data.data!;
 }
 
 export function invalidateSession() {
