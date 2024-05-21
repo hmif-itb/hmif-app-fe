@@ -5,12 +5,12 @@ import Timeline from './timeline';
 
 function DesktopView() {
   return (
-    <div className="hidden size-full lg:block">
+    <div className="hidden size-full max-h-full flex-col overflow-hidden lg:flex">
       <HeaderTitle />
-      <div className="flex h-full justify-between">
-        <div className="flex size-full min-h-full flex-col items-center gap-12 border-r border-gray-300 py-8">
+      <div className="flex h-0 flex-1 overflow-hidden">
+        <div className="flex min-h-full flex-1 flex-col items-center gap-12 border-r border-gray-300 py-8">
           {/* Top Navigation Section */}
-          <section className="flex size-full max-w-[500px] justify-between gap-4 px-4">
+          <section className="flex w-full max-w-[500px] justify-between gap-4 px-4">
             <NavigationItem
               src="/main-dashboard/folder.svg"
               alt="Ding Dong"
@@ -37,13 +37,13 @@ function DesktopView() {
           </section>
 
           {/* Calendar */}
-          <div className="h-full grow">
+          <div className="">
             <Calendar />
           </div>
         </div>
 
         {/* Schedule Section */}
-        <div className="flex h-full min-w-[450px] flex-col py-8">
+        <div className="flex flex-1 flex-col self-stretch overflow-y-auto py-8">
           <Timeline />
         </div>
       </div>

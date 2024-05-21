@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import dates from '../-dummy/dates';
-import Dates from './dates';
 import infos from '../-dummy/info';
+import Dates from './dates';
 import Schedule from './schedule';
 
 function Timeline() {
@@ -16,7 +16,7 @@ function Timeline() {
   return (
     <>
       {/* Date Section */}
-      <section className="grid size-full max-w-[500px] grid-cols-7 justify-between gap-1 px-4 sm:gap-4">
+      <section className="grid w-full max-w-[500px] grid-cols-7 justify-between gap-1 px-4 sm:gap-4">
         {dates.map((date) => (
           <Dates
             key={date.date}
@@ -28,7 +28,7 @@ function Timeline() {
       </section>
 
       {/* Schedule Section */}
-      <section className="flex w-full max-w-[500px] flex-col gap-4 px-6">
+      <section className="mt-10 flex w-full max-w-[500px] flex-col gap-4 px-6">
         <p className="self-start font-semibold">Schedule Today</p>
 
         <div className="flex justify-between px-2 text-[#BCC1CD]">

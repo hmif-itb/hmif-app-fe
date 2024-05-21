@@ -7,7 +7,7 @@ export const Route = createFileRoute('/')({
   component: Index,
   loader: () => {
     if (loadUserCache()) {
-      throw redirect({ to: '/main-dashboard' });
+      throw redirect({ to: '/home' });
     }
   },
 });
