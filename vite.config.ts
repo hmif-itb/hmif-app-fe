@@ -22,8 +22,8 @@ export default defineConfig({
       srcDir: 'src',
       filename: 'sw.ts',
       manifest: {
-        name: 'HMIF App',
-        short_name: 'HMIF App',
+        name: 'PIPS!',
+        short_name: 'PIPS!',
         description: 'Aplikasi resmi Himpunan Mahasiswa Informatika ITB',
         icons: [
           {
