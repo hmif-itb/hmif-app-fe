@@ -5,7 +5,7 @@ import Feed from './-components/feed';
 import postData from '~/assets/mock/post.json';
 // import { Post } from './-interface/IPost';
 
-export const Route = createFileRoute('/timeline/')({
+export const Route = createFileRoute('/_app/timeline/')({
   component: Timeline,
 });
 

@@ -15,10 +15,11 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Route as rootRoute } from './routes/__root'
 import { Route as AboutImport } from './routes/about'
 import { Route as NavbarImport } from './routes/_navbar'
+import { Route as AppImport } from './routes/_app'
 import { Route as IndexImport } from './routes/index'
-import { Route as TimelineIndexImport } from './routes/timeline/index'
-import { Route as MainDashboardIndexImport } from './routes/main-dashboard/index'
-import { Route as InfoDetailIndexImport } from './routes/info-detail/index'
+import { Route as AppTimelineIndexImport } from './routes/_app/timeline/index'
+import { Route as AppMainDashboardIndexImport } from './routes/_app/main-dashboard/index'
+import { Route as AppInfoDetailIndexImport } from './routes/_app/info-detail/index'
 
 // Create Virtual Routes
 
@@ -40,6 +41,11 @@ const NavbarRoute = NavbarImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const AppRoute = AppImport.update({
+  id: '/_app',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const IndexRoute = IndexImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
@@ -50,27 +56,27 @@ const LoginIndexLazyRoute = LoginIndexLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/login/index.lazy').then((d) => d.Route))
 
-const TimelineIndexRoute = TimelineIndexImport.update({
-  path: '/timeline/',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const MainDashboardIndexRoute = MainDashboardIndexImport.update({
-  path: '/main-dashboard/',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const InfoDetailIndexRoute = InfoDetailIndexImport.update({
-  path: '/info-detail/',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const NavbarContohIndexLazyRoute = NavbarContohIndexLazyImport.update({
   path: '/contoh/',
   getParentRoute: () => NavbarRoute,
 } as any).lazy(() =>
   import('./routes/_navbar/contoh/index.lazy').then((d) => d.Route),
 )
+
+const AppTimelineIndexRoute = AppTimelineIndexImport.update({
+  path: '/timeline/',
+  getParentRoute: () => AppRoute,
+} as any)
+
+const AppMainDashboardIndexRoute = AppMainDashboardIndexImport.update({
+  path: '/main-dashboard/',
+  getParentRoute: () => AppRoute,
+} as any)
+
+const AppInfoDetailIndexRoute = AppInfoDetailIndexImport.update({
+  path: '/info-detail/',
+  getParentRoute: () => AppRoute,
+} as any)
 
 const NavbarContohContohIdIndexLazyRoute =
   NavbarContohContohIdIndexLazyImport.update({
@@ -88,6 +94,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/_app': {
+      preLoaderRoute: typeof AppImport
+      parentRoute: typeof rootRoute
+    }
     '/_navbar': {
       preLoaderRoute: typeof NavbarImport
       parentRoute: typeof rootRoute
@@ -96,21 +106,21 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutImport
       parentRoute: typeof rootRoute
     }
-    '/info-detail/': {
-      preLoaderRoute: typeof InfoDetailIndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/main-dashboard/': {
-      preLoaderRoute: typeof MainDashboardIndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/timeline/': {
-      preLoaderRoute: typeof TimelineIndexImport
-      parentRoute: typeof rootRoute
-    }
     '/login/': {
       preLoaderRoute: typeof LoginIndexLazyImport
       parentRoute: typeof rootRoute
+    }
+    '/_app/info-detail/': {
+      preLoaderRoute: typeof AppInfoDetailIndexImport
+      parentRoute: typeof AppImport
+    }
+    '/_app/main-dashboard/': {
+      preLoaderRoute: typeof AppMainDashboardIndexImport
+      parentRoute: typeof AppImport
+    }
+    '/_app/timeline/': {
+      preLoaderRoute: typeof AppTimelineIndexImport
+      parentRoute: typeof AppImport
     }
     '/_navbar/contoh/': {
       preLoaderRoute: typeof NavbarContohIndexLazyImport
@@ -127,14 +137,16 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren([
   IndexRoute,
+  AppRoute.addChildren([
+    AppInfoDetailIndexRoute,
+    AppMainDashboardIndexRoute,
+    AppTimelineIndexRoute,
+  ]),
   NavbarRoute.addChildren([
     NavbarContohIndexLazyRoute,
     NavbarContohContohIdIndexLazyRoute,
   ]),
   AboutRoute,
-  InfoDetailIndexRoute,
-  MainDashboardIndexRoute,
-  TimelineIndexRoute,
   LoginIndexLazyRoute,
 ])
 
