@@ -10,7 +10,7 @@ function DesktopView() {
       <div className="flex h-0 flex-1 overflow-hidden">
         <div className="flex min-h-full flex-1 flex-col items-center gap-12 border-r border-gray-300 py-8">
           {/* Top Navigation Section */}
-          <section className="flex w-full max-w-[500px] justify-between gap-4 px-4">
+          <section className="flex w-full max-w-screen-md justify-between gap-4 px-4">
             <NavigationItem
               src="/main-dashboard/folder.svg"
               alt="Ding Dong"

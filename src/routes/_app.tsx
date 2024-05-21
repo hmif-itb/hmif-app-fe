@@ -22,7 +22,7 @@ export const Route = createFileRoute('/_app')({
 function AppLayout() {
   return (
     <SessionProvider>
-      <main className="lg:flex lg:size-full lg:overflow-y-auto">
+      <main className="mx-auto max-w-screen-md lg:flex lg:size-full lg:max-w-none lg:overflow-y-auto">
         <LeftNavbar />
         <Outlet />
       </main>

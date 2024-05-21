@@ -7,12 +7,12 @@ import Timeline from './timeline';
 
 function MobileView() {
   return (
-    <div className="flex flex-col items-center gap-12 font-inter lg:hidden">
+    <div className="flex flex-col items-center gap-8 font-inter lg:hidden">
       {/* Profile Section */}
       <Profile />
 
       {/* Top Navigation Section */}
-      <section className="flex w-full max-w-[500px] justify-between gap-4 px-4">
+      <section className="flex w-full max-w-screen-md justify-between gap-4 px-4">
         <NavigationItem
           src="/main-dashboard/folder.svg"
           alt="Ding Dong"

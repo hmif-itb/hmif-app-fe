@@ -1,5 +1,5 @@
-import type { Schedule } from '../-dummy/info';
 import { Separator } from '~/components/ui/separator';
+import type { Schedule } from '../-dummy/info';
 
 function Schedule({
   info,
@@ -11,7 +11,7 @@ function Schedule({
   isSecondLastIndex: boolean;
 }) {
   return (
-    <div className="flex justify-between">
+    <div className="flex justify-between space-x-6">
       {/* Schedule Time */}
       <div className="flex flex-col">
         <p className="text-[#212525]">{info.timeStart}</p>
