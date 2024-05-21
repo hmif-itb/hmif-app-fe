@@ -18,6 +18,7 @@ import { Route as NavbarImport } from './routes/_navbar'
 import { Route as IndexImport } from './routes/index'
 import { Route as TimelineIndexImport } from './routes/timeline/index'
 import { Route as MainDashboardIndexImport } from './routes/main-dashboard/index'
+import { Route as InfoDetailIndexImport } from './routes/info-detail/index'
 
 // Create Virtual Routes
 
@@ -59,6 +60,11 @@ const MainDashboardIndexRoute = MainDashboardIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const InfoDetailIndexRoute = InfoDetailIndexImport.update({
+  path: '/info-detail/',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const NavbarContohIndexLazyRoute = NavbarContohIndexLazyImport.update({
   path: '/contoh/',
   getParentRoute: () => NavbarRoute,
@@ -88,6 +94,10 @@ declare module '@tanstack/react-router' {
     }
     '/about': {
       preLoaderRoute: typeof AboutImport
+      parentRoute: typeof rootRoute
+    }
+    '/info-detail/': {
+      preLoaderRoute: typeof InfoDetailIndexImport
       parentRoute: typeof rootRoute
     }
     '/main-dashboard/': {
@@ -122,6 +132,7 @@ export const routeTree = rootRoute.addChildren([
     NavbarContohContohIdIndexLazyRoute,
   ]),
   AboutRoute,
+  InfoDetailIndexRoute,
   MainDashboardIndexRoute,
   TimelineIndexRoute,
   LoginIndexLazyRoute,

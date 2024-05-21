@@ -1,38 +1,65 @@
 [
-    {
-        "id":1,
-        "profile":{
-            "name": "Bond James",
-            "email": "jamesbownd@gmail.com",
-            "picture": "/images/timeline/bligates.jpg"
-        },
-        "TextData": {
-            "title":"PEMILU SPARTA HMIF 2023",
-            "content": "Selamat pagi, Byte!\n Pemilihan Ketua SPARTA HMIF 2023 sudah ditutup pada 21 April 2024 (23.59) dengan total suara sah sebanyak 188 suara.\n Pengumuman Zeus terpilih akan dilaksanakan pada HARI INI (12.00) melalui broadcast ke grup Byte dan grup PIPS (WA)."
-        },
-        "TagData":["SPARTA", "BYTE", "Pemilu"],
-        "image":[
-            "/images/timeline/astronot.jpg",
-            "/images/timeline/ayam.jpg",
-            "/images/timeline/stivjob.jpg"
-        ]
+  {
+    "id": 1,
+    "profile": {
+      "name": "Bond James",
+      "email": "jamesbownd@gmail.com",
+      "picture": "android-chrome-192x192.png"
     },
-    {
-        "id":1,
-        "profile":{
-            "name": "Bond James",
-            "email": "jamesbownd@gmail.com",
-            "picture": "/images/timeline/bligates.jpg"
+    "TextData": {
+      "title": "PEMILU SPARTA HMIF 2023",
+      "content": "Selamat pagi, Byte! 👋 <br /><br /> Pemilihan Ketua SPARTA HMIF 2023 sudah ditutup pada 21 April 2024(23.59) dengan total suara sah sebanyak 188 suara. <br /><br /> Pengumuman Zeus terpilih akan dilaksanakan pada <strong>HARI INI </strong> (12.00) melalui <em>broadcast</em> ke grupByte dan grup PIPS (WA)."
+    },
+    "TagData": [
+      "SPARTA",
+      "BYTE",
+      "Pemilu",
+      "2023",
+      "Voting",
+      "Zeus",
+      "IF23",
+      "STI23",
+      "SUDO"
+    ],
+    "image": [
+      "android-chrome-192x192.png",
+      "android-chrome-192x192.png",
+      "android-chrome-192x192.png",
+      "android-chrome-192x192.png"
+    ],
+    "ReactionData": [
+      "heart-eyes",
+      "heart-eyes",
+      "fire",
+      "heart-eyes",
+      "party",
+      "party",
+      "party"
+    ],
+    "UserReaction": null,
+    "comments": [
+      {
+        "ProfileData": {
+          "name": "Sudo",
+          "email": "13521xxx@std.stei.itb.ac.id",
+          "picture": "android-chrome-192x192.png"
         },
-        "TextData": {
-            "title":"PEMILU SPARTA HMIF 2023",
-            "content": "Selamat pagi, Byte!\n Pemilihan Ketua SPARTA HMIF 2023 sudah ditutup pada 21 April 2024 (23.59) dengan total suara sah sebanyak 188 suara.\n Pengumuman Zeus terpilih akan dilaksanakan pada HARI INI (12.00) melalui broadcast ke grup Byte dan grup PIPS (WA)."
+        "comment": "Wowww, congrats Zeus!!!!",
+        "datetime": "2024-05-20 15:15:21",
+        "ReactionData": ["heart-eyes", "heart-eyes"],
+        "UserRaction": null
+      },
+      {
+        "ProfileData": {
+          "name": "Byte",
+          "email": "13522xxx@std.stei.itb.ac.id",
+          "picture": "android-chrome-192x192.png"
         },
-        "TagData":["SPARTA", "BYTE", "Pemilu"],
-        "image":[
-            "/images/timeline/astronot.jpg",
-            "/images/timeline/ayam.jpg",
-            "/images/timeline/stivjob.jpg"
-        ]
-    }
+        "comment": "Keren banget 🤩",
+        "datetime": "2024-05-20 11:37:32",
+        "ReactionData": [],
+        "UserRaction": null
+      }
+    ]
+  }
 ]
