@@ -4,7 +4,7 @@ function Navbar() {
   return (
     <nav className="sticky bottom-0 z-20 flex w-full justify-between bg-neutral-light px-8 py-2 lg:hidden">
       <BottomNavigationItem
-        to="/info-detail"
+        to="/timeline"
         src="/main-dashboard/question-mark.svg"
         alt="Info"
         title="Info"

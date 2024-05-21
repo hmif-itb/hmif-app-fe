@@ -5,7 +5,7 @@ import Header from './-components/header';
 import PostComment from './-components/post-comment';
 import PostInteraction from './-components/post-interaction';
 
-export const Route = createFileRoute('/_app/info-detail/')({
+export const Route = createFileRoute('/_app/timeline/$infoId/')({
   component: InfoDetail,
 });
 

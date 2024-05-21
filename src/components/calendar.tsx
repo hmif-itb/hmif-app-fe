@@ -17,7 +17,7 @@ export default function Calendar() {
           className="absolute left-0 top-0 size-full select-none rounded-xl object-cover"
         />
         <div className="relative flex items-center justify-between">
-          <div className="flex w-full items-center justify-around gap-10">
+          <div className="flex w-full items-center justify-between gap-10">
             <ChevronLeft
               className="cursor-pointer text-yellow-300 transition-all hover:scale-105"
               onClick={() => {

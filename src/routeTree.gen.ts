@@ -19,8 +19,8 @@ import { Route as AppImport } from './routes/_app'
 import { Route as IndexImport } from './routes/index'
 import { Route as AppTimelineIndexImport } from './routes/_app/timeline/index'
 import { Route as AppSettingsIndexImport } from './routes/_app/settings/index'
-import { Route as AppInfoDetailIndexImport } from './routes/_app/info-detail/index'
 import { Route as AppHomeIndexImport } from './routes/_app/home/index'
+import { Route as AppTimelineInfoIdIndexImport } from './routes/_app/timeline/$infoId/index'
 
 // Create Virtual Routes
 
@@ -74,11 +74,6 @@ const AppSettingsIndexRoute = AppSettingsIndexImport.update({
   getParentRoute: () => AppRoute,
 } as any)
 
-const AppInfoDetailIndexRoute = AppInfoDetailIndexImport.update({
-  path: '/info-detail/',
-  getParentRoute: () => AppRoute,
-} as any)
-
 const AppHomeIndexRoute = AppHomeIndexImport.update({
   path: '/home/',
   getParentRoute: () => AppRoute,
@@ -91,6 +86,11 @@ const NavbarContohContohIdIndexLazyRoute =
   } as any).lazy(() =>
     import('./routes/_navbar/contoh/$contohId/index.lazy').then((d) => d.Route),
   )
+
+const AppTimelineInfoIdIndexRoute = AppTimelineInfoIdIndexImport.update({
+  path: '/timeline/$infoId/',
+  getParentRoute: () => AppRoute,
+} as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -120,10 +120,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppHomeIndexImport
       parentRoute: typeof AppImport
     }
-    '/_app/info-detail/': {
-      preLoaderRoute: typeof AppInfoDetailIndexImport
-      parentRoute: typeof AppImport
-    }
     '/_app/settings/': {
       preLoaderRoute: typeof AppSettingsIndexImport
       parentRoute: typeof AppImport
@@ -135,6 +131,10 @@ declare module '@tanstack/react-router' {
     '/_navbar/contoh/': {
       preLoaderRoute: typeof NavbarContohIndexLazyImport
       parentRoute: typeof NavbarImport
+    }
+    '/_app/timeline/$infoId/': {
+      preLoaderRoute: typeof AppTimelineInfoIdIndexImport
+      parentRoute: typeof AppImport
     }
     '/_navbar/contoh/$contohId/': {
       preLoaderRoute: typeof NavbarContohContohIdIndexLazyImport
@@ -149,9 +149,9 @@ export const routeTree = rootRoute.addChildren([
   IndexRoute,
   AppRoute.addChildren([
     AppHomeIndexRoute,
-    AppInfoDetailIndexRoute,
     AppSettingsIndexRoute,
     AppTimelineIndexRoute,
+    AppTimelineInfoIdIndexRoute,
   ]),
   NavbarRoute.addChildren([
     NavbarContohIndexLazyRoute,

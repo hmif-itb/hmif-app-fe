@@ -24,7 +24,7 @@ function LeftNavbar() {
           <span>Home</span>
         </Link>
         <Link
-          to="/info-detail"
+          to="/timeline"
           className={`flex items-center gap-8 border-l-8 border-transparent p-4 data-[status]:border-green-300`}
           activeProps={{
             className:
