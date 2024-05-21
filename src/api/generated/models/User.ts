@@ -6,12 +6,12 @@ export type User = {
   id: string;
   nim: string;
   email: string;
-  fullName: string | null;
+  fullName: string;
   major: 'IF' | 'STI';
   region: 'Ganesha' | 'Jatinangor';
-  angkatan: number | null;
-  gender: 'F' | 'M' | null;
-  membershipStatus: string | null;
+  angkatan: number;
+  gender: 'F' | 'M';
+  membershipStatus: string;
   picture: string;
 };
 

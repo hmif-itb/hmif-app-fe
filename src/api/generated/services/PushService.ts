@@ -8,6 +8,27 @@ import type { BaseHttpRequest } from '../core/BaseHttpRequest';
 export class PushService {
   constructor(public readonly httpRequest: BaseHttpRequest) {}
   /**
+   * @returns any Push subscription logged out
+   * @throws ApiError
+   */
+  public logoutPush({
+    requestBody,
+  }: {
+    requestBody: {
+      endpoint: string;
+    },
+  }): CancelablePromise<any> {
+    return this.httpRequest.request({
+      method: 'PUT',
+      url: '/api/push/logout',
+      body: requestBody,
+      mediaType: 'application/json',
+      errors: {
+        400: `Bad request: validation error`,
+      },
+    });
+  }
+  /**
    * Register a push subscription returned by the browser push API
    * @returns any Push subscription registered
    * @throws ApiError
@@ -36,6 +57,9 @@ export class PushService {
   }: {
     requestBody: {
       title: string;
+      options?: {
+        body?: string;
+      };
     },
   }): CancelablePromise<any> {
     return this.httpRequest.request({

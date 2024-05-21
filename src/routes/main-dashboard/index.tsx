@@ -1,23 +1,13 @@
-import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
-import { api } from '~/api/client';
-import infos from './-dummy/info';
-import MobileView from './-components/mobile-view';
+import useSession from '~/hooks/auth/useSession';
 import DesktopView from './-components/desktop-view';
+import MobileView from './-components/mobile-view';
+import infos from './-dummy/info';
 
 function MainDashboard() {
-  const usersQuery = useQuery({
-    queryKey: ['me'],
-    queryFn: () => api.auth.getMe(),
-  });
+  const user = useSession();
 
-  if (usersQuery.isFetching) {
-    return <div>Loading...</div>;
-  }
-
-  const user = usersQuery.data;
-
-  if (!user || !infos) {
+  if (!infos) {
     return <div>Error</div>;
   }
 
