@@ -1,16 +1,15 @@
+import { Separator } from '@radix-ui/react-separator';
+import Calendar from '~/components/calendar';
+import Navbar from '~/components/navbar';
 import Profile from '~/components/profile';
 import NavigationItem from './navigation-item';
-import Calendar from '~/components/calendar';
-import { Separator } from '@radix-ui/react-separator';
 import Timeline from './timeline';
-import Navbar from '~/components/navbar';
-import { User } from '~/api/generated';
 
-function MobileView({ user }: { user: User }) {
+function MobileView() {
   return (
     <div className="flex flex-col items-center gap-12 font-inter lg:hidden">
       {/* Profile Section */}
-      <Profile user={user} />
+      <Profile />
 
       {/* Top Navigation Section */}
       <section className="flex w-full max-w-[500px] justify-between gap-4 px-4">

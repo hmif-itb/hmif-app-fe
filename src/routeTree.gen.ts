@@ -18,8 +18,9 @@ import { Route as NavbarImport } from './routes/_navbar'
 import { Route as AppImport } from './routes/_app'
 import { Route as IndexImport } from './routes/index'
 import { Route as AppTimelineIndexImport } from './routes/_app/timeline/index'
-import { Route as AppMainDashboardIndexImport } from './routes/_app/main-dashboard/index'
+import { Route as AppSettingsIndexImport } from './routes/_app/settings/index'
 import { Route as AppInfoDetailIndexImport } from './routes/_app/info-detail/index'
+import { Route as AppHomeIndexImport } from './routes/_app/home/index'
 
 // Create Virtual Routes
 
@@ -68,13 +69,18 @@ const AppTimelineIndexRoute = AppTimelineIndexImport.update({
   getParentRoute: () => AppRoute,
 } as any)
 
-const AppMainDashboardIndexRoute = AppMainDashboardIndexImport.update({
-  path: '/main-dashboard/',
+const AppSettingsIndexRoute = AppSettingsIndexImport.update({
+  path: '/settings/',
   getParentRoute: () => AppRoute,
 } as any)
 
 const AppInfoDetailIndexRoute = AppInfoDetailIndexImport.update({
   path: '/info-detail/',
+  getParentRoute: () => AppRoute,
+} as any)
+
+const AppHomeIndexRoute = AppHomeIndexImport.update({
+  path: '/home/',
   getParentRoute: () => AppRoute,
 } as any)
 
@@ -110,12 +116,16 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginIndexLazyImport
       parentRoute: typeof rootRoute
     }
+    '/_app/home/': {
+      preLoaderRoute: typeof AppHomeIndexImport
+      parentRoute: typeof AppImport
+    }
     '/_app/info-detail/': {
       preLoaderRoute: typeof AppInfoDetailIndexImport
       parentRoute: typeof AppImport
     }
-    '/_app/main-dashboard/': {
-      preLoaderRoute: typeof AppMainDashboardIndexImport
+    '/_app/settings/': {
+      preLoaderRoute: typeof AppSettingsIndexImport
       parentRoute: typeof AppImport
     }
     '/_app/timeline/': {
@@ -138,8 +148,9 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren([
   IndexRoute,
   AppRoute.addChildren([
+    AppHomeIndexRoute,
     AppInfoDetailIndexRoute,
-    AppMainDashboardIndexRoute,
+    AppSettingsIndexRoute,
     AppTimelineIndexRoute,
   ]),
   NavbarRoute.addChildren([
