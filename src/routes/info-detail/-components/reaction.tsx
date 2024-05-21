@@ -6,7 +6,7 @@ const Reaction = ({
   initialUserReaction,
 }: {
   reactionData: IPost['ReactionData'];
-  initialUserReaction: IPost['UserReaction'];
+  initialUserReaction?: IPost['UserReaction'] | null;
 }) => {
   const [userReaction, setUserReaction] = useState(initialUserReaction);
   const [addReaction, setAddReaction] = useState(false);
@@ -21,7 +21,7 @@ const Reaction = ({
   };
 
   return (
-    <div className="relative flex items-center space-x-3 ml-0 mr-1">
+    <div className="relative ml-0 mr-1 flex items-center space-x-3">
       <button onClick={handleAddReaction} className="relative z-10">
         <img
           src={!userReaction ? '/icons/like-active.svg' : '/icons/like.svg'}
@@ -29,7 +29,7 @@ const Reaction = ({
         />
       </button>
       {addReaction && (
-        <div className="absolute flex-row space-x-1 top-50 w-max -translate-y-full left-0">
+        <div className="top-50 absolute left-0 w-max -translate-y-full flex-row space-x-1">
           <button
             onClick={() => handleReaction('grin')}
             className={userReaction === 'grin' ? 'size-8' : 'size-12'}

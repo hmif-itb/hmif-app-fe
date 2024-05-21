@@ -5,5 +5,5 @@ export interface IComment {
   comment: string;
   datetime: string;
   ReactionData: string[];
-  UserReaction: string;
+  UserReaction?: string | null;
 }
