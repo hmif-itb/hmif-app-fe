@@ -1,6 +1,5 @@
 import { Separator } from '@radix-ui/react-separator';
 import Calendar from '~/components/calendar';
-import Navbar from '~/components/navbar';
 import Profile from '~/components/profile';
 import NavigationItem from './navigation-item';
 import Timeline from './timeline';
@@ -47,9 +46,6 @@ function MobileView() {
 
       {/* Schedule Section */}
       <Timeline />
-
-      {/* Bottom Navigation Section */}
-      <Navbar />
     </div>
   );
 }

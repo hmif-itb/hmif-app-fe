@@ -1,6 +1,7 @@
 import { Outlet, createFileRoute, redirect } from '@tanstack/react-router';
 import { queryClient } from '~/api/client';
 import LeftNavbar from '~/components/left-navbar';
+import Navbar from '~/components/navbar';
 import SessionProvider from '~/components/session';
 import { loadUserCache } from '~/lib/session';
 
@@ -25,6 +26,7 @@ function AppLayout() {
       <main className="mx-auto max-w-screen-md lg:flex lg:size-full lg:max-w-none lg:overflow-y-auto">
         <LeftNavbar />
         <Outlet />
+        <Navbar />
       </main>
     </SessionProvider>
   );
