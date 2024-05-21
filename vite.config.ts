@@ -36,6 +36,11 @@ export default defineConfig({
             sizes: '384x384',
             type: 'image/png',
           },
+          {
+            src: '/android-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+          },
         ],
         screenshots: [
           {
@@ -47,7 +52,7 @@ export default defineConfig({
           },
         ],
         theme_color: '#FFFFFF',
-        background_color: '#ffffff',
+        background_color: '#2F754A',
         display: 'standalone',
         share_target: {
           action: '/share-file-handler',
