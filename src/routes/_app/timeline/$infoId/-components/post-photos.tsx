@@ -3,7 +3,7 @@ import { IPost } from '../-interface/IPost';
 const PostPhotos = ({ images }: { images: IPost['image'] }) => {
   return images.length === 1 ? (
     <div className="grid grid-cols-1 gap-4">
-      <div className="relative" style={{ paddingBottom: '100%' }}>
+      <div className="relative">
         <img
           src={images[0]}
           alt="Post"
@@ -12,10 +12,7 @@ const PostPhotos = ({ images }: { images: IPost['image'] }) => {
       </div>
     </div>
   ) : images.length === 2 ? (
-    <div
-      className="flex gap-2 overflow-hidden rounded-lg"
-      style={{ height: '75vw' }}
-    >
+    <div className="flex h-4/5 gap-2 overflow-hidden rounded-lg">
       <div className="relative h-full w-1/2">
         <img
           src={images[0]}
