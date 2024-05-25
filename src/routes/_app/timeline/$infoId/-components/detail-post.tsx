@@ -21,7 +21,7 @@ const DetailPost = ({
     <div className="flex-col space-y-4">
       <ProfilePost type="poster" profile={profile} />
       <PostText textData={textData} />
-      <PostPhotos images={images} />
+      {images.length > 0 && <PostPhotos images={images} />}
       <PostTags tags={tags} />
     </div>
   );

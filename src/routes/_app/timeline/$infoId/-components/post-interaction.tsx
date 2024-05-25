@@ -5,16 +5,22 @@ const PostInteraction = ({
   reactionData,
   userReaction,
   commentsCount,
+  isActive,
+  toggleReaction,
 }: {
   reactionData: IPost['ReactionData'];
   userReaction: string | null;
   commentsCount: number;
+  isActive: boolean;
+  toggleReaction: () => void;
 }) => {
   return (
     <div className="flex items-center space-x-3 border-y border-gray-300 p-2">
       <Reaction
         reactionData={reactionData}
         initialUserReaction={userReaction}
+        isActive={isActive}
+        toggleReaction={toggleReaction}
       ></Reaction>
       <div className="flex space-x-1">
         <button>

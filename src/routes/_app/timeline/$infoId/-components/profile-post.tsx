@@ -1,3 +1,4 @@
+import { cn } from '~/lib/utils';
 import { IProfile } from '../-interface/IProfile';
 
 const ProfilePost = ({
@@ -16,7 +17,11 @@ const ProfilePost = ({
         <img
           src={profile.picture}
           alt="Avatar"
-          className={`rounded-full ${type == 'poster' ? 'size-12' : 'size-9'}`}
+          className={cn(
+            'rounded-full',
+            type == 'poster' && 'size-12',
+            type == 'commenter' && 'size-9',
+          )}
         />
       </div>
       <div className="ml-3">
