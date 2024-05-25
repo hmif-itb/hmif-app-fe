@@ -1,9 +1,15 @@
-import { Link, createFileRoute } from '@tanstack/react-router';
+import { Link, createFileRoute, redirect } from '@tanstack/react-router';
 import { Button } from '~/components/ui/button';
+import { loadUserCache } from '~/lib/session';
 import LoginLayout from './login/-components/LoginLayout';
 
 export const Route = createFileRoute('/')({
   component: Index,
+  loader: () => {
+    if (loadUserCache()) {
+      throw redirect({ to: '/home' });
+    }
+  },
 });
 
 function Index() {

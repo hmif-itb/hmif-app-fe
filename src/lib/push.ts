@@ -1,7 +1,8 @@
 import { api } from '~/api/client';
 import { PushSubscription } from '~/api/generated';
 
-// TODO: remove alert
+let _subs: PushSubscription | null = null;
+
 export async function setupNotification() {
   if (typeof Notification !== 'undefined') {
     try {
@@ -12,23 +13,24 @@ export async function setupNotification() {
           userVisibleOnly: true,
           applicationServerKey: import.meta.env.VITE_VAPID_KEY,
         });
-        const json = subscription.toJSON();
+        const json = subscription.toJSON() as PushSubscription;
         if (
           typeof json.endpoint === 'string' &&
           typeof json.keys === 'object'
         ) {
           await api.push.registerPush({
-            requestBody: json as PushSubscription,
+            requestBody: json,
           });
         }
-        alert('Subscribed to push notif');
-        return subscription;
+        _subs = json;
+        return _subs;
       }
     } catch (e) {
-      console.log(e);
-      alert('Failed to subscribe to push notif');
+      // no permission
+      return null;
     }
   } else {
-    alert('Notification not supported');
+    // not supported
+    return null;
   }
 }

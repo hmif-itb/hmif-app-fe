@@ -15,7 +15,12 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Route as rootRoute } from './routes/__root'
 import { Route as AboutImport } from './routes/about'
 import { Route as NavbarImport } from './routes/_navbar'
+import { Route as AppImport } from './routes/_app'
 import { Route as IndexImport } from './routes/index'
+import { Route as AppTimelineIndexImport } from './routes/_app/timeline/index'
+import { Route as AppSettingsIndexImport } from './routes/_app/settings/index'
+import { Route as AppHomeIndexImport } from './routes/_app/home/index'
+import { Route as AppTimelineInfoIdIndexImport } from './routes/_app/timeline/$infoId/index'
 
 // Create Virtual Routes
 
@@ -35,6 +40,11 @@ const AboutRoute = AboutImport.update({
 
 const NavbarRoute = NavbarImport.update({
   id: '/_navbar',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AppRoute = AppImport.update({
+  id: '/_app',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -62,6 +72,21 @@ const NavbarContohIndexLazyRoute = NavbarContohIndexLazyImport.update({
   import('./routes/_navbar/contoh/index.lazy').then((d) => d.Route),
 )
 
+const AppTimelineIndexRoute = AppTimelineIndexImport.update({
+  path: '/timeline/',
+  getParentRoute: () => AppRoute,
+} as any)
+
+const AppSettingsIndexRoute = AppSettingsIndexImport.update({
+  path: '/settings/',
+  getParentRoute: () => AppRoute,
+} as any)
+
+const AppHomeIndexRoute = AppHomeIndexImport.update({
+  path: '/home/',
+  getParentRoute: () => AppRoute,
+} as any)
+
 const NavbarContohContohIdIndexLazyRoute =
   NavbarContohContohIdIndexLazyImport.update({
     path: '/contoh/$contohId/',
@@ -70,12 +95,21 @@ const NavbarContohContohIdIndexLazyRoute =
     import('./routes/_navbar/contoh/$contohId/index.lazy').then((d) => d.Route),
   )
 
+const AppTimelineInfoIdIndexRoute = AppTimelineInfoIdIndexImport.update({
+  path: '/timeline/$infoId/',
+  getParentRoute: () => AppRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
     '/': {
       preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/_app': {
+      preLoaderRoute: typeof AppImport
       parentRoute: typeof rootRoute
     }
     '/_navbar': {
@@ -94,9 +128,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginIndexLazyImport
       parentRoute: typeof rootRoute
     }
+    '/_app/home/': {
+      preLoaderRoute: typeof AppHomeIndexImport
+      parentRoute: typeof AppImport
+    }
+    '/_app/settings/': {
+      preLoaderRoute: typeof AppSettingsIndexImport
+      parentRoute: typeof AppImport
+    }
+    '/_app/timeline/': {
+      preLoaderRoute: typeof AppTimelineIndexImport
+      parentRoute: typeof AppImport
+    }
     '/_navbar/contoh/': {
       preLoaderRoute: typeof NavbarContohIndexLazyImport
       parentRoute: typeof NavbarImport
+    }
+    '/_app/timeline/$infoId/': {
+      preLoaderRoute: typeof AppTimelineInfoIdIndexImport
+      parentRoute: typeof AppImport
     }
     '/_navbar/contoh/$contohId/': {
       preLoaderRoute: typeof NavbarContohContohIdIndexLazyImport
@@ -109,6 +159,12 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren([
   IndexRoute,
+  AppRoute.addChildren([
+    AppHomeIndexRoute,
+    AppSettingsIndexRoute,
+    AppTimelineIndexRoute,
+    AppTimelineInfoIdIndexRoute,
+  ]),
   NavbarRoute.addChildren([
     NavbarContohIndexLazyRoute,
     NavbarContohContohIdIndexLazyRoute,

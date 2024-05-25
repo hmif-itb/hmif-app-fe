@@ -14,7 +14,7 @@ export default defineConfig({
   plugins: [
     VitePWA({
       strategies: 'injectManifest',
-      registerType: 'autoUpdate',
+      registerType: 'prompt',
       devOptions: {
         enabled: true,
         type: 'module',
@@ -22,8 +22,8 @@ export default defineConfig({
       srcDir: 'src',
       filename: 'sw.ts',
       manifest: {
-        name: 'HMIF App',
-        short_name: 'HMIF App',
+        name: 'PIPS!',
+        short_name: 'PIPS!',
         description: 'Aplikasi resmi Himpunan Mahasiswa Informatika ITB',
         icons: [
           {
@@ -32,9 +32,21 @@ export default defineConfig({
             type: 'image/png',
           },
           {
-            src: '/android-chrome-384x384.png',
-            sizes: '384x384',
+            src: '/android-chrome-512x512.png',
+            sizes: '512x512',
             type: 'image/png',
+          },
+          {
+            src: '/android-chrome-maskable-192x192.png',
+            sizes: '192x192',
+            type: 'image/png',
+            purpose: 'maskable',
+          },
+          {
+            src: '/android-chrome-maskable-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'maskable',
           },
         ],
         screenshots: [
@@ -47,7 +59,7 @@ export default defineConfig({
           },
         ],
         theme_color: '#FFFFFF',
-        background_color: '#ffffff',
+        background_color: '#2F754A',
         display: 'standalone',
         share_target: {
           action: '/share-file-handler',
