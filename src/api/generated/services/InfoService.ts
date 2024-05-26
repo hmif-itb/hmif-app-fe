@@ -36,12 +36,15 @@ export class InfoService {
     requestBody,
   }: {
     requestBody: {
+      title: string;
       content: string;
-      category: string;
-      forAngkatan: number;
       mediaUrls?: Array<string>;
-      forMatakuliah: string;
-      forClass: string;
+      forCategories: Array<string>;
+      forAngkatan?: Array<string>;
+      forCourses?: Array<{
+        courseId: string;
+        class?: number;
+      }>;
     },
   }): CancelablePromise<Info> {
     return this.httpRequest.request({
@@ -58,7 +61,7 @@ export class InfoService {
    * @returns any Get list of infos based on filter
    * @throws ApiError
    */
-  public getListInfos({
+  public getListInfo({
     search,
     category,
     unread = 'false',
@@ -85,6 +88,54 @@ export class InfoService {
       },
       errors: {
         400: `Bad request`,
+      },
+    });
+  }
+  /**
+   * @returns any Info deleted
+   * @throws ApiError
+   */
+  public deleteInfo({
+    infoId,
+  }: {
+    /**
+     * Id of info
+     */
+    infoId: string,
+  }): CancelablePromise<any> {
+    return this.httpRequest.request({
+      method: 'DELETE',
+      url: '/api/info/{infoId}',
+      path: {
+        'infoId': infoId,
+      },
+      errors: {
+        400: `Bad request`,
+        404: `Id not found`,
+      },
+    });
+  }
+  /**
+   * @returns Info Get info by id
+   * @throws ApiError
+   */
+  public getInfoById({
+    infoId,
+  }: {
+    /**
+     * Id of info
+     */
+    infoId: string,
+  }): CancelablePromise<Info> {
+    return this.httpRequest.request({
+      method: 'GET',
+      url: '/api/info/{infoId}',
+      path: {
+        'infoId': infoId,
+      },
+      errors: {
+        400: `Bad request`,
+        404: `Id not found`,
       },
     });
   }

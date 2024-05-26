@@ -1,10 +1,11 @@
-import { User } from '~/api/generated';
+import useSession from '~/hooks/auth/useSession';
 import { timeToMessage } from '~/routes/dashboard/-lib/utils';
 import { Button } from './ui/button';
 
-function Profile({ user }: { user: User }) {
+function Profile() {
+  const user = useSession();
   return (
-    <section className="flex w-full max-w-[500px] items-center justify-between px-4 pt-4 lg:max-w-full">
+    <section className="flex w-full max-w-screen-md items-center justify-between px-4 pt-4 lg:max-w-full">
       <div className="flex items-center gap-4">
         <img
           src={user.picture}

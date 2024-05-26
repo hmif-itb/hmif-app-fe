@@ -1,8 +1,8 @@
 import { createLazyFileRoute } from '@tanstack/react-router';
 import GoogleLogo from '~/assets/icons/login/google.svg';
 import { Button } from '~/components/ui/button';
+import useLogin from '../../hooks/auth/useLogin';
 import LoginLayout from './-components/LoginLayout';
-import useLogin from './-hooks/useLogin';
 
 export const Route = createLazyFileRoute('/login/')({
   component: LoginPage,

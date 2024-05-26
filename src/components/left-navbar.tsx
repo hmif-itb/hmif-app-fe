@@ -1,55 +1,57 @@
 import { Link } from '@tanstack/react-router';
 import Profile from './profile';
-import { User } from '~/api/generated';
-import { useState } from 'react';
 
-function LeftNavbar({ user }: { user: User }) {
-  const [isSelected] = useState(true);
-
+function LeftNavbar() {
   return (
-    <section className="sticky top-0 flex min-h-screen w-full min-w-[200px] max-w-[375px] flex-col gap-24 border-r border-gray-300">
-      <Profile user={user} />
+    <section className="sticky top-0 hidden min-h-full w-[375px] shrink-0 flex-col gap-24 border-r border-gray-300 lg:flex">
+      <Profile />
 
       {/* Navigation Section */}
       <section className="flex flex-col gap-8 ">
         <Link
-          to="/dashboard"
-          className={`flex items-center gap-8 p-4 ${!isSelected ? 'bg-yellow-75' : ''}`}
+          to="/home"
+          className={`flex items-center gap-8 border-l-8 border-transparent p-4 data-[status]:border-green-300`}
+          activeProps={{
+            className:
+              'bg-yellow-75 [&>img]:[filter:invert(26%)_sepia(14%)_saturate(1090%)_hue-rotate(82deg)_brightness(98%)_contrast(92%)] font-bold text-green-300',
+          }}
         >
           <img
             src="/dashboard/house.svg"
             alt="Home"
-            className={`size-[2.625rem] ${!isSelected ? '[filter:invert(26%)_sepia(14%)_saturate(1090%)_hue-rotate(82deg)_brightness(98%)_contrast(92%)]' : ''}`}
+            className={`size-[2.625rem]`}
           />
-          <p className={`${!isSelected ? 'font-bold text-green-300' : ''}`}>
-            Home
-          </p>
+          <span>Home</span>
         </Link>
         <Link
-          to="/dashboard"
-          className={`flex items-center gap-8 p-4 ${isSelected ? 'bg-yellow-75' : ''}`}
+          to="/timeline"
+          className={`flex items-center gap-8 border-l-8 border-transparent p-4 data-[status]:border-green-300`}
+          activeProps={{
+            className:
+              'bg-yellow-75 [&>img]:[filter:invert(26%)_sepia(14%)_saturate(1090%)_hue-rotate(82deg)_brightness(98%)_contrast(92%)] font-bold text-green-300',
+          }}
         >
           <img
             src="/dashboard/question-mark.svg"
             alt="Info"
-            className={`size-[2.625rem] ${isSelected ? '[filter:invert(26%)_sepia(14%)_saturate(1090%)_hue-rotate(82deg)_brightness(98%)_contrast(92%)]' : ''}`}
+            className={`size-[2.625rem]`}
           />
-          <p className={`${isSelected ? 'font-bold text-green-300' : ''}`}>
-            Info
-          </p>
+          <span>Info</span>
         </Link>
         <Link
-          to="/dashboard"
-          className={`flex items-center gap-8 p-4 ${!isSelected ? 'bg-yellow-75' : ''}`}
+          to="/settings"
+          className={`flex items-center gap-8 border-l-8 border-transparent p-4 data-[status]:border-green-300`}
+          activeProps={{
+            className:
+              'bg-yellow-75 [&>img]:[filter:invert(26%)_sepia(14%)_saturate(1090%)_hue-rotate(82deg)_brightness(98%)_contrast(92%)] font-bold text-green-300',
+          }}
         >
           <img
             src="/dashboard/settings.svg"
             alt="Settings"
-            className={`size-[2.625rem] ${!isSelected ? '[filter:invert(26%)_sepia(14%)_saturate(1090%)_hue-rotate(82deg)_brightness(98%)_contrast(92%)]' : ''}`}
+            className={`size-[2.625rem]`}
           />
-          <p className={`${!isSelected ? 'font-bold text-green-300' : ''}`}>
-            Settings
-          </p>
+          <span>Settings</span>
         </Link>
       </section>
     </section>

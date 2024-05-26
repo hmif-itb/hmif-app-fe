@@ -57,3 +57,24 @@ self.addEventListener('fetch', (event) => {
     })(),
   );
 });
+
+import { registerRoute } from 'workbox-routing';
+import { StaleWhileRevalidate } from 'workbox-strategies';
+
+const assetsExt = [
+  '.js',
+  '.css',
+  '.png',
+  '.jpg',
+  '.jpeg',
+  '.svg',
+  '.webp',
+  '.ico',
+];
+
+registerRoute(
+  ({ url }) => assetsExt.some((ext) => url.pathname.endsWith(ext)),
+  new StaleWhileRevalidate({
+    cacheName: 'assets-cache',
+  }),
+);
