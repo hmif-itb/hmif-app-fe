@@ -13,7 +13,7 @@ function Navbar() {
     <section className="flex w-full max-w-[400px] justify-between px-8 pb-4">
       <section className="flex w-full max-w-[400px] justify-between px-8 pb-4">
         <BottomNavigationItem
-          src="/main-dashboard/question-mark.svg"
+          src="/dashboard/question-mark.svg"
           alt="Info"
           title="Info"
           isSelected={isSelected}
@@ -21,7 +21,7 @@ function Navbar() {
         />
 
         <BottomNavigationItem
-          src="/main-dashboard/house.svg"
+          src="/dashboard/house.svg"
           alt="Home"
           title="Home"
           isSelected={!isSelected}
@@ -29,7 +29,7 @@ function Navbar() {
         />
 
         <BottomNavigationItem
-          src="/main-dashboard/settings.svg"
+          src="/dashboard/settings.svg"
           alt="Settings"
           title="Settings"
           isSelected={!isSelected}

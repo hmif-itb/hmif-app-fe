@@ -32,6 +32,6 @@ function MainDashboard() {
   );
 }
 
-export const Route = createFileRoute('/main-dashboard/')({
+export const Route = createFileRoute('/dashboard/')({
   component: MainDashboard,
 });

@@ -1,4 +1,6 @@
 import { User } from '~/api/generated';
+import { timeToMessage } from '~/routes/dashboard/-lib/utils';
+import { Button } from './ui/button';
 
 function Profile({ user }: { user: User }) {
   return (
@@ -12,12 +14,12 @@ function Profile({ user }: { user: User }) {
 
         <div>
           <p>Hi, {user.fullName}!</p>
-          <p className="font-bold">Good Morning</p>
+          <p className="font-bold">{timeToMessage()}</p>
         </div>
       </div>
-      <button className="rounded-[18px] border border-solid border-black bg-yellow-100 p-2">
-        <img src="/main-dashboard/bell.svg" alt="Bell" className="size-6" />
-      </button>
+      <Button className="rounded-[18px] border border-solid border-black bg-yellow-100 p-2">
+        <img src="/dashboard/bell.svg" alt="Bell" className="size-6" />
+      </Button>
     </section>
   );
 }

@@ -13,11 +13,11 @@ function LeftNavbar({ user }: { user: User }) {
       {/* Navigation Section */}
       <section className="flex flex-col gap-8 ">
         <Link
-          to="/main-dashboard"
+          to="/dashboard"
           className={`flex items-center gap-8 p-4 ${!isSelected ? 'bg-yellow-75' : ''}`}
         >
           <img
-            src="/main-dashboard/house.svg"
+            src="/dashboard/house.svg"
             alt="Home"
             className={`size-[2.625rem] ${!isSelected ? '[filter:invert(26%)_sepia(14%)_saturate(1090%)_hue-rotate(82deg)_brightness(98%)_contrast(92%)]' : ''}`}
           />
@@ -26,11 +26,11 @@ function LeftNavbar({ user }: { user: User }) {
           </p>
         </Link>
         <Link
-          to="/main-dashboard"
+          to="/dashboard"
           className={`flex items-center gap-8 p-4 ${isSelected ? 'bg-yellow-75' : ''}`}
         >
           <img
-            src="/main-dashboard/question-mark.svg"
+            src="/dashboard/question-mark.svg"
             alt="Info"
             className={`size-[2.625rem] ${isSelected ? '[filter:invert(26%)_sepia(14%)_saturate(1090%)_hue-rotate(82deg)_brightness(98%)_contrast(92%)]' : ''}`}
           />
@@ -39,11 +39,11 @@ function LeftNavbar({ user }: { user: User }) {
           </p>
         </Link>
         <Link
-          to="/main-dashboard"
+          to="/dashboard"
           className={`flex items-center gap-8 p-4 ${!isSelected ? 'bg-yellow-75' : ''}`}
         >
           <img
-            src="/main-dashboard/settings.svg"
+            src="/dashboard/settings.svg"
             alt="Settings"
             className={`size-[2.625rem] ${!isSelected ? '[filter:invert(26%)_sepia(14%)_saturate(1090%)_hue-rotate(82deg)_brightness(98%)_contrast(92%)]' : ''}`}
           />

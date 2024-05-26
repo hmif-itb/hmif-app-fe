@@ -16,7 +16,7 @@ function Timeline() {
   return (
     <>
       {/* Date Section */}
-      <section className="grid size-full max-w-[500px] grid-cols-7 justify-between gap-1 px-4 sm:gap-4">
+      <section className="grid size-full max-w-[500px] grid-cols-7 justify-between gap-1 px-4 sm:gap-4 lg:max-w-full">
         {dates.map((date) => (
           <Dates
             key={date.date}
@@ -38,11 +38,7 @@ function Timeline() {
           </div>
 
           <div>
-            <img
-              src="/main-dashboard/filter.svg"
-              alt="Filter"
-              className="size-6"
-            />
+            <img src="/dashboard/filter.svg" alt="Filter" className="size-6" />
           </div>
         </div>
 

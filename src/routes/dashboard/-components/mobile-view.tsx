@@ -15,25 +15,21 @@ function MobileView({ user }: { user: User }) {
       {/* Top Navigation Section */}
       <section className="flex w-full max-w-[500px] justify-between gap-4 px-4">
         <NavigationItem
-          src="/main-dashboard/folder.svg"
+          src="/dashboard/folder.svg"
           alt="Ding Dong"
           title="Ding Dong"
         />
 
         <NavigationItem
-          src="/main-dashboard/calendar.svg"
+          src="/dashboard/calendar.svg"
           alt="Calendar"
           title="Calendar"
         />
 
-        <NavigationItem
-          src="/main-dashboard/camera.svg"
-          alt="Tutor"
-          title="Tutor"
-        />
+        <NavigationItem src="/dashboard/camera.svg" alt="Tutor" title="Tutor" />
 
         <NavigationItem
-          src="/main-dashboard/file.svg"
+          src="/dashboard/file.svg"
           alt="Bundel Soal"
           title="Bundel Soal"
         />
