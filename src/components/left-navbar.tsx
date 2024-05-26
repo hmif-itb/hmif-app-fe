@@ -16,11 +16,7 @@ function LeftNavbar() {
               'bg-yellow-75 [&>img]:[filter:invert(26%)_sepia(14%)_saturate(1090%)_hue-rotate(82deg)_brightness(98%)_contrast(92%)] font-bold text-green-300',
           }}
         >
-          <img
-            src="/dashboard/house.svg"
-            alt="Home"
-            className={`size-[2.625rem]`}
-          />
+          <img src="/home/house.svg" alt="Home" className={`size-[2.625rem]`} />
           <span>Home</span>
         </Link>
         <Link
@@ -32,7 +28,7 @@ function LeftNavbar() {
           }}
         >
           <img
-            src="/dashboard/question-mark.svg"
+            src="/home/question-mark.svg"
             alt="Info"
             className={`size-[2.625rem]`}
           />
@@ -47,7 +43,7 @@ function LeftNavbar() {
           }}
         >
           <img
-            src="/dashboard/settings.svg"
+            src="/home/settings.svg"
             alt="Settings"
             className={`size-[2.625rem]`}
           />

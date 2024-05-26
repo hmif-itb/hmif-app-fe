@@ -12,25 +12,21 @@ function DesktopView() {
           {/* Top Navigation Section */}
           <section className="flex w-full max-w-screen-md justify-between gap-4 px-4">
             <NavigationItem
-              src="/main-dashboard/folder.svg"
+              src="/home/folder.svg"
               alt="Ding Dong"
               title="Ding Dong"
             />
 
             <NavigationItem
-              src="/main-dashboard/calendar.svg"
+              src="/home/calendar.svg"
               alt="Calendar"
               title="Calendar"
             />
 
-            <NavigationItem
-              src="/main-dashboard/camera.svg"
-              alt="Tutor"
-              title="Tutor"
-            />
+            <NavigationItem src="/home/camera.svg" alt="Tutor" title="Tutor" />
 
             <NavigationItem
-              src="/main-dashboard/file.svg"
+              src="/home/file.svg"
               alt="Bundel Soal"
               title="Bundel Soal"
             />

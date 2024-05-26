@@ -48,11 +48,7 @@ function Schedule({
         <p className="text-sm">{info.description}</p>
 
         <div className="flex items-center gap-1">
-          <img
-            src="/main-dashboard/location.svg"
-            alt="Location"
-            className="size-4"
-          />
+          <img src="/home/location.svg" alt="Location" className="size-4" />
           <p className="text-sm">{info.location}</p>
         </div>
 

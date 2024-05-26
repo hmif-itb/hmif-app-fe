@@ -1,6 +1,4 @@
 import { Dot } from 'lucide-react';
-import { Button } from '~/components/ui/button';
-import { cn } from '~/lib/utils';
 
 function Dates({
   date,
@@ -12,35 +10,32 @@ function Dates({
   onClick: (date: string) => void;
 }) {
   return (
-    <Button
-      className={cn(
-        'flex flex-col w-full min-w-[55px] items-center rounded-xl px-3 py-2 font-inter sm:px-4',
-        currentDate === date.date ? 'bg-yellow-100 z-10' : 'bg-white',
-      )}
+    <button
+      className={`flex flex-col items-center ${
+        currentDate === date.date ? 'bg-yellow-100' : ''
+      } rounded-xl px-3 py-2 font-inter sm:px-4`}
       onClick={() => onClick(date.date)}
     >
       <p
-        className={cn(
-          'text-lg text-black',
+        className={`${
           currentDate === date.date
             ? 'font-bold text-green-400'
-            : 'font-semibold',
-        )}
+            : 'font-semibold'
+        } text-lg`}
       >
         {date.date}
       </p>
       <p
-        className={cn(
-          'text-base',
+        className={`${
           currentDate === date.date
             ? 'font-medium text-green-400'
-            : 'font-normal text-[#94A3B8]',
-        )}
+            : 'font-normal text-[#94A3B8]'
+        } text-base`}
       >
         {date.day}
       </p>
       {currentDate === date.date && <Dot className="text-green-300" />}
-    </Button>
+    </button>
   );
 }
 

@@ -1,5 +1,5 @@
 import useSession from '~/hooks/auth/useSession';
-import { timeToMessage } from '~/routes/dashboard/-lib/utils';
+import timeToMessage from '~/lib/time';
 import { Button } from './ui/button';
 
 function Profile() {
@@ -19,7 +19,7 @@ function Profile() {
         </div>
       </div>
       <Button className="rounded-[18px] border border-solid border-black bg-yellow-100 p-2">
-        <img src="/dashboard/bell.svg" alt="Bell" className="size-6" />
+        <img src="/home/bell.svg" alt="Bell" className="size-6" />
       </Button>
     </section>
   );

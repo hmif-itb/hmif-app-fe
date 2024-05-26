@@ -17,7 +17,7 @@ export default function Calendar() {
     <div className="flex w-full flex-col items-center justify-center sm:flex-row">
       <div className="relative flex flex-col gap-4 rounded-xl p-8">
         <img
-          src="/main-dashboard/calendar-bg.png"
+          src="/home/calendar-bg.png"
           className="absolute left-0 top-0 size-full select-none rounded-xl object-cover"
         />
         <div className="relative flex items-center justify-between">
