@@ -4,6 +4,10 @@ import { generateDate, months } from '../lib/calendar';
 import { cn } from '../lib/utils';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
+/**
+ * A calendar component that allows users to navigate through months and select dates.
+ * @component
+ */
 export default function Calendar() {
   const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
   const currentDate = dayjs();
