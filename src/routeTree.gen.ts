@@ -21,6 +21,7 @@ import { Route as AppTimelineIndexImport } from './routes/_app/timeline/index'
 import { Route as AppSettingsIndexImport } from './routes/_app/settings/index'
 import { Route as AppHomeIndexImport } from './routes/_app/home/index'
 import { Route as AppTimelineInfoIdIndexImport } from './routes/_app/timeline/$infoId/index'
+import { Route as AppCourseAddIndexImport } from './routes/_app/course/add/index'
 
 // Create Virtual Routes
 
@@ -92,6 +93,11 @@ const AppTimelineInfoIdIndexRoute = AppTimelineInfoIdIndexImport.update({
   getParentRoute: () => AppRoute,
 } as any)
 
+const AppCourseAddIndexRoute = AppCourseAddIndexImport.update({
+  path: '/course/add/',
+  getParentRoute: () => AppRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -132,6 +138,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NavbarContohIndexLazyImport
       parentRoute: typeof NavbarImport
     }
+    '/_app/course/add/': {
+      preLoaderRoute: typeof AppCourseAddIndexImport
+      parentRoute: typeof AppImport
+    }
     '/_app/timeline/$infoId/': {
       preLoaderRoute: typeof AppTimelineInfoIdIndexImport
       parentRoute: typeof AppImport
@@ -151,6 +161,7 @@ export const routeTree = rootRoute.addChildren([
     AppHomeIndexRoute,
     AppSettingsIndexRoute,
     AppTimelineIndexRoute,
+    AppCourseAddIndexRoute,
     AppTimelineInfoIdIndexRoute,
   ]),
   NavbarRoute.addChildren([
