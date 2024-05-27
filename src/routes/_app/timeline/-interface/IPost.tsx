@@ -5,10 +5,8 @@ export interface Post {
     email: string;
     picture: string;
   };
-  TextData: {
-    title: string;
-    content: string;
-  };
+  title: string;
+  content: string;
   TagData: string[];
   image: string[];
 }
