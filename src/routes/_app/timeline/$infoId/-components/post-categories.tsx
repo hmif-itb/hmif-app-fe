@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
-import { IPost } from '../-interface/IPost';
-import Tag from './tag';
+import { useState } from 'react';
 import { Button } from '~/components/ui/button';
+import Tag from './tag';
 
-const PostTags = ({ tags }: { tags: IPost['TagData'] }) => {
+const PostCategories = ({ tags }: { tags: string[] }) => {
   const [showAll, setShowAll] = useState(false);
 
   const handleShowMore = () => {
@@ -32,4 +31,4 @@ const PostTags = ({ tags }: { tags: IPost['TagData'] }) => {
   );
 };
 
-export default PostTags;
+export default PostCategories;

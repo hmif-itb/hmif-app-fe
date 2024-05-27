@@ -1,6 +1,4 @@
-import { IPost } from '../-interface/IPost';
-
-const PostPhotos = ({ images }: { images: IPost['image'] }) => {
+const PostPhotos = ({ images }: { images: string[] }) => {
   return images.length === 1 ? (
     <div className="grid grid-cols-1 gap-4">
       <div className="relative">

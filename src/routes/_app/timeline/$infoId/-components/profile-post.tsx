@@ -1,13 +1,7 @@
+import { User } from '~/api/generated';
 import { cn } from '~/lib/utils';
-import { IProfile } from '../-interface/IProfile';
 
-const ProfilePost = ({
-  type,
-  profile,
-}: {
-  type: string;
-  profile: IProfile;
-}) => {
+const ProfilePost = ({ type, profile }: { type: string; profile: User }) => {
   if (!profile) {
     return null;
   }
@@ -15,7 +9,8 @@ const ProfilePost = ({
     <div className="flex items-center">
       <div className="relative">
         <img
-          src={profile.picture}
+          // TODO: default picture if null
+          src={profile.picture!}
           alt="Avatar"
           className={cn(
             'rounded-full',
@@ -25,7 +20,7 @@ const ProfilePost = ({
         />
       </div>
       <div className="ml-3">
-        <p className="text-base font-semibold leading-6">{profile.name}</p>
+        <p className="text-base font-semibold leading-6">{profile.fullName}</p>
         <p className="text-xs text-neutral-dark-active">{profile.email}</p>
       </div>
     </div>

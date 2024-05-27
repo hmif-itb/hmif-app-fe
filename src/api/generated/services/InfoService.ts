@@ -2,6 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { Course } from '../models/Course';
 import type { Info } from '../models/Info';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import type { BaseHttpRequest } from '../core/BaseHttpRequest';
@@ -29,7 +30,7 @@ export class InfoService {
   }
   /**
    * Create an info
-   * @returns Info Info created
+   * @returns any Info created
    * @throws ApiError
    */
   public createInfo({
@@ -46,7 +47,56 @@ export class InfoService {
         class?: number;
       }>;
     },
-  }): CancelablePromise<Info> {
+  }): CancelablePromise<{
+    id: string;
+    creatorId: string;
+    title: string;
+    content: string;
+    createdAt: string;
+    infoMedias?: Array<{
+      infoId: string;
+      mediaId: string;
+      media: {
+        id: string;
+        creatorId: string;
+        name: string;
+        type: string;
+        url: string;
+        createdAt: string;
+      };
+    }>;
+    infoCategories?: Array<{
+      infoId: string;
+      categoryId: string;
+      category: {
+        id: string;
+        name: string;
+        requiredPush: boolean;
+      };
+    }>;
+    infoCourses?: Array<{
+      infoId: string;
+      courseId: string;
+      class: number | null;
+      course: Course;
+    }>;
+    infoAngkatan?: Array<{
+      infoId: string;
+      angkatanId: string;
+      angkatan: {
+        id: string;
+        year: number;
+        name: string;
+      };
+    }>;
+    reactions?: {
+      totalReactions: number;
+      reactionsCount: Array<{
+        reaction: string;
+        count: number;
+      }>;
+    };
+  }> {
     return this.httpRequest.request({
       method: 'POST',
       url: '/api/info',
@@ -129,7 +179,7 @@ export class InfoService {
   }): CancelablePromise<Info> {
     return this.httpRequest.request({
       method: 'GET',
-      url: '/api/info/${infoId}',
+      url: '/api/info/{infoId}',
       path: {
         'infoId': infoId,
       },

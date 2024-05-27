@@ -1,29 +1,31 @@
-import { createFileRoute, useParams } from '@tanstack/react-router';
+import { useQuery } from '@tanstack/react-query';
+import { createFileRoute } from '@tanstack/react-router';
+import { useState } from 'react';
+import { api } from '~/api/client';
 import postData from '~/assets/mock/post.json';
 import DetailPost from './-components/detail-post';
 import Header from './-components/header';
 import PostComment from './-components/post-comment';
 import PostInteraction from './-components/post-interaction';
-import { useState } from 'react';
-import { api } from '~/api/client';
-import { fetchPostById } from '~/utils/fetch-post-by-id';
 
 export const Route = createFileRoute('/_app/timeline/$infoId/')({
   component: InfoDetail,
-  loader: async ({ params: { infoId } }) => {
-    console.log('infoId:', infoId);
-    try {
-      const info = await api.info.getInfoById({ infoId });
-      console.log(info);
-    } catch (error) {
-      console.error('Failed to fetch info:', error);
-    }
-    return fetchPostById(infoId);
-  },
 });
 
 function InfoDetail() {
   const { infoId } = Route.useParams();
+  const { data: info } = useQuery({
+    queryKey: ['info', 'detail', infoId],
+    queryFn: () => api.info.getInfoById({ infoId }),
+  });
+  const { data: comments } = useQuery({
+    queryKey: ['info', 'comments', infoId],
+    queryFn: () =>
+      api.comment
+        .getCommentsList({ infoId, sort: 'oldest' })
+        .then((res) => res.comment),
+  });
+
   const [activeReaction, setActiveReaction] = useState<string | null>(null);
 
   const toggleReaction = (key: string) => {
@@ -34,32 +36,33 @@ function InfoDetail() {
     }
   };
 
+  if (!info) {
+    // TODO: handle error or loading
+    return null;
+  }
+
   // let info = api.info.readInfo(InfoId);
 
   return (
-    <div>
+    <div className="w-full">
       <Header />
-      <h1>{infoId}</h1>
-      <div className="flex-col space-y-4 p-4">
-        <DetailPost
-          images={postData[0].image}
-          tags={postData[0].TagData}
-          profile={postData[0].profile}
-          title={postData[0].title}
-          content={postData[0].content}
-        />
+      <div className="max-w-screen-md flex-col space-y-4 p-4">
+        <DetailPost info={info} />
+        {/* TODO: wait for backend reaction */}
         <PostInteraction
           reactionData={postData[0].ReactionData}
-          commentsCount={postData[0].comments.length}
+          commentsCount={comments?.length ?? 0}
           userReaction={postData[0].UserReaction}
           isActive={activeReaction === 'post'}
           toggleReaction={() => toggleReaction('post')}
         />
-        <PostComment
-          comments={postData[0].comments}
-          activeReaction={activeReaction}
-          toggleReaction={toggleReaction}
-        />
+        {comments && (
+          <PostComment
+            comments={comments}
+            activeReaction={activeReaction}
+            toggleReaction={toggleReaction}
+          />
+        )}
       </div>
     </div>
   );

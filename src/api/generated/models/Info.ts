@@ -3,6 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { Course } from './Course';
+import type { User } from './User';
 export type Info = {
   id: string;
   creatorId: string;
@@ -52,5 +53,6 @@ export type Info = {
       count: number;
     }>;
   };
+  creator: User;
 };
 
