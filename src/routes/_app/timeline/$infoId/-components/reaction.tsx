@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { IPost } from '../-interface/IPost';
 import { Button } from '~/components/ui/button';
 import { cn } from '~/lib/utils';
+import { IPost } from '../-interface/IPost';
 
 const Reaction = ({
   reactionData,
@@ -40,7 +40,7 @@ const Reaction = ({
             className={cn(
               userReaction === 'grin' && 'size-10',
               userReaction !== 'grin' && 'size-8',
-              'p-0 m-0',
+              'm-0 p-0',
             )}
           >
             <img
@@ -54,7 +54,7 @@ const Reaction = ({
             className={cn(
               userReaction === 'heart-eyes' && 'size-10',
               userReaction !== 'heart-eyes' && 'size-8',
-              'p-0 m-0',
+              'm-0 p-0',
             )}
           >
             <img
@@ -68,7 +68,7 @@ const Reaction = ({
             className={cn(
               userReaction === 'fire' && 'size-10',
               userReaction !== 'fire' && 'size-8',
-              'p-0 m-0',
+              'm-0 p-0',
             )}
           >
             <img
@@ -82,7 +82,7 @@ const Reaction = ({
             className={cn(
               userReaction === 'cry' && 'size-10',
               userReaction !== 'cry' && 'size-8',
-              'p-0 m-0',
+              'm-0 p-0',
             )}
           >
             <img
@@ -96,7 +96,7 @@ const Reaction = ({
             className={cn(
               userReaction === 'screaming' && 'size-10',
               userReaction !== 'screaming' && 'size-8',
-              'p-0 m-0',
+              'm-0 p-0',
             )}
           >
             <img
@@ -110,7 +110,7 @@ const Reaction = ({
             className={cn(
               userReaction === 'party' && 'size-10',
               userReaction !== 'party' && 'size-8',
-              'p-0 m-0',
+              'm-0 p-0',
             )}
           >
             <img
