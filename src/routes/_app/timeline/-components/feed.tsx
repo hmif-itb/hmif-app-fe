@@ -18,7 +18,7 @@ function UserPost({ PostData }: { PostData: Post }) {
         ## Day Ago
       </div>
       <ProfileSection ProfileData={PostData.profile} />
-      <TextSection textData={PostData.TextData} />
+      <TextSection title={PostData.title} content={PostData.content} />
       <ImageSection images={PostData.image} />
       <div className="mt-5 text-[18px] font-bold text-green-300">
         <Link
@@ -53,18 +53,14 @@ function ProfileSection({ ProfileData }: { ProfileData: Post['profile'] }) {
   );
 }
 
-function TextSection({
-  textData,
-}: {
-  textData: {
-    title: string;
-    content: string;
-  };
-}) {
+function TextSection({ title, content }: { title: string; content: string }) {
   return (
     <div>
-      <h1 className="mb-2 text-[20px] font-semibold">{textData.title}</h1>
-      <span className="text-[16px]">{textData.content}</span>
+      <h1 className="mb-2 text-[20px] font-semibold">{title}</h1>
+      <div
+        className="text-base"
+        dangerouslySetInnerHTML={{ __html: content }}
+      />
     </div>
   );
 }

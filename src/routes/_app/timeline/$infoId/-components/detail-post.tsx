@@ -10,17 +10,19 @@ const DetailPost = ({
   images,
   tags,
   profile,
-  textData,
+  title,
+  content,
 }: {
   images: IPost['image'];
   tags: IPost['TagData'];
   profile: IProfile;
-  textData: IPost['TextData'];
+  title: IPost['title'];
+  content: IPost['content'];
 }) => {
   return (
     <div className="flex-col space-y-4">
       <ProfilePost type="poster" profile={profile} />
-      <PostText textData={textData} />
+      <PostText title={title} content={content} />
       {images.length > 0 && <PostPhotos images={images} />}
       <PostTags tags={tags} />
     </div>

@@ -129,7 +129,7 @@ export class InfoService {
   }): CancelablePromise<Info> {
     return this.httpRequest.request({
       method: 'GET',
-      url: '/api/info/{infoId}',
+      url: '/api/info/${infoId}',
       path: {
         'infoId': infoId,
       },
