@@ -1,52 +1,54 @@
 import { Link } from '@tanstack/react-router';
+import { Info, User } from '~/api/generated';
 import { Post } from '../-interface/IPost';
 
-export default function Feed({ posts }: { posts: Post[] }) {
+export default function Feed({ infos }: { infos: Info[] }) {
   return (
     <div>
-      {posts.map((post) => (
-        <UserPost PostData={post} />
+      {infos.map((info) => (
+        <UserPost key={info.id} info={info} />
       ))}
     </div>
   );
 }
 
-function UserPost({ PostData }: { PostData: Post }) {
+function UserPost({ info }: { info: Info }) {
   return (
     <div className="my-10">
       <div className="mb-5 text-[14px] font-bold text-neutral-dark">
         ## Day Ago
       </div>
-      <ProfileSection ProfileData={PostData.profile} />
-      <TextSection title={PostData.title} content={PostData.content} />
-      <ImageSection images={PostData.image} />
+      <ProfileSection data={info.creator} />
+      <TextSection title={info.title} content={info.content} />
+      {/* TODO: handle other than image */}
+      <ImageSection images={info.infoMedias?.map((im) => im.media.url) ?? []} />
       <div className="mt-5 text-[18px] font-bold text-green-300">
-        <Link
-          to="/timeline/$infoId"
-          params={{ infoId: PostData.id.toString() }}
-        >
+        <Link to="/timeline/$infoId" params={{ infoId: info.id }}>
           Show more
         </Link>
       </div>
-      <TagSection tags={PostData.TagData} />
+      <TagSection
+        tags={info.infoCategories?.map((ic) => ic.category.name) ?? []}
+      />
     </div>
   );
 }
 
-function ProfileSection({ ProfileData }: { ProfileData: Post['profile'] }) {
+function ProfileSection({ data }: { data: User }) {
   return (
     <div className="mb-5 flex items-center gap-5">
       <img
-        src={ProfileData.picture}
+        // TODO: handle null
+        src={data.picture!}
         alt=""
         className="size-[52px] rounded-full shadow-sm"
       />
       <div className="flex flex-col items-baseline">
         <h1 className="m-0 text-[16px] font-semibold">
-          <a href="">{ProfileData.name}</a>
+          <a href="">{data.fullName}</a>
         </h1>
         <span className="text-[12px] font-[400] leading-6 text-neutral-dark-active">
-          <a href="">{ProfileData.email}</a>
+          <a href="">{data.email}</a>
         </span>
       </div>
     </div>
