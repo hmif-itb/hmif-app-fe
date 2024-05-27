@@ -49,6 +49,23 @@ function LeftNavbar() {
           />
           <span>Settings</span>
         </Link>
+
+        {/* TODO: sebenernya di desainnya gaada tapi kayaknya harusnya ada */}
+        <Link
+          to="/courses"
+          className={`flex items-center gap-8 border-l-8 border-transparent p-4 data-[status]:border-green-300`}
+          activeProps={{
+            className:
+              'bg-yellow-75 [&>img]:[filter:invert(26%)_sepia(14%)_saturate(1090%)_hue-rotate(82deg)_brightness(98%)_contrast(92%)] font-bold text-green-300',
+          }}
+        >
+          <img
+            src="/home/settings.svg"
+            alt="Courses"
+            className={`size-[2.625rem]`}
+          />
+          <span>Courses</span>
+        </Link>
       </section>
     </section>
   );

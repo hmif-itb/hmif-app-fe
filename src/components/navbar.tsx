@@ -22,6 +22,14 @@ function Navbar() {
         alt="Settings"
         title="Settings"
       />
+
+      {/* TODO: sebenernya di desainnya gaada tapi kayaknya harusnya ada */}
+      <BottomNavigationItem
+        to="/courses"
+        src="/home/settings.svg"
+        alt="Courses"
+        title="Courses"
+      />
     </nav>
   );
 }
