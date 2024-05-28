@@ -11,7 +11,7 @@ export const Route = createRootRoute({
 });
 
 function RootComponent() {
-  if (!import.meta.env.DEV && isMobile() && !isPWA()) {
+  if (isMobile() && !isPWA()) {
     return <AskForInstall />;
   }
   return (
