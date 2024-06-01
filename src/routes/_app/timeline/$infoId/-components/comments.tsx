@@ -1,13 +1,14 @@
-import { Comment } from '~/api/generated';
+import { CommentWithReactions } from '~/api/generated';
 import { formatDate } from '~/utils/format-date';
 import ProfilePost from './profile-post';
+import Reaction from './reaction';
 
-const PostComment = ({
+const Comments = ({
   comments,
   activeReaction,
   toggleReaction,
 }: {
-  comments: Comment[];
+  comments: CommentWithReactions[];
   activeReaction: string | null;
   toggleReaction: (key: string) => void;
 }) => {
@@ -31,7 +32,7 @@ const CommentComponent = ({
   isActive,
   toggleReaction,
 }: {
-  commentData: Comment;
+  commentData: CommentWithReactions;
   isActive: boolean;
   toggleReaction: () => void;
 }) => {
@@ -44,12 +45,12 @@ const CommentComponent = ({
       <p>{commentData.content}</p>
       <div className="flex items-center space-x-1">
         {/* wait for reactions backend */}
-        {/* <Reaction
-          reactionData={commentData.ReactionData}
-          initialUserReaction={commentData.UserReaction}
+        <Reaction
+          reactions={commentData.reactions}
+          // initialUserReaction={commentData.UserReaction}
           isActive={isActive}
           toggleReaction={toggleReaction}
-        ></Reaction> */}
+        ></Reaction>
         <div className="text-xs font-semibold text-gray-400">
           {formatDate(commentData.createdAt)}
         </div>
@@ -58,4 +59,4 @@ const CommentComponent = ({
   );
 };
 
-export default PostComment;
+export default Comments;

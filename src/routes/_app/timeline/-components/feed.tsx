@@ -1,19 +1,18 @@
 import { Link } from '@tanstack/react-router';
 import { Info, User } from '~/api/generated';
 import Avatar from '~/components/user/avatar';
-import { Post } from '../-interface/IPost';
 
 export default function Feed({ infos }: { infos: Info[] }) {
   return (
     <div>
       {infos.map((info) => (
-        <UserPost key={info.id} info={info} />
+        <UserInfo key={info.id} info={info} />
       ))}
     </div>
   );
 }
 
-function UserPost({ info }: { info: Info }) {
+function UserInfo({ info }: { info: Info }) {
   return (
     <div className="my-10">
       <div className="mb-5 text-sm font-bold text-neutral-dark">## Day Ago</div>
@@ -76,7 +75,7 @@ function TagSection({ tags }: { tags: string[] }) {
   );
 }
 
-function ImageSection({ images }: { images: Post['image'] }) {
+function ImageSection({ images }: { images: string[] }) {
   if (images.length === 0) return null;
   return (
     <div className="mt-5 grid grid-cols-2 gap-2 lg:grid-cols-3">

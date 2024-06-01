@@ -156,7 +156,7 @@ const Reaction = ({
                 key={reaction.reaction}
                 src={emojiSrc}
                 alt={reaction.reaction}
-                className="size-5"
+                className="size-6"
                 style={{ marginLeft: '-8px', zIndex: (4 - index) * 5 }}
               />
             );

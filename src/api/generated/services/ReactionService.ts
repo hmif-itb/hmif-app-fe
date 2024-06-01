@@ -3,12 +3,13 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { Reaction } from '../models/Reaction';
+import type { ReactionAggregate } from '../models/ReactionAggregate';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import type { BaseHttpRequest } from '../core/BaseHttpRequest';
 export class ReactionService {
   constructor(public readonly httpRequest: BaseHttpRequest) {}
   /**
-   * @returns any Get reactions
+   * @returns ReactionAggregate Get reactions
    * @throws ApiError
    */
   public getReactions({
@@ -17,13 +18,7 @@ export class ReactionService {
   }: {
     infoId?: string,
     commentId?: string,
-  }): CancelablePromise<{
-    totalReactions: number;
-    reactionsCount: Array<{
-      reaction: string;
-      count: number;
-    }>;
-  }> {
+  }): CancelablePromise<ReactionAggregate> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/api/reaction',

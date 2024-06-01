@@ -4,6 +4,7 @@
 /* eslint-disable */
 import type { Course } from '../models/Course';
 import type { Info } from '../models/Info';
+import type { ReactionAggregate } from '../models/ReactionAggregate';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import type { BaseHttpRequest } from '../core/BaseHttpRequest';
 export class InfoService {
@@ -89,13 +90,7 @@ export class InfoService {
         name: string;
       };
     }>;
-    reactions?: {
-      totalReactions: number;
-      reactionsCount: Array<{
-        reaction: string;
-        count: number;
-      }>;
-    };
+    reactions?: ReactionAggregate;
   }> {
     return this.httpRequest.request({
       method: 'POST',

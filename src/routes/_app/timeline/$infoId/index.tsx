@@ -3,9 +3,9 @@ import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 import { api } from '~/api/client';
 import postData from '~/assets/mock/post.json';
+import Comments from './-components/comments';
 import DetailPost from './-components/detail-post';
 import Header from './-components/header';
-import PostComment from './-components/post-comment';
 import PostInteraction from './-components/post-interaction';
 
 export const Route = createFileRoute('/_app/timeline/$infoId/')({
@@ -57,7 +57,7 @@ function InfoDetail() {
           toggleReaction={() => toggleReaction('post')}
         />
         {comments && (
-          <PostComment
+          <Comments
             comments={comments}
             activeReaction={activeReaction}
             toggleReaction={toggleReaction}
