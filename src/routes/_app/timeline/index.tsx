@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from '~/api/client';
 import Feed from './-components/feed';
 import SearchBar from './-components/searchbar';
@@ -11,10 +11,18 @@ export const Route = createFileRoute('/_app/timeline/')({
 });
 
 function Timeline() {
+  const queryClient = useQueryClient();
   const { data: infos } = useQuery({
     // TODO: apply filter
     queryKey: ['info'],
-    queryFn: () => api.info.getListInfo({}).then((res) => res.infos),
+    queryFn: () =>
+      api.info.getListInfo({}).then((res) => {
+        const infos = res.infos;
+        infos.forEach((info) => {
+          queryClient.setQueryData(['info', 'detail', info.id], info);
+        });
+        return infos;
+      }),
   });
   if (!infos) {
     // TODO: handle loading or empty
