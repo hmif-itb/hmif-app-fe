@@ -1,6 +1,6 @@
 import { CommentWithReactions } from '~/api/generated';
 import { formatDate } from '~/utils/format-date';
-import ProfilePost from './profile-post';
+import InfoCreator from '../../-components/info-creator';
 import Reaction from './reaction';
 
 const Comments = ({
@@ -38,10 +38,7 @@ const CommentComponent = ({
 }) => {
   return (
     <div className="flex-row space-y-3">
-      <ProfilePost
-        type={'commenter'}
-        profile={commentData.creator}
-      ></ProfilePost>
+      <InfoCreator creator={commentData.creator} isComment />
       <p>{commentData.content}</p>
       <div className="flex items-center space-x-1">
         {/* wait for reactions backend */}

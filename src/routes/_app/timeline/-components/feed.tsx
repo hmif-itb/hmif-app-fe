@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router';
-import { Info, User } from '~/api/generated';
-import Avatar from '~/components/user/avatar';
+import { Info } from '~/api/generated';
+import InfoCreator from './info-creator';
 
 export default function Feed({ infos }: { infos: Info[] }) {
   return (
@@ -16,7 +16,7 @@ function UserInfo({ info }: { info: Info }) {
   return (
     <div className="my-10">
       <div className="mb-5 text-sm font-bold text-neutral-dark">## Day Ago</div>
-      <ProfileSection data={info.creator} />
+      <InfoCreator creator={info.creator} className="mb-5" />
       <TextSection title={info.title} content={info.content} />
       {/* TODO: handle other than image */}
       <ImageSection images={info.infoMedias?.map((im) => im.media.url) ?? []} />
@@ -28,22 +28,6 @@ function UserInfo({ info }: { info: Info }) {
       <TagSection
         tags={info.infoCategories?.map((ic) => ic.category.name) ?? []}
       />
-    </div>
-  );
-}
-
-function ProfileSection({ data }: { data: User }) {
-  return (
-    <div className="mb-5 flex items-center gap-5">
-      <Avatar src={data.picture} alt={data.fullName} />
-      <div className="flex flex-col items-baseline">
-        <h1 className="m-0 text-base font-semibold">
-          <a href="">{data.fullName}</a>
-        </h1>
-        <span className="text-xs font-[400] leading-6 text-neutral-dark-active">
-          <a href="">{data.email}</a>
-        </span>
-      </div>
     </div>
   );
 }
