@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router';
 import { Info, User } from '~/api/generated';
+import Avatar from '~/components/user/avatar';
 import { Post } from '../-interface/IPost';
 
 export default function Feed({ infos }: { infos: Info[] }) {
@@ -15,14 +16,12 @@ export default function Feed({ infos }: { infos: Info[] }) {
 function UserPost({ info }: { info: Info }) {
   return (
     <div className="my-10">
-      <div className="mb-5 text-[14px] font-bold text-neutral-dark">
-        ## Day Ago
-      </div>
+      <div className="mb-5 text-sm font-bold text-neutral-dark">## Day Ago</div>
       <ProfileSection data={info.creator} />
       <TextSection title={info.title} content={info.content} />
       {/* TODO: handle other than image */}
       <ImageSection images={info.infoMedias?.map((im) => im.media.url) ?? []} />
-      <div className="mt-5 text-[18px] font-bold text-green-300">
+      <div className="mt-5 text-lg font-bold text-green-300">
         <Link to="/timeline/$infoId" params={{ infoId: info.id }}>
           Show more
         </Link>
@@ -37,17 +36,12 @@ function UserPost({ info }: { info: Info }) {
 function ProfileSection({ data }: { data: User }) {
   return (
     <div className="mb-5 flex items-center gap-5">
-      <img
-        // TODO: handle null
-        src={data.picture!}
-        alt=""
-        className="size-[52px] rounded-full shadow-sm"
-      />
+      <Avatar src={data.picture} alt={data.fullName} />
       <div className="flex flex-col items-baseline">
-        <h1 className="m-0 text-[16px] font-semibold">
+        <h1 className="m-0 text-base font-semibold">
           <a href="">{data.fullName}</a>
         </h1>
-        <span className="text-[12px] font-[400] leading-6 text-neutral-dark-active">
+        <span className="text-xs font-[400] leading-6 text-neutral-dark-active">
           <a href="">{data.email}</a>
         </span>
       </div>
@@ -83,6 +77,7 @@ function TagSection({ tags }: { tags: string[] }) {
 }
 
 function ImageSection({ images }: { images: Post['image'] }) {
+  if (images.length === 0) return null;
   return (
     <div className="mt-5 grid grid-cols-2 gap-2 lg:grid-cols-3">
       <img

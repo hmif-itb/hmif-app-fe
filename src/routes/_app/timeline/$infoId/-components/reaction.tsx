@@ -1,15 +1,16 @@
 import { useState } from 'react';
+import { Info } from '~/api/generated';
 import { Button } from '~/components/ui/button';
 import { cn } from '~/lib/utils';
 import { IPost } from '../-interface/IPost';
 
 const Reaction = ({
-  reactionData,
+  reactions: reactions,
   initialUserReaction,
   isActive,
   toggleReaction,
 }: {
-  reactionData: IPost['ReactionData'];
+  reactions: Info['reactions'];
   initialUserReaction?: IPost['UserReaction'] | null;
   isActive: boolean;
   toggleReaction: () => void;
@@ -29,7 +30,9 @@ const Reaction = ({
         className="relative z-10 p-0"
       >
         <img
-          src={userReaction ? '/icons/like-active.svg' : '/icons/like.svg'}
+          src={
+            userReaction ? '/img/icons/like-active.svg' : '/img/icons/like.svg'
+          }
           alt="like"
         />
       </Button>
@@ -44,7 +47,7 @@ const Reaction = ({
             )}
           >
             <img
-              src="/icons/emojiGrin.svg"
+              src="/img/icons/emojiGrin.svg"
               alt="grin"
               className="m-0 size-full p-0"
             />
@@ -58,7 +61,7 @@ const Reaction = ({
             )}
           >
             <img
-              src="/icons/emojiHeartEyes.svg"
+              src="/img/icons/emojiHeartEyes.svg"
               alt="heart-eyes"
               className="m-0 size-full p-0"
             />
@@ -72,7 +75,7 @@ const Reaction = ({
             )}
           >
             <img
-              src="/icons/emojiFire.svg"
+              src="/img/icons/emojiFire.svg"
               alt="fire"
               className="m-0 size-full p-0"
             />
@@ -86,7 +89,7 @@ const Reaction = ({
             )}
           >
             <img
-              src="/icons/emojiCry.svg"
+              src="/img/icons/emojiCry.svg"
               alt="cry"
               className="m-0 size-full p-0"
             />
@@ -100,7 +103,7 @@ const Reaction = ({
             )}
           >
             <img
-              src="/icons/emojiScreaming.svg"
+              src="/img/icons/emojiScreaming.svg"
               alt="screaming"
               className="m-0 size-full p-0"
             />
@@ -114,35 +117,35 @@ const Reaction = ({
             )}
           >
             <img
-              src="/icons/emojiParty.svg"
+              src="/img/icons/emojiParty.svg"
               alt="party"
               className="m-0 size-full p-0"
             />
           </button>
         </div>
       )}
-      {reactionData.length > 0 && (
+      {reactions && (
         <div className="flex items-center space-x-2">
-          {reactionData.slice(0, 6).map((reaction, index) => {
+          {reactions.reactionsCount.map((reaction, index) => {
             let emojiSrc = '';
-            switch (reaction) {
+            switch (reaction.reaction) {
               case 'cry':
-                emojiSrc = '/icons/emojiCry.svg';
+                emojiSrc = '/img/icons/emojiCry.svg';
                 break;
               case 'fire':
-                emojiSrc = '/icons/emojiFire.svg';
+                emojiSrc = '/img/icons/emojiFire.svg';
                 break;
               case 'heart-eyes':
-                emojiSrc = '/icons/emojiHeartEyes.svg';
+                emojiSrc = '/img/icons/emojiHeartEyes.svg';
                 break;
               case 'grin':
-                emojiSrc = '/icons/emojiGrin.svg';
+                emojiSrc = '/img/icons/emojiGrin.svg';
                 break;
               case 'screaming':
-                emojiSrc = '/icons/emojiScreaming.svg';
+                emojiSrc = '/img/icons/emojiScreaming.svg';
                 break;
               case 'party':
-                emojiSrc = '/icons/emojiParty.svg';
+                emojiSrc = '/img/icons/emojiParty.svg';
                 break;
               default:
                 break;
@@ -150,9 +153,9 @@ const Reaction = ({
 
             return (
               <img
-                key={index}
+                key={reaction.reaction}
                 src={emojiSrc}
-                alt={reaction}
+                alt={reaction.reaction}
                 className="size-5"
                 style={{ marginLeft: '-8px', zIndex: (4 - index) * 5 }}
               />

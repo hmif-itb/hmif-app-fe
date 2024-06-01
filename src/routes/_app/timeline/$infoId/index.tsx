@@ -50,7 +50,7 @@ function InfoDetail() {
         <DetailPost info={info} />
         {/* TODO: wait for backend reaction */}
         <PostInteraction
-          reactionData={postData[0].ReactionData}
+          reactions={info.reactions}
           commentsCount={comments?.length ?? 0}
           userReaction={postData[0].UserReaction}
           isActive={activeReaction === 'post'}

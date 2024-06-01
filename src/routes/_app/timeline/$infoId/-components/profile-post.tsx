@@ -1,5 +1,6 @@
+import clsx from 'clsx';
 import { User } from '~/api/generated';
-import { cn } from '~/lib/utils';
+import Avatar from '~/components/user/avatar';
 
 const ProfilePost = ({ type, profile }: { type: string; profile: User }) => {
   if (!profile) {
@@ -8,11 +9,10 @@ const ProfilePost = ({ type, profile }: { type: string; profile: User }) => {
   return (
     <div className="flex items-center">
       <div className="relative">
-        <img
-          // TODO: default picture if null
+        <Avatar
           src={profile.picture!}
-          alt="Avatar"
-          className={cn(
+          alt={profile.fullName}
+          className={clsx(
             'rounded-full',
             type == 'poster' && 'size-12',
             type == 'commenter' && 'size-9',
