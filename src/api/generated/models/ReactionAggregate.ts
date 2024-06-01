@@ -8,5 +8,6 @@ export type ReactionAggregate = {
     reaction: string;
     count: number;
   }>;
+  userReaction?: string;
 };
 

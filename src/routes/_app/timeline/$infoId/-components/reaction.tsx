@@ -1,24 +1,75 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
+import { api } from '~/api/client';
 import { Info } from '~/api/generated';
 import { Button } from '~/components/ui/button';
 import { cn } from '~/lib/utils';
-import { IPost } from '../-interface/IPost';
 
 const Reaction = ({
   reactions: reactions,
-  initialUserReaction,
   isActive,
   toggleReaction,
+  infoId: infoId,
+  commentId,
 }: {
   reactions: Info['reactions'];
-  initialUserReaction?: IPost['UserReaction'] | null;
   isActive: boolean;
   toggleReaction: () => void;
+  infoId: string;
+  commentId?: string;
 }) => {
-  const [userReaction, setUserReaction] = useState(initialUserReaction);
+  const [userReaction, setUserReaction] = useState(
+    reactions?.userReaction ?? null,
+  );
+  const queryClient = useQueryClient();
+  const reactMutation = useMutation({
+    mutationFn: (reaction: string) => {
+      return api.reaction.createOrUpdateReaction({
+        requestBody: {
+          reaction,
+          commentId: commentId ? commentId : undefined,
+          infoId: commentId ? undefined : infoId,
+        },
+      });
+    },
+    onSuccess() {
+      if (commentId) {
+        queryClient.invalidateQueries({
+          queryKey: ['info', 'comments', infoId],
+        });
+      } else {
+        queryClient.invalidateQueries({ queryKey: ['info', 'detail', infoId] });
+      }
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: () => {
+      if (commentId) {
+        return api.reaction.deleteCommentReaction({ commentId });
+      } else {
+        return api.reaction.deleteInfoReaction({ infoId });
+      }
+    },
+    onSuccess() {
+      if (commentId) {
+        queryClient.invalidateQueries({
+          queryKey: ['info', 'comments', infoId],
+        });
+      } else {
+        queryClient.invalidateQueries({ queryKey: ['info', 'detail', infoId] });
+      }
+    },
+  });
 
   const handleReaction = (reaction: string) => {
     setUserReaction(userReaction === reaction ? null : reaction);
+    if (userReaction === reaction) {
+      deleteMutation.mutate();
+      return;
+    } else {
+      reactMutation.mutate(reaction);
+    }
     toggleReaction();
   };
 
@@ -124,9 +175,9 @@ const Reaction = ({
           </button>
         </div>
       )}
-      {reactions && (
-        <div className="flex items-center space-x-2">
-          {reactions.reactionsCount.map((reaction, index) => {
+      {reactions && reactions.totalReactions > 0 && (
+        <div className="flex items-center">
+          {reactions.reactionsCount?.map((reaction, index) => {
             let emojiSrc = '';
             switch (reaction.reaction) {
               case 'cry':
@@ -156,8 +207,11 @@ const Reaction = ({
                 key={reaction.reaction}
                 src={emojiSrc}
                 alt={reaction.reaction}
-                className="size-6"
-                style={{ marginLeft: '-8px', zIndex: (4 - index) * 5 }}
+                className="size-6 shrink-0"
+                style={{
+                  marginLeft: index !== 0 ? '-8px' : undefined,
+                  zIndex: reactions.reactionsCount.length - index,
+                }}
               />
             );
           })}

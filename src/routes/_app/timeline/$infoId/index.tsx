@@ -2,7 +2,6 @@ import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 import { api } from '~/api/client';
-import postData from '~/assets/mock/post.json';
 import Comments from './-components/comments';
 import DetailPost from './-components/detail-post';
 import Header from './-components/header';
@@ -48,11 +47,9 @@ function InfoDetail() {
       <Header />
       <div className="max-w-screen-md flex-col space-y-4 p-4">
         <DetailPost info={info} />
-        {/* TODO: wait for backend reaction */}
         <PostInteraction
           reactions={info.reactions}
           commentsCount={comments?.length ?? 0}
-          userReaction={postData[0].UserReaction}
           isActive={activeReaction === 'post'}
           toggleReaction={() => toggleReaction('post')}
         />

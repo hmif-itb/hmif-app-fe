@@ -59,16 +59,37 @@ export class ReactionService {
    * @returns Reaction Reaction deleted
    * @throws ApiError
    */
-  public deleteReaction({
-    reactionId,
+  public deleteCommentReaction({
+    commentId,
   }: {
-    reactionId: string,
+    commentId: string,
   }): CancelablePromise<Reaction> {
     return this.httpRequest.request({
       method: 'DELETE',
-      url: '/api/reaction/{reactionId}',
+      url: '/api/reaction/comment/{commentId}',
       path: {
-        'reactionId': reactionId,
+        'commentId': commentId,
+      },
+      errors: {
+        400: `Bad request`,
+        404: `Not found`,
+      },
+    });
+  }
+  /**
+   * @returns Reaction Reaction deleted
+   * @throws ApiError
+   */
+  public deleteInfoReaction({
+    infoId,
+  }: {
+    infoId: string,
+  }): CancelablePromise<Reaction> {
+    return this.httpRequest.request({
+      method: 'DELETE',
+      url: '/api/reaction/info/{infoId}',
+      path: {
+        'infoId': infoId,
       },
       errors: {
         400: `Bad request`,
