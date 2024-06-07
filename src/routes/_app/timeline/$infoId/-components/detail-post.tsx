@@ -1,28 +1,20 @@
-import React from 'react';
-import { IPost } from '../-interface/IPost';
+import { Info } from '~/api/generated';
+import InfoCreator from '../../-components/info-creator';
+import PostCategories from './post-categories';
 import PostPhotos from './post-photos';
-import PostTags from './post-tags';
 import PostText from './post-text';
-import ProfilePost from './profile-post';
-import { IProfile } from '../-interface/IProfile';
 
-const DetailPost = ({
-  images,
-  tags,
-  profile,
-  textData,
-}: {
-  images: IPost['image'];
-  tags: IPost['TagData'];
-  profile: IProfile;
-  textData: IPost['TextData'];
-}) => {
+const DetailPost = ({ info }: { info: Info }) => {
   return (
     <div className="flex-col space-y-4">
-      <ProfilePost type="poster" profile={profile} />
-      <PostText textData={textData} />
-      <PostPhotos images={images} />
-      <PostTags tags={tags} />
+      <InfoCreator creator={info.creator} />
+      <PostText title={info.title} content={info.content} />
+      {info.infoMedias && info.infoMedias.length > 0 && (
+        <PostPhotos images={info.infoMedias.map((media) => media.media.url)} />
+      )}
+      <PostCategories
+        tags={info.infoCategories?.map((ic) => ic.category.name) || []}
+      />
     </div>
   );
 };

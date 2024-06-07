@@ -1,70 +1,45 @@
 import { Link } from '@tanstack/react-router';
-import { Post } from '../-interface/IPost';
+import { Info } from '~/api/generated';
+import InfoCreator from './info-creator';
 
-export default function Feed({ posts }: { posts: Post[] }) {
+export default function Feed({ infos }: { infos: Info[] }) {
   return (
     <div>
-      {posts.map((post) => (
-        <UserPost PostData={post} />
+      {infos.map((info) => (
+        <UserInfo key={info.id} info={info} />
       ))}
     </div>
   );
 }
 
-function UserPost({ PostData }: { PostData: Post }) {
+function UserInfo({ info }: { info: Info }) {
   return (
     <div className="my-10">
-      <div className="mb-5 text-[14px] font-bold text-neutral-dark">
-        ## Day Ago
-      </div>
-      <ProfileSection ProfileData={PostData.profile} />
-      <TextSection textData={PostData.TextData} />
-      <ImageSection images={PostData.image} />
-      <div className="mt-5 text-[18px] font-bold text-green-300">
-        <Link
-          to="/timeline/$infoId"
-          params={{ infoId: PostData.id.toString() }}
-        >
+      <div className="mb-5 text-sm font-bold text-neutral-dark">## Day Ago</div>
+      <InfoCreator creator={info.creator} className="mb-5" />
+      <TextSection title={info.title} content={info.content} />
+      {/* TODO: handle other than image */}
+      <ImageSection images={info.infoMedias?.map((im) => im.media.url) ?? []} />
+      <div className="mt-5 text-lg font-bold text-green-300">
+        <Link to="/timeline/$infoId" params={{ infoId: info.id }}>
           Show more
         </Link>
       </div>
-      <TagSection tags={PostData.TagData} />
-    </div>
-  );
-}
-
-function ProfileSection({ ProfileData }: { ProfileData: Post['profile'] }) {
-  return (
-    <div className="mb-5 flex items-center gap-5">
-      <img
-        src={ProfileData.picture}
-        alt=""
-        className="size-[52px] rounded-full shadow-sm"
+      <TagSection
+        tags={info.infoCategories?.map((ic) => ic.category.name) ?? []}
       />
-      <div className="flex flex-col items-baseline">
-        <h1 className="m-0 text-[16px] font-semibold">
-          <a href="">{ProfileData.name}</a>
-        </h1>
-        <span className="text-[12px] font-[400] leading-6 text-neutral-dark-active">
-          <a href="">{ProfileData.email}</a>
-        </span>
-      </div>
     </div>
   );
 }
 
-function TextSection({
-  textData,
-}: {
-  textData: {
-    title: string;
-    content: string;
-  };
-}) {
+function TextSection({ title, content }: { title: string; content: string }) {
   return (
     <div>
-      <h1 className="mb-2 text-[20px] font-semibold">{textData.title}</h1>
-      <span className="text-[16px]">{textData.content}</span>
+      <h1 className="mb-2 text-[20px] font-semibold">{title}</h1>
+      <div
+        className="text-base"
+        dangerouslySetInnerHTML={{ __html: content }}
+      />
     </div>
   );
 }
@@ -84,7 +59,8 @@ function TagSection({ tags }: { tags: string[] }) {
   );
 }
 
-function ImageSection({ images }: { images: Post['image'] }) {
+function ImageSection({ images }: { images: string[] }) {
+  if (images.length === 0) return null;
   return (
     <div className="mt-5 grid grid-cols-2 gap-2 lg:grid-cols-3">
       <img

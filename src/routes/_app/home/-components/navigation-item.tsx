@@ -1,3 +1,5 @@
+import { Button } from '~/components/ui/button';
+
 function NavigationItem({
   src,
   alt,
@@ -9,9 +11,9 @@ function NavigationItem({
 }) {
   return (
     <div className="flex flex-col items-center gap-3 text-center">
-      <button className="flex size-[4.5rem] flex-col items-center justify-center rounded-full border border-solid border-black">
+      <Button className="flex size-[4.5rem] flex-col items-center justify-center rounded-full border border-solid border-black bg-white">
         <img src={src} alt={alt} className="size-[2.625rem]" />
-      </button>
+      </Button>
       <p>{title}</p>
     </div>
   );

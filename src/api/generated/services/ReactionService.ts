@@ -3,12 +3,13 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { Reaction } from '../models/Reaction';
+import type { ReactionAggregate } from '../models/ReactionAggregate';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import type { BaseHttpRequest } from '../core/BaseHttpRequest';
 export class ReactionService {
   constructor(public readonly httpRequest: BaseHttpRequest) {}
   /**
-   * @returns any Get reactions
+   * @returns ReactionAggregate Get reactions
    * @throws ApiError
    */
   public getReactions({
@@ -17,13 +18,7 @@ export class ReactionService {
   }: {
     infoId?: string,
     commentId?: string,
-  }): CancelablePromise<{
-    totalReactions: number;
-    reactionsCount: Array<{
-      reaction: string;
-      count: number;
-    }>;
-  }> {
+  }): CancelablePromise<ReactionAggregate> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/api/reaction',
@@ -64,16 +59,37 @@ export class ReactionService {
    * @returns Reaction Reaction deleted
    * @throws ApiError
    */
-  public deleteReaction({
-    reactionId,
+  public deleteCommentReaction({
+    commentId,
   }: {
-    reactionId: string,
+    commentId: string,
   }): CancelablePromise<Reaction> {
     return this.httpRequest.request({
       method: 'DELETE',
-      url: '/api/reaction/{reactionId}',
+      url: '/api/reaction/comment/{commentId}',
       path: {
-        'reactionId': reactionId,
+        'commentId': commentId,
+      },
+      errors: {
+        400: `Bad request`,
+        404: `Not found`,
+      },
+    });
+  }
+  /**
+   * @returns Reaction Reaction deleted
+   * @throws ApiError
+   */
+  public deleteInfoReaction({
+    infoId,
+  }: {
+    infoId: string,
+  }): CancelablePromise<Reaction> {
+    return this.httpRequest.request({
+      method: 'DELETE',
+      url: '/api/reaction/info/{infoId}',
+      path: {
+        'infoId': infoId,
       },
       errors: {
         400: `Bad request`,

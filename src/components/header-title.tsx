@@ -1,5 +1,9 @@
 import React from 'react';
 
+/**
+ * A header component that displays the title and logo for HMIF ITB.
+ * @component
+ */
 function HeaderTitle() {
   return (
     <section className="flex w-full justify-end border-b border-gray-300 px-4 py-6">

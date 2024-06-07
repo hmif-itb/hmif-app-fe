@@ -1,98 +1,217 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
-import { IPost } from '../-interface/IPost';
+import { api } from '~/api/client';
+import { Info } from '~/api/generated';
+import { Button } from '~/components/ui/button';
+import { cn } from '~/lib/utils';
 
 const Reaction = ({
-  reactionData,
-  initialUserReaction,
+  reactions: reactions,
+  isActive,
+  toggleReaction,
+  infoId: infoId,
+  commentId,
 }: {
-  reactionData: IPost['ReactionData'];
-  initialUserReaction?: IPost['UserReaction'] | null;
+  reactions: Info['reactions'];
+  isActive: boolean;
+  toggleReaction: () => void;
+  infoId: string;
+  commentId?: string;
 }) => {
-  const [userReaction, setUserReaction] = useState(initialUserReaction);
-  const [addReaction, setAddReaction] = useState(false);
+  const [userReaction, setUserReaction] = useState(
+    reactions?.userReaction ?? null,
+  );
+  const queryClient = useQueryClient();
+  const reactMutation = useMutation({
+    mutationFn: (reaction: string) => {
+      return api.reaction.createOrUpdateReaction({
+        requestBody: {
+          reaction,
+          commentId: commentId ? commentId : undefined,
+          infoId: commentId ? undefined : infoId,
+        },
+      });
+    },
+    onSuccess() {
+      if (commentId) {
+        queryClient.invalidateQueries({
+          queryKey: ['info', 'comments', infoId],
+        });
+      } else {
+        queryClient.invalidateQueries({ queryKey: ['info', 'detail', infoId] });
+      }
+    },
+  });
 
-  const handleAddReaction = () => {
-    setAddReaction(!addReaction);
-  };
+  const deleteMutation = useMutation({
+    mutationFn: () => {
+      if (commentId) {
+        return api.reaction.deleteCommentReaction({ commentId });
+      } else {
+        return api.reaction.deleteInfoReaction({ infoId });
+      }
+    },
+    onSuccess() {
+      if (commentId) {
+        queryClient.invalidateQueries({
+          queryKey: ['info', 'comments', infoId],
+        });
+      } else {
+        queryClient.invalidateQueries({ queryKey: ['info', 'detail', infoId] });
+      }
+    },
+  });
 
   const handleReaction = (reaction: string) => {
-    setUserReaction(reaction);
-    setAddReaction(!addReaction);
+    setUserReaction(userReaction === reaction ? null : reaction);
+    if (userReaction === reaction) {
+      deleteMutation.mutate();
+      return;
+    } else {
+      reactMutation.mutate(reaction);
+    }
+    toggleReaction();
   };
 
   return (
     <div className="relative ml-0 mr-1 flex items-center space-x-3">
-      <button onClick={handleAddReaction} className="relative z-10">
+      <Button
+        variant={'link'}
+        onClick={toggleReaction}
+        className="relative z-10 p-0"
+      >
         <img
-          src={!userReaction ? '/icons/like-active.svg' : '/icons/like.svg'}
+          src={
+            userReaction ? '/img/icons/like-active.svg' : '/img/icons/like.svg'
+          }
           alt="like"
         />
-      </button>
-      {addReaction && (
-        <div className="top-50 absolute left-0 w-max -translate-y-full flex-row space-x-1">
+      </Button>
+      {isActive && (
+        <div className="absolute left-0 w-max -translate-y-full flex-row space-x-1">
           <button
             onClick={() => handleReaction('grin')}
-            className={userReaction === 'grin' ? 'size-8' : 'size-12'}
+            className={cn(
+              userReaction === 'grin' && 'size-10',
+              userReaction !== 'grin' && 'size-8',
+              'm-0 p-0',
+            )}
           >
-            <img src="/icons/emojiGrin.svg" alt="grin" />
+            <img
+              src="/img/icons/emojiGrin.svg"
+              alt="grin"
+              className="m-0 size-full p-0"
+            />
           </button>
           <button
             onClick={() => handleReaction('heart-eyes')}
-            className={userReaction === 'heart-eyes' ? 'size-8' : 'size-12'}
+            className={cn(
+              userReaction === 'heart-eyes' && 'size-10',
+              userReaction !== 'heart-eyes' && 'size-8',
+              'm-0 p-0',
+            )}
           >
-            <img src="/icons/emojiHeartEyes.svg" alt="heart-eyes" />
+            <img
+              src="/img/icons/emojiHeartEyes.svg"
+              alt="heart-eyes"
+              className="m-0 size-full p-0"
+            />
           </button>
           <button
             onClick={() => handleReaction('fire')}
-            className={userReaction === 'fire' ? 'size-8' : 'size-12'}
+            className={cn(
+              userReaction === 'fire' && 'size-10',
+              userReaction !== 'fire' && 'size-8',
+              'm-0 p-0',
+            )}
           >
-            <img src="/icons/emojiFire.svg" alt="fire" />
+            <img
+              src="/img/icons/emojiFire.svg"
+              alt="fire"
+              className="m-0 size-full p-0"
+            />
           </button>
           <button
             onClick={() => handleReaction('cry')}
-            className={userReaction === 'cry' ? 'size-8' : 'size-12'}
+            className={cn(
+              userReaction === 'cry' && 'size-10',
+              userReaction !== 'cry' && 'size-8',
+              'm-0 p-0',
+            )}
           >
-            <img src="/icons/emojiCry.svg" alt="cry" />
+            <img
+              src="/img/icons/emojiCry.svg"
+              alt="cry"
+              className="m-0 size-full p-0"
+            />
           </button>
           <button
             onClick={() => handleReaction('screaming')}
-            className={userReaction === 'screaming' ? 'size-8' : 'size-12'}
+            className={cn(
+              userReaction === 'screaming' && 'size-10',
+              userReaction !== 'screaming' && 'size-8',
+              'm-0 p-0',
+            )}
           >
-            <img src="/icons/emojiScreaming.svg" alt="screaming" />
+            <img
+              src="/img/icons/emojiScreaming.svg"
+              alt="screaming"
+              className="m-0 size-full p-0"
+            />
           </button>
           <button
             onClick={() => handleReaction('party')}
-            className={userReaction === 'party' ? 'size-8' : 'size-12'}
+            className={cn(
+              userReaction === 'party' && 'size-10',
+              userReaction !== 'party' && 'size-8',
+              'm-0 p-0',
+            )}
           >
-            <img src="/icons/emojiParty.svg" alt="party" />
+            <img
+              src="/img/icons/emojiParty.svg"
+              alt="party"
+              className="m-0 size-full p-0"
+            />
           </button>
         </div>
       )}
-      {reactionData.length > 0 && (
-        <div className="flex items-center space-x-2">
-          {reactionData.slice(0, 6).map((reaction, index) => {
-            const emojiSrc =
-              reaction === 'cry'
-                ? '/icons/emojiCry.svg'
-                : reaction === 'fire'
-                  ? '/icons/emojiFire.svg'
-                  : reaction === 'heart-eyes'
-                    ? '/icons/emojiHeartEyes.svg'
-                    : reaction === 'grin'
-                      ? '/icons/emojiGrin.svg'
-                      : reaction === 'screaming'
-                        ? '/icons/emojiScreaming.svg'
-                        : reaction === 'party'
-                          ? '/icons/emojiParty.svg'
-                          : '';
+      {reactions && reactions.totalReactions > 0 && (
+        <div className="flex items-center">
+          {reactions.reactionsCount?.map((reaction, index) => {
+            let emojiSrc = '';
+            switch (reaction.reaction) {
+              case 'cry':
+                emojiSrc = '/img/icons/emojiCry.svg';
+                break;
+              case 'fire':
+                emojiSrc = '/img/icons/emojiFire.svg';
+                break;
+              case 'heart-eyes':
+                emojiSrc = '/img/icons/emojiHeartEyes.svg';
+                break;
+              case 'grin':
+                emojiSrc = '/img/icons/emojiGrin.svg';
+                break;
+              case 'screaming':
+                emojiSrc = '/img/icons/emojiScreaming.svg';
+                break;
+              case 'party':
+                emojiSrc = '/img/icons/emojiParty.svg';
+                break;
+              default:
+                break;
+            }
 
             return (
               <img
-                key={index}
+                key={reaction.reaction}
                 src={emojiSrc}
-                alt={reaction}
-                className="size-5"
-                style={{ marginLeft: '-8px', zIndex: (5 - index) * 10 }}
+                alt={reaction.reaction}
+                className="size-6 shrink-0"
+                style={{
+                  marginLeft: index !== 0 ? '-8px' : undefined,
+                  zIndex: reactions.reactionsCount.length - index,
+                }}
               />
             );
           })}

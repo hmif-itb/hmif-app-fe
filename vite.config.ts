@@ -108,6 +108,19 @@ export default defineConfig({
               },
             },
           },
+          {
+            urlPattern: /^\/img\/.*\.svg$/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'icons-cache',
+              expiration: {
+                maxAgeSeconds: 60 * 60 * 24 * 365, // <== 365 days
+              },
+              cacheableResponse: {
+                statuses: [0, 299],
+              },
+            },
+          },
         ],
       },
     }),

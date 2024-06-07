@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { IPost } from '../-interface/IPost';
+import { useState } from 'react';
+import { Button } from '~/components/ui/button';
 import Tag from './tag';
 
-const PostTags = ({ tags }: { tags: IPost['TagData'] }) => {
+const PostCategories = ({ tags }: { tags: string[] }) => {
   const [showAll, setShowAll] = useState(false);
 
   const handleShowMore = () => {
@@ -19,15 +19,16 @@ const PostTags = ({ tags }: { tags: IPost['TagData'] }) => {
         <Tag key={index} tag={tagData} />
       ))}
       {tags.length > 6 && (
-        <button
-          className="text-base font-semibold text-green-300"
+        <Button
+          variant={'link'}
+          className="p-0 text-base font-semibold text-green-300"
           onClick={showAll ? handleShowLess : handleShowMore}
         >
           <p>{showAll ? 'Show less' : 'Show more'}</p>
-        </button>
+        </Button>
       )}
     </div>
   );
 };
 
-export default PostTags;
+export default PostCategories;
