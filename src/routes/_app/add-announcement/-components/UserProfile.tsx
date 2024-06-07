@@ -1,7 +1,7 @@
 type ComponentProps = {
   name: string;
   email: string;
-  imageURL: string;
+  imageURL: string | null;
 };
 
 export default function UserProfile({
@@ -11,12 +11,16 @@ export default function UserProfile({
 }: ComponentProps): JSX.Element {
   return (
     <div className="flex items-center gap-3">
-      <img
-        src={imageURL}
-        alt="Profile picture"
-        className="size-[52px] rounded-full bg-[#E8C55F]"
-        referrerPolicy="no-referrer"
-      />
+      {imageURL ? (
+        <img
+          src={imageURL}
+          alt="Profile picture"
+          className="size-[52px] rounded-full bg-[#E8C55F]"
+          referrerPolicy="no-referrer"
+        />
+      ) : (
+        <div className="size-[52px] rounded-full bg-[#E8C55F]" />
+      )}
 
       <div>
         <h3 className="text-body-2 font-bold">{name}</h3>
