@@ -20,12 +20,12 @@ import { Route as IndexImport } from './routes/index'
 import { Route as AppTimelineIndexImport } from './routes/_app/timeline/index'
 import { Route as AppSettingsIndexImport } from './routes/_app/settings/index'
 import { Route as AppHomeIndexImport } from './routes/_app/home/index'
+import { Route as AppAddAnnouncementIndexImport } from './routes/_app/add-announcement/index'
 import { Route as AppTimelineInfoIdIndexImport } from './routes/_app/timeline/$infoId/index'
 
 // Create Virtual Routes
 
 const LoginIndexLazyImport = createFileRoute('/login/')()
-const AddAnnouncementIndexLazyImport = createFileRoute('/add-announcement/')()
 const NavbarContohIndexLazyImport = createFileRoute('/_navbar/contoh/')()
 const NavbarContohContohIdIndexLazyImport = createFileRoute(
   '/_navbar/contoh/$contohId/',
@@ -58,13 +58,6 @@ const LoginIndexLazyRoute = LoginIndexLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/login/index.lazy').then((d) => d.Route))
 
-const AddAnnouncementIndexLazyRoute = AddAnnouncementIndexLazyImport.update({
-  path: '/add-announcement/',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() =>
-  import('./routes/add-announcement/index.lazy').then((d) => d.Route),
-)
-
 const NavbarContohIndexLazyRoute = NavbarContohIndexLazyImport.update({
   path: '/contoh/',
   getParentRoute: () => NavbarRoute,
@@ -84,6 +77,11 @@ const AppSettingsIndexRoute = AppSettingsIndexImport.update({
 
 const AppHomeIndexRoute = AppHomeIndexImport.update({
   path: '/home/',
+  getParentRoute: () => AppRoute,
+} as any)
+
+const AppAddAnnouncementIndexRoute = AppAddAnnouncementIndexImport.update({
+  path: '/add-announcement/',
   getParentRoute: () => AppRoute,
 } as any)
 
@@ -120,13 +118,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutImport
       parentRoute: typeof rootRoute
     }
-    '/add-announcement/': {
-      preLoaderRoute: typeof AddAnnouncementIndexLazyImport
-      parentRoute: typeof rootRoute
-    }
     '/login/': {
       preLoaderRoute: typeof LoginIndexLazyImport
       parentRoute: typeof rootRoute
+    }
+    '/_app/add-announcement/': {
+      preLoaderRoute: typeof AppAddAnnouncementIndexImport
+      parentRoute: typeof AppImport
     }
     '/_app/home/': {
       preLoaderRoute: typeof AppHomeIndexImport
@@ -160,6 +158,7 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren([
   IndexRoute,
   AppRoute.addChildren([
+    AppAddAnnouncementIndexRoute,
     AppHomeIndexRoute,
     AppSettingsIndexRoute,
     AppTimelineIndexRoute,
@@ -170,7 +169,6 @@ export const routeTree = rootRoute.addChildren([
     NavbarContohContohIdIndexLazyRoute,
   ]),
   AboutRoute,
-  AddAnnouncementIndexLazyRoute,
   LoginIndexLazyRoute,
 ])
 

@@ -1,0 +1,126 @@
+import {
+  Command,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from '~/components/ui/command';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '~/components/ui/popover';
+import HashIcon from '~/assets/icons/add-announcement/hash.svg';
+import { UseFormReturn, useWatch } from 'react-hook-form';
+import { FormSchemaType } from '../-constants';
+import { useEffect, useState } from 'react';
+import { Button } from '~/components/ui/button';
+import { cn } from '~/lib/utils';
+import { api } from '~/api/client';
+import { useQuery } from '@tanstack/react-query';
+
+type ComponentProps = {
+  form: UseFormReturn<FormSchemaType>;
+};
+
+const angkatanOptions = [
+  {
+    id: 'ANG-1',
+    type: 'ANGKATAN',
+    title: '2021',
+  },
+  {
+    id: 'ANG-2',
+    type: 'ANGKATAN',
+    title: '2022',
+  },
+];
+
+export default function Categories({ form }: ComponentProps): JSX.Element {
+  const [catDropdownOpen, setCatDropdownOpen] = useState(false);
+  const [catOptions, setCatOptions] = useState(angkatanOptions);
+
+  const categories = useWatch({
+    control: form.control,
+    name: 'categories',
+    defaultValue: [],
+  });
+
+  const { data } = useQuery({
+    queryKey: ['categories'],
+    queryFn: () => api.category.getListCategory(),
+  });
+
+  useEffect(() => {
+    if (!data?.categories) return;
+    setCatOptions([
+      ...angkatanOptions,
+      ...data.categories.map((c) => ({
+        id: c.id,
+        type: 'KATEGORI',
+        title: c.name,
+      })),
+    ]);
+  }, [data]);
+
+  return (
+    <section className="flex w-full flex-wrap items-center gap-x-2 gap-y-4 px-5 py-3">
+      <img src={HashIcon} alt="" className="size-3" />
+      {categories.map((category, idx) => (
+        <div
+          key={idx}
+          className="-my-2 flex items-center gap-1 rounded-2xl bg-[#305138] px-3 pb-[5px] pt-1.5"
+        >
+          <p className="text-[10px] text-white">{category.title}</p>
+        </div>
+      ))}
+      <Popover open={catDropdownOpen} onOpenChange={setCatDropdownOpen}>
+        <PopoverTrigger asChild>
+          <Button
+            className="min-w-[100px] flex-auto justify-start px-0 py-1 text-xs text-[#64748B]"
+            size="sm"
+            variant="link"
+          >
+            Enter Categories
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-[70vw] p-0">
+          <Command>
+            <CommandInput placeholder="Select a category..." />
+            <CommandList>
+              {catOptions.map((cat, idx) => (
+                <CommandItem
+                  value={cat.id}
+                  onSelect={(val) => {
+                    const cat = catOptions.find((c) => c.id === val);
+                    if (!cat) return;
+                    const currCats = form.getValues('categories');
+                    if (!currCats.map((c) => c.id).includes(cat.id))
+                      form.setValue('categories', [
+                        ...form.getValues('categories'),
+                        cat,
+                      ]);
+                  }}
+                  className="gap-2"
+                  key={idx}
+                >
+                  <div
+                    key={idx}
+                    className={cn(
+                      'items-center gap-1 rounded-2xl px-3',
+                      cat.type === 'ANGKATAN' ? 'bg-[#E7613E]' : 'bg-[#E5B52B]',
+                    )}
+                  >
+                    <p className="text-[10px] uppercase text-white">
+                      {cat.type}
+                    </p>
+                  </div>
+                  <p>{cat.title}</p>
+                </CommandItem>
+              ))}
+            </CommandList>
+          </Command>
+        </PopoverContent>
+      </Popover>
+    </section>
+  );
+}
