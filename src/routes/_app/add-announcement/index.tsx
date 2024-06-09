@@ -13,18 +13,21 @@ import Categories from './-components/Categories';
 import MediaInput from './-components/MediaInput';
 import { PresignedURL } from '~/api/generated';
 import { useState } from 'react';
+import DocumentIcon from '~/assets/icons/add-announcement/document.svg';
 
 export const Route = createFileRoute('/_app/add-announcement/')({
   component: AddAnnouncementPage,
 });
 
-export type ImageUpload = {
+export type FileUpload = {
   url: string;
   file: File;
 };
 
 function AddAnnouncementPage(): JSX.Element {
-  const [images, setImages] = useState<ImageUpload[]>([]);
+  const [images, setImages] = useState<FileUpload[]>([]);
+  const [files, setFiles] = useState<FileUpload[]>([]);
+
   const navigate = useNavigate();
 
   const form = useForm<FormSchemaType>({
@@ -46,31 +49,39 @@ function AddAnnouncementPage(): JSX.Element {
   });
 
   const onSubmit = async (values: FormSchemaType) => {
-    const presignedUrls: PresignedURL[] = [];
-    for (const image of images) {
-      try {
-        const media = await postMediaUpload.mutateAsync({
-          requestBody: {
-            fileName: image.file.name.split('.')[0],
-            fileType: image.file.name.split('.')[1],
-          },
-        });
-        presignedUrls.push(media);
-      } catch (err) {
-        console.error(err);
-      }
-    }
+    try {
+      const presignedUrls: PresignedURL[] = await Promise.all(
+        images.map((i) =>
+          postMediaUpload.mutateAsync({
+            requestBody: {
+              fileName: i.file.name.split('.')[0],
+              fileType: i.file.name.split('.').at(-1) ?? '',
+            },
+          }),
+        ),
+      );
+      await Promise.all(
+        presignedUrls.map((p, idx) =>
+          fetch(p.presignedUrl, {
+            method: 'PUT',
+            body: images[idx].file,
+          }),
+        ),
+      );
 
-    postInfo.mutate({
-      requestBody: {
-        title: values.headline,
-        content: values.announcement,
-        forCategories: values.categories
-          .filter((c) => c.type === 'KATEGORI')
-          .map((c) => c.id),
-        mediaUrls: presignedUrls.map((p) => p.mediaUrl),
-      },
-    });
+      postInfo.mutate({
+        requestBody: {
+          title: values.headline,
+          content: values.announcement,
+          forCategories: values.categories
+            .filter((c) => c.type === 'KATEGORI')
+            .map((c) => c.id),
+          mediaUrls: presignedUrls.map((p) => p.mediaUrl),
+        },
+      });
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
@@ -85,20 +96,46 @@ function AddAnnouncementPage(): JSX.Element {
           <Content form={form} />
           <Categories form={form} />
 
-          <section className={cn(images.length > 0 && 'p-5')}>
+          <section
+            className={cn(
+              (images.length > 0 || files.length > 0) &&
+                'flex flex-col gap-1.5 p-5',
+            )}
+          >
+            {files.map((file, idx) => (
+              <a
+                href={URL.createObjectURL(file.file)}
+                target="_blank"
+                key={idx}
+                className="flex w-full items-center gap-2 rounded-xl bg-[#DCDCDC] p-4"
+              >
+                <img
+                  src={DocumentIcon}
+                  alt="Uploaded File"
+                  className="size-8"
+                />
+                <p className="text-sm font-semibold">{file.file.name}</p>
+                {file.file.webkitRelativePath}
+              </a>
+            ))}
             {images.map((image, idx) => (
               <img
                 key={idx}
                 src={image.url}
                 alt="Preview image"
-                className="aspect-auto w-full overflow-hidden rounded-2xl"
+                className="aspect-auto w-full overflow-hidden rounded-2xl object-cover"
               />
             ))}
           </section>
         </form>
       </Form>
 
-      <MediaInput images={images} setImages={setImages} />
+      <MediaInput
+        images={images}
+        setImages={setImages}
+        files={files}
+        setFiles={setFiles}
+      />
     </main>
   );
 }

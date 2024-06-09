@@ -63,7 +63,7 @@ export default function Categories({ form }: ComponentProps): JSX.Element {
   }, [data]);
 
   return (
-    <section className="flex w-full flex-wrap items-center gap-x-2 gap-y-4 px-5 py-3">
+    <section className="flex w-full flex-wrap items-center gap-x-2 gap-y-4 border-b border-b-[#EBEEEB] px-5 py-3">
       <img src={HashIcon} alt="" className="size-3" />
       {categories.map((category, idx) => (
         <div
