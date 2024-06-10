@@ -1,19 +1,19 @@
-import { Form } from '~/components/ui/form';
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { cn } from '~/lib/utils';
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
-import { api } from '~/api/client';
-import { FormSchema, FormSchemaType } from './-constants';
-import TopSection from './-components/TopSection';
-import Headline from './-components/Headline';
-import Content from './-components/Content';
-import Categories from './-components/Categories';
-import MediaInput from './-components/MediaInput';
-import { PresignedURL } from '~/api/generated';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { api } from '~/api/client';
+import { PresignedURL } from '~/api/generated';
 import DocumentIcon from '~/assets/icons/add-announcement/document.svg';
+import { Form } from '~/components/ui/form';
+import { cn } from '~/lib/utils';
+import Categories from './-components/Categories';
+import Content from './-components/Content';
+import Headline from './-components/Headline';
+import MediaInput from './-components/MediaInput';
+import TopSection from './-components/TopSection';
+import { FormSchema, FormSchemaType } from './-constants';
 
 export const Route = createFileRoute('/_app/add-announcement/')({
   component: AddAnnouncementPage,
@@ -85,7 +85,7 @@ function AddAnnouncementPage(): JSX.Element {
   };
 
   return (
-    <main className="relative min-h-[calc(100vh-89px)] py-9 font-inter">
+    <main className="relative h-full py-9 font-inter">
       <Form {...form}>
         <form
           className="max-h-full overflow-y-auto"

@@ -5,7 +5,7 @@ import SettingsIcon from './icons/settings';
 
 function Navbar() {
   return (
-    <div className="sticky bottom-0 z-20 flex flex-1 flex-col justify-end">
+    <div className="sticky bottom-0 z-20 flex flex-col justify-end">
       <nav className="flex w-full justify-between bg-neutral-light px-8 py-2 lg:hidden">
         <BottomNavigationItem
           to="/timeline"
