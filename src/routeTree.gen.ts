@@ -25,7 +25,7 @@ import { Route as AppAddAnnouncementIndexImport } from './routes/_app/add-announ
 import { Route as AppTimelineInfoIdIndexImport } from './routes/_app/timeline/$infoId/index'
 import { Route as AppSettingsSubscriptionsIndexImport } from './routes/_app/settings/subscriptions/index'
 import { Route as AppSettingsCoursesIndexImport } from './routes/_app/settings/courses/index'
-import { Route as AppCourseAddIndexImport } from './routes/_app/course/add/index'
+import { Route as AppSettingsCoursesAddIndexImport } from './routes/_app/settings/courses/add/index'
 
 // Create Virtual Routes
 
@@ -118,10 +118,12 @@ const AppSettingsCoursesIndexRoute = AppSettingsCoursesIndexImport.update({
   getParentRoute: () => AppSettingsRoute,
 } as any)
 
-const AppCourseAddIndexRoute = AppCourseAddIndexImport.update({
-  path: '/course/add/',
-  getParentRoute: () => AppRoute,
-} as any)
+const AppSettingsCoursesAddIndexRoute = AppSettingsCoursesAddIndexImport.update(
+  {
+    path: '/courses/add/',
+    getParentRoute: () => AppSettingsRoute,
+  } as any,
+)
 
 // Populate the FileRoutesByPath interface
 
@@ -171,10 +173,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NavbarContohIndexLazyImport
       parentRoute: typeof NavbarImport
     }
-    '/_app/course/add/': {
-      preLoaderRoute: typeof AppCourseAddIndexImport
-      parentRoute: typeof AppImport
-    }
     '/_app/settings/courses/': {
       preLoaderRoute: typeof AppSettingsCoursesIndexImport
       parentRoute: typeof AppSettingsImport
@@ -191,6 +189,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NavbarContohContohIdIndexLazyImport
       parentRoute: typeof NavbarImport
     }
+    '/_app/settings/courses/add/': {
+      preLoaderRoute: typeof AppSettingsCoursesAddIndexImport
+      parentRoute: typeof AppSettingsImport
+    }
   }
 }
 
@@ -203,11 +205,11 @@ export const routeTree = rootRoute.addChildren([
       AppSettingsIndexRoute,
       AppSettingsCoursesIndexRoute,
       AppSettingsSubscriptionsIndexRoute,
+      AppSettingsCoursesAddIndexRoute,
     ]),
     AppAddAnnouncementIndexRoute,
     AppHomeIndexRoute,
     AppTimelineIndexRoute,
-    AppCourseAddIndexRoute,
     AppTimelineInfoIdIndexRoute,
   ]),
   NavbarRoute.addChildren([

@@ -28,7 +28,7 @@ function SettingsLayout() {
         <HeaderTitle />
       </div>
       <div className="flex-1 overflow-y-auto bg-green-50">
-        <div className="mx-auto flex h-full max-w-screen-lg flex-col px-8">
+        <div className="mx-auto flex h-full max-w-screen-lg flex-col lg:px-8">
           <h1 className="my-8 hidden items-center space-x-12 text-heading-lg font-bold lg:flex">
             {selectedSettings && (
               <button

@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import { useRef } from 'react';
+import { isMobile } from '~/lib/device';
 
 export interface CourseData {
   courseId: string;
@@ -15,6 +16,7 @@ interface CourseCardProps {
   isSwiped: boolean;
   onSwipe: (courseId: string) => void;
   onReset: () => void;
+  onDelete?: () => void;
 }
 
 export default function CourseCard({
@@ -23,6 +25,7 @@ export default function CourseCard({
   onSwipe,
   onReset,
   deleteable,
+  onDelete,
 }: CourseCardProps) {
   // Track user horizontal touch movement
   const touchStart = useRef(0);
@@ -52,6 +55,15 @@ export default function CourseCard({
     }
   };
 
+  const handleMouseEnter = () => {
+    if (!deleteable || isMobile()) return;
+    onSwipe(courseData.courseId);
+  };
+  const handleMouseLeave = () => {
+    if (!deleteable || isMobile()) return;
+    onReset();
+  };
+
   const formatClass = (cls: number) =>
     cls.toLocaleString(undefined, { minimumIntegerDigits: 2 });
 
@@ -61,6 +73,8 @@ export default function CourseCard({
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <div
         className={clsx(
@@ -87,14 +101,15 @@ export default function CourseCard({
         </div>
       </div>
       {isSwiped && (
-        <div
+        <button
+          onClick={onDelete}
           className={clsx(
             `absolute inset-y-0 right-0 flex items-center justify-center rounded-r-xl bg-[#B01212] text-xs text-white transition-all duration-300 ease-out`,
             isSwiped ? 'w-1/4 pl-[10%] opacity-100' : 'w-0 opacity-0',
           )}
         >
           Delete
-        </div>
+        </button>
       )}
     </div>
   );
