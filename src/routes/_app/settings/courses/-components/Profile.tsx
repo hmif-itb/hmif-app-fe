@@ -18,7 +18,7 @@ export default function Profile({ className }: { className?: string }) {
       />
 
       <div>
-        <p className="lg:text-heading-md font-bold">{user.fullName}</p>
+        <p className="font-bold lg:text-heading-md">{user.fullName}</p>
         <p className="text-[#B0B3B0] lg:text-body-xl lg:text-neutral-darker">
           {user.email}
         </p>
