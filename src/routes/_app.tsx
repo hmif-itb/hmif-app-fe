@@ -26,7 +26,7 @@ function AppLayout() {
       <main className="mx-auto size-full max-w-screen-md lg:flex lg:max-w-none lg:overflow-y-auto">
         <LeftNavbar />
         <div className="flex h-full flex-1 flex-col lg:block">
-          <div className="flex-1">
+          <div className="h-0 flex-1 lg:h-full">
             <Outlet />
           </div>
           <Navbar />

@@ -23,7 +23,7 @@ export default function UserProfile({
       )}
 
       <div>
-        <h3 className="text-body-2 font-bold">{name}</h3>
+        <h3 className="text-body-lg font-bold">{name}</h3>
         <p className="text-xs text-[#6A6B6A]">{email}</p>
       </div>
     </div>

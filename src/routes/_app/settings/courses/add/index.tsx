@@ -1,21 +1,22 @@
-import { createFileRoute } from '@tanstack/react-router';
-import Profile from '~/components/profile';
+import { createFileRoute, useRouter } from '@tanstack/react-router';
 import { Button } from '~/components/ui/button';
+import Profile from '../-components/Profile';
 import CardList from './-components/cardlist';
 import CourseSearchBar from './-components/coursesearchbar';
 
-export const Route = createFileRoute('/_app/course/add/')({
+export const Route = createFileRoute('/_app/settings/courses/add/')({
   component: AddCourse,
 });
 
 function AddCourse() {
+  const router = useRouter();
   return (
     <div className="flex h-full flex-col gap-8 font-inter">
       {/* Profile Section */}
-      <Profile />
+      <Profile className="lg:hidden" />
 
       {/* Courses Section */}
-      <section className="flex w-full max-w-screen-md flex-1 flex-col gap-9 rounded-t-2xl bg-green-800 px-8 py-12">
+      <section className="flex w-full max-w-screen-md flex-1 flex-col gap-9 rounded-t-2xl bg-[url('/images/courses/gradient.png')] bg-cover bg-no-repeat px-8 py-12">
         {/* Title Section */}
         <div className="flex items-center justify-between text-neutral-light">
           <h2 className="text-3xl font-bold">Add Courses</h2>
@@ -31,10 +32,16 @@ function AddCourse() {
 
         {/* Buttons Section */}
         <section className="flex justify-between gap-3">
-          <Button className="w-full border-2 border-yellow-200 bg-green-800 font-semibold text-yellow-200">
+          <Button
+            variant="outlined"
+            className="flex-1 border-2 border-[#E8C55F] font-medium text-[#E8C55F]"
+            onClick={() => {
+              router.history.back();
+            }}
+          >
             Cancel
           </Button>
-          <Button className="w-full border-2 border-yellow-200 bg-yellow-200 font-semibold text-green-800">
+          <Button className="flex-1 bg-[#E8C55F] font-medium text-[#30764B]">
             Add
           </Button>
         </section>

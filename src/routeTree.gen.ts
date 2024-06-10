@@ -17,13 +17,15 @@ import { Route as AboutImport } from './routes/about'
 import { Route as NavbarImport } from './routes/_navbar'
 import { Route as AppImport } from './routes/_app'
 import { Route as IndexImport } from './routes/index'
+import { Route as AppSettingsImport } from './routes/_app/settings'
 import { Route as AppTimelineIndexImport } from './routes/_app/timeline/index'
 import { Route as AppSettingsIndexImport } from './routes/_app/settings/index'
 import { Route as AppHomeIndexImport } from './routes/_app/home/index'
-import { Route as AppCoursesIndexImport } from './routes/_app/courses/index'
 import { Route as AppAddAnnouncementIndexImport } from './routes/_app/add-announcement/index'
 import { Route as AppTimelineInfoIdIndexImport } from './routes/_app/timeline/$infoId/index'
-import { Route as AppCourseAddIndexImport } from './routes/_app/course/add/index'
+import { Route as AppSettingsSubscriptionsIndexImport } from './routes/_app/settings/subscriptions/index'
+import { Route as AppSettingsCoursesIndexImport } from './routes/_app/settings/courses/index'
+import { Route as AppSettingsCoursesAddIndexImport } from './routes/_app/settings/courses/add/index'
 
 // Create Virtual Routes
 
@@ -60,6 +62,11 @@ const LoginIndexLazyRoute = LoginIndexLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/login/index.lazy').then((d) => d.Route))
 
+const AppSettingsRoute = AppSettingsImport.update({
+  path: '/settings',
+  getParentRoute: () => AppRoute,
+} as any)
+
 const NavbarContohIndexLazyRoute = NavbarContohIndexLazyImport.update({
   path: '/contoh/',
   getParentRoute: () => NavbarRoute,
@@ -73,17 +80,12 @@ const AppTimelineIndexRoute = AppTimelineIndexImport.update({
 } as any)
 
 const AppSettingsIndexRoute = AppSettingsIndexImport.update({
-  path: '/settings/',
-  getParentRoute: () => AppRoute,
+  path: '/',
+  getParentRoute: () => AppSettingsRoute,
 } as any)
 
 const AppHomeIndexRoute = AppHomeIndexImport.update({
   path: '/home/',
-  getParentRoute: () => AppRoute,
-} as any)
-
-const AppCoursesIndexRoute = AppCoursesIndexImport.update({
-  path: '/courses/',
   getParentRoute: () => AppRoute,
 } as any)
 
@@ -105,10 +107,23 @@ const AppTimelineInfoIdIndexRoute = AppTimelineInfoIdIndexImport.update({
   getParentRoute: () => AppRoute,
 } as any)
 
-const AppCourseAddIndexRoute = AppCourseAddIndexImport.update({
-  path: '/course/add/',
-  getParentRoute: () => AppRoute,
+const AppSettingsSubscriptionsIndexRoute =
+  AppSettingsSubscriptionsIndexImport.update({
+    path: '/subscriptions/',
+    getParentRoute: () => AppSettingsRoute,
+  } as any)
+
+const AppSettingsCoursesIndexRoute = AppSettingsCoursesIndexImport.update({
+  path: '/courses/',
+  getParentRoute: () => AppSettingsRoute,
 } as any)
+
+const AppSettingsCoursesAddIndexRoute = AppSettingsCoursesAddIndexImport.update(
+  {
+    path: '/courses/add/',
+    getParentRoute: () => AppSettingsRoute,
+  } as any,
+)
 
 // Populate the FileRoutesByPath interface
 
@@ -130,6 +145,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutImport
       parentRoute: typeof rootRoute
     }
+    '/_app/settings': {
+      preLoaderRoute: typeof AppSettingsImport
+      parentRoute: typeof AppImport
+    }
     '/login/': {
       preLoaderRoute: typeof LoginIndexLazyImport
       parentRoute: typeof rootRoute
@@ -138,17 +157,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAddAnnouncementIndexImport
       parentRoute: typeof AppImport
     }
-    '/_app/courses/': {
-      preLoaderRoute: typeof AppCoursesIndexImport
-      parentRoute: typeof AppImport
-    }
     '/_app/home/': {
       preLoaderRoute: typeof AppHomeIndexImport
       parentRoute: typeof AppImport
     }
     '/_app/settings/': {
       preLoaderRoute: typeof AppSettingsIndexImport
-      parentRoute: typeof AppImport
+      parentRoute: typeof AppSettingsImport
     }
     '/_app/timeline/': {
       preLoaderRoute: typeof AppTimelineIndexImport
@@ -158,9 +173,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NavbarContohIndexLazyImport
       parentRoute: typeof NavbarImport
     }
-    '/_app/course/add/': {
-      preLoaderRoute: typeof AppCourseAddIndexImport
-      parentRoute: typeof AppImport
+    '/_app/settings/courses/': {
+      preLoaderRoute: typeof AppSettingsCoursesIndexImport
+      parentRoute: typeof AppSettingsImport
+    }
+    '/_app/settings/subscriptions/': {
+      preLoaderRoute: typeof AppSettingsSubscriptionsIndexImport
+      parentRoute: typeof AppSettingsImport
     }
     '/_app/timeline/$infoId/': {
       preLoaderRoute: typeof AppTimelineInfoIdIndexImport
@@ -170,6 +189,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NavbarContohContohIdIndexLazyImport
       parentRoute: typeof NavbarImport
     }
+    '/_app/settings/courses/add/': {
+      preLoaderRoute: typeof AppSettingsCoursesAddIndexImport
+      parentRoute: typeof AppSettingsImport
+    }
   }
 }
 
@@ -178,12 +201,15 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren([
   IndexRoute,
   AppRoute.addChildren([
+    AppSettingsRoute.addChildren([
+      AppSettingsIndexRoute,
+      AppSettingsCoursesIndexRoute,
+      AppSettingsSubscriptionsIndexRoute,
+      AppSettingsCoursesAddIndexRoute,
+    ]),
     AppAddAnnouncementIndexRoute,
-    AppCoursesIndexRoute,
     AppHomeIndexRoute,
-    AppSettingsIndexRoute,
     AppTimelineIndexRoute,
-    AppCourseAddIndexRoute,
     AppTimelineInfoIdIndexRoute,
   ]),
   NavbarRoute.addChildren([

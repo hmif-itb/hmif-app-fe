@@ -1,13 +1,16 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { Button } from '~/components/ui/button';
-import useLogout from '~/hooks/auth/useLogout';
+import SettingsDekstop from './-components/settings-desktop';
+import SettingsMobile from './-components/settings-mobile';
 
 export const Route = createFileRoute('/_app/settings/')({
-  component: SettingsPage,
+  component: SettingsIndex,
 });
 
-function SettingsPage() {
-  const { logout } = useLogout();
-
-  return <Button onClick={() => logout()}>Logout</Button>;
+function SettingsIndex() {
+  return (
+    <>
+      <SettingsMobile />
+      <SettingsDekstop />
+    </>
+  );
 }

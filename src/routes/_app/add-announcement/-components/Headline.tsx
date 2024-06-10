@@ -1,7 +1,7 @@
 import { UseFormReturn } from 'react-hook-form';
-import { FormSchemaType } from '../-constants';
 import { FormControl, FormField, FormItem } from '~/components/ui/form';
 import { TextField } from '~/components/ui/textfield';
+import { FormSchemaType } from '../-constants';
 
 type ComponentProps = {
   form: UseFormReturn<FormSchemaType>;
@@ -19,7 +19,7 @@ export default function Headline({ form }: ComponentProps): JSX.Element {
               <TextField
                 maxLength={50}
                 placeholder="Headline announcement"
-                inputClassName="rounded-none border-y border-y-[#EBEEEB] text-subtitle-2 py-4 px-6 font-bold"
+                inputClassName="rounded-none border-y border-y-[#EBEEEB] text-body-xl py-4 px-6 font-bold"
                 errorClassName="absolute top-0.5 left-4 text-xs"
                 error={
                   form.formState.errors.headline?.message &&

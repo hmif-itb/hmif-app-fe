@@ -14,7 +14,7 @@ function LoginPage(): JSX.Element {
   return (
     <LoginLayout>
       <h1 className="italic text-white lg:text-black">
-        <span className="text-heading-2 not-italic">
+        <span className="text-heading-lg not-italic">
           Hello, <span className="font-bold italic">Pips!</span>
         </span>
         <br />
