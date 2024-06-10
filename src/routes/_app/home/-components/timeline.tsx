@@ -38,7 +38,7 @@ function Timeline() {
           </div>
 
           <div>
-            <img src="/home/filter.svg" alt="Filter" className="size-6" />
+            <img src="/img/home/filter.svg" alt="Filter" className="size-6" />
           </div>
         </div>
 

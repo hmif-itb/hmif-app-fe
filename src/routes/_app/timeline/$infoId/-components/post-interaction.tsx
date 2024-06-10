@@ -1,24 +1,30 @@
-import { IPost } from '../-interface/IPost';
+import { useParams } from '@tanstack/react-router';
+import { Info } from '~/api/generated';
 import Reaction from './reaction';
 
 const PostInteraction = ({
-  reactionData,
-  userReaction,
+  reactions,
   commentsCount,
+  isActive,
+  toggleReaction,
 }: {
-  reactionData: IPost['ReactionData'];
-  userReaction: string | null;
+  reactions: Info['reactions'];
   commentsCount: number;
+  isActive: boolean;
+  toggleReaction: () => void;
 }) => {
+  const infoId = useParams({ from: '/_app/timeline/$infoId/' }).infoId;
   return (
     <div className="flex items-center space-x-3 border-y border-gray-300 p-2">
       <Reaction
-        reactionData={reactionData}
-        initialUserReaction={userReaction}
-      ></Reaction>
+        reactions={reactions}
+        isActive={isActive}
+        toggleReaction={toggleReaction}
+        infoId={infoId}
+      />
       <div className="flex space-x-1">
         <button>
-          <img src="/icons/comment.svg" alt="comment" />
+          <img src="/img/icons/comment.svg" alt="comment" />
         </button>
         <p className="text-xl text-neutral-dark-hover">{commentsCount}</p>
       </div>

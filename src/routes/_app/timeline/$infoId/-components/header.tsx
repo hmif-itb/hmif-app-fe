@@ -14,7 +14,7 @@ function Header() {
           history.go(-1);
         }}
       >
-        <img src="/icons/back.svg" />
+        <img src="/img/icons/back.svg" />
       </button>
       <h1 className="flex-auto pr-9 text-center text-xl font-bold text-black">
         Post

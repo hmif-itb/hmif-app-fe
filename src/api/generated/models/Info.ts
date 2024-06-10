@@ -3,6 +3,8 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { Course } from './Course';
+import type { ReactionAggregate } from './ReactionAggregate';
+import type { User } from './User';
 export type Info = {
   id: string;
   creatorId: string;
@@ -45,12 +47,7 @@ export type Info = {
       name: string;
     };
   }>;
-  reactions?: {
-    totalReactions: number;
-    reactionsCount: Array<{
-      reaction: string;
-      count: number;
-    }>;
-  };
+  reactions?: ReactionAggregate;
+  creator: User;
 };
 
