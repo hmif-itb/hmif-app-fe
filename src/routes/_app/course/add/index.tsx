@@ -1,8 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router';
 import Profile from '~/components/profile';
 import { Button } from '~/components/ui/button';
-import CourseSearchBar from './-components/coursesearchbar';
 import CardList from './-components/cardlist';
+import CourseSearchBar from './-components/coursesearchbar';
 
 export const Route = createFileRoute('/_app/course/add/')({
   component: AddCourse,
@@ -10,19 +10,19 @@ export const Route = createFileRoute('/_app/course/add/')({
 
 function AddCourse() {
   return (
-    <div className="flex flex-col items-center gap-8 font-inter lg:hidden">
+    <div className="flex h-full flex-col gap-8 font-inter">
       {/* Profile Section */}
       <Profile />
 
       {/* Courses Section */}
-      <section className="flex h-[1031px] w-full max-w-screen-md flex-col gap-9 rounded-t-2xl bg-green-800 px-8 py-12">
+      <section className="flex w-full max-w-screen-md flex-1 flex-col gap-9 rounded-t-2xl bg-green-800 px-8 py-12">
         {/* Title Section */}
         <div className="flex items-center justify-between text-neutral-light">
           <h2 className="text-3xl font-bold">Add Courses</h2>
           <h4 className="text-sm font-medium">Semester 4</h4>
         </div>
 
-        <div className="flex h-full flex-col gap-6">
+        <div className="flex flex-1 flex-col gap-6">
           {/* Search Bar Section */}
           <CourseSearchBar />
           {/* Course Card Section */}

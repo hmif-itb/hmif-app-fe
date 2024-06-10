@@ -1,7 +1,6 @@
-'use client';
 import { useState } from 'react';
-import PlusIcon from '~/assets/icons/course/Plus.svg';
 import MinusIcon from '~/assets/icons/course/Minus.svg';
+import PlusIcon from '~/assets/icons/course/Plus.svg';
 
 export default function CourseItem({ kelas }: { kelas: number }) {
   const [add, setAdd] = useState<boolean>(false);
