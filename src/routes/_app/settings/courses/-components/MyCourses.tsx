@@ -60,14 +60,14 @@ export default function MyCourses() {
   ];
 
   return (
-    <div className="flex-1 overflow-y-auto rounded-t-2xl bg-[url('/images/courses/gradient.png')] bg-cover bg-no-repeat px-7 py-10">
+    <div className="flex-1 overflow-y-auto rounded-t-2xl bg-[url('/images/courses/gradient.png')] bg-cover bg-no-repeat px-7 py-10 lg:rounded-none">
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-[30px] font-bold text-white antialiased">
           Your Courses
         </h1>
         <p className="text-sm text-[#D4D6D4]">SEMESTER 4</p>
       </div>
-      <div className="flex flex-col justify-between gap-4 overflow-y-auto">
+      <div className="flex flex-col justify-between gap-4">
         <div className={`flex flex-col gap-4`}>
           {currCourses.map((course) => (
             <CourseCard

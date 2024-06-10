@@ -17,11 +17,13 @@ import { Route as AboutImport } from './routes/about'
 import { Route as NavbarImport } from './routes/_navbar'
 import { Route as AppImport } from './routes/_app'
 import { Route as IndexImport } from './routes/index'
+import { Route as AppSettingsImport } from './routes/_app/settings'
 import { Route as AppTimelineIndexImport } from './routes/_app/timeline/index'
 import { Route as AppSettingsIndexImport } from './routes/_app/settings/index'
 import { Route as AppHomeIndexImport } from './routes/_app/home/index'
 import { Route as AppAddAnnouncementIndexImport } from './routes/_app/add-announcement/index'
 import { Route as AppTimelineInfoIdIndexImport } from './routes/_app/timeline/$infoId/index'
+import { Route as AppSettingsSubscriptionsIndexImport } from './routes/_app/settings/subscriptions/index'
 import { Route as AppSettingsCoursesIndexImport } from './routes/_app/settings/courses/index'
 import { Route as AppCourseAddIndexImport } from './routes/_app/course/add/index'
 
@@ -60,6 +62,11 @@ const LoginIndexLazyRoute = LoginIndexLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/login/index.lazy').then((d) => d.Route))
 
+const AppSettingsRoute = AppSettingsImport.update({
+  path: '/settings',
+  getParentRoute: () => AppRoute,
+} as any)
+
 const NavbarContohIndexLazyRoute = NavbarContohIndexLazyImport.update({
   path: '/contoh/',
   getParentRoute: () => NavbarRoute,
@@ -73,8 +80,8 @@ const AppTimelineIndexRoute = AppTimelineIndexImport.update({
 } as any)
 
 const AppSettingsIndexRoute = AppSettingsIndexImport.update({
-  path: '/settings/',
-  getParentRoute: () => AppRoute,
+  path: '/',
+  getParentRoute: () => AppSettingsRoute,
 } as any)
 
 const AppHomeIndexRoute = AppHomeIndexImport.update({
@@ -100,9 +107,15 @@ const AppTimelineInfoIdIndexRoute = AppTimelineInfoIdIndexImport.update({
   getParentRoute: () => AppRoute,
 } as any)
 
+const AppSettingsSubscriptionsIndexRoute =
+  AppSettingsSubscriptionsIndexImport.update({
+    path: '/subscriptions/',
+    getParentRoute: () => AppSettingsRoute,
+  } as any)
+
 const AppSettingsCoursesIndexRoute = AppSettingsCoursesIndexImport.update({
-  path: '/settings/courses/',
-  getParentRoute: () => AppRoute,
+  path: '/courses/',
+  getParentRoute: () => AppSettingsRoute,
 } as any)
 
 const AppCourseAddIndexRoute = AppCourseAddIndexImport.update({
@@ -130,6 +143,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutImport
       parentRoute: typeof rootRoute
     }
+    '/_app/settings': {
+      preLoaderRoute: typeof AppSettingsImport
+      parentRoute: typeof AppImport
+    }
     '/login/': {
       preLoaderRoute: typeof LoginIndexLazyImport
       parentRoute: typeof rootRoute
@@ -144,7 +161,7 @@ declare module '@tanstack/react-router' {
     }
     '/_app/settings/': {
       preLoaderRoute: typeof AppSettingsIndexImport
-      parentRoute: typeof AppImport
+      parentRoute: typeof AppSettingsImport
     }
     '/_app/timeline/': {
       preLoaderRoute: typeof AppTimelineIndexImport
@@ -160,7 +177,11 @@ declare module '@tanstack/react-router' {
     }
     '/_app/settings/courses/': {
       preLoaderRoute: typeof AppSettingsCoursesIndexImport
-      parentRoute: typeof AppImport
+      parentRoute: typeof AppSettingsImport
+    }
+    '/_app/settings/subscriptions/': {
+      preLoaderRoute: typeof AppSettingsSubscriptionsIndexImport
+      parentRoute: typeof AppSettingsImport
     }
     '/_app/timeline/$infoId/': {
       preLoaderRoute: typeof AppTimelineInfoIdIndexImport
@@ -178,12 +199,15 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren([
   IndexRoute,
   AppRoute.addChildren([
+    AppSettingsRoute.addChildren([
+      AppSettingsIndexRoute,
+      AppSettingsCoursesIndexRoute,
+      AppSettingsSubscriptionsIndexRoute,
+    ]),
     AppAddAnnouncementIndexRoute,
     AppHomeIndexRoute,
-    AppSettingsIndexRoute,
     AppTimelineIndexRoute,
     AppCourseAddIndexRoute,
-    AppSettingsCoursesIndexRoute,
     AppTimelineInfoIdIndexRoute,
   ]),
   NavbarRoute.addChildren([

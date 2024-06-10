@@ -137,7 +137,8 @@ module.exports = {
       fontSize: {
         'heading-xl': ['2.25rem', { lineHeight: '2.925rem' }],
         'heading-lg': ['1.875rem', { lineHeight: '2.4375rem' }],
-        'heading-sm': ['1.5rem', { lineHeight: '1.95rem' }],
+        'heading-md': ['1.5rem', { lineHeight: '1.95rem' }],
+        'heading-sm': ['1.25rem', { lineHeight: '1.625rem' }],
         'body-xl': ['1.125rem', { lineHeight: '1.75rem' }],
         'body-lg': ['1rem', { lineHeight: '1.625rem' }],
         'body-md': ['0.875rem', { lineHeight: '1.25rem' }],
