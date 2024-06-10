@@ -15,7 +15,13 @@ function Avatar({ alt, src, className, imgClassName }: AvatarProps) {
         className,
       )}
     >
-      {src && <img src={src} alt={alt} className={cn(imgClassName)} />}
+      {src && (
+        <img
+          src={src}
+          alt={alt}
+          className={cn('h-full w-full', imgClassName)}
+        />
+      )}
     </div>
   );
 }
