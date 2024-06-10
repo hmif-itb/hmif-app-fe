@@ -26,10 +26,10 @@ function Timeline() {
   });
   if (!infos) {
     // TODO: handle loading or empty
-    return null;
+    return <div className="flex-1"></div>;
   }
   return (
-    <div className="mx-5 mt-10 max-w-screen-md">
+    <div className="mx-5 mt-10 max-w-screen-md flex-1">
       <h1 className="text-[24px] font-bold antialiased">Timeline</h1>
       <SearchBar />
 

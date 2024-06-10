@@ -37,13 +37,13 @@ function InfoDetail() {
 
   if (!info) {
     // TODO: handle error or loading
-    return null;
+    return <div className="flex-1"></div>;
   }
 
   // let info = api.info.readInfo(InfoId);
 
   return (
-    <div className="w-full">
+    <div className="w-full flex-1">
       <Header />
       <div className="max-w-screen-md flex-col space-y-4 p-4">
         <DetailPost info={info} />

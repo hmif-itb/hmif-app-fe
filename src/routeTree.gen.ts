@@ -22,6 +22,7 @@ import { Route as AppTimelineIndexImport } from './routes/_app/timeline/index'
 import { Route as AppSettingsIndexImport } from './routes/_app/settings/index'
 import { Route as AppHomeIndexImport } from './routes/_app/home/index'
 import { Route as AppAddAnnouncementIndexImport } from './routes/_app/add-announcement/index'
+import { Route as AppSettingsCoursesImport } from './routes/_app/settings/courses'
 import { Route as AppTimelineInfoIdIndexImport } from './routes/_app/timeline/$infoId/index'
 import { Route as AppSettingsSubscriptionsIndexImport } from './routes/_app/settings/subscriptions/index'
 import { Route as AppSettingsCoursesIndexImport } from './routes/_app/settings/courses/index'
@@ -94,6 +95,11 @@ const AppAddAnnouncementIndexRoute = AppAddAnnouncementIndexImport.update({
   getParentRoute: () => AppRoute,
 } as any)
 
+const AppSettingsCoursesRoute = AppSettingsCoursesImport.update({
+  path: '/courses',
+  getParentRoute: () => AppSettingsRoute,
+} as any)
+
 const NavbarContohContohIdIndexLazyRoute =
   NavbarContohContohIdIndexLazyImport.update({
     path: '/contoh/$contohId/',
@@ -114,14 +120,14 @@ const AppSettingsSubscriptionsIndexRoute =
   } as any)
 
 const AppSettingsCoursesIndexRoute = AppSettingsCoursesIndexImport.update({
-  path: '/courses/',
-  getParentRoute: () => AppSettingsRoute,
+  path: '/',
+  getParentRoute: () => AppSettingsCoursesRoute,
 } as any)
 
 const AppSettingsCoursesAddIndexRoute = AppSettingsCoursesAddIndexImport.update(
   {
-    path: '/courses/add/',
-    getParentRoute: () => AppSettingsRoute,
+    path: '/add/',
+    getParentRoute: () => AppSettingsCoursesRoute,
   } as any,
 )
 
@@ -153,6 +159,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginIndexLazyImport
       parentRoute: typeof rootRoute
     }
+    '/_app/settings/courses': {
+      preLoaderRoute: typeof AppSettingsCoursesImport
+      parentRoute: typeof AppSettingsImport
+    }
     '/_app/add-announcement/': {
       preLoaderRoute: typeof AppAddAnnouncementIndexImport
       parentRoute: typeof AppImport
@@ -175,7 +185,7 @@ declare module '@tanstack/react-router' {
     }
     '/_app/settings/courses/': {
       preLoaderRoute: typeof AppSettingsCoursesIndexImport
-      parentRoute: typeof AppSettingsImport
+      parentRoute: typeof AppSettingsCoursesImport
     }
     '/_app/settings/subscriptions/': {
       preLoaderRoute: typeof AppSettingsSubscriptionsIndexImport
@@ -191,7 +201,7 @@ declare module '@tanstack/react-router' {
     }
     '/_app/settings/courses/add/': {
       preLoaderRoute: typeof AppSettingsCoursesAddIndexImport
-      parentRoute: typeof AppSettingsImport
+      parentRoute: typeof AppSettingsCoursesImport
     }
   }
 }
@@ -202,10 +212,12 @@ export const routeTree = rootRoute.addChildren([
   IndexRoute,
   AppRoute.addChildren([
     AppSettingsRoute.addChildren([
+      AppSettingsCoursesRoute.addChildren([
+        AppSettingsCoursesIndexRoute,
+        AppSettingsCoursesAddIndexRoute,
+      ]),
       AppSettingsIndexRoute,
-      AppSettingsCoursesIndexRoute,
       AppSettingsSubscriptionsIndexRoute,
-      AppSettingsCoursesAddIndexRoute,
     ]),
     AppAddAnnouncementIndexRoute,
     AppHomeIndexRoute,
