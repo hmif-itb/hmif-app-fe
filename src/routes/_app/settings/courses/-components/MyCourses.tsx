@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import CourseCard, { CourseData } from './CourseCard';
-import { Button } from '~/components/ui/button';
 import { Plus } from 'lucide-react';
+import { useState } from 'react';
+import { Button } from '~/components/ui/button';
+import CourseCard, { CourseData } from './CourseCard';
 
 export default function MyCourses() {
   const [isEditing, setIsEditing] = useState(false);
@@ -60,17 +60,15 @@ export default function MyCourses() {
   ];
 
   return (
-    <div className="h-full rounded-t-2xl bg-[url('/images/courses/gradient.png')] px-7 py-10">
+    <div className="flex-1 overflow-y-auto rounded-t-2xl bg-[url('/images/courses/gradient.png')] bg-cover bg-no-repeat px-7 py-10">
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-[30px] font-bold text-white antialiased">
           Your Courses
         </h1>
         <p className="text-sm text-[#D4D6D4]">SEMESTER 4</p>
       </div>
-      <div className="flex h-full flex-col justify-between gap-4">
-        <div
-          className={`flex ${isEditing ? 'h-[45vh]' : 'h-[55vh]'} flex-col gap-4 overflow-y-scroll`}
-        >
+      <div className="flex flex-col justify-between gap-4 overflow-y-auto">
+        <div className={`flex flex-col gap-4`}>
           {currCourses.map((course) => (
             <CourseCard
               key={course.courseId}
@@ -83,7 +81,7 @@ export default function MyCourses() {
           ))}
         </div>
         {isEditing ? (
-          <div className="flex h-[30vh] flex-col gap-10">
+          <div className="flex flex-col gap-10">
             <Button className="w-full rounded-xl bg-white py-3">
               <Plus size={25} className="text-[#8E8E93]" />
             </Button>
@@ -104,7 +102,7 @@ export default function MyCourses() {
             </div>
           </div>
         ) : (
-          <div className="h-[20vh]">
+          <div className="">
             <Button
               onClick={() => setIsEditing(true)}
               className="w-full bg-[#E8C55F] text-[#30764B]"

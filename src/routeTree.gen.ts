@@ -20,9 +20,9 @@ import { Route as IndexImport } from './routes/index'
 import { Route as AppTimelineIndexImport } from './routes/_app/timeline/index'
 import { Route as AppSettingsIndexImport } from './routes/_app/settings/index'
 import { Route as AppHomeIndexImport } from './routes/_app/home/index'
-import { Route as AppCoursesIndexImport } from './routes/_app/courses/index'
 import { Route as AppAddAnnouncementIndexImport } from './routes/_app/add-announcement/index'
 import { Route as AppTimelineInfoIdIndexImport } from './routes/_app/timeline/$infoId/index'
+import { Route as AppSettingsCoursesIndexImport } from './routes/_app/settings/courses/index'
 import { Route as AppCourseAddIndexImport } from './routes/_app/course/add/index'
 
 // Create Virtual Routes
@@ -82,11 +82,6 @@ const AppHomeIndexRoute = AppHomeIndexImport.update({
   getParentRoute: () => AppRoute,
 } as any)
 
-const AppCoursesIndexRoute = AppCoursesIndexImport.update({
-  path: '/courses/',
-  getParentRoute: () => AppRoute,
-} as any)
-
 const AppAddAnnouncementIndexRoute = AppAddAnnouncementIndexImport.update({
   path: '/add-announcement/',
   getParentRoute: () => AppRoute,
@@ -102,6 +97,11 @@ const NavbarContohContohIdIndexLazyRoute =
 
 const AppTimelineInfoIdIndexRoute = AppTimelineInfoIdIndexImport.update({
   path: '/timeline/$infoId/',
+  getParentRoute: () => AppRoute,
+} as any)
+
+const AppSettingsCoursesIndexRoute = AppSettingsCoursesIndexImport.update({
+  path: '/settings/courses/',
   getParentRoute: () => AppRoute,
 } as any)
 
@@ -138,10 +138,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAddAnnouncementIndexImport
       parentRoute: typeof AppImport
     }
-    '/_app/courses/': {
-      preLoaderRoute: typeof AppCoursesIndexImport
-      parentRoute: typeof AppImport
-    }
     '/_app/home/': {
       preLoaderRoute: typeof AppHomeIndexImport
       parentRoute: typeof AppImport
@@ -162,6 +158,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppCourseAddIndexImport
       parentRoute: typeof AppImport
     }
+    '/_app/settings/courses/': {
+      preLoaderRoute: typeof AppSettingsCoursesIndexImport
+      parentRoute: typeof AppImport
+    }
     '/_app/timeline/$infoId/': {
       preLoaderRoute: typeof AppTimelineInfoIdIndexImport
       parentRoute: typeof AppImport
@@ -179,11 +179,11 @@ export const routeTree = rootRoute.addChildren([
   IndexRoute,
   AppRoute.addChildren([
     AppAddAnnouncementIndexRoute,
-    AppCoursesIndexRoute,
     AppHomeIndexRoute,
     AppSettingsIndexRoute,
     AppTimelineIndexRoute,
     AppCourseAddIndexRoute,
+    AppSettingsCoursesIndexRoute,
     AppTimelineInfoIdIndexRoute,
   ]),
   NavbarRoute.addChildren([
