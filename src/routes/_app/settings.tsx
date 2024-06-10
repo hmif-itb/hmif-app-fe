@@ -41,7 +41,7 @@ function SettingsLayout() {
             )}
             <span>{selectedSettings?.title ?? 'Settings'}</span>
           </h1>
-          <div className="flex flex-1 overflow-hidden rounded-xl bg-white shadow-lg">
+          <div className="flex flex-1 overflow-hidden lg:rounded-xl lg:bg-white lg:shadow-lg">
             <ul className="hidden w-72 flex-col border-r border-neutral-normal-active py-9 lg:flex">
               {desktopSettingsOptions.map((option) => (
                 <Link

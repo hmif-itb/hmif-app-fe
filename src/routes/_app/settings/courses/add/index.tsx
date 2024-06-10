@@ -16,7 +16,7 @@ function AddCourse() {
       <Profile className="lg:hidden" />
 
       {/* Courses Section */}
-      <section className="flex w-full max-w-screen-md flex-1 flex-col gap-9 rounded-t-2xl bg-[url('/images/courses/gradient.png')] bg-cover bg-no-repeat px-8 py-12">
+      <section className="flex w-full max-w-screen-md flex-1 flex-col gap-9 rounded-t-2xl bg-[url('/images/courses/gradient.png')] bg-cover bg-no-repeat px-4 py-12">
         {/* Title Section */}
         <div className="flex items-center justify-between text-neutral-light">
           <h2 className="text-3xl font-bold">Add Courses</h2>

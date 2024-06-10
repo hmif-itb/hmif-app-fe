@@ -60,7 +60,7 @@ export default function MyCourses() {
 
   const [currCourses, setCurrCourses] = useState(coursesData);
   return (
-    <div className="flex-1 overflow-y-auto rounded-t-2xl bg-[url('/images/courses/gradient.png')] bg-cover bg-no-repeat px-7 py-10 lg:rounded-none">
+    <div className="flex-1 overflow-y-auto rounded-t-2xl bg-[url('/images/courses/gradient.png')] bg-cover bg-no-repeat px-4 py-10 lg:rounded-none">
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-[30px] font-bold text-white antialiased">
           Your Courses

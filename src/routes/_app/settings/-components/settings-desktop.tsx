@@ -4,7 +4,7 @@ import Profile from '../courses/-components/Profile';
 function SettingsDekstop() {
   const user = useSession();
   return (
-    <div className="px-6 py-[3.25rem]">
+    <div className="hidden px-6 py-[3.25rem] lg:block">
       <Profile className="rounded-md border border-[#D2D5DA]" />
       <ul className="mt-9 rounded-md border border-[#D2D5DA] p-6">
         <ProfileItem title="NIM" text={user.nim} />
