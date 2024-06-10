@@ -1,12 +1,13 @@
 import { Link, LinkProps } from '@tanstack/react-router';
+import QuestionMarkIcon from './icons/question-mark';
 
 function BottomNavigationItem({
-  src,
+  Icon,
   alt,
   title,
   to,
 }: {
-  src: string;
+  Icon: typeof QuestionMarkIcon;
   alt: string;
   title: string;
   to: LinkProps['to'];
@@ -16,11 +17,10 @@ function BottomNavigationItem({
       className={`flex size-[4.5625rem] flex-col items-center justify-center rounded-full border-2 border-transparent data-[status]:border-green-300`}
       to={to as undefined}
       activeProps={{
-        className:
-          'font-bold text-green-300 [&>img]:[filter:invert(26%)_sepia(14%)_saturate(1090%)_hue-rotate(82deg)_brightness(98%)_contrast(92%)] bg-yellow-75',
+        className: 'font-bold text-green-300 bg-yellow-75',
       }}
     >
-      <img src={src} alt={alt} className={`size-[2.625rem]`} />
+      <Icon className="size-[2.625rem]" />
       <span className={`text-[0.625rem]`}>{title}</span>
     </Link>
   );

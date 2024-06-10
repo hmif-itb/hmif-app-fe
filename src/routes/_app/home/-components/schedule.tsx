@@ -1,6 +1,6 @@
 import { Separator } from '~/components/ui/separator';
-import type { Schedule } from '../-dummy/info';
 import { cn } from '~/lib/utils';
+import type { Schedule } from '../-dummy/info';
 
 function Schedule({
   info,
@@ -53,7 +53,7 @@ function Schedule({
         <p className="text-sm">{info.description}</p>
 
         <div className="flex items-center gap-1">
-          <img src="/home/location.svg" alt="Location" className="size-4" />
+          <img src="/img/home/location.svg" alt="Location" className="size-4" />
           <p className="text-sm">{info.location}</p>
         </div>
 

@@ -8,10 +8,10 @@ export type User = {
   email: string;
   fullName: string;
   major: 'IF' | 'STI';
+  picture: string | null;
   region: 'Ganesha' | 'Jatinangor';
   angkatan: number;
   gender: 'F' | 'M';
   membershipStatus: string;
-  picture: string;
 };
 

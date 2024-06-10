@@ -23,10 +23,14 @@ export const Route = createFileRoute('/_app')({
 function AppLayout() {
   return (
     <SessionProvider>
-      <main className="mx-auto max-w-screen-md lg:flex lg:size-full lg:max-w-none lg:overflow-y-auto">
+      <main className="mx-auto size-full max-w-screen-md lg:flex lg:max-w-none lg:overflow-y-auto">
         <LeftNavbar />
-        <Outlet />
-        <Navbar />
+        <div className="flex h-full flex-1 flex-col lg:block">
+          <div className="flex-1">
+            <Outlet />
+          </div>
+          <Navbar />
+        </div>
       </main>
     </SessionProvider>
   );

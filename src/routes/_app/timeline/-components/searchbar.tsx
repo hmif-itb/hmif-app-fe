@@ -3,9 +3,9 @@ import { useState } from 'react';
 import { Drawer, DrawerTrigger } from '~/components/ui/drawer';
 import FilterContent from './filtercontent';
 
-import SearchIcon from '~/assets/icons/searchbar/search.svg';
-import ReadIcon from '~/assets/icons/searchbar/read.svg';
 import FilterIcon from '~/assets/icons/searchbar/filter.svg';
+import ReadIcon from '~/assets/icons/searchbar/read.svg';
+import SearchIcon from '~/assets/icons/searchbar/search.svg';
 
 export default function SearchBar() {
   const [drawerState, openDrawer] = useState(false);
@@ -13,11 +13,11 @@ export default function SearchBar() {
 
   return (
     <form className="relative my-10 flex w-full flex-row items-center justify-center gap-5">
-      <div className="relative w-[70%] text-[11.25px]">
+      <div className="relative w-[70%] text-xs">
         <input
           type="text"
           placeholder="Search..."
-          className="w-full rounded-full border-[.8px] border-black py-1 pl-4 shadow-sm outline-none"
+          className="w-full rounded-full border border-black py-1 pl-4 shadow-sm outline-none"
           name=""
           id=""
         />

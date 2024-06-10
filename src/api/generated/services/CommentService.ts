@@ -3,6 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { Comment } from '../models/Comment';
+import type { CommentWithReactions } from '../models/CommentWithReactions';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import type { BaseHttpRequest } from '../core/BaseHttpRequest';
 export class CommentService {
@@ -22,9 +23,9 @@ export class CommentService {
     /**
      * Sort info comments
      */
-    sort?: 'popular' | 'oldest' | 'newest',
+    sort?: 'oldest' | 'newest',
   }): CancelablePromise<{
-    comment: Array<Comment>;
+    comment: Array<CommentWithReactions>;
   }> {
     return this.httpRequest.request({
       method: 'GET',
