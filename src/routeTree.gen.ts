@@ -20,6 +20,7 @@ import { Route as IndexImport } from './routes/index'
 import { Route as AppTimelineIndexImport } from './routes/_app/timeline/index'
 import { Route as AppSettingsIndexImport } from './routes/_app/settings/index'
 import { Route as AppHomeIndexImport } from './routes/_app/home/index'
+import { Route as AppCoursesIndexImport } from './routes/_app/courses/index'
 import { Route as AppAddAnnouncementIndexImport } from './routes/_app/add-announcement/index'
 import { Route as AppTimelineInfoIdIndexImport } from './routes/_app/timeline/$infoId/index'
 import { Route as AppCourseAddIndexImport } from './routes/_app/course/add/index'
@@ -81,6 +82,11 @@ const AppHomeIndexRoute = AppHomeIndexImport.update({
   getParentRoute: () => AppRoute,
 } as any)
 
+const AppCoursesIndexRoute = AppCoursesIndexImport.update({
+  path: '/courses/',
+  getParentRoute: () => AppRoute,
+} as any)
+
 const AppAddAnnouncementIndexRoute = AppAddAnnouncementIndexImport.update({
   path: '/add-announcement/',
   getParentRoute: () => AppRoute,
@@ -132,6 +138,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAddAnnouncementIndexImport
       parentRoute: typeof AppImport
     }
+    '/_app/courses/': {
+      preLoaderRoute: typeof AppCoursesIndexImport
+      parentRoute: typeof AppImport
+    }
     '/_app/home/': {
       preLoaderRoute: typeof AppHomeIndexImport
       parentRoute: typeof AppImport
@@ -169,6 +179,7 @@ export const routeTree = rootRoute.addChildren([
   IndexRoute,
   AppRoute.addChildren([
     AppAddAnnouncementIndexRoute,
+    AppCoursesIndexRoute,
     AppHomeIndexRoute,
     AppSettingsIndexRoute,
     AppTimelineIndexRoute,
