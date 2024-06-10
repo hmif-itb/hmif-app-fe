@@ -38,6 +38,8 @@ export interface TextFieldProps
   success?: boolean;
   inputClassName?: string;
   inputContainerClassName?: string;
+  errorClassName?: string;
+  iconClassName?: string;
 }
 
 /**
@@ -48,6 +50,10 @@ export interface TextFieldProps
  * @param fieldSize - "default", "m", or "xl
  * @param [success] - Indicates if the input is successfully submitted.
  * @param [error] - Error message.
+ * @param [inputClassName] - Additional class name for the input.
+ * @param [inputContainerClassName] - Additional class name for the input container.
+ * @param [errorClassName] - Additional class name for the error message.
+ * @param [iconClassName] - Additional class name for the info icon.
  */
 const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
   (
@@ -61,6 +67,8 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
       error,
       inputClassName,
       inputContainerClassName,
+      errorClassName,
+      iconClassName,
       ...props
     },
     ref,
@@ -95,7 +103,12 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
             ref={ref}
             {...props}
           />
-          <div className="pointer-events-none absolute right-3 top-1/2 flex -translate-y-1/2 items-center gap-2">
+          <div
+            className={cn(
+              'pointer-events-none absolute right-3 top-1/2 flex -translate-y-1/2 items-center gap-2',
+              iconClassName,
+            )}
+          >
             {(props.disabled || error || success) && (
               <img
                 src={
@@ -109,7 +122,9 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
         </div>
 
         {!props.disabled && error && (
-          <p className="text-sm text-[#FF2C20]">* {error}</p>
+          <p className={cn('text-sm text-[#FF2C20]', errorClassName)}>
+            * {error}
+          </p>
         )}
       </div>
     );
