@@ -1,4 +1,5 @@
-import { useRef, useState } from "react";
+import clsx from 'clsx';
+import { useRef } from 'react';
 
 export interface CourseData {
   courseId: string;
@@ -16,7 +17,13 @@ interface CourseCardProps {
   onReset: () => void;
 }
 
-export default function CourseCard({ courseData, isSwiped, onSwipe, onReset, deleteable }: CourseCardProps) {
+export default function CourseCard({
+  courseData,
+  isSwiped,
+  onSwipe,
+  onReset,
+  deleteable,
+}: CourseCardProps) {
   // Track user horizontal touch movement
   const touchStart = useRef(0);
   const touchCurr = useRef(0);
@@ -27,36 +34,39 @@ export default function CourseCard({ courseData, isSwiped, onSwipe, onReset, del
   const handleTouchStart = (e: React.TouchEvent) => {
     if (!deleteable) return;
     touchStart.current = e.touches[0].clientX;
-  }
+  };
 
   const handleTouchMove = (e: React.TouchEvent) => {
     if (!deleteable) return;
     touchCurr.current = e.touches[0].clientX;
     touchDist.current = touchCurr.current - touchStart.current;
-  }
+  };
 
   const handleTouchEnd = () => {
     if (!deleteable) return;
-    if (touchDist.current < -MIN_TOUCH_DIST) { // Swipe left
+    if (touchDist.current < -MIN_TOUCH_DIST) {
+      // Swipe left
       onSwipe(courseData.courseId);
     } else {
       onReset();
     }
-  }
+  };
 
-  const formatClass = (cls: number) => (
-    cls.toLocaleString(undefined, { minimumIntegerDigits: 2 })
-  )
+  const formatClass = (cls: number) =>
+    cls.toLocaleString(undefined, { minimumIntegerDigits: 2 });
 
   return (
     <div
-      className="relative flex items-center rounded-xl w-full"
+      className="relative flex w-full items-center rounded-xl"
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
       <div
-        className={`z-10 flex items-center rounded-xl bg-white ${isSwiped ? 'w-[85%]' : 'w-[100%]'} transition-all duration-300 ease-out`}
+        className={clsx(
+          `z-10 flex items-center rounded-xl bg-white transition-all duration-300 ease-out`,
+          isSwiped ? 'w-[85%]' : 'w-full',
+        )}
       >
         <div className="flex items-center gap-4 px-5 py-4">
           <div className="flex h-min flex-col items-center gap-1 rounded-md bg-[#305138] px-3 py-2">
@@ -76,12 +86,16 @@ export default function CourseCard({ courseData, isSwiped, onSwipe, onReset, del
           </div>
         </div>
       </div>
-      {isSwiped && <div
-        className={`absolute bottom-0 right-0 top-0 flex items-center justify-center rounded-r-xl bg-[#B01212] text-xs text-white transition-all duration-300 ease-out ${isSwiped ? 'pl-[10%] w-[25%] opacity-100' : 'w-[0%] opacity-0'
-          }`}
-      >
-        Delete
-      </div>}
+      {isSwiped && (
+        <div
+          className={clsx(
+            `absolute inset-y-0 right-0 flex items-center justify-center rounded-r-xl bg-[#B01212] text-xs text-white transition-all duration-300 ease-out`,
+            isSwiped ? 'w-1/4 pl-[10%] opacity-100' : 'w-0 opacity-0',
+          )}
+        >
+          Delete
+        </div>
+      )}
     </div>
   );
 }

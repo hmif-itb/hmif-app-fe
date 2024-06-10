@@ -1,13 +1,14 @@
+import Avatar from '~/components/user/avatar';
 import useSession from '~/hooks/auth/useSession';
 
 export default function Profile() {
   const user = useSession();
   return (
     <section className="flex w-full items-center gap-4 px-5 py-4">
-      <img
+      <Avatar
         src={user.picture}
         alt="User Profile"
-        className="size-[3.3125rem] rounded-full"
+        className="size-[3.3125rem]"
       />
 
       <div>

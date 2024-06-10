@@ -19,6 +19,7 @@ function BottomNavigationItem({
       activeProps={{
         className: 'font-bold text-green-300 bg-yellow-75',
       }}
+      alt={alt}
     >
       <Icon className="size-[2.625rem]" />
       <span className={`text-[0.625rem]`}>{title}</span>

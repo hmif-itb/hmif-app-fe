@@ -1,10 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router";
-import MyCourses from "./-components/MyCourses";
-import Profile from "./-components/Profile";
+import { createFileRoute } from '@tanstack/react-router';
+import MyCourses from './-components/MyCourses';
+import Profile from './-components/Profile';
 
 function Courses() {
   return (
-    <div className="pt-3 flex flex-col gap-3 h-[100vh]">
+    <div className="flex h-full flex-col gap-3 pt-3">
       <Profile />
       <MyCourses />
     </div>
