@@ -11,6 +11,17 @@ type ComponentProps = {
   emailClassName?: string;
 };
 
+/**
+ * User info component to display profile picture, name, and email
+ * @component
+ * @param name - User's name
+ * @param email - User's email
+ * @param imageURL - User's profile picture URL
+ * @param [className] - Additional class name for the container
+ * @param [avatarClassName] - Additional class name for the avatar
+ * @param [nameClassName] - Additional class name for the name
+ * @param [emailClassName] - Additional class name for the email
+ */
 export default function UserInfo({
   name,
   email,
