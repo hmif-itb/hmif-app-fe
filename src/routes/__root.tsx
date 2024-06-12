@@ -15,9 +15,9 @@ export const Route = createRootRoute({
 });
 
 function RootComponent() {
-  // if (isMobile() && !isPWA()) {
-  //   return <AskForInstall />;
-  // }
+  if (import.meta.env.PROD && isMobile() && !isPWA()) {
+    return <AskForInstall />;
+  }
   return (
     <>
       <QueryClientProvider client={queryClient}>
