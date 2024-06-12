@@ -41,13 +41,13 @@ export default function FilterContent({
         </DrawerHeader>
         <form action="">
           <RadioGroup>
-            {data.map((a) => (
-              <Options header={a.header} choices={a.choices} />
+            {data.map((a, idx) => (
+              <Options key={idx} header={a.header} choices={a.choices} />
             ))}
           </RadioGroup>
           <DrawerFooter className="flex flex-row justify-around">
             <button>Apply</button>
-            <DrawerClose>
+            <DrawerClose asChild>
               <button>Cancel</button>
             </DrawerClose>
           </DrawerFooter>
