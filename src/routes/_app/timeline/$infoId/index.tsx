@@ -40,8 +40,6 @@ function InfoDetail() {
     return <div className="flex-1"></div>;
   }
 
-  // let info = api.info.readInfo(InfoId);
-
   return (
     <div className="w-full flex-1">
       <Header />
