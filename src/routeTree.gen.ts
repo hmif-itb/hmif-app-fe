@@ -26,6 +26,7 @@ import { Route as AppSettingsCoursesImport } from './routes/_app/settings/course
 import { Route as AppTimelineInfoIdIndexImport } from './routes/_app/timeline/$infoId/index'
 import { Route as AppSettingsSubscriptionsIndexImport } from './routes/_app/settings/subscriptions/index'
 import { Route as AppSettingsCoursesIndexImport } from './routes/_app/settings/courses/index'
+import { Route as AppHomeDingdongIndexImport } from './routes/_app/home/dingdong/index'
 import { Route as AppSettingsCoursesAddIndexImport } from './routes/_app/settings/courses/add/index'
 
 // Create Virtual Routes
@@ -124,6 +125,11 @@ const AppSettingsCoursesIndexRoute = AppSettingsCoursesIndexImport.update({
   getParentRoute: () => AppSettingsCoursesRoute,
 } as any)
 
+const AppHomeDingdongIndexRoute = AppHomeDingdongIndexImport.update({
+  path: '/home/dingdong/',
+  getParentRoute: () => AppRoute,
+} as any)
+
 const AppSettingsCoursesAddIndexRoute = AppSettingsCoursesAddIndexImport.update(
   {
     path: '/add/',
@@ -183,6 +189,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NavbarContohIndexLazyImport
       parentRoute: typeof NavbarImport
     }
+    '/_app/home/dingdong/': {
+      preLoaderRoute: typeof AppHomeDingdongIndexImport
+      parentRoute: typeof AppImport
+    }
     '/_app/settings/courses/': {
       preLoaderRoute: typeof AppSettingsCoursesIndexImport
       parentRoute: typeof AppSettingsCoursesImport
@@ -222,6 +232,7 @@ export const routeTree = rootRoute.addChildren([
     AppAddAnnouncementIndexRoute,
     AppHomeIndexRoute,
     AppTimelineIndexRoute,
+    AppHomeDingdongIndexRoute,
     AppTimelineInfoIdIndexRoute,
   ]),
   NavbarRoute.addChildren([
