@@ -7,12 +7,9 @@ import {
 } from '~/components/ui/drawer';
 import Options from './options';
 import { RadioGroup } from '@radix-ui/react-radio-group';
+import Filter from './filter';
 
-export default function FilterContent({
-  onInteractOutside,
-}: {
-  onInteractOutside: () => void;
-}) {
+export default function FilterContent() {
   const data = [
     {
       header: 'Category',
@@ -29,30 +26,18 @@ export default function FilterContent({
   ];
 
   return (
-    <DrawerContent onInteractOutside={onInteractOutside}>
-      <div className="mx-10">
-        <DrawerHeader className="flex items-baseline justify-between px-0">
-          <h1 className="text-[24px] font-bold text-green-400">Filters</h1>
-          <button type="button">
-            <DrawerDescription className="text-[16px] text-green-400">
-              Reset
-            </DrawerDescription>
+    <div className="mx-10">
+      <Filter />
+      <DrawerFooter className="flex flex-row justify-around">
+        <button className="rounded-full bg-green-500 px-12 py-3 text-white">
+          Apply
+        </button>
+        <DrawerClose>
+          <button className="rounded-full border-2 border-green-500 px-12 py-3 text-green-500">
+            Cancel
           </button>
-        </DrawerHeader>
-        <form action="">
-          <RadioGroup>
-            {data.map((a) => (
-              <Options header={a.header} choices={a.choices} />
-            ))}
-          </RadioGroup>
-          <DrawerFooter className="flex flex-row justify-around">
-            <button>Apply</button>
-            <DrawerClose>
-              <button>Cancel</button>
-            </DrawerClose>
-          </DrawerFooter>
-        </form>
-      </div>
-    </DrawerContent>
+        </DrawerClose>
+      </DrawerFooter>
+    </div>
   );
 }

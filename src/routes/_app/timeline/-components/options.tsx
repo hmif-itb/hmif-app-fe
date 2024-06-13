@@ -14,7 +14,7 @@ export default function Options({
       <Separator className="mb-3 mt-1" />
       <div className="flex gap-5">
         {choices.map((choice) => (
-          <div className="flex items-center space-x-2 rounded-[265.71px] border border-green-950 px-3 py-1">
+          <div className="flex w-32 items-center space-x-2 rounded-[265.71px] border border-green-950 px-3 py-1">
             <RadioGroupItem value={choice} id={choice} />
             <label htmlFor={choice} className="font-medium">
               {choice}

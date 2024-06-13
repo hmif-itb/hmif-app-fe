@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Drawer, DrawerTrigger } from '~/components/ui/drawer';
+import { Drawer, DrawerTrigger, DrawerContent } from '~/components/ui/drawer';
 import FilterContent from './filtercontent';
 
 import FilterIcon from '~/assets/icons/searchbar/filter.svg';
@@ -13,39 +13,48 @@ export default function SearchBar() {
 
   return (
     <form className="relative my-10 flex w-full flex-row items-center justify-center gap-5">
-      <div className="relative w-[70%] text-xs">
+      <div className="relative w-[70%] text-xs lg:w-full">
         <input
           type="text"
           placeholder="Search..."
-          className="w-full rounded-full border border-black py-1 pl-4 shadow-sm outline-none"
+          className="w-full rounded-full border border-black py-1 pl-4 shadow-sm outline-none lg:border-2 lg:py-3 lg:text-sm lg:font-semibold"
           name=""
           id=""
         />
-        <button className="absolute right-0 top-[49%] -translate-y-1/2 rounded-full bg-green-900 p-[.57rem]">
-          <img alt="Search Button" src={SearchIcon} className="size-2" />
+        <button className="absolute right-0 top-1/2 -translate-y-1/2 rounded-full bg-green-900 p-[.57rem] lg:p-[.8rem]">
+          <img
+            alt="Search Button"
+            src={SearchIcon}
+            className="size-2 lg:size-5"
+          />
         </button>
       </div>
-      <ThumbToggle
-        Icon={ReadIcon}
-        isPressed={readState}
-        onClick={() => {
-          setRead((a) => (a = !a));
-        }}
-      />
-      <Drawer>
-        <DrawerTrigger
+      <div className="flex flex-row gap-5 lg:hidden">
+        <ThumbToggle
+          Icon={ReadIcon}
+          isPressed={readState}
           onClick={() => {
-            openDrawer((a) => (a = !a));
-          }}
-        >
-          <ThumbToggle Icon={FilterIcon} isPressed={drawerState} />
-        </DrawerTrigger>
-        <FilterContent
-          onInteractOutside={() => {
-            openDrawer((a) => (a = !a));
+            setRead((a) => (a = !a));
           }}
         />
-      </Drawer>
+        <Drawer>
+          <DrawerTrigger
+            onClick={() => {
+              openDrawer((a) => (a = !a));
+            }}
+          >
+            <ThumbToggle Icon={FilterIcon} isPressed={drawerState} />
+          </DrawerTrigger>
+          <DrawerContent
+            onInteractOutside={() => {
+              openDrawer((a) => (a = !a));
+            }}
+            className="bg-green-75"
+          >
+            <FilterContent />
+          </DrawerContent>
+        </Drawer>
+      </div>
     </form>
   );
 }
