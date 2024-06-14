@@ -50,7 +50,7 @@ export default function SearchBar() {
             onInteractOutside={() => {
               openDrawer((a) => (a = !a));
             }}
-            className="bg-green-75"
+            className="bg-green-75 p-0"
           >
             <FilterContent />
           </DrawerContent>
