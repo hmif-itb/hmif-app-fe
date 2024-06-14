@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { forwardRef, useState } from 'react';
 
 import { Drawer, DrawerTrigger, DrawerContent } from '~/components/ui/drawer';
 import FilterContent from './filtercontent';
@@ -39,6 +39,7 @@ export default function SearchBar() {
         />
         <Drawer>
           <DrawerTrigger
+            asChild
             onClick={() => {
               openDrawer((a) => (a = !a));
             }}
@@ -59,28 +60,29 @@ export default function SearchBar() {
   );
 }
 
-function ThumbToggle({
-  Icon,
-  isPressed,
-  onClick,
-}: {
+type ThumbToggleProps = {
   Icon: string;
   isPressed: boolean;
   onClick?: () => void;
-}) {
-  return (
-    <button
-      className={`${
-        isPressed ? `bg-green-900` : `bg-white `
-      } rounded-[14.4px] border-[.8px] border-black p-[.6rem] shadow-sm`}
-      type="button"
-      onClick={onClick}
-    >
-      <img
-        alt="A button"
-        src={Icon}
-        className={`size-3 ${isPressed ? `invert` : ``}`}
-      />
-    </button>
-  );
-}
+};
+
+const ThumbToggle = forwardRef<HTMLButtonElement, ThumbToggleProps>(
+  ({ Icon, isPressed, onClick }, ref) => {
+    return (
+      <button
+        ref={ref}
+        className={`${
+          isPressed ? `bg-green-900` : `bg-white `
+        } rounded-[14.4px] border-[.8px] border-black p-[.6rem] shadow-sm`}
+        type="button"
+        onClick={onClick}
+      >
+        <img
+          alt="A button"
+          src={Icon}
+          className={`size-3 ${isPressed ? `invert` : ``}`}
+        />
+      </button>
+    );
+  },
+);
