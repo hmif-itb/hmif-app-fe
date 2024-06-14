@@ -5,7 +5,7 @@ import Tag from './tag';
 
 export default function Feed({ infos }: { infos: Info[] }) {
   return (
-    <div>
+    <div className="mx-5">
       {infos.map((info) => (
         <UserInfo key={info.id} info={info} />
       ))}
