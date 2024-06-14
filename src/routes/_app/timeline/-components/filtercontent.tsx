@@ -6,11 +6,11 @@ export default function FilterContent() {
     <div className="mx-10">
       <Filter />
       <DrawerFooter className="flex flex-row justify-around">
-        <button className="rounded-full bg-green-500 px-12 py-3 text-white">
+        <button className="rounded-full bg-green-300 px-12 py-3 text-white">
           Apply
         </button>
         <DrawerClose>
-          <button className="rounded-full border-2 border-green-500 px-12 py-3 text-green-500">
+          <button className="rounded-full border-2 border-green-300 px-12 py-3 text-green-500">
             Cancel
           </button>
         </DrawerClose>

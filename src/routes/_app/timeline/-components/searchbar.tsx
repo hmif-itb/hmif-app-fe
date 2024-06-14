@@ -17,7 +17,7 @@ export default function SearchBar() {
         <input
           type="text"
           placeholder="Search..."
-          className="w-full rounded-full border border-black py-1 pl-4 shadow-sm outline-none lg:border-2 lg:py-3 lg:text-sm lg:font-semibold"
+          className="w-full rounded-full border border-black py-2 pl-4 shadow-sm outline-none lg:border-2 lg:py-3 lg:text-sm lg:font-semibold"
           name=""
           id=""
         />
@@ -25,7 +25,7 @@ export default function SearchBar() {
           <img
             alt="Search Button"
             src={SearchIcon}
-            className="size-2 lg:size-5"
+            className="size-4 lg:size-5"
           />
         </button>
       </div>
@@ -50,7 +50,7 @@ export default function SearchBar() {
             onInteractOutside={() => {
               openDrawer((a) => (a = !a));
             }}
-            className="bg-green-75 p-0"
+            className="bg-[#EAEEEB] p-0"
           >
             <FilterContent />
           </DrawerContent>
