@@ -1,40 +1,79 @@
-import { createFileRoute, Link } from '@tanstack/react-router';
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from '~/api/client';
-import Feed from './-components/feed';
-import SearchBar from './-components/searchbar';
 import MegaphoneIcon from '~/assets/icons/timeline/megaphone.svg';
 import MobileView from './-components/mobile-view';
 import DesktopView from './-components/desktop-view';
-// import { Post } from './-interface/IPost';
+import { z } from 'zod';
+import { isMobile } from '~/lib/device';
+
+const timelineSearchSchema = z.object({
+  search: z.string().optional(),
+  read: z.boolean().optional(),
+});
 
 export const Route = createFileRoute('/_app/timeline/')({
   component: Timeline,
+  validateSearch: (search) => timelineSearchSchema.parse(search),
 });
 
 function Timeline() {
-  const queryClient = useQueryClient();
-  const { data: infos } = useQuery({
-    // TODO: apply filter
-    queryKey: ['info'],
-    queryFn: () =>
-      api.info.getListInfo({}).then((res) => {
-        const infos = res.infos;
-        infos.forEach((info) => {
-          queryClient.setQueryData(['info', 'detail', info.id], info);
-        });
-        return infos;
+  const navigate = useNavigate({ from: Route.fullPath });
+  const { search, read } = Route.useSearch();
+
+  const setSearch = (value: string) => {
+    navigate({
+      search: (prev) => ({
+        ...prev,
+        search: value || undefined,
       }),
+    });
+  };
+
+  const setRead = (value: boolean) => {
+    navigate({
+      search: (prev) => ({
+        ...prev,
+        read: value || undefined,
+      }),
+    });
+  };
+
+  const queryClient = useQueryClient();
+  const { data: infos = [] } = useQuery({
+    queryKey: ['info', search, read],
+    queryFn: () =>
+      api.info
+        .getListInfo({ search, unread: read ? 'true' : 'false' })
+        .then((res) => {
+          const infos = res.infos;
+          infos.forEach((info) => {
+            queryClient.setQueryData(['info', 'detail', info.id], info);
+          });
+          return infos;
+        }),
   });
-  if (!infos) {
-    // TODO: handle loading or empty
-    return <div className="flex-1"></div>;
-  }
+
   return (
     <>
-      <MobileView infos={infos} />
-      <DesktopView infos={infos} />
+      {isMobile() ? (
+        <MobileView
+          read={read ?? false}
+          setRead={setRead}
+          search={search ?? ''}
+          setSearch={setSearch}
+          infos={infos}
+        />
+      ) : (
+        <DesktopView
+          read={read ?? false}
+          setRead={setRead}
+          search={search ?? ''}
+          setSearch={setSearch}
+          infos={infos}
+        />
+      )}
 
       <Link
         to="/add-announcement"
