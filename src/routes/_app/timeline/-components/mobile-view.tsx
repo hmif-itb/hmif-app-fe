@@ -1,32 +1,19 @@
 import { Info } from '~/api/generated';
 import Feed from './feed';
 import SearchBar from './searchbar';
+import { FilterProps } from '../-types';
 
 type ComponentProps = {
   infos: Info[];
   search: string;
   setSearch: (value: string) => void;
-  read: boolean;
-  setRead: (value: boolean) => void;
-};
+} & FilterProps;
 
-export default function MobileView({
-  infos,
-  search,
-  setSearch,
-  read,
-  setRead,
-}: ComponentProps) {
+export default function MobileView({ infos, ...props }: ComponentProps) {
   return (
     <div className="mx-5 mt-10 max-w-screen-md flex-1 lg:hidden">
       <h1 className="text-[24px] font-bold antialiased">Timeline</h1>
-      <SearchBar
-        read={read}
-        setRead={setRead}
-        search={search}
-        setSearch={setSearch}
-      />
-
+      <SearchBar {...props} />
       <Feed infos={infos} />
     </div>
   );

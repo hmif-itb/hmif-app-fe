@@ -11,6 +11,7 @@ import { isMobile } from '~/lib/device';
 const timelineSearchSchema = z.object({
   search: z.string().optional(),
   read: z.boolean().optional(),
+  category: z.string().optional(),
 });
 
 export const Route = createFileRoute('/_app/timeline/')({
@@ -20,7 +21,7 @@ export const Route = createFileRoute('/_app/timeline/')({
 
 function Timeline() {
   const navigate = useNavigate({ from: Route.fullPath });
-  const { search, read } = Route.useSearch();
+  const { search, read, category } = Route.useSearch();
 
   const setSearch = (value: string) => {
     navigate({
@@ -40,12 +41,21 @@ function Timeline() {
     });
   };
 
+  const setCategory = (value: string) => {
+    navigate({
+      search: (prev) => ({
+        ...prev,
+        category: value || undefined,
+      }),
+    });
+  };
+
   const queryClient = useQueryClient();
   const { data: infos = [] } = useQuery({
-    queryKey: ['info', search, read],
+    queryKey: ['info', search, read, category],
     queryFn: () =>
       api.info
-        .getListInfo({ search, unread: read ? 'true' : 'false' })
+        .getListInfo({ search, unread: read ? 'true' : 'false', category })
         .then((res) => {
           const infos = res.infos;
           infos.forEach((info) => {
@@ -64,6 +74,8 @@ function Timeline() {
           search={search ?? ''}
           setSearch={setSearch}
           infos={infos}
+          category={category ?? ''}
+          setCategory={setCategory}
         />
       ) : (
         <DesktopView
@@ -72,6 +84,8 @@ function Timeline() {
           search={search ?? ''}
           setSearch={setSearch}
           infos={infos}
+          category={category ?? ''}
+          setCategory={setCategory}
         />
       )}
 

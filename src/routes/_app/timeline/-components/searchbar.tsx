@@ -6,19 +6,17 @@ import FilterContent from './filtercontent';
 import FilterIcon from '~/assets/icons/searchbar/filter.svg';
 import ReadIcon from '~/assets/icons/searchbar/read.svg';
 import SearchIcon from '~/assets/icons/searchbar/search.svg';
+import { FilterProps } from '../-types';
 
 type ComponentProps = {
   search: string;
   setSearch: (value: string) => void;
-  read: boolean;
-  setRead: (value: boolean) => void;
-};
+} & FilterProps;
 
 export default function SearchBar({
   search,
   setSearch,
-  read,
-  setRead,
+  ...props
 }: ComponentProps) {
   const [drawerState, openDrawer] = useState(false);
 
@@ -45,8 +43,8 @@ export default function SearchBar({
       <div className="flex flex-row gap-5 lg:hidden">
         <ThumbToggle
           Icon={ReadIcon}
-          isPressed={read}
-          onClick={() => setRead(!read)}
+          isPressed={props.read}
+          onClick={() => props.setRead(!props.read)}
         />
         <Drawer>
           <DrawerTrigger
@@ -63,7 +61,7 @@ export default function SearchBar({
             }}
             className="z-[100] bg-[#EAEEEB] p-0"
           >
-            <FilterContent />
+            <FilterContent {...props} />
           </DrawerContent>
         </Drawer>
       </div>
