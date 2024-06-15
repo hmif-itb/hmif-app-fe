@@ -1,18 +1,11 @@
 import clsx from 'clsx';
 import { useRef } from 'react';
+import { UserCourse } from '~/api/generated';
 import { isMobile } from '~/lib/device';
-
-export interface CourseData {
-  courseId: string;
-  code: string;
-  name: string;
-  class: number;
-  credits: number;
-}
 
 interface CourseCardProps {
   deleteable?: boolean;
-  courseData: CourseData;
+  courseData: UserCourse;
   isSwiped: boolean;
   onSwipe: (courseId: string) => void;
   onReset: () => void;
@@ -86,13 +79,13 @@ export default function CourseCard({
           <div className="flex h-min flex-col items-center gap-1 rounded-md bg-[#305138] px-3 py-2">
             <p className="text-xs text-white">SKS</p>
             <p className="text-2xl font-medium leading-6 text-white">
-              {courseData.credits}
+              {courseData.course?.credits}
             </p>
           </div>
           <div className="flex flex-col gap-2">
             <div className="flex flex-col">
-              <p className="font-bold leading-5">{courseData.code}</p>
-              <p className="leading-5">{courseData.name}</p>
+              <p className="font-bold leading-5">{courseData.course?.code}</p>
+              <p className="leading-5">{courseData.course?.name}</p>
             </div>
             <p className="text-xs text-[#6A6B6A]">
               Kelas: {formatClass(courseData.class)}

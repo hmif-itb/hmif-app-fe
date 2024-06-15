@@ -2,54 +2,15 @@ import { Link } from '@tanstack/react-router';
 import { Plus } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '~/components/ui/button';
-import CourseCard, { CourseData } from './CourseCard';
-const coursesData: CourseData[] = [
-  {
-    courseId: '1',
-    code: 'IF4031',
-    name: 'Manajemen Perangkat Lunak',
-    class: 3,
-    credits: 3,
-  },
-  {
-    courseId: '2',
-    code: 'IF4050',
-    name: 'Pemrograman Web',
-    class: 1,
-    credits: 5,
-  },
-  {
-    courseId: '3',
-    code: 'IF4031',
-    name: 'Manajemen Perangkat Lunak',
-    class: 3,
-    credits: 3,
-  },
-  {
-    courseId: '4',
-    code: 'IF4050',
-    name: 'Pemrograman Web',
-    class: 1,
-    credits: 5,
-  },
-  {
-    courseId: '5',
-    code: 'IF4031',
-    name: 'Manajemen Perangkat Lunak',
-    class: 3,
-    credits: 3,
-  },
-  {
-    courseId: '6',
-    code: 'IF4050',
-    name: 'Pemrograman Web',
-    class: 1,
-    credits: 5,
-  },
-];
+import CourseCard from './CourseCard';
+import { api } from '~/api/client';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { UserCourse } from '~/api/generated';
+
 export default function MyCourses() {
   const [isEditing, setIsEditing] = useState(false);
   const [swipedCourse, setSwipedCourse] = useState<string | null>(null);
+  const [currCourses, setCurrCourses] = useState<UserCourse[]>([]);
   const handleSwipe = (courseId: string) => {
     setSwipedCourse(courseId);
   };
@@ -58,7 +19,29 @@ export default function MyCourses() {
     setSwipedCourse(null);
   };
 
-  const [currCourses, setCurrCourses] = useState(coursesData);
+  const deleteCourseMutation = useMutation({
+    mutationFn: api.course.deleteUserCourse.bind(api.course),
+    onSuccess: () => {
+      setSwipedCourse(null);
+    },
+    onError: (error) => {
+      console.error(error);
+    },
+  });
+
+  const { data: currentCourses } = useQuery({
+    queryKey: ['currentCourses'],
+    queryFn: () => api.course.getCurrentUserCourse(),
+  });
+
+  if (!currentCourses) {
+    return <div>Loading...</div>;
+  }
+
+  if (currCourses.length === 0) {
+    setCurrCourses(currentCourses);
+  }
+
   return (
     <>
       <div className="mb-6 flex items-center justify-between">
@@ -81,6 +64,7 @@ export default function MyCourses() {
                 setCurrCourses((prev) =>
                   prev.filter((c) => c.courseId !== course.courseId),
                 );
+                deleteCourseMutation.mutate({ courseId: course.courseId });
               }}
             />
           ))}

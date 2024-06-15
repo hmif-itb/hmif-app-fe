@@ -2,13 +2,61 @@ import { createFileRoute, useRouter } from '@tanstack/react-router';
 import { Button } from '~/components/ui/button';
 import CardList from './-components/cardlist';
 import CourseSearchBar from './-components/coursesearchbar';
+import {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useState,
+} from 'react';
+import { useMutation } from '@tanstack/react-query';
+import { api } from '~/api/client';
 
 export const Route = createFileRoute('/_app/settings/courses/add/')({
   component: AddCourse,
 });
 
+export interface TakeCourseBody {
+  courseId: string;
+  class: number;
+}
+
+export const CourseContext = createContext<{
+  selectedCourses: TakeCourseBody[];
+  setSelectedCourses: Dispatch<SetStateAction<TakeCourseBody[]>>;
+}>({
+  selectedCourses: [],
+  setSelectedCourses: (() => {}) as Dispatch<SetStateAction<TakeCourseBody[]>>,
+});
+
 function AddCourse() {
+  const [selectedCourses, setSelectedCourses] = useState<TakeCourseBody[]>([]);
+
+  return (
+    <CourseContext.Provider value={{ selectedCourses, setSelectedCourses }}>
+      <AddCourseComponent />
+    </CourseContext.Provider>
+  );
+}
+
+function AddCourseComponent() {
   const router = useRouter();
+  const { selectedCourses } = useContext(CourseContext);
+
+  const addCourseMutation = useMutation({
+    mutationFn: api.course.createOrUpdateBatchUserCourse.bind(api.course),
+    onSuccess: () => {
+      router.history.back();
+    },
+    onError: (error) => {
+      console.error(error);
+    },
+  });
+
+  async function handleAddCourse() {
+    addCourseMutation.mutate({ requestBody: selectedCourses });
+  }
+
   return (
     <>
       <div className="mb-6 flex items-center justify-between">
@@ -36,7 +84,10 @@ function AddCourse() {
         >
           Cancel
         </Button>
-        <Button className="flex-1 bg-[#E8C55F] font-medium text-[#30764B]">
+        <Button
+          onClick={handleAddCourse}
+          className="flex-1 bg-[#E8C55F] font-medium text-[#30764B]"
+        >
           Add
         </Button>
       </section>

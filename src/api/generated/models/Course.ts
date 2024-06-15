@@ -5,7 +5,8 @@
 export type Course = {
   id: string;
   curriculumYear: number;
-  major: 'IF' | 'STI';
+  major: 'IF' | 'STI' | 'OTHER';
+  type: 'Mandatory' | 'Elective';
   semester: number;
   semesterCode: 'Ganjil' | 'Genap';
   code: string;

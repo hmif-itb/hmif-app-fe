@@ -10,6 +10,7 @@ export { CancelablePromise, CancelError } from './core/CancelablePromise';
 export { OpenAPI } from './core/OpenAPI';
 export type { OpenAPIConfig } from './core/OpenAPI';
 
+export type { CalendarEvent } from './models/CalendarEvent';
 export type { Comment } from './models/Comment';
 export type { CommentWithReactions } from './models/CommentWithReactions';
 export type { Course } from './models/Course';
@@ -21,11 +22,13 @@ export type { PresignedURL } from './models/PresignedURL';
 export type { PushSubscription } from './models/PushSubscription';
 export type { Reaction } from './models/Reaction';
 export type { ReactionAggregate } from './models/ReactionAggregate';
+export type { Testimoni } from './models/Testimoni';
 export type { User } from './models/User';
 export type { UserCourse } from './models/UserCourse';
 export type { ValidationError } from './models/ValidationError';
 
 export { AuthService } from './services/AuthService';
+export { CalendarService } from './services/CalendarService';
 export { CategoryService } from './services/CategoryService';
 export { CommentService } from './services/CommentService';
 export { CourseService } from './services/CourseService';
@@ -34,4 +37,5 @@ export { MediaService } from './services/MediaService';
 export { OpenGraphService } from './services/OpenGraphService';
 export { PushService } from './services/PushService';
 export { ReactionService } from './services/ReactionService';
+export { TestimoniService } from './services/TestimoniService';
 export { UnsubscribeService } from './services/UnsubscribeService';
