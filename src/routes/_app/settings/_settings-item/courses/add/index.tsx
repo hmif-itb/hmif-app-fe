@@ -3,7 +3,9 @@ import { Button } from '~/components/ui/button';
 import CardList from './-components/cardlist';
 import CourseSearchBar from './-components/coursesearchbar';
 
-export const Route = createFileRoute('/_app/settings/_settings-item/courses/add/')({
+export const Route = createFileRoute(
+  '/_app/settings/_settings-item/courses/add/',
+)({
   component: AddCourse,
 });
 
