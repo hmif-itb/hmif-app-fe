@@ -24,7 +24,7 @@ export default function DesktopView({
         <div className="w-[65%]">
           <Feed onInView={onInView} infos={infos} />
         </div>
-        <div className="flex w-[30%] flex-col items-center">
+        <div className="sticky top-0 flex h-fit w-[30%] flex-col items-center">
           <SearchBar {...props} />
           <FilterCard {...props} />
         </div>

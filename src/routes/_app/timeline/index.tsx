@@ -6,7 +6,6 @@ import MegaphoneIcon from '~/assets/icons/timeline/megaphone.svg';
 import MobileView from './-components/mobile-view';
 import DesktopView from './-components/desktop-view';
 import { z } from 'zod';
-import { isMobile } from '~/lib/device';
 import useWindowSize from '~/hooks/useWindowSize';
 
 const timelineSearchSchema = z.object({
@@ -84,7 +83,7 @@ function Timeline() {
     !isFetchingNextPage &&
     (infos?.pages.flatMap((p) => p).length ?? 1) % PAGE_SIZE === 0 &&
     fetchNextPage();
-  console.log(windowSize.width);
+
   return (
     <>
       {windowSize.width < 1024 ? (

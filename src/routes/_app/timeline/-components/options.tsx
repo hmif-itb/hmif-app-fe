@@ -40,12 +40,12 @@ export default function Options({ header, choices, form }: ComponentProps) {
                   {choices.map((choice, idx) => (
                     <FormItem
                       key={idx}
-                      className="flex items-center space-x-2 space-y-0 rounded-[265.71px] border border-green-950 py-1 pl-2 pr-3"
+                      className="relative space-y-0 rounded-[265.71px] border border-green-950"
                     >
-                      <FormControl>
+                      <FormControl className="absolute left-2 top-1/2 -translate-y-1/2">
                         <RadioGroupItem className="shrink-0" value={choice} />
                       </FormControl>
-                      <FormLabel className="text-sm font-medium">
+                      <FormLabel className="block size-full py-1 pl-8 pr-3 text-sm font-medium">
                         {choice}
                       </FormLabel>
                     </FormItem>

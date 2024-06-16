@@ -9,7 +9,6 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form } from '~/components/ui/form';
 import { FilterProps } from '../-types';
-import { isMobile } from '~/lib/device';
 import useWindowSize from '~/hooks/useWindowSize';
 
 export default function Filter({
@@ -40,8 +39,8 @@ export default function Filter({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)}>
-        <div className="mx-10">
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="px-10">
+        <div>
           <div className="flex items-baseline justify-between px-0">
             <h1 className="text-[24px] font-bold text-green-400">Filters</h1>
             <Button
@@ -90,16 +89,18 @@ export default function Filter({
             </DrawerClose>
           </DrawerFooter>
         ) : (
-          <div className="flex flex-row justify-around">
+          <div className="flex flex-col justify-around gap-4">
             <Button
               type="submit"
-              className="rounded-full bg-green-300 px-12 py-3 text-white"
+              size="sm"
+              className="w-full rounded-full bg-green-300 px-12 py-3 text-white"
             >
               Apply
             </Button>
             <Button
               variant="outlined"
-              className="rounded-full border-2 border-green-300 px-12 py-3 text-green-500"
+              size="sm"
+              className="w-full rounded-full border-2 border-green-300 px-12 py-3 text-green-500"
             >
               Cancel
             </Button>
