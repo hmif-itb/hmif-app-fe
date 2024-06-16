@@ -21,6 +21,7 @@ import { Route as AppTimelineIndexImport } from './routes/_app/timeline/index'
 import { Route as AppSettingsIndexImport } from './routes/_app/settings/index'
 import { Route as AppHomeIndexImport } from './routes/_app/home/index'
 import { Route as AppAddAnnouncementIndexImport } from './routes/_app/add-announcement/index'
+import { Route as AppSettingsSubscriptionsImport } from './routes/_app/settings/subscriptions'
 import { Route as AppSettingsCoursesImport } from './routes/_app/settings/courses'
 import { Route as AppTimelineInfoIdIndexImport } from './routes/_app/timeline/$infoId/index'
 import { Route as AppSettingsSubscriptionsIndexImport } from './routes/_app/settings/subscriptions/index'
@@ -89,6 +90,11 @@ const AppAddAnnouncementIndexRoute = AppAddAnnouncementIndexImport.update({
   getParentRoute: () => AppRoute,
 } as any)
 
+const AppSettingsSubscriptionsRoute = AppSettingsSubscriptionsImport.update({
+  path: '/subscriptions',
+  getParentRoute: () => AppSettingsRoute,
+} as any)
+
 const AppSettingsCoursesRoute = AppSettingsCoursesImport.update({
   path: '/courses',
   getParentRoute: () => AppSettingsRoute,
@@ -109,8 +115,8 @@ const AppTimelineInfoIdIndexRoute = AppTimelineInfoIdIndexImport.update({
 
 const AppSettingsSubscriptionsIndexRoute =
   AppSettingsSubscriptionsIndexImport.update({
-    path: '/subscriptions/',
-    getParentRoute: () => AppSettingsRoute,
+    path: '/',
+    getParentRoute: () => AppSettingsSubscriptionsRoute,
   } as any)
 
 const AppSettingsCoursesIndexRoute = AppSettingsCoursesIndexImport.update({
@@ -171,6 +177,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSettingsCoursesImport
       parentRoute: typeof AppSettingsImport
     }
+    '/_app/settings/subscriptions': {
+      id: '/_app/settings/subscriptions'
+      path: '/subscriptions'
+      fullPath: '/settings/subscriptions'
+      preLoaderRoute: typeof AppSettingsSubscriptionsImport
+      parentRoute: typeof AppSettingsImport
+    }
     '/_app/add-announcement/': {
       id: '/_app/add-announcement/'
       path: '/add-announcement'
@@ -215,10 +228,10 @@ declare module '@tanstack/react-router' {
     }
     '/_app/settings/subscriptions/': {
       id: '/_app/settings/subscriptions/'
-      path: '/subscriptions'
-      fullPath: '/settings/subscriptions'
+      path: '/'
+      fullPath: '/settings/subscriptions/'
       preLoaderRoute: typeof AppSettingsSubscriptionsIndexImport
-      parentRoute: typeof AppSettingsImport
+      parentRoute: typeof AppSettingsSubscriptionsImport
     }
     '/_app/timeline/$infoId/': {
       id: '/_app/timeline/$infoId/'
@@ -254,8 +267,10 @@ export const routeTree = rootRoute.addChildren({
         AppSettingsCoursesIndexRoute,
         AppSettingsCoursesAddIndexRoute,
       }),
+      AppSettingsSubscriptionsRoute: AppSettingsSubscriptionsRoute.addChildren({
+        AppSettingsSubscriptionsIndexRoute,
+      }),
       AppSettingsIndexRoute,
-      AppSettingsSubscriptionsIndexRoute,
     }),
     AppAddAnnouncementIndexRoute,
     AppHomeIndexRoute,
@@ -308,8 +323,8 @@ export const routeTree = rootRoute.addChildren({
       "parent": "/_app",
       "children": [
         "/_app/settings/courses",
-        "/_app/settings/",
-        "/_app/settings/subscriptions/"
+        "/_app/settings/subscriptions",
+        "/_app/settings/"
       ]
     },
     "/login/": {
@@ -321,6 +336,13 @@ export const routeTree = rootRoute.addChildren({
       "children": [
         "/_app/settings/courses/",
         "/_app/settings/courses/add/"
+      ]
+    },
+    "/_app/settings/subscriptions": {
+      "filePath": "_app/settings/subscriptions.tsx",
+      "parent": "/_app/settings",
+      "children": [
+        "/_app/settings/subscriptions/"
       ]
     },
     "/_app/add-announcement/": {
@@ -349,7 +371,7 @@ export const routeTree = rootRoute.addChildren({
     },
     "/_app/settings/subscriptions/": {
       "filePath": "_app/settings/subscriptions/index.tsx",
-      "parent": "/_app/settings"
+      "parent": "/_app/settings/subscriptions"
     },
     "/_app/timeline/$infoId/": {
       "filePath": "_app/timeline/$infoId/index.tsx",
