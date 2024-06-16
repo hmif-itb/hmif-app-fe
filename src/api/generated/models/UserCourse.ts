@@ -9,6 +9,6 @@ export type UserCourse = {
   class: number;
   semesterCodeTaken: 'Ganjil' | 'Genap';
   semesterYearTaken: number;
-  courses?: Course;
+  course?: Course;
 };
 

@@ -79,7 +79,7 @@ function AddCourseComponent() {
           variant="outlined"
           className="flex-1 border-2 border-[#E8C55F] font-medium text-[#E8C55F]"
           onClick={() => {
-            router.history.back();
+            router.navigate({ to: '/settings/courses' });
           }}
         >
           Cancel

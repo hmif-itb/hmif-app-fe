@@ -11,6 +11,7 @@ export default function MyCourses() {
   const [isEditing, setIsEditing] = useState(false);
   const [swipedCourse, setSwipedCourse] = useState<string | null>(null);
   const [currCourses, setCurrCourses] = useState<UserCourse[]>([]);
+  const [deletedCourses, setDeletedCourses] = useState<string[]>([]);
   const handleSwipe = (courseId: string) => {
     setSwipedCourse(courseId);
   };
@@ -61,10 +62,11 @@ export default function MyCourses() {
               isSwiped={swipedCourse === course.courseId}
               deleteable={isEditing}
               onDelete={() => {
+                setDeletedCourses((prev) => [...prev, course.courseId]);
                 setCurrCourses((prev) =>
                   prev.filter((c) => c.courseId !== course.courseId),
                 );
-                deleteCourseMutation.mutate({ courseId: course.courseId });
+                setSwipedCourse(null);
               }}
             />
           ))}
@@ -78,14 +80,23 @@ export default function MyCourses() {
             </Button>
             <div className="flex gap-3">
               <Button
-                onClick={() => setIsEditing(false)}
+                onClick={() => {
+                  setCurrCourses(currentCourses);
+                  setDeletedCourses([]);
+                  setIsEditing(false);
+                }}
                 variant="outlined"
                 className="w-1/2 border-2 border-[#E8C55F] font-medium text-[#E8C55F]"
               >
                 Cancel
               </Button>
               <Button
-                onClick={() => setIsEditing(true)}
+                onClick={() => {
+                  deletedCourses.forEach((e) =>
+                    deleteCourseMutation.mutate({ courseId: e }),
+                  );
+                  setIsEditing(false);
+                }}
                 className="w-1/2 bg-[#E8C55F] font-medium text-[#30764B]"
               >
                 Save
