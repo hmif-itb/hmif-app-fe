@@ -5,11 +5,23 @@ import {
   AccordionTrigger,
 } from '~/components/ui/accordion';
 import CourseItem from './courseitem';
+import { Course } from '~/api/generated';
+import { createContext, Dispatch, SetStateAction, useState } from 'react';
 
-export default function CourseCard({ id }: { id: string }) {
+export const SelectedClassContext = createContext<{
+  selectedClass: number;
+  setSelectedClass: Dispatch<SetStateAction<number>>;
+}>({
+  selectedClass: 0,
+  setSelectedClass: (() => {}) as Dispatch<SetStateAction<number>>,
+});
+
+export default function CourseCard({ course }: { course: Course }) {
+  const [selectedClass, setSelectedClass] = useState(0);
+
   return (
     <AccordionItem
-      value={id}
+      value={course.id}
       className="[&[data-state=open]>.content]:rounded-b-none"
     >
       <div
@@ -19,11 +31,11 @@ export default function CourseCard({ id }: { id: string }) {
         <div className="flex gap-5">
           <div className="flex size-12 flex-col items-center justify-center rounded-md bg-green-900 text-neutral-light">
             <p className="pt-1 text-[8px] leading-none">SKS</p>
-            <p className="text-xl font-bold leading-6">3</p>
+            <p className="text-xl font-bold leading-6">{course.credits}</p>
           </div>
           <div className="flex flex-col">
-            <p className="text-lg font-bold">II2220</p>
-            <p className="text-sm">Manajemen Sumber Daya STI</p>
+            <p className="text-lg font-bold">{course.code}</p>
+            <p className="text-sm">{course.name}</p>
           </div>
         </div>
         <AccordionTrigger type="button">
@@ -37,9 +49,16 @@ export default function CourseCard({ id }: { id: string }) {
       <AccordionContent>
         <div className="rounded-b-lg bg-neutral-light">
           {/* data.map */}
-          <CourseItem kelas={1} />
-          <CourseItem kelas={2} />
-          <CourseItem kelas={3} />
+          <SelectedClassContext.Provider
+            value={{
+              selectedClass: selectedClass,
+              setSelectedClass: setSelectedClass,
+            }}
+          >
+            <CourseItem kelas={1} courseId={course.id} />
+            <CourseItem kelas={2} courseId={course.id} />
+            <CourseItem kelas={3} courseId={course.id} />
+          </SelectedClassContext.Provider>
         </div>
       </AccordionContent>
     </AccordionItem>

@@ -115,7 +115,8 @@ export class CourseService {
   }: {
     requestBody: {
       curriculumYear: number;
-      major: 'IF' | 'STI';
+      major: 'IF' | 'STI' | 'OTHER';
+      type?: 'Mandatory' | 'Elective';
       semester: number;
       code: string;
       name: string;
@@ -164,7 +165,8 @@ export class CourseService {
     courseId: string,
     requestBody?: {
       curriculumYear?: number;
-      major?: 'IF' | 'STI';
+      major?: 'IF' | 'STI' | 'OTHER';
+      type?: 'Mandatory' | 'Elective';
       semester?: number;
       code?: string;
       name?: string;
@@ -203,6 +205,28 @@ export class CourseService {
       errors: {
         400: `Bad request`,
         404: `Course not found`,
+      },
+    });
+  }
+  /**
+   * @returns UserCourse Courses added to user courses
+   * @throws ApiError
+   */
+  public createOrUpdateBatchUserCourse({
+    requestBody,
+  }: {
+    requestBody: Array<{
+      courseId: string;
+      class: number;
+    }>,
+  }): CancelablePromise<Array<UserCourse>> {
+    return this.httpRequest.request({
+      method: 'PUT',
+      url: '/api/course/take/batch',
+      body: requestBody,
+      mediaType: 'application/json',
+      errors: {
+        400: `Bad request`,
       },
     });
   }

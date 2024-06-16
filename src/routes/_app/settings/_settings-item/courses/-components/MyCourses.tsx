@@ -1,55 +1,17 @@
 import { Link } from '@tanstack/react-router';
 import { Plus } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '~/components/ui/button';
-import CourseCard, { CourseData } from './CourseCard';
-const coursesData: CourseData[] = [
-  {
-    courseId: '1',
-    code: 'IF4031',
-    name: 'Manajemen Perangkat Lunak',
-    class: 3,
-    credits: 3,
-  },
-  {
-    courseId: '2',
-    code: 'IF4050',
-    name: 'Pemrograman Web',
-    class: 1,
-    credits: 5,
-  },
-  {
-    courseId: '3',
-    code: 'IF4031',
-    name: 'Manajemen Perangkat Lunak',
-    class: 3,
-    credits: 3,
-  },
-  {
-    courseId: '4',
-    code: 'IF4050',
-    name: 'Pemrograman Web',
-    class: 1,
-    credits: 5,
-  },
-  {
-    courseId: '5',
-    code: 'IF4031',
-    name: 'Manajemen Perangkat Lunak',
-    class: 3,
-    credits: 3,
-  },
-  {
-    courseId: '6',
-    code: 'IF4050',
-    name: 'Pemrograman Web',
-    class: 1,
-    credits: 5,
-  },
-];
+import CourseCard from './CourseCard';
+import { api } from '~/api/client';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { UserCourse } from '~/api/generated';
+
 export default function MyCourses() {
   const [isEditing, setIsEditing] = useState(false);
   const [swipedCourse, setSwipedCourse] = useState<string | null>(null);
+  const [currCourses, setCurrCourses] = useState<UserCourse[]>([]);
+  const [deletedCourses, setDeletedCourses] = useState<string[]>([]);
   const handleSwipe = (courseId: string) => {
     setSwipedCourse(courseId);
   };
@@ -58,7 +20,31 @@ export default function MyCourses() {
     setSwipedCourse(null);
   };
 
-  const [currCourses, setCurrCourses] = useState(coursesData);
+  const deleteCourseMutation = useMutation({
+    mutationFn: api.course.deleteUserCourse.bind(api.course),
+    onSuccess: () => {
+      setSwipedCourse(null);
+    },
+    onError: (error) => {
+      console.error(error);
+    },
+  });
+
+  const { data: currentCourses } = useQuery({
+    queryKey: ['currentCourses'],
+    queryFn: () => api.course.getCurrentUserCourse(),
+  });
+
+  useEffect(() => {
+    if (currentCourses) {
+      setCurrCourses(currentCourses);
+    }
+  }, [currentCourses]);
+
+  if (!currentCourses) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <>
       <div className="mb-6 flex items-center justify-between">
@@ -78,9 +64,11 @@ export default function MyCourses() {
               isSwiped={swipedCourse === course.courseId}
               deleteable={isEditing}
               onDelete={() => {
+                setDeletedCourses((prev) => [...prev, course.courseId]);
                 setCurrCourses((prev) =>
                   prev.filter((c) => c.courseId !== course.courseId),
                 );
+                setSwipedCourse(null);
               }}
             />
           ))}
@@ -94,14 +82,23 @@ export default function MyCourses() {
             </Button>
             <div className="flex gap-3">
               <Button
-                onClick={() => setIsEditing(false)}
+                onClick={() => {
+                  setCurrCourses(currentCourses);
+                  setDeletedCourses([]);
+                  setIsEditing(false);
+                }}
                 variant="outlined"
                 className="w-1/2 border-2 border-[#E8C55F] font-medium text-[#E8C55F]"
               >
                 Cancel
               </Button>
               <Button
-                onClick={() => setIsEditing(true)}
+                onClick={() => {
+                  deletedCourses.forEach((e) =>
+                    deleteCourseMutation.mutate({ courseId: e }),
+                  );
+                  setIsEditing(false);
+                }}
                 className="w-1/2 bg-[#E8C55F] font-medium text-[#30764B]"
               >
                 Save
