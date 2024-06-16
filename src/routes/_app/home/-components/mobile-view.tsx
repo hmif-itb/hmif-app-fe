@@ -3,8 +3,15 @@ import Calendar from '~/components/calendar';
 import Profile from '~/components/profile';
 import NavigationItem from './navigation-item';
 import Timeline from './timeline';
+import { useNavigate } from '@tanstack/react-router';
 
 function MobileView() {
+  const navigate = useNavigate();
+
+  const handleNavigation = (path: string) => {
+    navigate({ to: path });
+  };
+
   return (
     <div className="flex flex-col items-center gap-8 font-inter lg:hidden">
       {/* Profile Section */}
@@ -16,20 +23,28 @@ function MobileView() {
           src="/img/home/folder.svg"
           alt="Ding Dong"
           title="Ding Dong"
+          onClick={() => handleNavigation('/home/dingdong/')}
         />
 
         <NavigationItem
           src="/img/home/calendar.svg"
           alt="Calendar"
           title="Calendar"
+          onClick={() => handleNavigation('/home/')}
         />
 
-        <NavigationItem src="/img/home/camera.svg" alt="Tutor" title="Tutor" />
+        <NavigationItem
+          src="/img/home/camera.svg"
+          alt="Tutor"
+          title="Tutor"
+          onClick={() => handleNavigation('/home/')}
+        />
 
         <NavigationItem
           src="/img/home/file.svg"
           alt="Bundel Soal"
           title="Bundel Soal"
+          onClick={() => handleNavigation('/home/')}
         />
       </section>
 

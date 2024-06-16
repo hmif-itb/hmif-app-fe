@@ -1,24 +1,16 @@
-import { RouterProvider, createRouter } from '@tanstack/react-router';
+import './instrument';
+
+import { RouterProvider } from '@tanstack/react-router';
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 import { registerSW } from 'virtual:pwa-register';
 import './index.css';
 
 // Import the generated route tree
-import { routeTree } from './routeTree.gen';
-
-// Create a new router instance
-const router = createRouter({ routeTree });
+import { router } from './router';
 
 // register service worker to enable automatic updates reload
 registerSW({ immediate: true });
-
-// Register the router instance for type safety
-declare module '@tanstack/react-router' {
-  interface Register {
-    router: typeof router;
-  }
-}
 
 // Render the app
 const rootElement = document.getElementById('root')!;

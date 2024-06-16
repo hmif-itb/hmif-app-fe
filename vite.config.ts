@@ -1,3 +1,4 @@
+import { sentryVitePlugin } from '@sentry/vite-plugin';
 import { TanStackRouterVite } from '@tanstack/router-vite-plugin';
 import react from '@vitejs/plugin-react';
 import path from 'path';
@@ -11,6 +12,7 @@ export default defineConfig({
       '~': path.resolve(__dirname, './src'),
     },
   },
+
   plugins: [
     VitePWA({
       strategies: 'injectManifest',
@@ -126,5 +128,16 @@ export default defineConfig({
     }),
     react(),
     TanStackRouterVite(),
+    sentryVitePlugin({
+      org: 'hmif',
+      project: 'hmif-app-fe',
+      url: 'https://errors.hmif.dev',
+      debug: true,
+      disable: true,
+    }),
   ],
+
+  build: {
+    sourcemap: true,
+  },
 });

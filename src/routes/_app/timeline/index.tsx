@@ -5,6 +5,8 @@ import { api } from '~/api/client';
 import Feed from './-components/feed';
 import SearchBar from './-components/searchbar';
 import MegaphoneIcon from '~/assets/icons/timeline/megaphone.svg';
+import MobileView from './-components/mobile-view';
+import DesktopView from './-components/desktop-view';
 // import { Post } from './-interface/IPost';
 
 export const Route = createFileRoute('/_app/timeline/')({
@@ -30,11 +32,9 @@ function Timeline() {
     return <div className="flex-1"></div>;
   }
   return (
-    <div className="mx-5 mt-10 max-w-screen-md flex-1">
-      <h1 className="text-[24px] font-bold antialiased">Timeline</h1>
-      <SearchBar />
-
-      <Feed infos={infos} />
+    <>
+      <MobileView infos={infos} />
+      <DesktopView infos={infos} />
 
       <Link
         to="/add-announcement"
@@ -42,6 +42,8 @@ function Timeline() {
       >
         <img src={MegaphoneIcon} className="mr-1 size-7" alt="" />
       </Link>
-    </div>
+    </>
   );
 }
+
+// TODO: Mobile view, background drawernya meninggoy
