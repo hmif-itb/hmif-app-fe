@@ -12,7 +12,9 @@ import {
 import { useMutation } from '@tanstack/react-query';
 import { api } from '~/api/client';
 
-export const Route = createFileRoute('/_app/settings/courses/add/')({
+export const Route = createFileRoute(
+  '/_app/settings/_settings-item/courses/add/',
+)({
   component: AddCourse,
 });
 

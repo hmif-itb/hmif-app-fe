@@ -2,8 +2,6 @@ import { createFileRoute, Link } from '@tanstack/react-router';
 
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from '~/api/client';
-import Feed from './-components/feed';
-import SearchBar from './-components/searchbar';
 import MegaphoneIcon from '~/assets/icons/timeline/megaphone.svg';
 import MobileView from './-components/mobile-view';
 import DesktopView from './-components/desktop-view';

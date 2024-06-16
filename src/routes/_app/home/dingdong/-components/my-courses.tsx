@@ -47,7 +47,7 @@ export default function MyCourses() {
     },
   ];
 
-  const [currCourses, setCurrCourses] = useState(coursesData);
+  const [currCourses] = useState(coursesData);
 
   return (
     <>
