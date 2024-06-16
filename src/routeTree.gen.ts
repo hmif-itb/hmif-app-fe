@@ -25,6 +25,7 @@ import { Route as AppSettingsCoursesImport } from './routes/_app/settings/course
 import { Route as AppTimelineInfoIdIndexImport } from './routes/_app/timeline/$infoId/index'
 import { Route as AppSettingsSubscriptionsIndexImport } from './routes/_app/settings/subscriptions/index'
 import { Route as AppSettingsCoursesIndexImport } from './routes/_app/settings/courses/index'
+import { Route as AppHomeDingdongIndexImport } from './routes/_app/home/dingdong/index'
 import { Route as AppSettingsCoursesAddIndexImport } from './routes/_app/settings/courses/add/index'
 
 // Create Virtual Routes
@@ -118,6 +119,11 @@ const AppSettingsCoursesIndexRoute = AppSettingsCoursesIndexImport.update({
   getParentRoute: () => AppSettingsCoursesRoute,
 } as any)
 
+const AppHomeDingdongIndexRoute = AppHomeDingdongIndexImport.update({
+  path: '/home/dingdong/',
+  getParentRoute: () => AppRoute,
+} as any)
+
 const AppSettingsCoursesAddIndexRoute = AppSettingsCoursesAddIndexImport.update(
   {
     path: '/add/',
@@ -206,6 +212,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NavbarContohIndexLazyImport
       parentRoute: typeof NavbarImport
     }
+    '/_app/home/dingdong/': {
+      id: '/_app/home/dingdong/'
+      path: '/home/dingdong'
+      fullPath: '/home/dingdong'
+      preLoaderRoute: typeof AppHomeDingdongIndexImport
+      parentRoute: typeof AppImport
+    }
     '/_app/settings/courses/': {
       id: '/_app/settings/courses/'
       path: '/'
@@ -260,6 +273,7 @@ export const routeTree = rootRoute.addChildren({
     AppAddAnnouncementIndexRoute,
     AppHomeIndexRoute,
     AppTimelineIndexRoute,
+    AppHomeDingdongIndexRoute,
     AppTimelineInfoIdIndexRoute,
   }),
   NavbarRoute: NavbarRoute.addChildren({
@@ -293,6 +307,7 @@ export const routeTree = rootRoute.addChildren({
         "/_app/add-announcement/",
         "/_app/home/",
         "/_app/timeline/",
+        "/_app/home/dingdong/",
         "/_app/timeline/$infoId/"
       ]
     },
@@ -342,6 +357,10 @@ export const routeTree = rootRoute.addChildren({
     "/_navbar/contoh/": {
       "filePath": "_navbar/contoh/index.lazy.tsx",
       "parent": "/_navbar"
+    },
+    "/_app/home/dingdong/": {
+      "filePath": "_app/home/dingdong/index.tsx",
+      "parent": "/_app"
     },
     "/_app/settings/courses/": {
       "filePath": "_app/settings/courses/index.tsx",
