@@ -213,6 +213,9 @@ declare module '@tanstack/react-router' {
       parentRoute: typeof NavbarImport
     }
     '/_app/home/dingdong/': {
+      id: '/_app/home/dingdong/'
+      path: '/home/dingdong'
+      fullPath: '/home/dingdong'
       preLoaderRoute: typeof AppHomeDingdongIndexImport
       parentRoute: typeof AppImport
     }
@@ -304,6 +307,7 @@ export const routeTree = rootRoute.addChildren({
         "/_app/add-announcement/",
         "/_app/home/",
         "/_app/timeline/",
+        "/_app/home/dingdong/",
         "/_app/timeline/$infoId/"
       ]
     },
@@ -353,6 +357,10 @@ export const routeTree = rootRoute.addChildren({
     "/_navbar/contoh/": {
       "filePath": "_navbar/contoh/index.lazy.tsx",
       "parent": "/_navbar"
+    },
+    "/_app/home/dingdong/": {
+      "filePath": "_app/home/dingdong/index.tsx",
+      "parent": "/_app"
     },
     "/_app/settings/courses/": {
       "filePath": "_app/settings/courses/index.tsx",
