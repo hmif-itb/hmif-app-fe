@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router';
 import { Plus } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '~/components/ui/button';
 import CourseCard from './CourseCard';
 import { api } from '~/api/client';
@@ -35,12 +35,14 @@ export default function MyCourses() {
     queryFn: () => api.course.getCurrentUserCourse(),
   });
 
+  useEffect(() => {
+    if (currentCourses) {
+      setCurrCourses(currentCourses);
+    }
+  }, [currentCourses]);
+
   if (!currentCourses) {
     return <div>Loading...</div>;
-  }
-
-  if (currCourses.length === 0) {
-    setCurrCourses(currentCourses);
   }
 
   return (
