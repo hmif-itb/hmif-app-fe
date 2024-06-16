@@ -1,10 +1,11 @@
 import { Link } from '@tanstack/react-router';
 import { Info } from '~/api/generated';
-import InfoCreator from './info-creator';
+import UserInfoProfile from '~/components/user/user-info';
+import Tag from './tag';
 
 export default function Feed({ infos }: { infos: Info[] }) {
   return (
-    <div>
+    <div className="mx-5">
       {infos.map((info) => (
         <UserInfo key={info.id} info={info} />
       ))}
@@ -16,11 +17,17 @@ function UserInfo({ info }: { info: Info }) {
   return (
     <div className="my-10">
       <div className="mb-5 text-sm font-bold text-neutral-dark">## Day Ago</div>
-      <InfoCreator creator={info.creator} className="mb-5" />
+      <UserInfoProfile
+        name={info.creator.fullName}
+        imageURL={info.creator.picture}
+        email={info.creator.email}
+        className="mb-5"
+        avatarClassName="size-[3.25rem]"
+      />
       <TextSection title={info.title} content={info.content} />
       {/* TODO: handle other than image */}
       <ImageSection images={info.infoMedias?.map((im) => im.media.url) ?? []} />
-      <div className="mt-5 text-lg font-bold text-green-300">
+      <div className="mt-4 font-bold text-green-300">
         <Link to="/timeline/$infoId" params={{ infoId: info.id }}>
           Show more
         </Link>
@@ -46,14 +53,9 @@ function TextSection({ title, content }: { title: string; content: string }) {
 
 function TagSection({ tags }: { tags: string[] }) {
   return (
-    <div className="mt-2 flex flex-wrap gap-3">
-      {tags.map((tag) => (
-        <a
-          href=""
-          className="rounded-[80px] bg-neutral-normal px-4 py-1 font-medium hover:bg-neutral-normal-hover"
-        >
-          {tag}
-        </a>
+    <div className="mt-3 flex flex-wrap gap-3">
+      {tags.map((tag, idx) => (
+        <Tag key={idx} tag={tag} />
       ))}
     </div>
   );

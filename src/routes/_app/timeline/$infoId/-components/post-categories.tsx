@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button } from '~/components/ui/button';
-import Tag from './tag';
+import Tag from '../../-components/tag';
 
 const PostCategories = ({ tags }: { tags: string[] }) => {
   const [showAll, setShowAll] = useState(false);

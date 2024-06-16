@@ -7,6 +7,7 @@ import {
   createRootRoute,
 } from '@tanstack/react-router';
 import { queryClient } from '~/api/client';
+import Sentry from '~/instrument';
 import { isMobile, isPWA } from '~/lib/device';
 import AskForInstall from '../components/ask-install';
 
@@ -15,15 +16,17 @@ export const Route = createRootRoute({
 });
 
 function RootComponent() {
-  // if (isMobile() && !isPWA()) {
-  //   return <AskForInstall />;
-  // }
+  if (import.meta.env.PROD && isMobile() && !isPWA()) {
+    return <AskForInstall />;
+  }
   return (
     <>
       <QueryClientProvider client={queryClient}>
         <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
           <ScrollRestoration getKey={(location) => location.pathname} />
-          <Outlet />
+          <Sentry.ErrorBoundary fallback={<div>Something went wrong</div>}>
+            <Outlet />
+          </Sentry.ErrorBoundary>
         </GoogleOAuthProvider>
         <ReactQueryDevtools />
       </QueryClientProvider>

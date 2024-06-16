@@ -13,7 +13,6 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as AboutImport } from './routes/about'
 import { Route as NavbarImport } from './routes/_navbar'
 import { Route as AppImport } from './routes/_app'
 import { Route as IndexImport } from './routes/index'
@@ -38,11 +37,6 @@ const NavbarContohContohIdIndexLazyImport = createFileRoute(
 )()
 
 // Create/Update Routes
-
-const AboutRoute = AboutImport.update({
-  path: '/about',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const NavbarRoute = NavbarImport.update({
   id: '/_navbar',
@@ -142,50 +136,79 @@ const AppSettingsCoursesAddIndexRoute = AppSettingsCoursesAddIndexImport.update(
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
     '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
     '/_app': {
+      id: '/_app'
+      path: ''
+      fullPath: ''
       preLoaderRoute: typeof AppImport
       parentRoute: typeof rootRoute
     }
     '/_navbar': {
+      id: '/_navbar'
+      path: ''
+      fullPath: ''
       preLoaderRoute: typeof NavbarImport
       parentRoute: typeof rootRoute
     }
-    '/about': {
-      preLoaderRoute: typeof AboutImport
-      parentRoute: typeof rootRoute
-    }
     '/_app/settings': {
+      id: '/_app/settings'
+      path: '/settings'
+      fullPath: '/settings'
       preLoaderRoute: typeof AppSettingsImport
       parentRoute: typeof AppImport
     }
     '/login/': {
+      id: '/login/'
+      path: '/login'
+      fullPath: '/login'
       preLoaderRoute: typeof LoginIndexLazyImport
       parentRoute: typeof rootRoute
     }
     '/_app/settings/courses': {
+      id: '/_app/settings/courses'
+      path: '/courses'
+      fullPath: '/settings/courses'
       preLoaderRoute: typeof AppSettingsCoursesImport
       parentRoute: typeof AppSettingsImport
     }
     '/_app/add-announcement/': {
+      id: '/_app/add-announcement/'
+      path: '/add-announcement'
+      fullPath: '/add-announcement'
       preLoaderRoute: typeof AppAddAnnouncementIndexImport
       parentRoute: typeof AppImport
     }
     '/_app/home/': {
+      id: '/_app/home/'
+      path: '/home'
+      fullPath: '/home'
       preLoaderRoute: typeof AppHomeIndexImport
       parentRoute: typeof AppImport
     }
     '/_app/settings/': {
+      id: '/_app/settings/'
+      path: '/'
+      fullPath: '/settings/'
       preLoaderRoute: typeof AppSettingsIndexImport
       parentRoute: typeof AppSettingsImport
     }
     '/_app/timeline/': {
+      id: '/_app/timeline/'
+      path: '/timeline'
+      fullPath: '/timeline'
       preLoaderRoute: typeof AppTimelineIndexImport
       parentRoute: typeof AppImport
     }
     '/_navbar/contoh/': {
+      id: '/_navbar/contoh/'
+      path: '/contoh'
+      fullPath: '/contoh'
       preLoaderRoute: typeof NavbarContohIndexLazyImport
       parentRoute: typeof NavbarImport
     }
@@ -194,22 +217,37 @@ declare module '@tanstack/react-router' {
       parentRoute: typeof AppImport
     }
     '/_app/settings/courses/': {
+      id: '/_app/settings/courses/'
+      path: '/'
+      fullPath: '/settings/courses/'
       preLoaderRoute: typeof AppSettingsCoursesIndexImport
       parentRoute: typeof AppSettingsCoursesImport
     }
     '/_app/settings/subscriptions/': {
+      id: '/_app/settings/subscriptions/'
+      path: '/subscriptions'
+      fullPath: '/settings/subscriptions'
       preLoaderRoute: typeof AppSettingsSubscriptionsIndexImport
       parentRoute: typeof AppSettingsImport
     }
     '/_app/timeline/$infoId/': {
+      id: '/_app/timeline/$infoId/'
+      path: '/timeline/$infoId'
+      fullPath: '/timeline/$infoId'
       preLoaderRoute: typeof AppTimelineInfoIdIndexImport
       parentRoute: typeof AppImport
     }
     '/_navbar/contoh/$contohId/': {
+      id: '/_navbar/contoh/$contohId/'
+      path: '/contoh/$contohId'
+      fullPath: '/contoh/$contohId'
       preLoaderRoute: typeof NavbarContohContohIdIndexLazyImport
       parentRoute: typeof NavbarImport
     }
     '/_app/settings/courses/add/': {
+      id: '/_app/settings/courses/add/'
+      path: '/add'
+      fullPath: '/settings/courses/add'
       preLoaderRoute: typeof AppSettingsCoursesAddIndexImport
       parentRoute: typeof AppSettingsCoursesImport
     }
@@ -218,29 +256,124 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren([
+export const routeTree = rootRoute.addChildren({
   IndexRoute,
-  AppRoute.addChildren([
-    AppSettingsRoute.addChildren([
-      AppSettingsCoursesRoute.addChildren([
+  AppRoute: AppRoute.addChildren({
+    AppSettingsRoute: AppSettingsRoute.addChildren({
+      AppSettingsCoursesRoute: AppSettingsCoursesRoute.addChildren({
         AppSettingsCoursesIndexRoute,
         AppSettingsCoursesAddIndexRoute,
-      ]),
+      }),
       AppSettingsIndexRoute,
       AppSettingsSubscriptionsIndexRoute,
-    ]),
+    }),
     AppAddAnnouncementIndexRoute,
     AppHomeIndexRoute,
     AppTimelineIndexRoute,
     AppHomeDingdongIndexRoute,
     AppTimelineInfoIdIndexRoute,
-  ]),
-  NavbarRoute.addChildren([
+  }),
+  NavbarRoute: NavbarRoute.addChildren({
     NavbarContohIndexLazyRoute,
     NavbarContohContohIdIndexLazyRoute,
-  ]),
-  AboutRoute,
+  }),
   LoginIndexLazyRoute,
-])
+})
 
 /* prettier-ignore-end */
+
+/* ROUTE_MANIFEST_START
+{
+  "routes": {
+    "__root__": {
+      "filePath": "__root.tsx",
+      "children": [
+        "/",
+        "/_app",
+        "/_navbar",
+        "/login/"
+      ]
+    },
+    "/": {
+      "filePath": "index.tsx"
+    },
+    "/_app": {
+      "filePath": "_app.tsx",
+      "children": [
+        "/_app/settings",
+        "/_app/add-announcement/",
+        "/_app/home/",
+        "/_app/timeline/",
+        "/_app/timeline/$infoId/"
+      ]
+    },
+    "/_navbar": {
+      "filePath": "_navbar.tsx",
+      "children": [
+        "/_navbar/contoh/",
+        "/_navbar/contoh/$contohId/"
+      ]
+    },
+    "/_app/settings": {
+      "filePath": "_app/settings.tsx",
+      "parent": "/_app",
+      "children": [
+        "/_app/settings/courses",
+        "/_app/settings/",
+        "/_app/settings/subscriptions/"
+      ]
+    },
+    "/login/": {
+      "filePath": "login/index.lazy.tsx"
+    },
+    "/_app/settings/courses": {
+      "filePath": "_app/settings/courses.tsx",
+      "parent": "/_app/settings",
+      "children": [
+        "/_app/settings/courses/",
+        "/_app/settings/courses/add/"
+      ]
+    },
+    "/_app/add-announcement/": {
+      "filePath": "_app/add-announcement/index.tsx",
+      "parent": "/_app"
+    },
+    "/_app/home/": {
+      "filePath": "_app/home/index.tsx",
+      "parent": "/_app"
+    },
+    "/_app/settings/": {
+      "filePath": "_app/settings/index.tsx",
+      "parent": "/_app/settings"
+    },
+    "/_app/timeline/": {
+      "filePath": "_app/timeline/index.tsx",
+      "parent": "/_app"
+    },
+    "/_navbar/contoh/": {
+      "filePath": "_navbar/contoh/index.lazy.tsx",
+      "parent": "/_navbar"
+    },
+    "/_app/settings/courses/": {
+      "filePath": "_app/settings/courses/index.tsx",
+      "parent": "/_app/settings/courses"
+    },
+    "/_app/settings/subscriptions/": {
+      "filePath": "_app/settings/subscriptions/index.tsx",
+      "parent": "/_app/settings"
+    },
+    "/_app/timeline/$infoId/": {
+      "filePath": "_app/timeline/$infoId/index.tsx",
+      "parent": "/_app"
+    },
+    "/_navbar/contoh/$contohId/": {
+      "filePath": "_navbar/contoh/$contohId/index.lazy.tsx",
+      "parent": "/_navbar"
+    },
+    "/_app/settings/courses/add/": {
+      "filePath": "_app/settings/courses/add/index.tsx",
+      "parent": "/_app/settings/courses"
+    }
+  }
+}
+ROUTE_MANIFEST_END */

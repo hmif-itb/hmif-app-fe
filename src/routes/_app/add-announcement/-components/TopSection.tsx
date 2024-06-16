@@ -1,9 +1,9 @@
 import { Button } from '~/components/ui/button';
 import { FormSchemaType } from '../-constants';
-import UserProfile from './UserProfile';
 import { useRouter } from '@tanstack/react-router';
 import useSession from '~/hooks/auth/useSession';
 import { UseFormReturn } from 'react-hook-form';
+import UserInfo from '~/components/user/user-info';
 
 type ComponentProps = {
   form: UseFormReturn<FormSchemaType>;
@@ -38,7 +38,7 @@ export default function TopSection({ form }: ComponentProps): JSX.Element {
       </div>
 
       <div className="border-t border-t-[#EBEEEB] px-6 py-4">
-        <UserProfile
+        <UserInfo
           name={user.fullName}
           email={user.email}
           imageURL={user.picture}

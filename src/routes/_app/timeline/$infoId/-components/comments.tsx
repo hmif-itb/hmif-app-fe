@@ -1,7 +1,7 @@
 import { useParams } from '@tanstack/react-router';
 import { CommentWithReactions } from '~/api/generated';
+import UserInfo from '~/components/user/user-info';
 import { formatDate } from '~/utils/format-date';
-import InfoCreator from '../../-components/info-creator';
 import Reaction from './reaction';
 
 const Comments = ({
@@ -43,7 +43,12 @@ const CommentComponent = ({
 }) => {
   return (
     <div className="flex-row space-y-3">
-      <InfoCreator creator={commentData.creator} isComment />
+      <UserInfo
+        name={commentData.creator.fullName}
+        email={commentData.creator.email}
+        imageURL={commentData.creator.picture}
+        avatarClassName="size-9"
+      />
       <p>{commentData.content}</p>
       <div className="flex items-center space-x-1">
         {/* wait for reactions backend */}
