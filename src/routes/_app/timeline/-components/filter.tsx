@@ -10,6 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Form } from '~/components/ui/form';
 import { FilterProps } from '../-types';
 import { isMobile } from '~/lib/device';
+import useWindowSize from '~/hooks/useWindowSize';
 
 export default function Filter({
   read,
@@ -17,6 +18,8 @@ export default function Filter({
   category,
   setCategory,
 }: FilterProps) {
+  const windowSize = useWindowSize();
+
   const { data: catData } = useQuery({
     queryKey: ['categories'],
     queryFn: () => api.category.getListCategory(),
@@ -69,7 +72,7 @@ export default function Filter({
             />
           ))}
         </div>
-        {isMobile() ? (
+        {windowSize.width < 1024 ? (
           <DrawerFooter className="flex flex-row justify-around">
             <Button
               type="submit"

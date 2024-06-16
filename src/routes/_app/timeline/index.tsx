@@ -1,12 +1,13 @@
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from '~/api/client';
 import MegaphoneIcon from '~/assets/icons/timeline/megaphone.svg';
 import MobileView from './-components/mobile-view';
 import DesktopView from './-components/desktop-view';
 import { z } from 'zod';
 import { isMobile } from '~/lib/device';
+import useWindowSize from '~/hooks/useWindowSize';
 
 const timelineSearchSchema = z.object({
   search: z.string().optional(),
@@ -20,6 +21,9 @@ export const Route = createFileRoute('/_app/timeline/')({
 });
 
 function Timeline() {
+  const PAGE_SIZE = 10;
+  const windowSize = useWindowSize();
+
   const navigate = useNavigate({ from: Route.fullPath });
   const { search, read, category } = Route.useSearch();
 
@@ -51,11 +55,20 @@ function Timeline() {
   };
 
   const queryClient = useQueryClient();
-  const { data: infos = [] } = useQuery({
+  const {
+    data: infos,
+    fetchNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
     queryKey: ['info', search, read, category],
-    queryFn: () =>
+    queryFn: ({ pageParam }) =>
       api.info
-        .getListInfo({ search, unread: read ? 'true' : 'false', category })
+        .getListInfo({
+          search,
+          unread: read ? 'true' : 'false',
+          category,
+          offset: pageParam,
+        })
         .then((res) => {
           const infos = res.infos;
           infos.forEach((info) => {
@@ -63,19 +76,27 @@ function Timeline() {
           });
           return infos;
         }),
+    initialPageParam: 0,
+    getNextPageParam: (_1, _2, lastOffset) => lastOffset + PAGE_SIZE,
   });
 
+  const fetchWhenInView = () =>
+    !isFetchingNextPage &&
+    (infos?.pages.flatMap((p) => p).length ?? 1) % PAGE_SIZE === 0 &&
+    fetchNextPage();
+  console.log(windowSize.width);
   return (
     <>
-      {isMobile() ? (
+      {windowSize.width < 1024 ? (
         <MobileView
           read={read ?? false}
           setRead={setRead}
           search={search ?? ''}
           setSearch={setSearch}
-          infos={infos}
+          infos={infos?.pages.flatMap((p) => p) ?? []}
           category={category ?? ''}
           setCategory={setCategory}
+          onInView={fetchWhenInView}
         />
       ) : (
         <DesktopView
@@ -83,9 +104,10 @@ function Timeline() {
           setRead={setRead}
           search={search ?? ''}
           setSearch={setSearch}
-          infos={infos}
+          infos={infos?.pages.flatMap((p) => p) ?? []}
           category={category ?? ''}
           setCategory={setCategory}
+          onInView={fetchWhenInView}
         />
       )}
 
