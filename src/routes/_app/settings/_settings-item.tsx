@@ -1,12 +1,12 @@
-import { Outlet, createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, Outlet } from '@tanstack/react-router';
 import UserInfo from '~/components/user/user-info';
 import useSession from '~/hooks/auth/useSession';
 
-export const Route = createFileRoute('/_app/settings/courses')({
-  component: CoursesLayout,
+export const Route = createFileRoute('/_app/settings/_settings-item')({
+  component: SettingsItemLayout,
 });
 
-function CoursesLayout() {
+function SettingsItemLayout(): JSX.Element {
   const user = useSession();
 
   return (
