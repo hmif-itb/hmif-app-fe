@@ -5,6 +5,8 @@ function SubscriptionsPage() {
   return <Subscriptions />;
 }
 
-export const Route = createFileRoute('/_app/settings/subscriptions/')({
+export const Route = createFileRoute(
+  '/_app/settings/_settings-item/subscriptions/',
+)({
   component: SubscriptionsPage,
 });

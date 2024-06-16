@@ -5,6 +5,6 @@ function Courses() {
   return <MyCourses />;
 }
 
-export const Route = createFileRoute('/_app/settings/courses/')({
+export const Route = createFileRoute('/_app/settings/_settings-item/courses/')({
   component: Courses,
 });
