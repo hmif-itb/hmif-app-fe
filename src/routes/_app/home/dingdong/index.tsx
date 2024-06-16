@@ -1,4 +1,4 @@
-import { createFileRoute, Outlet } from '@tanstack/react-router';
+import { createFileRoute } from '@tanstack/react-router';
 import MyCourses from './-components/my-courses';
 import UserInfo from '~/components/user/user-info';
 import useSession from '~/hooks/auth/useSession';

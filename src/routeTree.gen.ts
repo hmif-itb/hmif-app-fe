@@ -21,12 +21,12 @@ import { Route as AppTimelineIndexImport } from './routes/_app/timeline/index'
 import { Route as AppSettingsIndexImport } from './routes/_app/settings/index'
 import { Route as AppHomeIndexImport } from './routes/_app/home/index'
 import { Route as AppAddAnnouncementIndexImport } from './routes/_app/add-announcement/index'
-import { Route as AppSettingsCoursesImport } from './routes/_app/settings/courses'
+import { Route as AppSettingsSettingsItemImport } from './routes/_app/settings/_settings-item'
 import { Route as AppTimelineInfoIdIndexImport } from './routes/_app/timeline/$infoId/index'
-import { Route as AppSettingsSubscriptionsIndexImport } from './routes/_app/settings/subscriptions/index'
-import { Route as AppSettingsCoursesIndexImport } from './routes/_app/settings/courses/index'
 import { Route as AppHomeDingdongIndexImport } from './routes/_app/home/dingdong/index'
-import { Route as AppSettingsCoursesAddIndexImport } from './routes/_app/settings/courses/add/index'
+import { Route as AppSettingsSettingsItemSubscriptionsIndexImport } from './routes/_app/settings/_settings-item/subscriptions/index'
+import { Route as AppSettingsSettingsItemCoursesIndexImport } from './routes/_app/settings/_settings-item/courses/index'
+import { Route as AppSettingsSettingsItemCoursesAddIndexImport } from './routes/_app/settings/_settings-item/courses/add/index'
 
 // Create Virtual Routes
 
@@ -90,8 +90,8 @@ const AppAddAnnouncementIndexRoute = AppAddAnnouncementIndexImport.update({
   getParentRoute: () => AppRoute,
 } as any)
 
-const AppSettingsCoursesRoute = AppSettingsCoursesImport.update({
-  path: '/courses',
+const AppSettingsSettingsItemRoute = AppSettingsSettingsItemImport.update({
+  id: '/_settings-item',
   getParentRoute: () => AppSettingsRoute,
 } as any)
 
@@ -108,28 +108,28 @@ const AppTimelineInfoIdIndexRoute = AppTimelineInfoIdIndexImport.update({
   getParentRoute: () => AppRoute,
 } as any)
 
-const AppSettingsSubscriptionsIndexRoute =
-  AppSettingsSubscriptionsIndexImport.update({
-    path: '/subscriptions/',
-    getParentRoute: () => AppSettingsRoute,
-  } as any)
-
-const AppSettingsCoursesIndexRoute = AppSettingsCoursesIndexImport.update({
-  path: '/',
-  getParentRoute: () => AppSettingsCoursesRoute,
-} as any)
-
 const AppHomeDingdongIndexRoute = AppHomeDingdongIndexImport.update({
   path: '/home/dingdong/',
   getParentRoute: () => AppRoute,
 } as any)
 
-const AppSettingsCoursesAddIndexRoute = AppSettingsCoursesAddIndexImport.update(
-  {
-    path: '/add/',
-    getParentRoute: () => AppSettingsCoursesRoute,
-  } as any,
-)
+const AppSettingsSettingsItemSubscriptionsIndexRoute =
+  AppSettingsSettingsItemSubscriptionsIndexImport.update({
+    path: '/subscriptions/',
+    getParentRoute: () => AppSettingsSettingsItemRoute,
+  } as any)
+
+const AppSettingsSettingsItemCoursesIndexRoute =
+  AppSettingsSettingsItemCoursesIndexImport.update({
+    path: '/courses/',
+    getParentRoute: () => AppSettingsSettingsItemRoute,
+  } as any)
+
+const AppSettingsSettingsItemCoursesAddIndexRoute =
+  AppSettingsSettingsItemCoursesAddIndexImport.update({
+    path: '/courses/add/',
+    getParentRoute: () => AppSettingsSettingsItemRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -170,11 +170,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginIndexLazyImport
       parentRoute: typeof rootRoute
     }
-    '/_app/settings/courses': {
-      id: '/_app/settings/courses'
-      path: '/courses'
-      fullPath: '/settings/courses'
-      preLoaderRoute: typeof AppSettingsCoursesImport
+    '/_app/settings/_settings-item': {
+      id: '/_app/settings/_settings-item'
+      path: ''
+      fullPath: '/settings'
+      preLoaderRoute: typeof AppSettingsSettingsItemImport
       parentRoute: typeof AppSettingsImport
     }
     '/_app/add-announcement/': {
@@ -219,20 +219,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppHomeDingdongIndexImport
       parentRoute: typeof AppImport
     }
-    '/_app/settings/courses/': {
-      id: '/_app/settings/courses/'
-      path: '/'
-      fullPath: '/settings/courses/'
-      preLoaderRoute: typeof AppSettingsCoursesIndexImport
-      parentRoute: typeof AppSettingsCoursesImport
-    }
-    '/_app/settings/subscriptions/': {
-      id: '/_app/settings/subscriptions/'
-      path: '/subscriptions'
-      fullPath: '/settings/subscriptions'
-      preLoaderRoute: typeof AppSettingsSubscriptionsIndexImport
-      parentRoute: typeof AppSettingsImport
-    }
     '/_app/timeline/$infoId/': {
       id: '/_app/timeline/$infoId/'
       path: '/timeline/$infoId'
@@ -247,12 +233,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NavbarContohContohIdIndexLazyImport
       parentRoute: typeof NavbarImport
     }
-    '/_app/settings/courses/add/': {
-      id: '/_app/settings/courses/add/'
-      path: '/add'
+    '/_app/settings/_settings-item/courses/': {
+      id: '/_app/settings/_settings-item/courses/'
+      path: '/courses'
+      fullPath: '/settings/courses'
+      preLoaderRoute: typeof AppSettingsSettingsItemCoursesIndexImport
+      parentRoute: typeof AppSettingsSettingsItemImport
+    }
+    '/_app/settings/_settings-item/subscriptions/': {
+      id: '/_app/settings/_settings-item/subscriptions/'
+      path: '/subscriptions'
+      fullPath: '/settings/subscriptions'
+      preLoaderRoute: typeof AppSettingsSettingsItemSubscriptionsIndexImport
+      parentRoute: typeof AppSettingsSettingsItemImport
+    }
+    '/_app/settings/_settings-item/courses/add/': {
+      id: '/_app/settings/_settings-item/courses/add/'
+      path: '/courses/add'
       fullPath: '/settings/courses/add'
-      preLoaderRoute: typeof AppSettingsCoursesAddIndexImport
-      parentRoute: typeof AppSettingsCoursesImport
+      preLoaderRoute: typeof AppSettingsSettingsItemCoursesAddIndexImport
+      parentRoute: typeof AppSettingsSettingsItemImport
     }
   }
 }
@@ -263,12 +263,12 @@ export const routeTree = rootRoute.addChildren({
   IndexRoute,
   AppRoute: AppRoute.addChildren({
     AppSettingsRoute: AppSettingsRoute.addChildren({
-      AppSettingsCoursesRoute: AppSettingsCoursesRoute.addChildren({
-        AppSettingsCoursesIndexRoute,
-        AppSettingsCoursesAddIndexRoute,
+      AppSettingsSettingsItemRoute: AppSettingsSettingsItemRoute.addChildren({
+        AppSettingsSettingsItemCoursesIndexRoute,
+        AppSettingsSettingsItemSubscriptionsIndexRoute,
+        AppSettingsSettingsItemCoursesAddIndexRoute,
       }),
       AppSettingsIndexRoute,
-      AppSettingsSubscriptionsIndexRoute,
     }),
     AppAddAnnouncementIndexRoute,
     AppHomeIndexRoute,
@@ -322,20 +322,20 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "_app/settings.tsx",
       "parent": "/_app",
       "children": [
-        "/_app/settings/courses",
-        "/_app/settings/",
-        "/_app/settings/subscriptions/"
+        "/_app/settings/_settings-item",
+        "/_app/settings/"
       ]
     },
     "/login/": {
       "filePath": "login/index.lazy.tsx"
     },
-    "/_app/settings/courses": {
-      "filePath": "_app/settings/courses.tsx",
+    "/_app/settings/_settings-item": {
+      "filePath": "_app/settings/_settings-item.tsx",
       "parent": "/_app/settings",
       "children": [
-        "/_app/settings/courses/",
-        "/_app/settings/courses/add/"
+        "/_app/settings/_settings-item/courses/",
+        "/_app/settings/_settings-item/subscriptions/",
+        "/_app/settings/_settings-item/courses/add/"
       ]
     },
     "/_app/add-announcement/": {
@@ -362,14 +362,6 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "_app/home/dingdong/index.tsx",
       "parent": "/_app"
     },
-    "/_app/settings/courses/": {
-      "filePath": "_app/settings/courses/index.tsx",
-      "parent": "/_app/settings/courses"
-    },
-    "/_app/settings/subscriptions/": {
-      "filePath": "_app/settings/subscriptions/index.tsx",
-      "parent": "/_app/settings"
-    },
     "/_app/timeline/$infoId/": {
       "filePath": "_app/timeline/$infoId/index.tsx",
       "parent": "/_app"
@@ -378,9 +370,17 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "_navbar/contoh/$contohId/index.lazy.tsx",
       "parent": "/_navbar"
     },
-    "/_app/settings/courses/add/": {
-      "filePath": "_app/settings/courses/add/index.tsx",
-      "parent": "/_app/settings/courses"
+    "/_app/settings/_settings-item/courses/": {
+      "filePath": "_app/settings/_settings-item/courses/index.tsx",
+      "parent": "/_app/settings/_settings-item"
+    },
+    "/_app/settings/_settings-item/subscriptions/": {
+      "filePath": "_app/settings/_settings-item/subscriptions/index.tsx",
+      "parent": "/_app/settings/_settings-item"
+    },
+    "/_app/settings/_settings-item/courses/add/": {
+      "filePath": "_app/settings/_settings-item/courses/add/index.tsx",
+      "parent": "/_app/settings/_settings-item"
     }
   }
 }

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Button } from '~/components/ui/button';
 import CameraIcon from '~/assets/icons/add-announcement/camera.svg';
 import GalleryIcon from '~/assets/icons/add-announcement/gallery.svg';
