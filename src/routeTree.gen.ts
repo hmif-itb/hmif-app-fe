@@ -23,6 +23,7 @@ import { Route as AppHomeIndexImport } from './routes/_app/home/index'
 import { Route as AppAddAnnouncementIndexImport } from './routes/_app/add-announcement/index'
 import { Route as AppSettingsSettingsItemImport } from './routes/_app/settings/_settings-item'
 import { Route as AppTimelineInfoIdIndexImport } from './routes/_app/timeline/$infoId/index'
+import { Route as AppHomeDingdongIndexImport } from './routes/_app/home/dingdong/index'
 import { Route as AppSettingsSettingsItemSubscriptionsIndexImport } from './routes/_app/settings/_settings-item/subscriptions/index'
 import { Route as AppSettingsSettingsItemCoursesIndexImport } from './routes/_app/settings/_settings-item/courses/index'
 import { Route as AppSettingsSettingsItemCoursesAddIndexImport } from './routes/_app/settings/_settings-item/courses/add/index'
@@ -104,6 +105,11 @@ const NavbarContohContohIdIndexLazyRoute =
 
 const AppTimelineInfoIdIndexRoute = AppTimelineInfoIdIndexImport.update({
   path: '/timeline/$infoId/',
+  getParentRoute: () => AppRoute,
+} as any)
+
+const AppHomeDingdongIndexRoute = AppHomeDingdongIndexImport.update({
+  path: '/home/dingdong/',
   getParentRoute: () => AppRoute,
 } as any)
 
@@ -206,6 +212,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NavbarContohIndexLazyImport
       parentRoute: typeof NavbarImport
     }
+    '/_app/home/dingdong/': {
+      id: '/_app/home/dingdong/'
+      path: '/home/dingdong'
+      fullPath: '/home/dingdong'
+      preLoaderRoute: typeof AppHomeDingdongIndexImport
+      parentRoute: typeof AppImport
+    }
     '/_app/timeline/$infoId/': {
       id: '/_app/timeline/$infoId/'
       path: '/timeline/$infoId'
@@ -260,6 +273,7 @@ export const routeTree = rootRoute.addChildren({
     AppAddAnnouncementIndexRoute,
     AppHomeIndexRoute,
     AppTimelineIndexRoute,
+    AppHomeDingdongIndexRoute,
     AppTimelineInfoIdIndexRoute,
   }),
   NavbarRoute: NavbarRoute.addChildren({
@@ -293,6 +307,7 @@ export const routeTree = rootRoute.addChildren({
         "/_app/add-announcement/",
         "/_app/home/",
         "/_app/timeline/",
+        "/_app/home/dingdong/",
         "/_app/timeline/$infoId/"
       ]
     },
@@ -342,6 +357,10 @@ export const routeTree = rootRoute.addChildren({
     "/_navbar/contoh/": {
       "filePath": "_navbar/contoh/index.lazy.tsx",
       "parent": "/_navbar"
+    },
+    "/_app/home/dingdong/": {
+      "filePath": "_app/home/dingdong/index.tsx",
+      "parent": "/_app"
     },
     "/_app/timeline/$infoId/": {
       "filePath": "_app/timeline/$infoId/index.tsx",
