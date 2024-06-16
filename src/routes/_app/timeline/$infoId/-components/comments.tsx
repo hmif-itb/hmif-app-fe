@@ -1,8 +1,8 @@
 import { useParams } from '@tanstack/react-router';
 import { CommentWithReactions } from '~/api/generated';
+import UserInfo from '~/components/user/user-info';
 import { formatDate } from '~/utils/format-date';
 import Reaction from './reaction';
-import UserInfo from '~/components/user/user-info';
 
 const Comments = ({
   comments,

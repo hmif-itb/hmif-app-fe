@@ -1,8 +1,8 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createLazyFileRoute } from '@tanstack/react-router';
 import useContohDetail from './-hooks/useContohDetail';
 import IniComponent from './-components/IniComponent';
 
-export const Route = createFileRoute('/_navbar/contoh/$contohId/')({
+export const Route = createLazyFileRoute('/_navbar/contoh/$contohId/')({
   component: ContohDetailPage,
 });
 
