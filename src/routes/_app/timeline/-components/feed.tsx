@@ -2,13 +2,25 @@ import { Link } from '@tanstack/react-router';
 import { Info } from '~/api/generated';
 import UserInfoProfile from '~/components/user/user-info';
 import Tag from './tag';
+import { InView } from 'react-intersection-observer';
 
-export default function Feed({ infos }: { infos: Info[] }) {
+type ComponentProps = {
+  infos: Info[];
+  onInView: () => void;
+};
+
+export default function Feed({ infos, onInView }: ComponentProps) {
   return (
     <div className="mx-5">
-      {infos.map((info) => (
-        <UserInfo key={info.id} info={info} />
-      ))}
+      {infos.map((info, idx) =>
+        idx < infos.length - 2 ? (
+          <UserInfo key={info.id} info={info} />
+        ) : (
+          <InView key={info.id} onChange={(inView) => inView && onInView()}>
+            <UserInfo info={info} />
+          </InView>
+        ),
+      )}
     </div>
   );
 }

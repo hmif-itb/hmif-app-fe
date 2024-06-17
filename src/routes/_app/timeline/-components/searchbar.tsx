@@ -6,15 +6,26 @@ import FilterContent from './filtercontent';
 import FilterIcon from '~/assets/icons/searchbar/filter.svg';
 import ReadIcon from '~/assets/icons/searchbar/read.svg';
 import SearchIcon from '~/assets/icons/searchbar/search.svg';
+import { FilterProps } from '../-types';
 
-export default function SearchBar() {
+type ComponentProps = {
+  search: string;
+  setSearch: (value: string) => void;
+} & FilterProps;
+
+export default function SearchBar({
+  search,
+  setSearch,
+  ...props
+}: ComponentProps) {
   const [drawerState, openDrawer] = useState(false);
-  const [readState, setRead] = useState(false);
 
   return (
     <form className="relative my-10 flex w-full flex-row items-center justify-center gap-5">
       <div className="relative w-[70%] text-xs lg:w-full">
         <input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
           type="text"
           placeholder="Search..."
           className="w-full rounded-full border border-black py-2 pl-4 shadow-sm outline-none lg:border-2 lg:py-3 lg:text-sm lg:font-semibold"
@@ -32,10 +43,8 @@ export default function SearchBar() {
       <div className="flex flex-row gap-5 lg:hidden">
         <ThumbToggle
           Icon={ReadIcon}
-          isPressed={readState}
-          onClick={() => {
-            setRead((a) => (a = !a));
-          }}
+          isPressed={props.read}
+          onClick={() => props.setRead(!props.read)}
         />
         <Drawer>
           <DrawerTrigger
@@ -50,9 +59,9 @@ export default function SearchBar() {
             onInteractOutside={() => {
               openDrawer((a) => (a = !a));
             }}
-            className="bg-[#EAEEEB] p-0"
+            className="z-[100] bg-[#EAEEEB] p-0"
           >
-            <FilterContent />
+            <FilterContent {...props} />
           </DrawerContent>
         </Drawer>
       </div>
