@@ -4,6 +4,7 @@ import { api } from '~/api/client';
 import { Info } from '~/api/generated';
 import { Button } from '~/components/ui/button';
 import { cn } from '~/lib/utils';
+import { emojiImages } from '../-constants/emoji';
 
 const Reaction = ({
   reactions: reactions,
@@ -178,30 +179,8 @@ const Reaction = ({
       {reactions && reactions.totalReactions > 0 && (
         <div className="flex items-center">
           {reactions.reactionsCount?.map((reaction, index) => {
-            let emojiSrc = '';
-            switch (reaction.reaction) {
-              case 'cry':
-                emojiSrc = '/img/icons/emojiCry.svg';
-                break;
-              case 'fire':
-                emojiSrc = '/img/icons/emojiFire.svg';
-                break;
-              case 'heart-eyes':
-                emojiSrc = '/img/icons/emojiHeartEyes.svg';
-                break;
-              case 'grin':
-                emojiSrc = '/img/icons/emojiGrin.svg';
-                break;
-              case 'screaming':
-                emojiSrc = '/img/icons/emojiScreaming.svg';
-                break;
-              case 'party':
-                emojiSrc = '/img/icons/emojiParty.svg';
-                break;
-              default:
-                break;
-            }
-
+            const emojiSrc =
+              emojiImages[reaction.reaction as keyof typeof emojiImages] ?? '';
             return (
               <img
                 key={reaction.reaction}

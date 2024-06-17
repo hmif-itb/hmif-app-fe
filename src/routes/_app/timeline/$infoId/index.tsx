@@ -2,13 +2,18 @@ import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 import { api } from '~/api/client';
+import { preloadImages } from '~/lib/image';
 import Comments from './-components/comments';
 import DetailPost from './-components/detail-post';
 import Header from './-components/header';
 import PostInteraction from './-components/post-interaction';
+import { emojiImages } from './-constants/emoji';
 
 export const Route = createFileRoute('/_app/timeline/$infoId/')({
   component: InfoDetail,
+  beforeLoad() {
+    preloadImages(Object.values(emojiImages));
+  },
 });
 
 function InfoDetail() {
