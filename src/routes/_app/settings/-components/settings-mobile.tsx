@@ -1,10 +1,13 @@
 import { Link } from '@tanstack/react-router';
+import { Button } from '~/components/ui/button';
 import Avatar from '~/components/user/avatar';
+import useLogout from '~/hooks/auth/useLogout';
 import useSession from '~/hooks/auth/useSession';
 import { settingsOptions } from '../-config/settings-options';
 
 export default function SettingsMobile() {
   const user = useSession();
+  const { logout } = useLogout();
   return (
     <div className="flex h-full flex-col bg-[#30764B] lg:hidden lg:bg-transparent">
       <div className="flex flex-col items-center py-6">
@@ -18,7 +21,7 @@ export default function SettingsMobile() {
         </h3>
         <p className="text-body-lg text-neutral-normal-hover">{user.email}</p>
       </div>
-      <div className="flex-1 rounded-t-2xl bg-green-50 px-7 py-9">
+      <div className="flex flex-1 flex-col rounded-t-2xl bg-green-50 px-7 py-9">
         <ul className="flex flex-col gap-1 rounded-[0.375rem] bg-white">
           <ProfileItem title="NIM" text={user.nim} />
           <ProfileItem title="Jenis Keanggotaan" text={user.membershipStatus} />
@@ -27,7 +30,7 @@ export default function SettingsMobile() {
             text={`${user.major}'${user.angkatan}`}
           />
         </ul>
-        <ul className="mt-6 flex flex-col gap-1 rounded-[0.375rem] bg-white">
+        <div className="mt-6 flex flex-col gap-1 rounded-[0.375rem] bg-white">
           {settingsOptions.map((option) => (
             <Link
               to={option.href}
@@ -38,7 +41,16 @@ export default function SettingsMobile() {
               <span>{option.title}</span>
             </Link>
           ))}
-        </ul>
+        </div>
+        <div className="flex flex-1 items-center">
+          <Button
+            variant={'link'}
+            className="w-full text-[#8E8E93]"
+            onClick={() => logout()}
+          >
+            Log out
+          </Button>
+        </div>
       </div>
     </div>
   );

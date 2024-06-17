@@ -8,7 +8,7 @@ export default function useLogout() {
     mutationFn: async () => {
       const subscription = await setupNotification();
       if (subscription) {
-        return await api.push.logoutPush({
+        await api.push.logoutPush({
           requestBody: { endpoint: subscription.endpoint },
         });
       }

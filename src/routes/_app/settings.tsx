@@ -7,6 +7,8 @@ import {
 } from '@tanstack/react-router';
 import { ChevronLeft } from 'lucide-react';
 import HeaderTitle from '~/components/header-title';
+import { Button } from '~/components/ui/button';
+import useLogout from '~/hooks/auth/useLogout';
 import {
   desktopSettingsOptions,
   settingsOptions,
@@ -22,6 +24,7 @@ function SettingsLayout() {
   const selectedSettings = settingsOptions.find((option) =>
     routerState.location.pathname.startsWith(option.href),
   );
+  const { logout } = useLogout();
   return (
     <div className="flex h-full flex-col overflow-hidden">
       <div className="hidden lg:block">
@@ -42,7 +45,7 @@ function SettingsLayout() {
             <span>{selectedSettings?.title ?? 'Settings'}</span>
           </h1>
           <div className="flex flex-1 overflow-hidden lg:rounded-xl lg:bg-white lg:shadow-lg">
-            <ul className="hidden w-72 flex-col border-r border-neutral-normal-active py-9 lg:flex">
+            <div className="hidden w-72 flex-col border-r border-neutral-normal-active py-9 lg:flex">
               {desktopSettingsOptions.map((option) => (
                 <Link
                   to={option.href}
@@ -63,7 +66,15 @@ function SettingsLayout() {
                   <span>{option.title}</span>
                 </Link>
               ))}
-            </ul>
+              <div className="flex-1" />
+              <Button
+                variant={'link'}
+                className="w-full text-[#8E8E93]"
+                onClick={() => logout()}
+              >
+                Log out
+              </Button>
+            </div>
             <div className="flex-1 overflow-y-auto">
               <Outlet />
             </div>
