@@ -6,6 +6,7 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'plugin:react-hooks/recommended',
     'plugin:prettier/recommended',
+    'plugin:tailwindcss/recommended',
   ],
   ignorePatterns: [
     'dist',
@@ -21,6 +22,13 @@ module.exports = {
       { allowConstantExport: true },
     ],
     '@typescript-eslint/no-unused-vars': 'warn',
+    'react-refresh/only-export-components': 'off',
+    'prettier/prettier': [
+      'error',
+      {
+        endOfLine: 'auto',
+      },
+    ],
   },
   parserOptions: {
     ecmaVersion: 'latest',

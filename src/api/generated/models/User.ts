@@ -4,7 +4,14 @@
 /* eslint-disable */
 export type User = {
   id: string;
-  name: string;
-  age: number;
+  nim: string;
+  email: string;
+  fullName: string;
+  major: 'IF' | 'STI';
+  picture: string | null;
+  region: 'Ganesha' | 'Jatinangor';
+  angkatan: number;
+  gender: 'F' | 'M';
+  membershipStatus: string;
 };
 

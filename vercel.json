@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/sparta/:path*",
+      "destination": "https://sparta.hmif.dev/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

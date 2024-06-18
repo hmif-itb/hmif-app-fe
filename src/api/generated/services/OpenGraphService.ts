@@ -2,30 +2,29 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { User } from '../models/User';
+import type { OgObject } from '../models/OgObject';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import type { BaseHttpRequest } from '../core/BaseHttpRequest';
-export class HelloService {
+export class OpenGraphService {
   constructor(public readonly httpRequest: BaseHttpRequest) {}
   /**
-   * @returns User Retrieve the user
+   * Scrape Open Graph meta tags from a URL
+   * @returns OgObject Scrape successful
    * @throws ApiError
    */
-  public getUser({
-    id,
-    test,
+  public openGraphScrape({
+    url,
   }: {
-    id: string,
-    test?: string,
-  }): CancelablePromise<User> {
+    url: string,
+  }): CancelablePromise<OgObject> {
     return this.httpRequest.request({
       method: 'GET',
-      url: '/api/users/{id}',
-      path: {
-        'id': id,
-      },
+      url: '/api/open-graph',
       query: {
-        'test': test,
+        'url': url,
+      },
+      errors: {
+        400: `Invalid URL`,
       },
     });
   }
