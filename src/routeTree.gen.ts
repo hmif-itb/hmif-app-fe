@@ -13,7 +13,6 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as NavbarImport } from './routes/_navbar'
 import { Route as AppImport } from './routes/_app'
 import { Route as IndexImport } from './routes/index'
 import { Route as AppSettingsImport } from './routes/_app/settings'
@@ -31,17 +30,8 @@ import { Route as AppSettingsSettingsItemCoursesAddIndexImport } from './routes/
 // Create Virtual Routes
 
 const LoginIndexLazyImport = createFileRoute('/login/')()
-const NavbarContohIndexLazyImport = createFileRoute('/_navbar/contoh/')()
-const NavbarContohContohIdIndexLazyImport = createFileRoute(
-  '/_navbar/contoh/$contohId/',
-)()
 
 // Create/Update Routes
-
-const NavbarRoute = NavbarImport.update({
-  id: '/_navbar',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const AppRoute = AppImport.update({
   id: '/_app',
@@ -62,13 +52,6 @@ const AppSettingsRoute = AppSettingsImport.update({
   path: '/settings',
   getParentRoute: () => AppRoute,
 } as any)
-
-const NavbarContohIndexLazyRoute = NavbarContohIndexLazyImport.update({
-  path: '/contoh/',
-  getParentRoute: () => NavbarRoute,
-} as any).lazy(() =>
-  import('./routes/_navbar/contoh/index.lazy').then((d) => d.Route),
-)
 
 const AppTimelineIndexRoute = AppTimelineIndexImport.update({
   path: '/timeline/',
@@ -94,14 +77,6 @@ const AppSettingsSettingsItemRoute = AppSettingsSettingsItemImport.update({
   id: '/_settings-item',
   getParentRoute: () => AppSettingsRoute,
 } as any)
-
-const NavbarContohContohIdIndexLazyRoute =
-  NavbarContohContohIdIndexLazyImport.update({
-    path: '/contoh/$contohId/',
-    getParentRoute: () => NavbarRoute,
-  } as any).lazy(() =>
-    import('./routes/_navbar/contoh/$contohId/index.lazy').then((d) => d.Route),
-  )
 
 const AppTimelineInfoIdIndexRoute = AppTimelineInfoIdIndexImport.update({
   path: '/timeline/$infoId/',
@@ -147,13 +122,6 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: ''
       preLoaderRoute: typeof AppImport
-      parentRoute: typeof rootRoute
-    }
-    '/_navbar': {
-      id: '/_navbar'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof NavbarImport
       parentRoute: typeof rootRoute
     }
     '/_app/settings': {
@@ -205,13 +173,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppTimelineIndexImport
       parentRoute: typeof AppImport
     }
-    '/_navbar/contoh/': {
-      id: '/_navbar/contoh/'
-      path: '/contoh'
-      fullPath: '/contoh'
-      preLoaderRoute: typeof NavbarContohIndexLazyImport
-      parentRoute: typeof NavbarImport
-    }
     '/_app/home/dingdong/': {
       id: '/_app/home/dingdong/'
       path: '/home/dingdong'
@@ -225,13 +186,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/timeline/$infoId'
       preLoaderRoute: typeof AppTimelineInfoIdIndexImport
       parentRoute: typeof AppImport
-    }
-    '/_navbar/contoh/$contohId/': {
-      id: '/_navbar/contoh/$contohId/'
-      path: '/contoh/$contohId'
-      fullPath: '/contoh/$contohId'
-      preLoaderRoute: typeof NavbarContohContohIdIndexLazyImport
-      parentRoute: typeof NavbarImport
     }
     '/_app/settings/_settings-item/courses/': {
       id: '/_app/settings/_settings-item/courses/'
@@ -276,10 +230,6 @@ export const routeTree = rootRoute.addChildren({
     AppHomeDingdongIndexRoute,
     AppTimelineInfoIdIndexRoute,
   }),
-  NavbarRoute: NavbarRoute.addChildren({
-    NavbarContohIndexLazyRoute,
-    NavbarContohContohIdIndexLazyRoute,
-  }),
   LoginIndexLazyRoute,
 })
 
@@ -293,7 +243,6 @@ export const routeTree = rootRoute.addChildren({
       "children": [
         "/",
         "/_app",
-        "/_navbar",
         "/login/"
       ]
     },
@@ -309,13 +258,6 @@ export const routeTree = rootRoute.addChildren({
         "/_app/timeline/",
         "/_app/home/dingdong/",
         "/_app/timeline/$infoId/"
-      ]
-    },
-    "/_navbar": {
-      "filePath": "_navbar.tsx",
-      "children": [
-        "/_navbar/contoh/",
-        "/_navbar/contoh/$contohId/"
       ]
     },
     "/_app/settings": {
@@ -354,10 +296,6 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "_app/timeline/index.tsx",
       "parent": "/_app"
     },
-    "/_navbar/contoh/": {
-      "filePath": "_navbar/contoh/index.lazy.tsx",
-      "parent": "/_navbar"
-    },
     "/_app/home/dingdong/": {
       "filePath": "_app/home/dingdong/index.tsx",
       "parent": "/_app"
@@ -365,10 +303,6 @@ export const routeTree = rootRoute.addChildren({
     "/_app/timeline/$infoId/": {
       "filePath": "_app/timeline/$infoId/index.tsx",
       "parent": "/_app"
-    },
-    "/_navbar/contoh/$contohId/": {
-      "filePath": "_navbar/contoh/$contohId/index.lazy.tsx",
-      "parent": "/_navbar"
     },
     "/_app/settings/_settings-item/courses/": {
       "filePath": "_app/settings/_settings-item/courses/index.tsx",
