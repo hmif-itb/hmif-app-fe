@@ -1,7 +1,7 @@
 import BottomNavigationItem from './bottom-navigation-item';
-import HomeIcon from './icons/home';
-import QuestionMarkIcon from './icons/question-mark';
-import SettingsIcon from './icons/settings';
+import HomeIcon from '../icons/home';
+import QuestionMarkIcon from '../icons/question-mark';
+import SettingsIcon from '../icons/settings';
 
 function Navbar() {
   return (

@@ -1,6 +1,6 @@
 import { Separator } from '@radix-ui/react-separator';
 import Calendar from '~/components/calendar';
-import Profile from '~/components/profile';
+import Profile from '~/components/navbar/profile';
 import NavigationItem from './navigation-item';
 import Timeline from './timeline';
 import { useNavigate } from '@tanstack/react-router';

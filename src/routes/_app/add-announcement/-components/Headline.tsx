@@ -2,12 +2,17 @@ import { UseFormReturn } from 'react-hook-form';
 import { FormControl, FormField, FormItem } from '~/components/ui/form';
 import { TextField } from '~/components/ui/textfield';
 import { FormSchemaType } from '../-constants';
+import { cn } from '~/lib/utils';
 
 type ComponentProps = {
   form: UseFormReturn<FormSchemaType>;
+  isDesktop?: boolean;
 };
 
-export default function Headline({ form }: ComponentProps): JSX.Element {
+export default function Headline({
+  form,
+  isDesktop,
+}: ComponentProps): JSX.Element {
   return (
     <FormField
       control={form.control}
@@ -19,7 +24,10 @@ export default function Headline({ form }: ComponentProps): JSX.Element {
               <TextField
                 maxLength={50}
                 placeholder="Headline announcement"
-                inputClassName="rounded-none border-y border-y-[#EBEEEB] text-body-xl py-4 px-6 font-bold"
+                inputClassName={cn(
+                  'rounded-none border-y border-y-[#EBEEEB] text-body-xl py-4 px-6 font-bold',
+                  isDesktop && 'text-xl',
+                )}
                 errorClassName="absolute top-0.5 left-4 text-xs"
                 error={
                   form.formState.errors.headline?.message &&

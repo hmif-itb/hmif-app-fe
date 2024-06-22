@@ -24,7 +24,13 @@ export type FileUpload = {
   file: File;
 };
 
-function AddAnnouncementPage(): JSX.Element {
+type ComponentProps = {
+  isDesktop?: boolean;
+};
+
+export function AddAnnouncementPage({
+  isDesktop,
+}: ComponentProps): JSX.Element {
   const [images, setImages] = useState<FileUpload[]>([]);
   const [files, setFiles] = useState<FileUpload[]>([]);
 
@@ -39,9 +45,13 @@ function AddAnnouncementPage(): JSX.Element {
     },
   });
 
+  const mobileHandleSuccess = () => navigate({ to: '/home' });
+  const desktopHandleSuccess = () =>
+    navigate({ search: (prev) => ({ ...prev, showAnnounce: undefined }) });
+
   const postInfo = useMutation({
     mutationFn: api.info.createInfo.bind(api.info),
-    onSuccess: () => navigate({ to: '/home' }),
+    onSuccess: isDesktop ? desktopHandleSuccess : mobileHandleSuccess,
   });
 
   const postMediaUpload = useMutation({
@@ -85,47 +95,56 @@ function AddAnnouncementPage(): JSX.Element {
   };
 
   return (
-    <main className="relative h-full py-9 font-inter">
+    <main
+      className={cn(
+        'relative h-full font-inter',
+        isDesktop ? 'pb-2 pt-7' : 'py-9',
+      )}
+    >
       <Form {...form}>
         <form
           className="max-h-full overflow-y-auto"
           onSubmit={form.handleSubmit(onSubmit)}
         >
-          <TopSection form={form} />
-          <Headline form={form} />
-          <Content form={form} />
-          <Categories form={form} />
+          <TopSection form={form} isDialog={isDesktop} />
+          <Headline form={form} isDesktop={isDesktop} />
+          <Content form={form} isDesktop={isDesktop} />
+          <Categories form={form} isDesktop={isDesktop} />
 
           <section
-            className={cn(
-              (images.length > 0 || files.length > 0) &&
-                'flex flex-col gap-1.5 p-5',
-            )}
+            className={cn(isDesktop && 'max-h-[15vw] overflow-y-scroll')}
           >
-            {files.map((file, idx) => (
-              <a
-                href={URL.createObjectURL(file.file)}
-                target="_blank"
-                key={idx}
-                className="flex w-full items-center gap-2 rounded-xl bg-[#DCDCDC] p-4"
-              >
+            <ul
+              className={cn(
+                (images.length > 0 || files.length > 0) &&
+                  'flex flex-col gap-1.5 p-5',
+              )}
+            >
+              {files.map((file, idx) => (
+                <a
+                  href={URL.createObjectURL(file.file)}
+                  target="_blank"
+                  key={idx}
+                  className="flex w-full items-center gap-2 rounded-xl bg-[#DCDCDC] p-4"
+                >
+                  <img
+                    src={DocumentIcon}
+                    alt="Uploaded File"
+                    className="size-8"
+                  />
+                  <p className="text-sm font-semibold">{file.file.name}</p>
+                  {file.file.webkitRelativePath}
+                </a>
+              ))}
+              {images.map((image, idx) => (
                 <img
-                  src={DocumentIcon}
-                  alt="Uploaded File"
-                  className="size-8"
+                  key={idx}
+                  src={image.url}
+                  alt="Preview image"
+                  className="aspect-auto w-full overflow-hidden rounded-2xl object-cover"
                 />
-                <p className="text-sm font-semibold">{file.file.name}</p>
-                {file.file.webkitRelativePath}
-              </a>
-            ))}
-            {images.map((image, idx) => (
-              <img
-                key={idx}
-                src={image.url}
-                alt="Preview image"
-                className="aspect-auto w-full overflow-hidden rounded-2xl object-cover"
-              />
-            ))}
+              ))}
+            </ul>
           </section>
         </form>
       </Form>
@@ -135,6 +154,7 @@ function AddAnnouncementPage(): JSX.Element {
         setImages={setImages}
         files={files}
         setFiles={setFiles}
+        isDesktop={isDesktop}
       />
     </main>
   );
