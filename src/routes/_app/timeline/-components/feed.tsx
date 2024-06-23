@@ -3,6 +3,9 @@ import { Info } from '~/api/generated';
 import UserInfoProfile from '~/components/user/user-info';
 import Tag from './tag';
 import { InView } from 'react-intersection-observer';
+import { extractUrls } from '~/lib/url-parser';
+import { useQueries } from '@tanstack/react-query';
+import { api } from '~/api/client';
 
 type ComponentProps = {
   infos: Info[];
@@ -52,13 +55,47 @@ function UserInfo({ info }: { info: Info }) {
 }
 
 function TextSection({ title, content }: { title: string; content: string }) {
+  const urls = extractUrls(content);
+
+  const { data, isFetching } = useQueries({
+    queries: urls.map((url) => ({
+      queryKey: ['openGraph', url],
+      queryFn: () => api.openGraph.openGraphScrape({ url }),
+    })),
+    combine: (result) => {
+      return {
+        data: result.map((r) => r.data),
+        isFetching: result.some((r) => r.isFetching),
+      };
+    },
+  });
+
+  if (isFetching) return <div>Loading...</div>;
+
+  if (data.length > 0) console.log(data);
+
   return (
     <div>
       <h1 className="mb-2 text-[20px] font-semibold">{title}</h1>
-      <div
-        className="text-base"
-        dangerouslySetInnerHTML={{ __html: content }}
-      />
+      <div className="text-base">
+        {/* Render text as normal, but if link make it into anchor tag, split it on space and newline */}
+        {content.split(/[\s\n]/).map((word, idx) => {
+          const isLink = urls.includes(word);
+          return isLink ? (
+            <a
+              key={idx}
+              href={word}
+              target="_blank"
+              rel="noreferrer"
+              className="text-blue-400"
+            >
+              {word}
+            </a>
+          ) : (
+            <>{word} </>
+          );
+        })}
+      </div>
     </div>
   );
 }

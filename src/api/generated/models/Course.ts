@@ -7,10 +7,11 @@ export type Course = {
   curriculumYear: number;
   major: 'IF' | 'STI' | 'OTHER';
   type: 'Mandatory' | 'Elective';
-  semester: number;
-  semesterCode: 'Ganjil' | 'Genap';
+  semester: number | null;
+  semesterCode: 'Ganjil' | 'Genap' | null;
   code: string;
   name: string;
-  credits: number;
+  credits: number | null;
+  dingdongUrl: string | null;
 };
 

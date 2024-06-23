@@ -112,12 +112,14 @@ export class InfoService {
     unread = 'false',
     userId,
     offset,
+    sort = 'newest',
   }: {
     search?: string,
     category?: string,
     unread?: 'true' | 'false',
     userId?: string,
     offset?: number | null,
+    sort?: 'oldest' | 'newest',
   }): CancelablePromise<{
     infos: Array<Info>;
   }> {
@@ -130,6 +132,7 @@ export class InfoService {
         'unread': unread,
         'userId': userId,
         'offset': offset,
+        'sort': sort,
       },
       errors: {
         400: `Bad request`,
