@@ -7,9 +7,13 @@ export type Testimoni = {
   userId: string | null;
   courseId: string;
   userName: string | null;
-  overview: string;
-  assignments: string;
-  lecturer: string;
+  impressions: string | null;
+  challenges: string | null;
+  advice: string | null;
+  overview: string | null;
+  assignments: string | null;
+  lecturer_review: string | null;
+  lecturer: string | null;
   createdAt: string;
 };
 
