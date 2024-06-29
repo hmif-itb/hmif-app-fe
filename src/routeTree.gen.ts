@@ -30,6 +30,7 @@ import { Route as AppSettingsSettingsItemCoursesIndexImport } from './routes/_ap
 import { Route as AppHomeTestimoniTypeIndexImport } from './routes/_app/home/testimoni/$type/index'
 import { Route as AppSettingsSettingsItemCoursesAddIndexImport } from './routes/_app/settings/_settings-item/courses/add/index'
 import { Route as AppHomeTestimoniTypeSemesterIndexImport } from './routes/_app/home/testimoni/$type/$semester/index'
+import { Route as AppHomeTestimoniTypeSemesterCourseIdIndexImport } from './routes/_app/home/testimoni_/$type/$semester/$courseId/index'
 
 // Create Virtual Routes
 
@@ -129,6 +130,12 @@ const AppHomeTestimoniTypeSemesterIndexRoute =
   AppHomeTestimoniTypeSemesterIndexImport.update({
     path: '/$type/$semester/',
     getParentRoute: () => AppHomeTestimoniRoute,
+  } as any)
+
+const AppHomeTestimoniTypeSemesterCourseIdIndexRoute =
+  AppHomeTestimoniTypeSemesterCourseIdIndexImport.update({
+    path: '/home/testimoni/$type/$semester/$courseId/',
+    getParentRoute: () => AppRoute,
   } as any)
 
 // Populate the FileRoutesByPath interface
@@ -261,6 +268,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSettingsSettingsItemCoursesAddIndexImport
       parentRoute: typeof AppSettingsSettingsItemImport
     }
+    '/_app/home/testimoni/$type/$semester/$courseId/': {
+      id: '/_app/home/testimoni/$type/$semester/$courseId/'
+      path: '/home/testimoni/$type/$semester/$courseId'
+      fullPath: '/home/testimoni/$type/$semester/$courseId'
+      preLoaderRoute: typeof AppHomeTestimoniTypeSemesterCourseIdIndexImport
+      parentRoute: typeof AppImport
+    }
   }
 }
 
@@ -287,6 +301,7 @@ export const routeTree = rootRoute.addChildren({
     AppTimelineIndexRoute,
     AppHomeDingdongIndexRoute,
     AppTimelineInfoIdIndexRoute,
+    AppHomeTestimoniTypeSemesterCourseIdIndexRoute,
   }),
   LoginIndexLazyRoute,
 })
@@ -316,7 +331,8 @@ export const routeTree = rootRoute.addChildren({
         "/_app/home/",
         "/_app/timeline/",
         "/_app/home/dingdong/",
-        "/_app/timeline/$infoId/"
+        "/_app/timeline/$infoId/",
+        "/_app/home/testimoni/$type/$semester/$courseId/"
       ]
     },
     "/_app/settings": {
@@ -395,6 +411,10 @@ export const routeTree = rootRoute.addChildren({
     "/_app/settings/_settings-item/courses/add/": {
       "filePath": "_app/settings/_settings-item/courses/add/index.tsx",
       "parent": "/_app/settings/_settings-item"
+    },
+    "/_app/home/testimoni/$type/$semester/$courseId/": {
+      "filePath": "_app/home/testimoni_/$type/$semester/$courseId/index.tsx",
+      "parent": "/_app"
     }
   }
 }

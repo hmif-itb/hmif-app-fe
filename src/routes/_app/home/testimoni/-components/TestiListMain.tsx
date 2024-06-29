@@ -1,4 +1,4 @@
-import { Link } from '@tanstack/react-router';
+import { Link, useParams } from '@tanstack/react-router';
 import SearchIcon from '~/assets/icons/searchbar/search.svg';
 import { Button } from '~/components/ui/button';
 
@@ -13,6 +13,8 @@ export default function TestiListMain({
   major,
   linkFrom,
 }: ComponentProps): JSX.Element {
+  const { type } = useParams({ strict: false });
+
   return (
     <section className="flex-1 overflow-y-auto rounded-t-2xl bg-[url('/images/courses/gradient.png')] bg-cover bg-no-repeat px-4 py-10 lg:rounded-none">
       <div className="mb-6 flex items-center justify-between">
@@ -40,12 +42,14 @@ export default function TestiListMain({
             />
           </button>
         </div>
-
         <ul className="flex w-full flex-col justify-between gap-4">
           {children}
         </ul>
 
-        <Link form={linkFrom} to="..">
+        <Link
+          from={linkFrom}
+          to={type === 'mata-kuliah-umum' ? '/home/testimoni' : '..'}
+        >
           <Button className="w-full bg-[#E8C55F] font-medium text-[#30764B]">
             Back
           </Button>
