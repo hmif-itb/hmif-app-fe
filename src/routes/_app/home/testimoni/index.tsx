@@ -23,6 +23,7 @@ function TestimoniPage(): JSX.Element {
           />
         )),
         <TestiListItem
+          key={3}
           linkFrom={Route.fullPath}
           linkTo="./mata-kuliah-umum/other"
           icon={BookMarkIcon}

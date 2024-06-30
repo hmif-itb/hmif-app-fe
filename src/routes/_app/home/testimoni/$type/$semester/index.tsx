@@ -33,6 +33,7 @@ function TestimoniCoursesPage(): JSX.Element {
           ? `${major} / ${semester ? 'Semester ' + semString : 'Mata Kuliah Pilihan'}`
           : undefined
       }
+      showSearchbar
     >
       {data?.courses.map((course, idx) => (
         <TestiListItem

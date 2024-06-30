@@ -5,6 +5,8 @@ import UserInfo from '~/components/user/user-info';
 import TestiContent from './-components/TestiContent';
 import { cn } from '~/lib/utils';
 import { z } from 'zod';
+import { useQuery } from '@tanstack/react-query';
+import { api } from '~/api/client';
 
 const testiSearchSchema = z.object({
   page: z.number().optional(),
@@ -18,15 +20,32 @@ export const Route = createFileRoute(
 });
 
 function TestimoniListPage(): JSX.Element {
-  const { type } = Route.useParams();
+  const { type, courseId } = Route.useParams();
   const { page } = Route.useSearch();
+  const currentPage = page ?? 1;
 
-  const testiLength = 3;
+  const { data } = useQuery({
+    queryKey: ['testimoni', courseId],
+    queryFn: () => api.testimoni.getTestimoniByCourseId({ courseId }),
+    select: (data) => ({
+      content: data[currentPage - 1],
+      length: data.length,
+    }),
+  });
+  const { data: courseData } = useQuery({
+    queryKey: ['course', courseId],
+    queryFn: () => api.course.getCourseById({ courseId }),
+    select: ({ name, code }) => ({
+      name,
+      code,
+    }),
+  });
+
+  const testiLength = data?.length ?? 0;
   const pages =
     testiLength <= 5
       ? [...Array(testiLength).keys()].map((i) => (i + 1).toString())
       : ['1', '2', '...', (testiLength - 1).toString(), testiLength.toString()];
-  const currentPage = page ?? 1;
 
   return (
     <main className="h-screen w-full overflow-auto bg-[url('/images/courses/gradient.png')] p-8 pb-12">
@@ -42,14 +61,14 @@ function TestimoniListPage(): JSX.Element {
           </Button>
         </Link>
         <h1 className="text-3xl font-semibold">
-          II2220 Manajemen Sumber Daya STI
+          {courseData?.code} {courseData?.name}
         </h1>
       </header>
 
       <section className="mt-9 w-full rounded-lg bg-white p-6">
         <UserInfo
-          name="Michael"
-          email="2021"
+          name={data?.content?.userName ?? ''}
+          email=""
           imageURL=""
           avatarClassName="size-11"
         />
@@ -57,21 +76,34 @@ function TestimoniListPage(): JSX.Element {
         <div className="mt-6 flex w-full flex-col gap-4">
           <TestiContent
             title={type === 'teknik-informatika' ? 'Overview' : 'Kesan'}
-            content="Belajar COBIT COBIT trus kita itu harus mikirin bisnis dlu baru ke it nya. Intinya gimana it mendukung bisnis lah ya. Tapi pembawaan bapaknya oke banget sih trus banyak cerita pengamannya juga jadi ga ngantuk. Bapaknya sering banget cerita di 1 slide itu 30 menit lebih trus slide lainnya di skip (tapi bakal masuk ujian)"
+            content={
+              (type === 'teknik-informatika'
+                ? data?.content?.overview
+                : data?.content?.impressions) ?? ''
+            }
           />
 
           <TestiContent
             title={type === 'teknik-informatika' ? 'Tugas' : 'Tantangan'}
-            content="Bapaknya sering banget ngasih tugas tapi deadline nya mepet banget atau ngasih tugas tapi instruksi nya ga jelas gitu, trus bakal upload instruksinya tuh biasanya di hari pengumpulan waktu bapaknya assign tugas di edunex. Trus ujiannya juga agak gws sih karna harus bener2 ngapal gitu untuk pilgan nya (karna rasanya di beberapa pilihan itu bener tapi harus sesuai ppt atau cobit)."
+            content={
+              (type === 'teknik-informatika'
+                ? data?.content?.assignments
+                : data?.content?.challenges) ?? ''
+            }
           />
 
           <TestiContent
             title={type === 'teknik-informatika' ? 'Dosen' : 'Saran'}
-            content="Baca dan hapal cobit trus tubes nya jangan ngilang karna tubesnya tuh bergantung gitu dari bagian atas sampai bagian bawah"
+            content={
+              (type === 'teknik-informatika'
+                ? data?.content?.lecturer_review
+                : data?.content?.advice) ?? ''
+            }
           />
 
           <p className="text-sm text-[#2F754A]">
-            <span className="font-semibold">Dosen:</span> Windy Gambetta
+            <span className="font-semibold">Dosen:</span>{' '}
+            {data?.content?.lecturer}
           </p>
         </div>
       </section>
@@ -101,6 +133,7 @@ function TestimoniListPage(): JSX.Element {
               </div>
             ) : (
               <Link
+                key={page}
                 search={{
                   page: page !== '...' ? parseInt(page) : currentPage,
                 }}

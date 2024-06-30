@@ -6,12 +6,14 @@ type ComponentProps = {
   children?: JSX.Element[];
   major?: string;
   linkFrom: string;
+  showSearchbar?: boolean;
 };
 
 export default function TestiListMain({
   children,
   major,
   linkFrom,
+  showSearchbar = false,
 }: ComponentProps): JSX.Element {
   const { type } = useParams({ strict: false });
 
@@ -26,22 +28,25 @@ export default function TestiListMain({
 
       <div className="flex w-full flex-col gap-8">
         {/* TODO: Update this searchbar */}
-        <div className="flex h-12 rounded-l-lg rounded-r-xl bg-neutral-light">
-          <input
-            type="text"
-            placeholder="Search..."
-            className="w-full rounded-l-lg px-4 font-semibold"
-            name=""
-            id=""
-          />
-          <button className="flex size-12 rounded-lg bg-green-900">
-            <img
-              alt="Search Button"
-              src={SearchIcon}
-              className="m-auto size-5"
+        {showSearchbar && (
+          <div className="flex h-12 rounded-l-lg rounded-r-xl bg-neutral-light">
+            <input
+              type="text"
+              placeholder="Search..."
+              className="w-full rounded-l-lg px-4 font-semibold"
+              name=""
+              id=""
             />
-          </button>
-        </div>
+            <button className="flex size-12 rounded-lg bg-green-900">
+              <img
+                alt="Search Button"
+                src={SearchIcon}
+                className="m-auto size-5"
+              />
+            </button>
+          </div>
+        )}
+
         <ul className="flex w-full flex-col justify-between gap-4">
           {children}
         </ul>
