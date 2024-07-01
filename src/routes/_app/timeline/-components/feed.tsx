@@ -11,7 +11,7 @@ type ComponentProps = {
 
 export default function Feed({ infos, onInView }: ComponentProps) {
   return (
-    <div className="mx-5">
+    <div className="w-full">
       {infos.map((info, idx) =>
         idx < infos.length - 2 ? (
           <UserInfo key={info.id} info={info} />

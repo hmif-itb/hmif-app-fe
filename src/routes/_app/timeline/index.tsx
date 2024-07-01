@@ -43,8 +43,6 @@ function Timeline() {
       }),
     });
   };
-  // navigate({
-  // })
 
   const setCategory = (value: string) => {
     navigate({

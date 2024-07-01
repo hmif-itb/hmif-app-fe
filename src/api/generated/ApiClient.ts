@@ -17,6 +17,7 @@ import { PushService } from './services/PushService';
 import { ReactionService } from './services/ReactionService';
 import { TestimoniService } from './services/TestimoniService';
 import { UnsubscribeService } from './services/UnsubscribeService';
+import { UserProfileService } from './services/UserProfileService';
 type HttpRequestConstructor = new (config: OpenAPIConfig) => BaseHttpRequest;
 export class ApiClient {
   public readonly auth: AuthService;
@@ -31,6 +32,7 @@ export class ApiClient {
   public readonly reaction: ReactionService;
   public readonly testimoni: TestimoniService;
   public readonly unsubscribe: UnsubscribeService;
+  public readonly userProfile: UserProfileService;
   public readonly request: BaseHttpRequest;
   constructor(config?: Partial<OpenAPIConfig>, HttpRequest: HttpRequestConstructor = FetchHttpRequest) {
     this.request = new HttpRequest({
@@ -56,6 +58,7 @@ export class ApiClient {
     this.reaction = new ReactionService(this.request);
     this.testimoni = new TestimoniService(this.request);
     this.unsubscribe = new UnsubscribeService(this.request);
+    this.userProfile = new UserProfileService(this.request);
   }
 }
 
