@@ -7,6 +7,7 @@ import { cn } from '~/lib/utils';
 import { z } from 'zod';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '~/api/client';
+import { useEffect } from 'react';
 
 const testiSearchSchema = z.object({
   page: z.number().optional(),
@@ -18,6 +19,16 @@ export const Route = createFileRoute(
   component: TestimoniListPage,
   validateSearch: (search) => testiSearchSchema.parse(search),
 });
+
+function generatePageArray(currentPage: number, maxPage: number) {
+  if (maxPage <= 5) {
+    return [...Array(maxPage).keys()].map((i) => (i + 1).toString());
+  } else if (currentPage > 2 && currentPage < maxPage - 1) {
+    return ['1', '...', currentPage.toString(), '...', maxPage.toString()];
+  } else {
+    return ['1', '2', '...', (maxPage - 1).toString(), maxPage.toString()];
+  }
+}
 
 function TestimoniListPage(): JSX.Element {
   const { type, courseId } = Route.useParams();
@@ -42,10 +53,7 @@ function TestimoniListPage(): JSX.Element {
   });
 
   const testiLength = data?.length ?? 0;
-  const pages =
-    testiLength <= 5
-      ? [...Array(testiLength).keys()].map((i) => (i + 1).toString())
-      : ['1', '2', '...', (testiLength - 1).toString(), testiLength.toString()];
+  const pages = generatePageArray(currentPage, testiLength);
 
   return (
     <main className="h-screen w-full overflow-auto bg-[url('/images/courses/gradient.png')] p-8 pb-12">
@@ -115,16 +123,20 @@ function TestimoniListPage(): JSX.Element {
             page: currentPage > 1 ? currentPage - 1 : currentPage,
           })}
         >
-          <Button className="rounded-md bg-[#AAB8AD]" size="icon-md">
+          <Button
+            disabled={currentPage === 1}
+            className="rounded-md bg-[#AAB8AD]"
+            size="icon-md"
+          >
             <ChevronLeft className="size-4" />
           </Button>
         </Link>
 
         <div className="flex items-center justify-center gap-1">
-          {pages.map((page) =>
+          {pages.map((page, idx) =>
             page === '...' ? (
               <div
-                key={page}
+                key={idx}
                 className={cn(
                   'flex size-10 items-center justify-center rounded-md text-white',
                 )}
@@ -133,7 +145,7 @@ function TestimoniListPage(): JSX.Element {
               </div>
             ) : (
               <Link
-                key={page}
+                key={idx}
                 search={{
                   page: page !== '...' ? parseInt(page) : currentPage,
                 }}
@@ -161,7 +173,11 @@ function TestimoniListPage(): JSX.Element {
             page: currentPage < testiLength ? currentPage + 1 : currentPage,
           })}
         >
-          <Button className="rounded-md bg-[#AAB8AD]" size="icon-md">
+          <Button
+            disabled={currentPage === testiLength}
+            className="rounded-md bg-[#AAB8AD]"
+            size="icon-md"
+          >
             <ChevronRight className="size-4" />
           </Button>
         </Link>
