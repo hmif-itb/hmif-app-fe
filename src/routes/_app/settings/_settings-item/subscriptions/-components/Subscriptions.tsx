@@ -1,38 +1,54 @@
-import { useState } from 'react';
-import SubscriptionCard, { SubscriptionData } from './SubscriptionCard';
-
-const subscriptionData: SubscriptionData[] = [
-  {
-    imageSrc: '/logo/hmif.png',
-    name: 'SPARTA',
-    active: true,
-  },
-  {
-    imageSrc: '/logo/hmif.png',
-    name: 'SPARTY',
-    active: false,
-  },
-  {
-    imageSrc: '/logo/hmif.png',
-    name: 'SPORTY',
-    active: false,
-  },
-  {
-    imageSrc: '/logo/hmif.png',
-    name: 'LMAO',
-    active: true,
-  },
-];
+// import { createContext, Dispatch, SetStateAction, useState } from 'react';
+import SubscriptionCard from './SubscriptionCard';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { api } from '~/api/client';
 
 export default function Subscriptions() {
-  const [currSubscriptions, setCurrSubscriptions] = useState(subscriptionData);
+  return <SubscriptionComponent />;
+}
 
-  const handleSwitchChange = (name: string, active: boolean) => {
-    setCurrSubscriptions((prevSubscriptions) =>
-      prevSubscriptions.map((subscription) =>
-        subscription.name === name ? { ...subscription, active } : subscription,
-      ),
-    );
+function SubscriptionComponent() {
+  const queryClient = useQueryClient();
+
+  const { data: categories } = useQuery({
+    queryKey: ['categories'],
+    queryFn: () => api.category.getListCategory(),
+  });
+  const { data: unsubscribed } = useQuery({
+    queryKey: ['unsubscribe'],
+    queryFn: () => api.unsubscribe.getListUserUnsubscribeCategory(),
+  });
+
+  const unsubscribeMutation = useMutation({
+    mutationFn: async (categoryId: string) => {
+      await api.unsubscribe.postUserUnsubscribeCategory({
+        requestBody: { categoryId },
+      });
+    },
+    onSuccess: () => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries({ queryKey: ['unsubscribe'] });
+    },
+  });
+
+  const subscribeMutation = useMutation({
+    mutationFn: async (categoryId: string) => {
+      await api.unsubscribe.deleteUserUnsubscribeCategory({
+        requestBody: { categoryId },
+      });
+    },
+    onSuccess: () => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries({ queryKey: ['unsubscribe'] });
+    },
+  });
+
+  const handleSwitchChange = (id: string, active: boolean) => {
+    if (active) {
+      subscribeMutation.mutate(id);
+    } else {
+      unsubscribeMutation.mutate(id);
+    }
   };
 
   return (
@@ -43,10 +59,13 @@ export default function Subscriptions() {
         </h1>
       </div>
       <div className="flex flex-col justify-between gap-4">
-        {currSubscriptions.map((subscription) => (
+        {categories?.categories.map((category) => (
           <SubscriptionCard
-            key={subscription.name}
-            subscriptionData={subscription}
+            key={category.id}
+            categoryData={category}
+            unsubscribed={
+              unsubscribed?.categoryId.includes(category.id) ? true : false
+            }
             onSwitchChange={handleSwitchChange}
           />
         ))}
