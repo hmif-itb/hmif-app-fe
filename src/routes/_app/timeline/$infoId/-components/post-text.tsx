@@ -1,4 +1,4 @@
-import { extractUrls } from '~/lib/url-parser';
+import { extractUrls, removePunctuation } from '~/lib/url-parser';
 import { IPost } from '../-interface/IPost';
 import { useQueries } from '@tanstack/react-query';
 import { api } from '~/api/client';
@@ -35,11 +35,12 @@ const PostText = ({
       <div className="text-base">
         {/* Render text as normal, but if link make it into anchor tag, split it on space and newline */}
         {content.split(/[\s\n]/).map((word, idx) => {
-          const isLink = urls.includes(word);
+          const cleanedWord = removePunctuation(word);
+          const isLink = urls.includes(cleanedWord);
           return isLink ? (
             <a
               key={idx}
-              href={word}
+              href={cleanedWord}
               target="_blank"
               rel="noreferrer"
               className="text-blue-400"
@@ -48,6 +49,43 @@ const PostText = ({
             </a>
           ) : (
             <>{word} </>
+          );
+        })}
+      </div>
+      <div className="flex flex-col gap-2">
+        {data.map((d, idx) => {
+          // Check if opengraph data is available
+          if (!d) return null;
+
+          return (
+            <a key={idx} href={d.ogUrl}>
+              {/* Check if url have opengraph image */}
+              {d.ogImage && d.ogImage.length > 0 ? (
+                <div className="flex items-center gap-4">
+                  <img
+                    alt={d.ogImage[0].alt}
+                    src={d.ogImage[0].url}
+                    className="size-16 object-cover shadow-md"
+                  />
+                  <div>
+                    <div className="line-clamp-1 font-bold">{d.ogTitle}</div>
+                    <div className="line-clamp-1 text-xs">
+                      {d.ogDescription}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex h-10 items-center gap-2">
+                  <div className="h-full w-2 bg-green-400"></div>
+                  <div>
+                    <div className="line-clamp-1 font-bold">{d.ogTitle}</div>
+                    <div className="line-clamp-1 text-xs">
+                      {d.ogDescription}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </a>
           );
         })}
       </div>

@@ -32,3 +32,19 @@ export function extractUrls(text: string): string[] {
   const urls = text.match(urlRegex);
   return urls || [];
 }
+
+/**
+ * Removes all punctuation and symbol characters from the start and end of a string.
+ *
+ * @param {string} str - The input string from which to remove punctuation.
+ * @returns {string} - The resulting string with punctuation removed from the start and end.
+ *
+ * @example
+ * // Returns "Hello, world"
+ * removePunctuation("!Hello, world!");
+ */
+export function removePunctuation(str: string): string {
+  // Regular expression to match punctuation at the start and end of a string
+  const punctuationRegex = /^[\p{P}\p{S}]+|[\p{P}\p{S}]+$/gu;
+  return str.replace(punctuationRegex, '');
+}
