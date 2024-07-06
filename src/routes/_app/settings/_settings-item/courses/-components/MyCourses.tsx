@@ -94,9 +94,9 @@ export default function MyCourses() {
               </Button>
               <Button
                 onClick={() => {
-                  deletedCourses.forEach((e) =>
-                    deleteCourseMutation.mutate({ courseId: e }),
-                  );
+                  deleteCourseMutation.mutate({
+                    requestBody: { courseIds: deletedCourses },
+                  });
                   setIsEditing(false);
                 }}
                 className="w-1/2 bg-[#E8C55F] font-medium text-[#30764B]"

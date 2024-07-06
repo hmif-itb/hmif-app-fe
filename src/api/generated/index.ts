@@ -39,3 +39,4 @@ export { PushService } from './services/PushService';
 export { ReactionService } from './services/ReactionService';
 export { TestimoniService } from './services/TestimoniService';
 export { UnsubscribeService } from './services/UnsubscribeService';
+export { UserProfileService } from './services/UserProfileService';
