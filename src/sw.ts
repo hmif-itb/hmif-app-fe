@@ -23,7 +23,8 @@ self.addEventListener('push', (e) => {
     const message = e.data.json();
     e.waitUntil(
       self.registration.showNotification(message.title, {
-        badge: '/favicon-32x32.png',
+        icon: '/icon-foreground.png',
+        badge: '/logo-nobg-256x256.png',
         ...message.options,
       }),
     );
@@ -32,6 +33,29 @@ self.addEventListener('push', (e) => {
   }
 });
 
+self.addEventListener('notificationclick', (e) => {
+  e.notification.close();
+  const rootUrl = new URL('/', location.href);
+  if (e.notification.data && e.notification.data.url) {
+    rootUrl.pathname = e.notification.data.url;
+  }
+  const url = rootUrl.href;
+  e.waitUntil(
+    self.clients.matchAll().then((clients) => {
+      for (const client of clients) {
+        if (
+          client.url === url &&
+          'focus' in client &&
+          typeof client.focus === 'function'
+        ) {
+          return client.focus();
+        }
+      }
+
+      return self.clients.openWindow(url);
+    }),
+  );
+});
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
   if (
