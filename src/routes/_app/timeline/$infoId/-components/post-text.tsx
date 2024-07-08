@@ -58,7 +58,7 @@ const PostText = ({
           if (!d) return null;
 
           return (
-            <a key={idx} href={d.ogUrl}>
+            <a key={idx} href={d.ogUrl} target="_blank">
               {/* Check if url have opengraph image */}
               {d.ogImage && d.ogImage.length > 0 ? (
                 <div className="flex items-center gap-4">
