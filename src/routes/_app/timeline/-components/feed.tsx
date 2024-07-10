@@ -91,7 +91,7 @@ function TextSection({ title, content }: { title: string; content: string }) {
               {word}
             </a>
           ) : (
-            <>{word} </>
+            <span key={idx}>{word} </span>
           );
         })}
       </div>
