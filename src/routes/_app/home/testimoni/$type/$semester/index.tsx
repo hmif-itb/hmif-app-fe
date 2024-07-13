@@ -5,6 +5,7 @@ import { api } from '~/api/client';
 import TestiListItem from '../../-components/TestiListItem';
 import FolderIcon from '~/assets/icons/testimoni/folder.svg';
 import { majorMap } from '../../-constants';
+import TestiListItemLoader from '../../-components/TestiListItemLoader';
 
 export const Route = createFileRoute('/_app/home/testimoni/$type/$semester/')({
   component: TestimoniCoursesPage,
@@ -35,15 +36,21 @@ function TestimoniCoursesPage(): JSX.Element {
       }
       showSearchbar
     >
-      {data?.courses.map((course, idx) => (
-        <TestiListItem
-          linkFrom={Route.fullPath}
-          linkTo={`./${course.id}`}
-          icon={FolderIcon}
-          title={course.name}
-          key={idx}
-        />
-      ))}
+      {data?.courses && data?.courses.length > 0
+        ? data?.courses.map((course, idx) => (
+            <TestiListItem
+              linkFrom={Route.fullPath}
+              linkTo={`./${course.id}`}
+              icon={FolderIcon}
+              title={course.name}
+              key={idx}
+            />
+          ))
+        : [
+            <TestiListItemLoader />,
+            <TestiListItemLoader />,
+            <TestiListItemLoader />,
+          ]}
     </TestiListMain>
   );
 }
