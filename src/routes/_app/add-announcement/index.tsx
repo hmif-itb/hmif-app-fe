@@ -14,6 +14,7 @@ import Headline from './-components/Headline';
 import MediaInput from './-components/MediaInput';
 import TopSection from './-components/TopSection';
 import { FormSchema, FormSchemaType } from './-constants';
+import toast from 'react-hot-toast';
 
 export const Route = createFileRoute('/_app/add-announcement/')({
   component: AddAnnouncementPage,
@@ -28,11 +29,14 @@ type ComponentProps = {
   isDesktop?: boolean;
 };
 
+const TOAST_ID = 'add-announcement-toast';
+
 export function AddAnnouncementPage({
   isDesktop,
 }: ComponentProps): JSX.Element {
   const [images, setImages] = useState<FileUpload[]>([]);
   const [files, setFiles] = useState<FileUpload[]>([]);
+  const [pendingUpload, setPendingUpload] = useState<string[]>([]);
 
   const navigate = useNavigate();
 
@@ -51,7 +55,12 @@ export function AddAnnouncementPage({
 
   const postInfo = useMutation({
     mutationFn: api.info.createInfo.bind(api.info),
-    onSuccess: isDesktop ? desktopHandleSuccess : mobileHandleSuccess,
+    onSuccess: () => {
+      toast.success('Announced!', { id: TOAST_ID });
+      setPendingUpload([]);
+      setTimeout(isDesktop ? desktopHandleSuccess : mobileHandleSuccess, 1000);
+    },
+    onError: () => toast.error('Failed to announce', { id: TOAST_ID }),
   });
 
   const postMediaUpload = useMutation({
@@ -59,25 +68,34 @@ export function AddAnnouncementPage({
   });
 
   const onSubmit = async (values: FormSchemaType) => {
+    if (!values.categories.some((c) => c.type === 'KATEGORI')) {
+      return toast.error('Please select at least one category', {
+        id: TOAST_ID,
+      });
+    }
+
+    toast.loading('Please wait...', { id: TOAST_ID });
     try {
-      const presignedUrls: PresignedURL[] = await Promise.all(
-        images.map((i) =>
-          postMediaUpload.mutateAsync({
-            requestBody: {
-              fileName: i.file.name.split('.')[0],
-              fileType: i.file.name.split('.').at(-1) ?? '',
-            },
-          }),
-        ),
-      );
-      await Promise.all(
-        presignedUrls.map((p, idx) =>
-          fetch(p.presignedUrl, {
-            method: 'PUT',
-            body: images[idx].file,
-          }),
-        ),
-      );
+      if (pendingUpload.length === 0) {
+        const presignedUrls: PresignedURL[] = await Promise.all(
+          images.map((i) =>
+            postMediaUpload.mutateAsync({
+              requestBody: {
+                fileName: i.file.name.split('.')[0],
+                fileType: i.file.name.split('.').at(-1) ?? '',
+              },
+            }),
+          ),
+        );
+        await Promise.all(
+          presignedUrls.map((p, idx) =>
+            fetch(p.presignedUrl, {
+              method: 'PUT',
+              body: images[idx].file,
+            }).then(() => pendingUpload.push(p.mediaUrl)),
+          ),
+        );
+      }
 
       postInfo.mutate({
         requestBody: {
@@ -86,11 +104,12 @@ export function AddAnnouncementPage({
           forCategories: values.categories
             .filter((c) => c.type === 'KATEGORI')
             .map((c) => c.id),
-          mediaUrls: presignedUrls.map((p) => p.mediaUrl),
+          mediaUrls: pendingUpload,
         },
       });
     } catch (err) {
       console.error(err);
+      toast.error('Failed to announce', { id: TOAST_ID });
     }
   };
 
@@ -106,7 +125,11 @@ export function AddAnnouncementPage({
           className="max-h-full overflow-y-auto"
           onSubmit={form.handleSubmit(onSubmit)}
         >
-          <TopSection form={form} isDialog={isDesktop} />
+          <TopSection
+            form={form}
+            isMutating={postInfo.isPending}
+            isDialog={isDesktop}
+          />
           <Headline form={form} isDesktop={isDesktop} />
           <Content form={form} isDesktop={isDesktop} />
           <Categories form={form} isDesktop={isDesktop} />

@@ -10,6 +10,7 @@ import { queryClient } from '~/api/client';
 import Sentry from '~/instrument';
 import { isMobile, isPWA } from '~/lib/device';
 import AskForInstall from '../components/ask-install';
+import { Toaster } from 'react-hot-toast';
 
 export const Route = createRootRoute({
   component: RootComponent,
@@ -25,7 +26,10 @@ function RootComponent() {
         <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
           <ScrollRestoration getKey={(location) => location.pathname} />
           <Sentry.ErrorBoundary fallback={<div>Something went wrong</div>}>
-            <Outlet />
+            <>
+              <Toaster />
+              <Outlet />
+            </>
           </Sentry.ErrorBoundary>
         </GoogleOAuthProvider>
         <ReactQueryDevtools />

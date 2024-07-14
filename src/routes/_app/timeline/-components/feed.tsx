@@ -6,6 +6,7 @@ import { InView } from 'react-intersection-observer';
 import { extractUrls, removePunctuation } from '~/lib/url-parser';
 import { useQueries } from '@tanstack/react-query';
 import { api } from '~/api/client';
+import FeedLoader from './FeedLoader';
 
 type ComponentProps = {
   infos: Info[];
@@ -15,15 +16,17 @@ type ComponentProps = {
 export default function Feed({ infos, onInView }: ComponentProps) {
   return (
     <div className="w-full">
-      {infos.map((info, idx) =>
-        idx < infos.length - 2 ? (
-          <UserInfo key={info.id} info={info} />
-        ) : (
-          <InView key={info.id} onChange={(inView) => inView && onInView()}>
-            <UserInfo info={info} />
-          </InView>
-        ),
-      )}
+      {infos.length > 0
+        ? infos.map((info, idx) =>
+            idx < infos.length - 2 ? (
+              <UserInfo key={info.id} info={info} />
+            ) : (
+              <InView key={info.id} onChange={(inView) => inView && onInView()}>
+                <UserInfo info={info} />
+              </InView>
+            ),
+          )
+        : [<FeedLoader />, <FeedLoader />]}
     </div>
   );
 }
@@ -91,7 +94,7 @@ function TextSection({ title, content }: { title: string; content: string }) {
               {word}
             </a>
           ) : (
-            <>{word} </>
+            <span key={idx}>{word} </span>
           );
         })}
       </div>
