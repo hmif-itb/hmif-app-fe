@@ -57,7 +57,8 @@ function InfoDetail() {
           isActive={activeReaction === 'post'}
           toggleReaction={() => toggleReaction('post')}
         />
-        <CommentForm />
+        <CommentForm repliedInfoId="0" /> 
+        {/* P.S. idk how i should generate the repliedInfoId, sorry. */}
         {comments && (
           <Comments
             comments={comments}
