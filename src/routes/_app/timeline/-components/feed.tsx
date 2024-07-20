@@ -6,6 +6,7 @@ import { InView } from 'react-intersection-observer';
 import { extractUrls, removePunctuation } from '~/lib/url-parser';
 import { useQueries } from '@tanstack/react-query';
 import { api } from '~/api/client';
+import FeedLoader from './FeedLoader';
 
 type ComponentProps = {
   infos: Info[];
@@ -15,15 +16,17 @@ type ComponentProps = {
 export default function Feed({ infos, onInView }: ComponentProps) {
   return (
     <div className="w-full">
-      {infos.map((info, idx) =>
-        idx < infos.length - 2 ? (
-          <UserInfo key={info.id} info={info} />
-        ) : (
-          <InView key={info.id} onChange={(inView) => inView && onInView()}>
-            <UserInfo info={info} />
-          </InView>
-        ),
-      )}
+      {infos.length > 0
+        ? infos.map((info, idx) =>
+            idx < infos.length - 2 ? (
+              <UserInfo key={info.id} info={info} />
+            ) : (
+              <InView key={info.id} onChange={(inView) => inView && onInView()}>
+                <UserInfo info={info} />
+              </InView>
+            ),
+          )
+        : [<FeedLoader />, <FeedLoader />]}
     </div>
   );
 }
@@ -91,7 +94,7 @@ function TextSection({ title, content }: { title: string; content: string }) {
               {word}
             </a>
           ) : (
-            <>{word} </>
+            <span key={idx}>{word} </span>
           );
         })}
       </div>
@@ -149,32 +152,78 @@ function TagSection({ tags }: { tags: string[] }) {
 function ImageSection({ images }: { images: string[] }) {
   if (images.length === 0) return null;
   return (
-    <div className="mt-5 grid grid-cols-2 gap-2 lg:grid-cols-3">
-      <img
-        alt=""
-        className="row-span-2  size-full rounded-lg object-cover shadow-md"
-        src={images[0]}
-      ></img>
-      <img
-        alt=""
-        className="size-full  rounded-lg object-cover shadow-md "
-        src={images[1]}
-      ></img>
-      {images.length <= 3 ? (
-        <img
-          alt=""
-          className="size-full  rounded-lg object-cover shadow-md "
-          src={images[2]}
-        ></img>
-      ) : (
-        <div className="relative text-center">
+    <div className="mt-5 w-full">
+      {images.length === 1 ? (
+        <div className="grid grid-cols-1 gap-4">
+          <div className="relative border">
+            <img
+              src={images[0]}
+              alt="Post"
+              className="size-full rounded-lg object-cover"
+            />
+          </div>
+        </div>
+      ) : images.length === 2 ? (
+        <div className="flex max-h-96 gap-4 overflow-hidden">
+          <div className="relative w-1/2">
+            <img
+              src={images[0]}
+              alt="Post"
+              className="size-full rounded-l-lg border object-cover"
+            />
+          </div>
+          <div className="relative w-1/2">
+            <img
+              src={images[1]}
+              alt="Post"
+              className="size-full rounded-r-lg border object-cover"
+            />
+          </div>
+        </div>
+      ) : images.length === 3 ? (
+        <div className="grid grid-cols-2 gap-4 overflow-hidden">
           <img
-            alt=""
-            className="size-full rounded-lg object-cover shadow-md brightness-50"
+            src={images[0]}
+            alt="Post"
+            className="row-span-2 size-full rounded-l-lg border object-cover"
+          />
+          <img
+            src={images[1]}
+            alt="Post"
+            className="h-96 w-full rounded-tr-lg border object-cover"
+          />
+          <img
             src={images[2]}
-          ></img>
-          <div className="absolute left-[45%] top-[42%] text-lg font-medium text-white">
-            2+
+            alt="Post"
+            className="h-96 w-full rounded-br-lg border object-cover"
+          />
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 gap-4 overflow-hidden">
+          <img
+            alt="Post"
+            className="h-96 w-full rounded-tl-lg border object-cover"
+            src={images[0]}
+          />
+          <img
+            alt="Post"
+            className="h-96 w-full rounded-tr-lg border object-cover"
+            src={images[1]}
+          />
+          <img
+            alt="Post"
+            className="h-96 w-full rounded-bl-lg border object-cover"
+            src={images[2]}
+          />
+          <div className="relative size-full rounded-br-lg border text-center">
+            <img
+              alt="Post"
+              className="h-96 w-full rounded-br-lg border object-cover brightness-50"
+              src={images[3]}
+            />
+            <div className="absolute inset-0 flex items-center justify-center text-lg font-medium text-white">
+              {images.length - 3}+
+            </div>
           </div>
         </div>
       )}

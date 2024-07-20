@@ -14,6 +14,8 @@ import Headline from './-components/Headline';
 import MediaInput from './-components/MediaInput';
 import TopSection from './-components/TopSection';
 import { FormSchema, FormSchemaType } from './-constants';
+import toast from 'react-hot-toast';
+import { XIcon } from 'lucide-react';
 
 export const Route = createFileRoute('/_app/add-announcement/')({
   component: AddAnnouncementPage,
@@ -28,11 +30,14 @@ type ComponentProps = {
   isDesktop?: boolean;
 };
 
+const TOAST_ID = 'add-announcement-toast';
+
 export function AddAnnouncementPage({
   isDesktop,
 }: ComponentProps): JSX.Element {
   const [images, setImages] = useState<FileUpload[]>([]);
   const [files, setFiles] = useState<FileUpload[]>([]);
+  const [pendingUpload, setPendingUpload] = useState<string[]>([]);
 
   const navigate = useNavigate();
 
@@ -51,7 +56,12 @@ export function AddAnnouncementPage({
 
   const postInfo = useMutation({
     mutationFn: api.info.createInfo.bind(api.info),
-    onSuccess: isDesktop ? desktopHandleSuccess : mobileHandleSuccess,
+    onSuccess: () => {
+      toast.success('Announced!', { id: TOAST_ID });
+      setPendingUpload([]);
+      setTimeout(isDesktop ? desktopHandleSuccess : mobileHandleSuccess, 1000);
+    },
+    onError: () => toast.error('Failed to announce', { id: TOAST_ID }),
   });
 
   const postMediaUpload = useMutation({
@@ -59,25 +69,34 @@ export function AddAnnouncementPage({
   });
 
   const onSubmit = async (values: FormSchemaType) => {
+    if (!values.categories.some((c) => c.type === 'KATEGORI')) {
+      return toast.error('Please select at least one category', {
+        id: TOAST_ID,
+      });
+    }
+
+    toast.loading('Please wait...', { id: TOAST_ID });
     try {
-      const presignedUrls: PresignedURL[] = await Promise.all(
-        images.map((i) =>
-          postMediaUpload.mutateAsync({
-            requestBody: {
-              fileName: i.file.name.split('.')[0],
-              fileType: i.file.name.split('.').at(-1) ?? '',
-            },
-          }),
-        ),
-      );
-      await Promise.all(
-        presignedUrls.map((p, idx) =>
-          fetch(p.presignedUrl, {
-            method: 'PUT',
-            body: images[idx].file,
-          }),
-        ),
-      );
+      if (pendingUpload.length === 0) {
+        const presignedUrls: PresignedURL[] = await Promise.all(
+          images.map((i) =>
+            postMediaUpload.mutateAsync({
+              requestBody: {
+                fileName: i.file.name.split('.')[0],
+                fileType: i.file.name.split('.').at(-1) ?? '',
+              },
+            }),
+          ),
+        );
+        await Promise.all(
+          presignedUrls.map((p, idx) =>
+            fetch(p.presignedUrl, {
+              method: 'PUT',
+              body: images[idx].file,
+            }).then(() => pendingUpload.push(p.mediaUrl)),
+          ),
+        );
+      }
 
       postInfo.mutate({
         requestBody: {
@@ -86,12 +105,23 @@ export function AddAnnouncementPage({
           forCategories: values.categories
             .filter((c) => c.type === 'KATEGORI')
             .map((c) => c.id),
-          mediaUrls: presignedUrls.map((p) => p.mediaUrl),
+          mediaUrls: pendingUpload,
         },
       });
     } catch (err) {
       console.error(err);
+      toast.error('Failed to announce', { id: TOAST_ID });
     }
+  };
+
+  const deleteById = (images: boolean, idx: number) => {
+    images
+      ? setImages((prev) => {
+          return prev.filter((image, index) => index !== idx);
+        })
+      : setFiles((prev) => {
+          return prev.filter((file, index) => index !== idx);
+        });
   };
 
   return (
@@ -106,13 +136,20 @@ export function AddAnnouncementPage({
           className="max-h-full overflow-y-auto"
           onSubmit={form.handleSubmit(onSubmit)}
         >
-          <TopSection form={form} isDialog={isDesktop} />
+          <TopSection
+            form={form}
+            isMutating={postInfo.isPending}
+            isDialog={isDesktop}
+          />
           <Headline form={form} isDesktop={isDesktop} />
           <Content form={form} isDesktop={isDesktop} />
           <Categories form={form} isDesktop={isDesktop} />
+          {/* <ImageSection images={images} /> */}
 
           <section
-            className={cn(isDesktop && 'max-h-[15vw] overflow-y-scroll')}
+            className={cn(
+              isDesktop && 'max-h-[15vw] w-[62vw] overflow-y-scroll',
+            )}
           >
             <ul
               className={cn(
@@ -120,30 +157,50 @@ export function AddAnnouncementPage({
                   'flex flex-col gap-1.5 p-5',
               )}
             >
-              {files.map((file, idx) => (
-                <a
-                  href={URL.createObjectURL(file.file)}
-                  target="_blank"
-                  key={idx}
-                  className="flex w-full items-center gap-2 rounded-xl bg-[#DCDCDC] p-4"
-                >
-                  <img
-                    src={DocumentIcon}
-                    alt="Uploaded File"
-                    className="size-8"
-                  />
-                  <p className="text-sm font-semibold">{file.file.name}</p>
-                  {file.file.webkitRelativePath}
-                </a>
-              ))}
-              {images.map((image, idx) => (
-                <img
-                  key={idx}
-                  src={image.url}
-                  alt="Preview image"
-                  className="aspect-auto w-full overflow-hidden rounded-2xl object-cover"
-                />
-              ))}
+              <div className="mb-4 flex gap-2 overflow-x-auto">
+                {images.map((image, idx) => (
+                  <div key={idx} className="relative">
+                    <a href={URL.createObjectURL(image.file)} target="_blank">
+                      <img
+                        src={image.url}
+                        alt="Preview image"
+                        className="aspect-auto size-36 min-w-36 flex-nowrap overflow-hidden rounded-2xl border object-cover"
+                      />
+                    </a>
+                    <button
+                      className="absolute right-2.5 top-2.5 rounded-full border-2 border-black bg-gray-300"
+                      onClick={() => deleteById(true, idx)}
+                    >
+                      <XIcon className="size-5 rounded-full" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+              <div className="mb-4 flex flex-col gap-2">
+                {files.map((file, idx) => (
+                  <div key={idx} className="relative">
+                    <a
+                      href={URL.createObjectURL(file.file)}
+                      target="_blank"
+                      className="flex w-full items-center gap-2 rounded-xl bg-[#DCDCDC] p-4"
+                    >
+                      <img
+                        src={DocumentIcon}
+                        alt="Uploaded File"
+                        className="size-8"
+                      />
+                      <p className="text-sm font-semibold">{file.file.name}</p>
+                      {file.file.webkitRelativePath}
+                    </a>
+                    <button
+                      className="absolute right-5 top-5 rounded-full"
+                      onClick={() => deleteById(false, idx)}
+                    >
+                      <XIcon className="size-6 rounded-full border-black hover:border-2" />
+                    </button>
+                  </div>
+                ))}
+              </div>
             </ul>
           </section>
         </form>

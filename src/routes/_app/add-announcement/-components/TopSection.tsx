@@ -8,11 +8,13 @@ import { DialogClose } from '~/components/ui/dialog';
 
 type ComponentProps = {
   form: UseFormReturn<FormSchemaType>;
+  isMutating: boolean;
   isDialog?: boolean;
 };
 
 export default function TopSection({
   form,
+  isMutating,
   isDialog,
 }: ComponentProps): JSX.Element {
   const router = useRouter();
@@ -48,6 +50,7 @@ export default function TopSection({
           </Button>
         )}
         <Button
+          disabled={isMutating}
           type="submit"
           className="bg-[#305138]"
           size="sm"
