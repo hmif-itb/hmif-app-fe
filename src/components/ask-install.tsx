@@ -6,29 +6,49 @@ import {
   CarouselContent,
   CarouselItem,
 } from './ui/carousel';
+import { isiOS } from '~/lib/device';
 
 export default function AskForInstall() {
-  // return isiOS() ? <IOSInstall /> : null;
-  return <IOSInstall />;
+  const isIos = isiOS();
+  return <InstallTutorial isIos={isIos} />;
 }
 
 const iosImages = Array.from({ length: 5 }, (_, i) => i + 1).map(
   (i) => `/img/install/iphone${i}.png`,
 );
-const help = [
+const iosHelp = [
   "Click the 'Share' button",
   "Select 'Add to Home Screen'",
   "Select 'Add to Home Screen'",
   "Click 'Add'",
   'Welcome PIPS!',
 ];
+const iosDimensions = { height: 926, width: 428 };
 
-function IOSInstall() {
-  const height = Math.min(window.innerHeight, (926 / 428) * window.innerWidth);
-  const width = (428 / 926) * height;
+const androidImages = Array.from({ length: 4 }, (_, i) => i + 1).map(
+  (i) => `/img/install/android${i}.png`,
+);
+const androidHelp = [
+  'Click the three dots button',
+  'Select "Add to Home Screen" option',
+  'Select the "Install" option',
+  'Select the "Install" option',
+];
+const androidDimensions = { height: 916, width: 412 };
+
+function InstallTutorial({ isIos }: { isIos: boolean }) {
+  const dimensions = isIos ? iosDimensions : androidDimensions;
+  const height = Math.min(
+    window.innerHeight,
+    (dimensions.height / dimensions.width) * window.innerWidth,
+  );
+  const width = (dimensions.width / dimensions.height) * height;
   const style = { height, width };
   const [selected, setSelected] = useState(0);
   const [api, setApi] = useState<CarouselApi>(undefined);
+
+  const images = isIos ? iosImages : androidImages;
+  const help = isIos ? iosHelp : androidHelp;
 
   return (
     <div className="bg-[#2F754A]">
@@ -38,8 +58,8 @@ function IOSInstall() {
         onSlideChange={setSelected}
         setApi={setApi}
       >
-        <CarouselContent style={style}>
-          {iosImages.map((src, i) => (
+        <CarouselContent>
+          {images.map((src, i) => (
             <CarouselItem key={src} className="relative flex flex-col">
               <img
                 src={src}
@@ -53,7 +73,7 @@ function IOSInstall() {
           ))}
         </CarouselContent>
         <div className="absolute bottom-[8px] flex w-full items-center justify-center space-x-2 opacity-60">
-          {iosImages.map((_, i) => (
+          {images.map((_, i) => (
             <button
               className={clsx(
                 'size-[8px] rounded-full',
