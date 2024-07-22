@@ -66,7 +66,7 @@ function InstallTutorial({ isIos }: { isIos: boolean }) {
                 alt={'install ' + i + 1}
                 style={{ width, height: height - 50 }}
               />
-              <div className="flex flex-1 flex-col justify-center pb-[10px] text-center text-sm font-medium text-white">
+              <div className="flex flex-1 flex-col justify-center py-[5px] text-center text-sm font-medium text-white">
                 {help[i]}
               </div>
             </CarouselItem>
