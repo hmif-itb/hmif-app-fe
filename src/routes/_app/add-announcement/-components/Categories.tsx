@@ -20,6 +20,7 @@ import { useQuery } from '@tanstack/react-query';
 
 type ComponentProps = {
   form: UseFormReturn<FormSchemaType>;
+  isDesktop?: boolean;
 };
 
 const angkatanOptions = [
@@ -35,7 +36,10 @@ const angkatanOptions = [
   },
 ];
 
-export default function Categories({ form }: ComponentProps): JSX.Element {
+export default function Categories({
+  form,
+  isDesktop,
+}: ComponentProps): JSX.Element {
   const [catDropdownOpen, setCatDropdownOpen] = useState(false);
   const [catOptions, setCatOptions] = useState(angkatanOptions);
 
@@ -83,7 +87,7 @@ export default function Categories({ form }: ComponentProps): JSX.Element {
             Enter Categories
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-[70vw] p-0">
+        <PopoverContent className={cn('p-0', !isDesktop && 'w-[70vw]')}>
           <Command>
             <CommandInput placeholder="Select a category..." />
             <CommandList>

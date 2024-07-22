@@ -2,7 +2,7 @@ import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from '~/api/client';
-import MegaphoneIcon from '~/assets/icons/timeline/megaphone.svg';
+import MegaphoneIcon from '~/assets/icons/megaphone.svg';
 import MobileView from './-components/mobile-view';
 import DesktopView from './-components/desktop-view';
 import { z } from 'zod';
@@ -112,7 +112,7 @@ function Timeline() {
 
       <Link
         to="/add-announcement"
-        className="fixed bottom-[120px] right-4 z-20 flex size-[4.5625rem] flex-col items-center justify-center rounded-full border-2 border-green-300 bg-yellow-75"
+        className="fixed bottom-[120px] right-4 z-20 flex size-[4.5625rem] flex-col items-center justify-center rounded-full border-2 border-green-300 bg-yellow-75 lg:hidden"
       >
         <img src={MegaphoneIcon} className="mr-1 size-7" alt="" />
       </Link>

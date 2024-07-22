@@ -7,12 +7,14 @@ import { FileUpload } from '..';
 import { Dialog, DialogContent, DialogTrigger } from '~/components/ui/dialog';
 import Webcam from 'react-webcam';
 import dataURLtoFile from '~/lib/dataURLtoFile';
+import { cn } from '~/lib/utils';
 
 type ComponentProps = {
   images: FileUpload[];
   setImages: React.Dispatch<React.SetStateAction<FileUpload[]>>;
   files: FileUpload[];
   setFiles: React.Dispatch<React.SetStateAction<FileUpload[]>>;
+  isDesktop?: boolean;
 };
 
 export default function MediaInput({
@@ -20,6 +22,7 @@ export default function MediaInput({
   setImages,
   files,
   setFiles,
+  isDesktop,
 }: ComponentProps): JSX.Element {
   const [captureOpen, setCaptureOpen] = useState<boolean>(false);
 
@@ -29,7 +32,12 @@ export default function MediaInput({
 
   return (
     <>
-      <div className="absolute bottom-0 left-0 flex w-full items-center border-t border-[#EBEEEB] bg-white px-5">
+      <div
+        className={cn(
+          'flex w-full items-center border-t border-[#EBEEEB] bg-white px-5',
+          !isDesktop && 'absolute bottom-0 left-0',
+        )}
+      >
         <Dialog open={captureOpen} onOpenChange={setCaptureOpen}>
           <DialogTrigger asChild>
             <Button variant="link" size="icon-md">

@@ -1,5 +1,5 @@
 import { Link, LinkProps } from '@tanstack/react-router';
-import QuestionMarkIcon from './icons/question-mark';
+import QuestionMarkIcon from '../icons/question-mark';
 
 function BottomNavigationItem({
   Icon,

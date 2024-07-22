@@ -58,23 +58,46 @@ export class CourseService {
     });
   }
   /**
-   * @returns UserCourse Deleted user course
+   * @returns UserCourse Deleted user batch course
    * @throws ApiError
    */
   public deleteUserCourse({
-    courseId,
+    requestBody,
   }: {
-    courseId: string,
-  }): CancelablePromise<UserCourse> {
+    requestBody?: {
+      courseIds: (Array<string> | string);
+    },
+  }): CancelablePromise<Array<UserCourse>> {
     return this.httpRequest.request({
       method: 'DELETE',
-      url: '/api/course/take/{courseId}',
-      path: {
-        'courseId': courseId,
-      },
+      url: '/api/course/take/batch',
+      body: requestBody,
+      mediaType: 'application/json',
       errors: {
         400: `Bad request`,
         404: `User course not found`,
+      },
+    });
+  }
+  /**
+   * @returns UserCourse Courses added to user courses
+   * @throws ApiError
+   */
+  public createOrUpdateBatchUserCourse({
+    requestBody,
+  }: {
+    requestBody: Array<{
+      courseId: string;
+      class: number;
+    }>,
+  }): CancelablePromise<Array<UserCourse>> {
+    return this.httpRequest.request({
+      method: 'PUT',
+      url: '/api/course/take/batch',
+      body: requestBody,
+      mediaType: 'application/json',
+      errors: {
+        400: `Bad request`,
       },
     });
   }
@@ -86,10 +109,14 @@ export class CourseService {
     curriculumYear,
     major,
     semester,
+    type,
+    credits,
   }: {
     curriculumYear?: number | null,
-    major?: 'IF' | 'STI',
+    major?: 'IF' | 'STI' | 'OTHER',
     semester?: number | null,
+    type?: 'Mandatory' | 'Elective',
+    credits?: number | null,
   }): CancelablePromise<{
     courses: Array<Course>;
   }> {
@@ -100,6 +127,8 @@ export class CourseService {
         'curriculumYear': curriculumYear,
         'major': major,
         'semester': semester,
+        'type': type,
+        'credits': credits,
       },
       errors: {
         400: `Bad request`,
@@ -117,10 +146,11 @@ export class CourseService {
       curriculumYear: number;
       major: 'IF' | 'STI' | 'OTHER';
       type?: 'Mandatory' | 'Elective';
-      semester: number;
+      semester?: number | null;
       code: string;
       name: string;
-      credits: number;
+      credits?: number | null;
+      dingdongUrl?: string | null;
     },
   }): CancelablePromise<Course> {
     return this.httpRequest.request({
@@ -167,10 +197,11 @@ export class CourseService {
       curriculumYear?: number;
       major?: 'IF' | 'STI' | 'OTHER';
       type?: 'Mandatory' | 'Elective';
-      semester?: number;
+      semester?: number | null;
       code?: string;
       name?: string;
-      credits?: number;
+      credits?: number | null;
+      dingdongUrl?: string | null;
     },
   }): CancelablePromise<Course> {
     return this.httpRequest.request({
@@ -205,28 +236,6 @@ export class CourseService {
       errors: {
         400: `Bad request`,
         404: `Course not found`,
-      },
-    });
-  }
-  /**
-   * @returns UserCourse Courses added to user courses
-   * @throws ApiError
-   */
-  public createOrUpdateBatchUserCourse({
-    requestBody,
-  }: {
-    requestBody: Array<{
-      courseId: string;
-      class: number;
-    }>,
-  }): CancelablePromise<Array<UserCourse>> {
-    return this.httpRequest.request({
-      method: 'PUT',
-      url: '/api/course/take/batch',
-      body: requestBody,
-      mediaType: 'application/json',
-      errors: {
-        400: `Bad request`,
       },
     });
   }
