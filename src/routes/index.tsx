@@ -34,10 +34,17 @@ function Index() {
           </p>
           <Button
             variant="outlined"
-            className="w-full max-lg:border-white max-lg:text-white"
+            className="mt-1 w-full p-1 max-lg:border-white max-lg:text-white"
             asChild
           >
-            <a href="/sparta">LOGO SPARTA</a>
+            <a href="/sparta">
+              <img
+                src="/img/sparta.png"
+                alt="Logo sparta"
+                width={80}
+                height={46}
+              />
+            </a>
           </Button>
         </div>
       </div>
