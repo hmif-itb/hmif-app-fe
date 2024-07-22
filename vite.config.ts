@@ -53,11 +53,11 @@ export default defineConfig({
         ],
         screenshots: [
           {
-            sizes: '396x704',
-            src: '/img/ss.png',
-            type: 'image/png',
+            sizes: '813x1446',
+            src: '/img/ss/login.jpg',
+            type: 'image/jpg',
             form_factor: 'narrow',
-            label: 'Main page',
+            label: 'Login page',
           },
         ],
         theme_color: '#FFFFFF',
