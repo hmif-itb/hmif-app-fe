@@ -25,6 +25,7 @@ import { Route as AppHomeTestimoniImport } from './routes/_app/home/testimoni'
 import { Route as AppTimelineInfoIdIndexImport } from './routes/_app/timeline/$infoId/index'
 import { Route as AppHomeTestimoniIndexImport } from './routes/_app/home/testimoni/index'
 import { Route as AppHomeDingdongIndexImport } from './routes/_app/home/dingdong/index'
+import { Route as AppHomeCalendarIndexImport } from './routes/_app/home/calendar/index'
 import { Route as AppSettingsSettingsItemSubscriptionsIndexImport } from './routes/_app/settings/_settings-item/subscriptions/index'
 import { Route as AppSettingsSettingsItemCoursesIndexImport } from './routes/_app/settings/_settings-item/courses/index'
 import { Route as AppHomeTestimoniTypeIndexImport } from './routes/_app/home/testimoni/$type/index'
@@ -100,6 +101,11 @@ const AppHomeTestimoniIndexRoute = AppHomeTestimoniIndexImport.update({
 
 const AppHomeDingdongIndexRoute = AppHomeDingdongIndexImport.update({
   path: '/home/dingdong/',
+  getParentRoute: () => AppRoute,
+} as any)
+
+const AppHomeCalendarIndexRoute = AppHomeCalendarIndexImport.update({
+  path: '/home/calendar/',
   getParentRoute: () => AppRoute,
 } as any)
 
@@ -212,6 +218,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppTimelineIndexImport
       parentRoute: typeof AppImport
     }
+    '/_app/home/calendar/': {
+      id: '/_app/home/calendar/'
+      path: '/home/calendar'
+      fullPath: '/home/calendar'
+      preLoaderRoute: typeof AppHomeCalendarIndexImport
+      parentRoute: typeof AppImport
+    }
     '/_app/home/dingdong/': {
       id: '/_app/home/dingdong/'
       path: '/home/dingdong'
@@ -299,6 +312,7 @@ export const routeTree = rootRoute.addChildren({
     AppAddAnnouncementIndexRoute,
     AppHomeIndexRoute,
     AppTimelineIndexRoute,
+    AppHomeCalendarIndexRoute,
     AppHomeDingdongIndexRoute,
     AppTimelineInfoIdIndexRoute,
     AppHomeTestimoniTypeSemesterCourseIdIndexRoute,
@@ -330,6 +344,7 @@ export const routeTree = rootRoute.addChildren({
         "/_app/add-announcement/",
         "/_app/home/",
         "/_app/timeline/",
+        "/_app/home/calendar/",
         "/_app/home/dingdong/",
         "/_app/timeline/$infoId/",
         "/_app/home/testimoni/$type/$semester/$courseId/"
@@ -378,6 +393,10 @@ export const routeTree = rootRoute.addChildren({
     },
     "/_app/timeline/": {
       "filePath": "_app/timeline/index.tsx",
+      "parent": "/_app"
+    },
+    "/_app/home/calendar/": {
+      "filePath": "_app/home/calendar/index.tsx",
       "parent": "/_app"
     },
     "/_app/home/dingdong/": {
