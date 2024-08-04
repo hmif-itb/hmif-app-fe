@@ -9,8 +9,15 @@ import { FormField, FormItem } from '~/components/ui/form';
 import { TextField } from '~/components/ui/textfield';
 import dayjs from 'dayjs';
 import { Button } from '~/components/ui/button';
+import { motion } from 'framer-motion';
 
-export default function DesktopAddEvent() {
+type ComponentProps = {
+  constraintRef: React.MutableRefObject<HTMLElement | null>;
+};
+
+export default function DesktopAddEvent(props: Readonly<ComponentProps>) {
+  const { constraintRef } = props;
+
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -27,7 +34,13 @@ export default function DesktopAddEvent() {
   const endTimeDisplay = dayjs(form.getValues('end')).format('hh:mma');
 
   return (
-    <div className="w-[564px] overflow-hidden rounded-2xl bg-white shadow-[0_4px_4px_3px_rgba(0,0,0,0.25)]">
+    <motion.div
+      drag
+      dragMomentum={false}
+      dragConstraints={constraintRef}
+      dragElastic={0}
+      className="w-[564px] overflow-hidden rounded-2xl bg-white shadow-[0_4px_4px_3px_rgba(0,0,0,0.25)]"
+    >
       <div className="flex flex-row justify-end bg-[#D9D9D9] px-4 py-3">
         <img src={CloseIcon} alt="close" className="size-4" />
       </div>
@@ -118,6 +131,6 @@ export default function DesktopAddEvent() {
           </div>
         </form>
       </Form>
-    </div>
+    </motion.div>
   );
 }
