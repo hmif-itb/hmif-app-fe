@@ -1,8 +1,9 @@
-import Calendar from '~/components/calendar';
+// import Calendar from '~/components/calendar';
 import HeaderTitle from '~/components/header-title';
 import NavigationItem from './navigation-item';
 import Timeline from './timeline';
 import { useNavigate } from '@tanstack/react-router';
+import Calendar from '~/components/new-calendar';
 
 function DesktopView() {
   const navigate = useNavigate();
@@ -49,7 +50,10 @@ function DesktopView() {
 
           {/* Calendar */}
           <div className="">
-            <Calendar />
+            {/* <Calendar /> */}
+
+            {/* New Calendar Component */}
+            <Calendar isMobile={false} />
           </div>
         </div>
 
