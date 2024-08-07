@@ -53,17 +53,18 @@ export function AddEventPage({ setDrawer }: ComponentProps) {
   function onSubmit(values: EventSchema) {
     try {
       console.log(values);
-      // postEvent.mutate({
-      //   requestBody: {
-      //     calendarGroupId: values.calendarGroupId,
-      //     courseId: values.courseId,
-      //     title: values.title,
-      //     description: values.description,
-      //     category: values.category,
-      //     start: values.start,
-      //     end: values.end,
-      //   },
-      // });
+      toast.loading('Please wait...', { id: TOAST_ID });
+      postEvent.mutate({
+        requestBody: {
+          calendarGroupId: values.calendarGroupId,
+          courseId: values.courseId,
+          title: values.title,
+          description: values.description,
+          category: values.category,
+          start: values.start,
+          end: values.end,
+        },
+      });
     } catch (error) {
       console.log(error);
       toast.error('Failed to post event', { id: TOAST_ID });
@@ -74,7 +75,13 @@ export function AddEventPage({ setDrawer }: ComponentProps) {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <DrawerHeader className="flex flex-row items-baseline justify-between px-10">
-          <DrawerClose>Cancel</DrawerClose>
+          <DrawerClose
+            onClick={() => {
+              setDrawer(false);
+            }}
+          >
+            Cancel
+          </DrawerClose>
           <DrawerTitle>New Event</DrawerTitle>
           <Button
             variant="link"
