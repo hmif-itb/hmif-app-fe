@@ -8,6 +8,7 @@ import DetailPost from './-components/detail-post';
 import Header from './-components/header';
 import PostInteraction from './-components/post-interaction';
 import { emojiImages } from './-constants/emoji';
+import CommentForm from './-components/comment-form';
 
 export const Route = createFileRoute('/_app/timeline/$infoId/')({
   component: InfoDetail,
@@ -56,6 +57,8 @@ function InfoDetail() {
           isActive={activeReaction === 'post'}
           toggleReaction={() => toggleReaction('post')}
         />
+        <CommentForm repliedInfoId="0" />
+        {/* P.S. idk how i should generate the repliedInfoId, sorry. */}
         {comments && (
           <Comments
             comments={comments}
