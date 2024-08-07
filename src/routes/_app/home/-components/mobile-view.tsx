@@ -1,10 +1,9 @@
 import { Separator } from '@radix-ui/react-separator';
-// import Calendar from '~/components/calendar';
+import Calendar from '~/components/calendar';
 import Profile from '~/components/navbar/profile';
 import NavigationItem from './navigation-item';
 import Timeline from './timeline';
 import { useNavigate } from '@tanstack/react-router';
-import Calendar from '~/components/new-calendar';
 
 function MobileView() {
   const navigate = useNavigate();
@@ -51,10 +50,7 @@ function MobileView() {
 
       {/* Calendar Section */}
       <section className="flex size-full justify-center px-4">
-        {/* <Calendar /> */}
-
-        {/* New Calendar Component */}
-        <Calendar isMobile={true} />
+        <Calendar />
       </section>
 
       <Separator />
