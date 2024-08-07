@@ -1,13 +1,6 @@
 import { Button } from '../ui/button';
 import MegaphoneIcon from '~/assets/icons/megaphone.svg';
-import {
-  DialogDescription,
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '../ui/dialog';
+import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
 import { getRouteApi } from '@tanstack/react-router';
 import { AddAnnouncementPage } from '~/routes/_app/add-announcement';
 
