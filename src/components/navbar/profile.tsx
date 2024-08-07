@@ -1,6 +1,5 @@
 import useSession from '~/hooks/auth/useSession';
 import timeToMessage from '~/lib/time';
-import { Button } from '../ui/button';
 import Avatar from '../user/avatar';
 
 function Profile() {
@@ -15,9 +14,9 @@ function Profile() {
           <p className="font-bold">{timeToMessage()}</p>
         </div>
       </div>
-      <Button className="rounded-[18px] border border-solid border-black bg-yellow-100 p-2">
+      {/* <Button className="rounded-[18px] border border-solid border-black bg-yellow-100 p-2">
         <img src="/img/home/bell.svg" alt="Bell" className="size-4" />
-      </Button>
+      </Button> */}
     </section>
   );
 }
