@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import { useState, useRef, useEffect } from 'react';
 import { Textarea } from '~/components/ui/textarea';
 import { cn } from '~/lib/utils';
+import AddEvent from './add-event';
 
 interface Event {
   title: string;
@@ -57,13 +58,6 @@ function DesktopView() {
   const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   const currentDate = dayjs();
   const [today, setToday] = useState(currentDate);
-  const [date, setDate] = useState(dayjs().format('YYYY-MM-DD'));
-  const [startTime, setStartTime] = useState(
-    dayjs().startOf('minute').format('HH:mm'),
-  );
-  const [endTime, setEndTime] = useState(
-    dayjs().add(1, 'hour').startOf('minute').format('HH:mm'),
-  );
 
   const [showFloatingCategoryModal, setShowFloatingCategoryModal] =
     useState(false);
@@ -141,15 +135,6 @@ function DesktopView() {
     };
   }, [showFloatingCategoryModal, showAddEventModal]);
 
-  useEffect(() => {
-    const now = dayjs();
-    const roundedMinutes = Math.ceil(now.minute() / 5) * 5;
-    const start = now.minute(roundedMinutes).second(0);
-    const end = start.add(1, 'hour');
-    setStartTime(start.format('HH:mm'));
-    setEndTime(end.format('HH:mm'));
-  }, []);
-
   return (
     <div className="hidden size-full max-h-full flex-col lg:flex">
       <HeaderTitle />
@@ -207,102 +192,12 @@ function DesktopView() {
       )}
 
       {showAddEventModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-800/75">
-          <div ref={addEventModalRef} className="rounded-xl bg-white shadow-xl">
-            <div className="flex w-full justify-end rounded-t-xl bg-gray-300 px-4 py-3">
-              <button onClick={() => setShowAddEventModal(false)}>
-                <X size={20} />
-              </button>
-            </div>
-            <div className="px-10 py-8">
-              <div className="mb-4 ml-11">
-                <input
-                  type="text"
-                  placeholder="Add title"
-                  className="w-full border-0 border-b-2 border-gray-300 text-3xl font-medium placeholder:text-3xl focus:border-gray-500 focus:outline-0"
-                />
-              </div>
-              <div className="mb-6 ml-11 flex gap-2">
-                <button
-                  className={cn(
-                    category === 'Akademik' && 'bg-yellow-100 text-green-500',
-                    category === 'Blank' && 'border border-gray-800 bg-white',
-                    'flex flex-row items-center gap-2 rounded-md px-4 py-2 font-medium',
-                  )}
-                  onClick={() => setCategory('Akademik')}
-                >
-                  <img src="/img/icons/akademikEvent.svg" />
-                  Akademik
-                </button>
-                <button
-                  className={cn(
-                    category === 'Blank' && 'bg-yellow-100 text-green-500',
-                    category === 'Akademik' &&
-                      'border border-gray-800 bg-white',
-                    'flex flex-row items-center gap-2 rounded-md px-4 py-2 font-medium',
-                  )}
-                  onClick={() => setCategory('Blank')}
-                >
-                  <img src="/img/icons/blankEvent.svg" />
-                  Blank
-                </button>
-              </div>
-              <div className="mb-5">
-                <div className="flex items-center gap-2">
-                  <img src="/img/icons/clock.svg" className="mr-3" />
-                  <input
-                    type="date"
-                    className="border-0 border-b-2 border-gray-300 focus:border-gray-500 focus:outline-0"
-                    value={date}
-                    onChange={(e) => setDate(e.target.value)}
-                  />
-                  <input
-                    type="time"
-                    className="border-0 border-b-2 border-gray-300 focus:border-gray-500 focus:outline-0"
-                    step="300" // step attribute to increment by 5 minutes
-                    value={startTime}
-                    onChange={(e) => setStartTime(e.target.value)}
-                  />
-                  <input
-                    type="time"
-                    className="border-0 border-b-2 border-gray-300 focus:border-gray-500 focus:outline-0"
-                    step="300" // step attribute to increment by 5 minutes
-                    value={endTime}
-                    onChange={(e) => setEndTime(e.target.value)}
-                  />
-                </div>
-              </div>
-              <div className="mb-5 flex items-start gap-2">
-                <img src="/img/icons/eventSubject.svg" className="mr-3" />
-                <input
-                  type="text"
-                  placeholder="Add subject"
-                  className="w-full border-0 placeholder:text-base focus:border-b-2 focus:border-gray-500 focus:outline-0"
-                />
-              </div>
-              <div className="mb-5 flex items-start gap-2">
-                <img src="/img/icons/description.svg" className="mr-3" />
-                <textarea
-                  placeholder="Add description"
-                  className="w-full border-0 placeholder:text-base focus:border-b-2 focus:border-gray-500 focus:outline-0"
-                  rows={1}
-                  onInput={(e) => {
-                    e.currentTarget.style.height = 'auto';
-                    e.currentTarget.style.height = `${e.currentTarget.scrollHeight}px`;
-                  }}
-                />
-              </div>
-              <div className="flex justify-end">
-                <Button
-                  className="bg-green-300 text-white"
-                  onClick={() => setShowAddEventModal(false)}
-                >
-                  Save
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <AddEvent
+          category={category}
+          setCategory={setCategory}
+          showAddEventModal={showAddEventModal}
+          setShowAddEventModal={setShowAddEventModal}
+        />
       )}
     </div>
   );
