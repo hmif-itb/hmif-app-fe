@@ -3,7 +3,6 @@ import { X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Button } from '~/components/ui/button';
 import { cn } from '~/lib/utils';
-import TimePicker from 'react-time-picker';
 
 interface AddEventProps {
   category: string;

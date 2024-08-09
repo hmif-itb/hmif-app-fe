@@ -24,7 +24,7 @@ function DesktopView() {
     {
       title: 'UAS Jaringan Komputer',
       time: '08:00',
-      color: 'purple',
+      color: 'green',
       date: 1,
     },
     {

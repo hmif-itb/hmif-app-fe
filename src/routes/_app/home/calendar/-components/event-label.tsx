@@ -7,10 +7,14 @@ function EventLabel({
   time: string;
   color: string;
 }) {
-  const bgColor = color + '-200';
-  const textColor = color + '-800';
-
-  const containerClassNames = `flex flex-row bg-${bgColor} text-${textColor} border-1 border-${textColor} items-center rounded px-1 py-0.5 text-xs`;
+  const containerClassNames =
+    'flex flex-row bg-' +
+    color +
+    '-200 text-' +
+    color +
+    '-500 border border-' +
+    color +
+    '-500 items-center rounded px-1 py-0.5 text-xs';
 
   return (
     <div className={containerClassNames}>
