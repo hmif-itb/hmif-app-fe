@@ -1,11 +1,9 @@
-import { CirclePlus, Clock, FileText, Search, X } from 'lucide-react';
+import { CirclePlus, Search } from 'lucide-react';
 import HeaderTitle from '~/components/header-title';
 import { Button } from '~/components/ui/button';
 import CalendarDay from './calendar-day';
 import dayjs from 'dayjs';
 import { useState, useRef, useEffect } from 'react';
-import { Textarea } from '~/components/ui/textarea';
-import { cn } from '~/lib/utils';
 import AddEvent from './add-event';
 
 interface Event {
@@ -19,7 +17,15 @@ interface EventsByDate {
   [key: number]: Event[];
 }
 
-function DesktopView() {
+function DesktopView({
+  currentMonth,
+  currentYear,
+  onMonthChange,
+}: {
+  currentMonth: number;
+  currentYear: number;
+  onMonthChange: (newMonth: number) => void;
+}) {
   const dummyEvents: Event[] = [
     {
       title: 'UAS Jaringan Komputer',
@@ -56,8 +62,7 @@ function DesktopView() {
   }, {} as EventsByDate);
 
   const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-  const currentDate = dayjs();
-  const [today, setToday] = useState(currentDate);
+  const today = dayjs().month(currentMonth).year(currentYear);
 
   const [showFloatingCategoryModal, setShowFloatingCategoryModal] =
     useState(false);
