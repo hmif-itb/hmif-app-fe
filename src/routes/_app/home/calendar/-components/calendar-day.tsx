@@ -17,9 +17,10 @@ function CalendarDay({
   const currentDate = dayjs();
   const [today, setToday] = useState(currentDate);
 
-  useEffect(() => {
-    setToday(currentDate);
-  }, [currentDate]);
+  // useEffect(() => {
+  //   // setToday(currentDate);
+  //   console.log('kena', currentDate);
+  // }, [currentDate]);
 
   const isToday = day === today.date() && isCurrentMonth;
 

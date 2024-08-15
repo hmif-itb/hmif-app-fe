@@ -1,9 +1,19 @@
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { generateDate, months } from '../lib/calendar';
 import { cn } from '../lib/utils';
 import { Separator } from './ui/separator';
+
+type ComponentProps = {
+  isMobile: boolean;
+  className?: string;
+  onChange?: (date: Date) => void;
+  currentMonth: number;
+  currentYear: number;
+  onMonthChange: (newMonth: number) => void;
+  defaultDate?: Date;
+};
 
 /**
  * A calendar component that allows users to navigate through months and select dates.
@@ -11,27 +21,36 @@ import { Separator } from './ui/separator';
  */
 export default function Calendar({
   isMobile,
+  className,
+  onChange,
+  defaultDate,
   currentMonth,
   currentYear,
   onMonthChange,
-}: {
-  isMobile: boolean;
-  currentMonth: number;
-  currentYear: number;
-  onMonthChange: (newMonth: number) => void;
-}) {
+}: Readonly<ComponentProps>) {
   const days = isMobile
     ? ['Sun', 'Mon', 'Tue', 'Wed', 'Tu', 'Fri', 'Sat']
     : ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
   const currentDate = dayjs();
-  // const today = dayjs().month(currentMonth).year(currentYear);
-  const [today, setToday] = useState(currentDate);
-  const [selectDate, setSelectDate] = useState(today);
+  const [today, setToday] = useState(
+    defaultDate ? dayjs(defaultDate) : currentDate,
+  );
+  const [selectDate, setSelectDate] = useState(
+    defaultDate ? dayjs(defaultDate) : currentDate,
+  );
+
+  useEffect(() => {
+    if (onChange) {
+      onChange(selectDate.toDate());
+    }
+  }, [selectDate, onChange]);
+
   return (
     <div
       className={cn(
         isMobile ? 'max-w-[400px]' : 'max-w-[350px]',
         'flex w-full flex-col items-center justify-center sm:flex-row',
+        className,
       )}
     >
       <div className="relative flex size-full flex-col gap-4">
