@@ -7,7 +7,6 @@ import { cn } from '~/lib/utils';
 import { z } from 'zod';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '~/api/client';
-import { useEffect } from 'react';
 
 const testiSearchSchema = z.object({
   page: z.number().optional(),

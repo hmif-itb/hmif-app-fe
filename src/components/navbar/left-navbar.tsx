@@ -4,6 +4,7 @@ import QuestionMarkIcon from '../icons/question-mark';
 import SettingsIcon from '../icons/settings';
 import Profile from './profile';
 import Announce from './Announce';
+import Event from './event';
 
 function LeftNavbar() {
   return (
@@ -42,8 +43,8 @@ function LeftNavbar() {
           <SettingsIcon className="size-[2.625rem]" />
           <span>Settings</span>
         </Link>
-
         <Announce />
+        <Event />
       </section>
     </section>
   );
