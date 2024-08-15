@@ -29,7 +29,7 @@ function DesktopView() {
               src="/img/home/calendar.svg"
               alt="Calendar"
               title="Calendar"
-              onClick={() => handleNavigation('/home/')}
+              onClick={() => handleNavigation('/home/calendar/')}
             />
 
             <NavigationItem

@@ -9,17 +9,28 @@ import { Separator } from './ui/separator';
  * A calendar component that allows users to navigate through months and select dates.
  * @component
  */
-export default function Calendar({ isMobile }: { isMobile: boolean }) {
+export default function Calendar({
+  isMobile,
+  currentMonth,
+  currentYear,
+  onMonthChange,
+}: {
+  isMobile: boolean;
+  currentMonth: number;
+  currentYear: number;
+  onMonthChange: (newMonth: number) => void;
+}) {
   const days = isMobile
     ? ['Sun', 'Mon', 'Tue', 'Wed', 'Tu', 'Fri', 'Sat']
     : ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
   const currentDate = dayjs();
+  // const today = dayjs().month(currentMonth).year(currentYear);
   const [today, setToday] = useState(currentDate);
-  const [selectDate, setSelectDate] = useState(currentDate);
+  const [selectDate, setSelectDate] = useState(today);
   return (
     <div
       className={cn(
-        isMobile ? 'max-w-[400px]' : 'max-w-[250px]',
+        isMobile ? 'max-w-[400px]' : 'max-w-[350px]',
         'flex w-full flex-col items-center justify-center sm:flex-row',
       )}
     >
@@ -42,6 +53,7 @@ export default function Calendar({ isMobile }: { isMobile: boolean }) {
                 <ChevronLeft
                   className={cn(!isMobile && 'size-[15px]', 'cursor-pointer')}
                   onClick={() => {
+                    onMonthChange(today.month() - 1);
                     setToday(today.month(today.month() - 1));
                   }}
                 />
@@ -58,6 +70,7 @@ export default function Calendar({ isMobile }: { isMobile: boolean }) {
                 <ChevronRight
                   className={cn(!isMobile && 'size-[15px]', 'cursor-pointer')}
                   onClick={() => {
+                    onMonthChange(today.month() + 1);
                     setToday(today.month(today.month() + 1));
                   }}
                 />
