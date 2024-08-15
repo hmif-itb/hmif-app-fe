@@ -10,6 +10,12 @@ import { TextField } from '~/components/ui/textfield';
 import dayjs from 'dayjs';
 import { Button } from '~/components/ui/button';
 import { motion } from 'framer-motion';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '~/components/ui/popover';
+import Calendar from '~/components/new-calendar';
 
 type ComponentProps = {
   constraintRef: React.MutableRefObject<HTMLElement | null>;
@@ -29,9 +35,12 @@ export default function DesktopAddEvent(props: Readonly<ComponentProps>) {
     },
   });
 
-  const dateDisplay = dayjs(form.getValues('start')).format('dddd, MMMM DD');
-  const startTimeDisplay = dayjs(form.getValues('start')).format('hh:mma');
-  const endTimeDisplay = dayjs(form.getValues('end')).format('hh:mma');
+  const watchStart = form.watch('start');
+  const watchEnd = form.watch('end');
+
+  const dateDisplay = dayjs(watchStart).format('dddd, MMMM DD');
+  const startTimeDisplay = dayjs(watchStart).format('hh:mma');
+  const endTimeDisplay = dayjs(watchEnd).format('hh:mma');
 
   return (
     <motion.div
@@ -77,11 +86,27 @@ export default function DesktopAddEvent(props: Readonly<ComponentProps>) {
             className="col-start-1 col-end-1 row-start-3 row-end-3 size-6"
           />
           <div className="col-start-2 col-end-2 row-start-3 row-end-3 flex items-center gap-5">
-            <TextField
-              value={dateDisplay}
-              inputClassName="font-medium border-none text-base px-0"
-              className="w-[160px]"
-            />
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="link"
+                  className="w-[180px] justify-start p-0 text-base font-medium"
+                >
+                  {dateDisplay}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-fit rounded-xl p-0 shadow-[0_4px_4px_3px_rgba(0,0,0,0.25)]">
+                <Calendar
+                  onChange={(date) => {
+                    form.setValue('start', date.toISOString());
+                    form.setValue('end', date.toISOString());
+                  }}
+                  isMobile={false}
+                  defaultDate={new Date(watchStart)}
+                  className="p-4 pb-0"
+                />
+              </PopoverContent>
+            </Popover>
             <div className="flex items-center">
               <TextField
                 value={startTimeDisplay}

@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import DesktopAddEvent from './-components/DesktopAddEvent';
 import { motion } from 'framer-motion';
 import { useRef } from 'react';
+import Calendar from '~/components/new-calendar';
 
 export const Route = createFileRoute('/_app/dummy-cal/')({
   component: DummyCal,
