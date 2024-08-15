@@ -1,4 +1,4 @@
-import { Link, useMatch } from '@tanstack/react-router';
+import { Link, useLocation, useMatch } from '@tanstack/react-router';
 import HomeIcon from '../icons/home';
 import QuestionMarkIcon from '../icons/question-mark';
 import SettingsIcon from '../icons/settings';
@@ -11,17 +11,21 @@ import dayjs from 'dayjs';
 function LeftNavbar() {
   const [currentMonth, setCurrentMonth] = useState(dayjs().month());
   const [currentYear, setCurrentYear] = useState(dayjs().year());
-  let isCalendarRoute = false;
+  // let isCalendarRoute = false;
 
-  try {
-    isCalendarRoute = !!useMatch({
-      from: '/_app/home/calendar/',
-      exact: true,
-    });
-  } catch (error) {
-    // Handle the error or leave it empty to silently fail
-    console.error('Error matching route:', error);
-  }
+  const pathname = useLocation({
+    select: (location) => location.pathname,
+  });
+
+  // try {
+  // isCalendarRoute = useMatch({
+  //   from: '/_app/home/calendar/',
+  //   // exact: true,
+  // });
+  // } catch (error) {
+  // Handle the error or leave it empty to silently fail
+  // console.error('Error matching route:', error);
+  // }
 
   const handleMonthChange = (newMonth: number) => {
     if (newMonth < 0) {
@@ -41,7 +45,7 @@ function LeftNavbar() {
 
       <section className="mt-4 flex size-full flex-1 flex-col items-center justify-between p-0">
         {/* Calendar Preview for Desktop View */}
-        {isCalendarRoute ? (
+        {pathname.includes('calendar') ? (
           <div className="w-full">
             <Calendar
               isMobile={false}
@@ -50,12 +54,10 @@ function LeftNavbar() {
               onMonthChange={handleMonthChange}
             />
           </div>
-        ) : (
-          <div></div>
-        )}
+        ) : null}
 
         {/* Navigation Section */}
-        <section className="mb-4 flex w-full flex-col items-center gap-2">
+        <section className="mb-4 mt-24 flex w-full flex-col items-center gap-2">
           <Link
             to="/home"
             className={`flex w-full items-center gap-8 border-l-8 border-transparent p-4 pl-8 data-[status]:border-green-300`}

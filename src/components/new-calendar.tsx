@@ -23,7 +23,9 @@ export default function Calendar({
   const days = isMobile
     ? ['Sun', 'Mon', 'Tue', 'Wed', 'Tu', 'Fri', 'Sat']
     : ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
-  const today = dayjs().month(currentMonth).year(currentYear);
+  const currentDate = dayjs();
+  // const today = dayjs().month(currentMonth).year(currentYear);
+  const [today, setToday] = useState(currentDate);
   const [selectDate, setSelectDate] = useState(today);
   return (
     <div
@@ -52,6 +54,7 @@ export default function Calendar({
                   className={cn(!isMobile && 'size-[15px]', 'cursor-pointer')}
                   onClick={() => {
                     onMonthChange(today.month() - 1);
+                    setToday(today.month(today.month() - 1));
                   }}
                 />
               </div>
@@ -68,6 +71,7 @@ export default function Calendar({
                   className={cn(!isMobile && 'size-[15px]', 'cursor-pointer')}
                   onClick={() => {
                     onMonthChange(today.month() + 1);
+                    setToday(today.month(today.month() + 1));
                   }}
                 />
               </div>

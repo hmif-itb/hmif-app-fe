@@ -19,6 +19,7 @@ import { Route as AppSettingsImport } from './routes/_app/settings'
 import { Route as AppTimelineIndexImport } from './routes/_app/timeline/index'
 import { Route as AppSettingsIndexImport } from './routes/_app/settings/index'
 import { Route as AppHomeIndexImport } from './routes/_app/home/index'
+import { Route as AppAddEventIndexImport } from './routes/_app/add-event/index'
 import { Route as AppAddAnnouncementIndexImport } from './routes/_app/add-announcement/index'
 import { Route as AppSettingsSettingsItemImport } from './routes/_app/settings/_settings-item'
 import { Route as AppHomeTestimoniImport } from './routes/_app/home/testimoni'
@@ -71,6 +72,11 @@ const AppSettingsIndexRoute = AppSettingsIndexImport.update({
 
 const AppHomeIndexRoute = AppHomeIndexImport.update({
   path: '/home/',
+  getParentRoute: () => AppRoute,
+} as any)
+
+const AppAddEventIndexRoute = AppAddEventIndexImport.update({
+  path: '/add-event/',
   getParentRoute: () => AppRoute,
 } as any)
 
@@ -197,6 +203,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAddAnnouncementIndexImport
       parentRoute: typeof AppImport
     }
+    '/_app/add-event/': {
+      id: '/_app/add-event/'
+      path: '/add-event'
+      fullPath: '/add-event'
+      preLoaderRoute: typeof AppAddEventIndexImport
+      parentRoute: typeof AppImport
+    }
     '/_app/home/': {
       id: '/_app/home/'
       path: '/home'
@@ -310,6 +323,7 @@ export const routeTree = rootRoute.addChildren({
       AppHomeTestimoniTypeSemesterIndexRoute,
     }),
     AppAddAnnouncementIndexRoute,
+    AppAddEventIndexRoute,
     AppHomeIndexRoute,
     AppTimelineIndexRoute,
     AppHomeCalendarIndexRoute,
@@ -342,6 +356,7 @@ export const routeTree = rootRoute.addChildren({
         "/_app/settings",
         "/_app/home/testimoni",
         "/_app/add-announcement/",
+        "/_app/add-event/",
         "/_app/home/",
         "/_app/timeline/",
         "/_app/home/calendar/",
@@ -381,6 +396,10 @@ export const routeTree = rootRoute.addChildren({
     },
     "/_app/add-announcement/": {
       "filePath": "_app/add-announcement/index.tsx",
+      "parent": "/_app"
+    },
+    "/_app/add-event/": {
+      "filePath": "_app/add-event/index.tsx",
       "parent": "/_app"
     },
     "/_app/home/": {

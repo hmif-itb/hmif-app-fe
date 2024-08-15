@@ -7,6 +7,7 @@ import { extractUrls, removePunctuation } from '~/lib/url-parser';
 import { useQueries } from '@tanstack/react-query';
 import { api } from '~/api/client';
 import FeedLoader from './FeedLoader';
+import dayjs from 'dayjs';
 
 type ComponentProps = {
   infos: Info[];
@@ -34,7 +35,9 @@ export default function Feed({ infos, onInView }: ComponentProps) {
 function UserInfo({ info }: { info: Info }) {
   return (
     <div className="my-10">
-      <div className="mb-5 text-sm font-bold text-neutral-dark">## Day Ago</div>
+      <div className="mb-5 text-sm font-bold text-neutral-dark">
+        {dayjs(info.createdAt).format('DD MMM YYYY HH:mm')}
+      </div>
       <UserInfoProfile
         name={info.creator.fullName}
         imageURL={info.creator.picture}
@@ -104,7 +107,7 @@ function TextSection({ title, content }: { title: string; content: string }) {
           if (!d) return null;
 
           return (
-            <a key={idx} href={d.ogUrl}>
+            <a key={idx} href={d.ogUrl} target="_blank" rel="noreferrer">
               {/* Check if url have opengraph image */}
               {d.ogImage && d.ogImage.length > 0 ? (
                 <div className="flex items-center gap-4">
@@ -155,11 +158,11 @@ function ImageSection({ images }: { images: string[] }) {
     <div className="mt-5 w-full">
       {images.length === 1 ? (
         <div className="grid grid-cols-1 gap-4">
-          <div className="relative border">
+          <div className="relative">
             <img
               src={images[0]}
               alt="Post"
-              className="size-full rounded-lg object-cover"
+              className="size-full max-w-96 rounded-lg border object-cover"
             />
           </div>
         </div>
@@ -169,14 +172,14 @@ function ImageSection({ images }: { images: string[] }) {
             <img
               src={images[0]}
               alt="Post"
-              className="size-full rounded-l-lg border object-cover"
+              className="size-full max-w-96 rounded-l-lg border object-cover"
             />
           </div>
           <div className="relative w-1/2">
             <img
               src={images[1]}
               alt="Post"
-              className="size-full rounded-r-lg border object-cover"
+              className="size-full max-w-96 rounded-r-lg border object-cover"
             />
           </div>
         </div>
@@ -185,40 +188,40 @@ function ImageSection({ images }: { images: string[] }) {
           <img
             src={images[0]}
             alt="Post"
-            className="row-span-2 size-full rounded-l-lg border object-cover"
+            className="row-span-2 size-full max-w-96 rounded-l-lg border object-cover"
           />
           <img
             src={images[1]}
             alt="Post"
-            className="h-96 w-full rounded-tr-lg border object-cover"
+            className="h-96 w-full max-w-96 rounded-tr-lg border object-cover"
           />
           <img
             src={images[2]}
             alt="Post"
-            className="h-96 w-full rounded-br-lg border object-cover"
+            className="h-96 w-full max-w-96 rounded-br-lg border object-cover"
           />
         </div>
       ) : (
         <div className="grid grid-cols-2 gap-4 overflow-hidden">
           <img
             alt="Post"
-            className="h-96 w-full rounded-tl-lg border object-cover"
+            className="h-96 w-full max-w-96 rounded-tl-lg border object-cover"
             src={images[0]}
           />
           <img
             alt="Post"
-            className="h-96 w-full rounded-tr-lg border object-cover"
+            className="h-96 w-full max-w-96 rounded-tr-lg border object-cover"
             src={images[1]}
           />
           <img
             alt="Post"
-            className="h-96 w-full rounded-bl-lg border object-cover"
+            className="h-96 w-full max-w-96 rounded-bl-lg border object-cover"
             src={images[2]}
           />
           <div className="relative size-full rounded-br-lg border text-center">
             <img
               alt="Post"
-              className="h-96 w-full rounded-br-lg border object-cover brightness-50"
+              className="h-96 w-full max-w-96 rounded-br-lg border object-cover brightness-50"
               src={images[3]}
             />
             <div className="absolute inset-0 flex items-center justify-center text-lg font-medium text-white">

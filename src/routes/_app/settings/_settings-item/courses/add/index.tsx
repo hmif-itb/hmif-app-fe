@@ -44,6 +44,7 @@ function AddCourse() {
 function AddCourseComponent() {
   const router = useRouter();
   const { selectedCourses } = useContext(CourseContext);
+  const [search, setSearch] = useState('');
 
   const addCourseMutation = useMutation({
     mutationFn: api.course.createOrUpdateBatchUserCourse.bind(api.course),
@@ -70,9 +71,9 @@ function AddCourseComponent() {
 
       <div className="flex flex-1 flex-col gap-6">
         {/* Search Bar Section */}
-        <CourseSearchBar />
+        <CourseSearchBar search={search} onSearchChange={setSearch} />
         {/* Course Card Section */}
-        <CardList />
+        <CardList search={search} />
       </div>
 
       {/* Buttons Section */}
