@@ -12,12 +12,13 @@ function NavigationItem({
   onClick: () => void;
 }) {
   return (
-    <div className="flex flex-col items-center gap-3 text-center">
+    <div className="flex flex-col items-center gap-3 text-center text-xs md:text-base">
       <Button
-        className="flex size-[4.5rem] flex-col items-center justify-center rounded-full border border-solid border-black bg-white"
+        size={'sm'}
+        className="flex size-14 items-center justify-center rounded-full border border-solid border-black bg-white md:size-16"
         onClick={onClick}
       >
-        <img src={src} alt={alt} className="size-[2.625rem]" />
+        <img src={src} alt={alt} className="size-7 shrink-0 md:size-8" />
       </Button>
       <p>{title}</p>
     </div>

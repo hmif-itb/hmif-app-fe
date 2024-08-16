@@ -29,9 +29,9 @@ function DesktopView() {
             />
 
             <NavigationItem
-              src="/img/home/camera.svg"
-              alt="Tutor"
-              title="Tutor"
+              src="/img/home/nim-finder.svg"
+              alt="NIM Finder"
+              title="NIM Finder"
               onClick={() => navigate({ to: '/home' })}
             />
 
