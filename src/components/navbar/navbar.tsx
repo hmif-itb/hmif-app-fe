@@ -1,9 +1,8 @@
-import BottomNavigationItem from './bottom-navigation-item';
-import HomeIcon from '../icons/home';
 import QuestionMarkIcon from '../icons/question-mark';
 import SettingsIcon from '../icons/settings';
+import BottomNavigationItem from './bottom-navigation-item';
 // import AddEvent from '~/routes/_app/add-event/add-event';
-import Event from './event';
+import HomeFilledIcon from '../icons/home-filled';
 
 function Navbar() {
   return (
@@ -17,11 +16,11 @@ function Navbar() {
         />
         <BottomNavigationItem
           to="/home"
-          Icon={HomeIcon}
+          Icon={HomeFilledIcon}
           alt="Home"
           title="Home"
         />
-        <Event />
+        {/* <Event /> */}
 
         <BottomNavigationItem
           to="/settings"
