@@ -60,35 +60,35 @@ function LeftNavbar() {
         <section className="mb-4 mt-24 flex w-full flex-col items-center gap-2">
           <Link
             to="/home"
-            className={`flex w-full items-center gap-8 border-l-8 border-transparent px-4 py-2 pl-8 data-[status]:border-green-300`}
+            className={`flex w-full items-center gap-8 border-l-8 border-transparent px-4 py-2 pl-8 hover:bg-yellow-75 data-[status]:border-green-300`}
             activeProps={{
               className:
                 'bg-yellow-75 font-bold text-green-300 [&>svg]:fill-green-300 [&>svg]:stroke-neutral-light',
             }}
           >
-            <HomeFilledIcon className="size-[2.625rem] fill-transparent stroke-black" />
+            <HomeFilledIcon className="size-[2.625rem] fill-transparent stroke-black transition-colors duration-200" />
             <span>Home</span>
           </Link>
           <Link
             to="/timeline"
-            className={`flex w-full items-center gap-8 border-l-8 border-transparent px-4 py-2 pl-8 data-[status]:border-green-300`}
+            className={`flex w-full items-center gap-8 border-l-8 border-transparent px-4 py-2 pl-8 hover:bg-yellow-75 data-[status]:border-green-300`}
             activeProps={{
               className:
                 'bg-yellow-75 font-bold text-green-300 [&>svg]:fill-green-300 [&>svg]:stroke-neutral-light',
             }}
           >
-            <QuestionMarkIcon className="size-[2.625rem] fill-transparent stroke-black" />
+            <QuestionMarkIcon className="size-[2.625rem] fill-transparent stroke-black transition-colors duration-200" />
             <span>Info</span>
           </Link>
           <Link
             to="/settings"
-            className={`flex w-full items-center gap-8 border-l-8 border-transparent px-4 py-2 pl-8 data-[status]:border-green-300`}
+            className={`flex w-full items-center gap-8 border-l-8 border-transparent px-4 py-2 pl-8 hover:bg-yellow-75 data-[status]:border-green-300`}
             activeProps={{
               className:
                 'bg-yellow-75 font-bold text-green-300 [&>svg]:fill-green-300 [&>svg]:stroke-neutral-light',
             }}
           >
-            <SettingsIcon className="size-[2.625rem] fill-transparent stroke-black" />
+            <SettingsIcon className="size-[2.625rem] fill-transparent stroke-black transition-colors duration-200" />
             <span>Settings</span>
           </Link>
           <Announce />

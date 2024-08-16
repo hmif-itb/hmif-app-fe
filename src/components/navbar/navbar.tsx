@@ -7,7 +7,7 @@ import HomeFilledIcon from '../icons/home-filled';
 function Navbar() {
   return (
     <div className="sticky bottom-0 z-20 flex flex-col justify-end">
-      <nav className="flex w-full justify-between bg-neutral-light px-8 py-2 lg:hidden">
+      <nav className="flex w-full justify-between bg-neutral-light px-8 py-3 lg:hidden">
         <BottomNavigationItem
           to="/timeline"
           Icon={QuestionMarkIcon}

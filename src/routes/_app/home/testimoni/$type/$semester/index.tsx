@@ -1,11 +1,12 @@
-import { createFileRoute } from '@tanstack/react-router';
-import TestiListMain from '../../-components/TestiListMain';
 import { useQuery } from '@tanstack/react-query';
+import { createFileRoute } from '@tanstack/react-router';
+import { useState } from 'react';
 import { api } from '~/api/client';
-import TestiListItem from '../../-components/TestiListItem';
 import FolderIcon from '~/assets/icons/testimoni/folder.svg';
-import { majorMap } from '../../-constants';
+import TestiListItem from '../../-components/TestiListItem';
 import TestiListItemLoader from '../../-components/TestiListItemLoader';
+import TestiListMain from '../../-components/TestiListMain';
+import { majorMap } from '../../-constants';
 
 export const Route = createFileRoute('/_app/home/testimoni/$type/$semester/')({
   component: TestimoniCoursesPage,
@@ -16,8 +17,17 @@ function TestimoniCoursesPage(): JSX.Element {
 
   const major = majorMap.get(type);
   const semester = semString === 'other' ? undefined : parseInt(semString, 10);
+  const [search, setSearch] = useState('');
+  const lowerSearch = search.toLowerCase();
   const { data } = useQuery({
-    queryKey: ['courses', { major, semester }],
+    queryKey: [
+      'courses',
+      {
+        major,
+        semester,
+        type: semString === 'other' ? 'Elective' : 'Mandatory',
+      },
+    ],
     queryFn: () =>
       api.course.getlistCourses({
         major,
@@ -25,6 +35,15 @@ function TestimoniCoursesPage(): JSX.Element {
         type: semString === 'other' ? 'Elective' : 'Mandatory',
       }),
   });
+
+  const courses =
+    search.length > 2
+      ? data?.courses.filter(
+          (course) =>
+            course.name.toLowerCase().includes(lowerSearch) ||
+            course.code.includes(lowerSearch),
+        )
+      : data?.courses;
 
   return (
     <TestiListMain
@@ -34,22 +53,24 @@ function TestimoniCoursesPage(): JSX.Element {
           ? `${major} / ${semester ? 'Semester ' + semString : 'Mata Kuliah Pilihan'}`
           : undefined
       }
-      showSearchbar
+      onSearchChange={setSearch}
     >
-      {data?.courses && data?.courses.length > 0
-        ? data?.courses.map((course, idx) => (
+      {courses
+        ? courses.map((course) => (
             <TestiListItem
               linkFrom={Route.fullPath}
               linkTo={`./${course.id}`}
               icon={FolderIcon}
               title={course.name}
-              key={idx}
+              key={course.id}
             />
           ))
         : [
-            <TestiListItemLoader />,
-            <TestiListItemLoader />,
-            <TestiListItemLoader />,
+            <TestiListItemLoader key={1} />,
+            <TestiListItemLoader key={2} />,
+            <TestiListItemLoader key={3} />,
+            <TestiListItemLoader key={4} />,
+            <TestiListItemLoader key={5} />,
           ]}
     </TestiListMain>
   );

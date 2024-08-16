@@ -15,7 +15,7 @@ function BottomNavigationItem({
 }) {
   return (
     <Link
-      className={`flex size-[4.5625rem] flex-col items-center justify-center rounded-full `}
+      className={`flex w-[4.5625rem] flex-col items-center justify-center rounded-full`}
       to={to as undefined}
       activeProps={{
         className:
@@ -23,7 +23,7 @@ function BottomNavigationItem({
       }}
       alt={alt}
     >
-      <Icon className="active-icon size-[2.625rem] fill-transparent stroke-black" />
+      <Icon className="active-icon size-[2.625rem] fill-transparent stroke-black transition-colors duration-200" />
       <span className={`text-[0.625rem]`}>{title}</span>
     </Link>
   );
