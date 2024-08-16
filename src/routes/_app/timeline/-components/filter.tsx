@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import Options from './options';
-import { DrawerClose, DrawerFooter } from '~/components/ui/drawer';
+import { Drawer, DrawerClose, DrawerFooter } from '~/components/ui/drawer';
 import { Button } from '~/components/ui/button';
 
 import { api } from '~/api/client';
@@ -72,22 +72,24 @@ export default function Filter({
           ))}
         </div>
         {windowSize.width < 1024 ? (
-          <DrawerFooter className="flex flex-row justify-around">
-            <Button
-              type="submit"
-              className="rounded-full bg-green-300 px-12 py-3 text-white"
-            >
-              Apply
-            </Button>
-            <DrawerClose asChild>
+          <Drawer>
+            <DrawerFooter className="flex flex-row justify-around">
               <Button
-                variant="outlined"
-                className="rounded-full border-2 border-green-300 px-12 py-3 text-green-500"
+                type="submit"
+                className="rounded-full bg-green-300 px-12 py-3 text-white"
               >
-                Cancel
+                Apply
               </Button>
-            </DrawerClose>
-          </DrawerFooter>
+              <DrawerClose asChild>
+                <Button
+                  variant="outlined"
+                  className="rounded-full border-2 border-green-300 px-12 py-3 text-green-500"
+                >
+                  Cancel
+                </Button>
+              </DrawerClose>
+            </DrawerFooter>
+          </Drawer>
         ) : (
           <div className="flex flex-col justify-around gap-4">
             <Button
