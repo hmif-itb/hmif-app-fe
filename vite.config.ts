@@ -74,7 +74,7 @@ export default defineConfig({
             files: [
               {
                 name: 'images',
-                accept: ['image/jpg'],
+                accept: ['image/*'],
               },
             ],
           },

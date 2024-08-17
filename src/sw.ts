@@ -79,7 +79,11 @@ registerRoute(
   }),
 );
 
-registerRoute('/share-file-handler', new NetworkOnly(), 'POST');
+registerRoute(
+  ({ url }) => url.pathname === '/share-file-handler',
+  new NetworkOnly(),
+  'POST',
+);
 
 let db: IDBPDatabase | null = null;
 
@@ -110,7 +114,7 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
   if (
     event.request.method !== 'POST' ||
-    url.pathname.startsWith('/share-file-handler')
+    url.pathname !== '/share-file-handler'
   ) {
     return;
   }
