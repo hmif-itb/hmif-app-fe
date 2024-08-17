@@ -17,6 +17,7 @@ import { Button } from '~/components/ui/button';
 import { cn } from '~/lib/utils';
 import { api } from '~/api/client';
 import { useQuery } from '@tanstack/react-query';
+import { XIcon } from 'lucide-react';
 
 type ComponentProps = {
   form: UseFormReturn<FormSchemaType>;
@@ -56,15 +57,24 @@ export default function Categories({
 
   useEffect(() => {
     if (!data?.categories) return;
-    setCatOptions([
-      ...angkatanOptions,
-      ...data.categories.map((c) => ({
-        id: c.id,
-        type: 'KATEGORI',
-        title: c.name,
-      })),
-    ]);
-  }, [data]);
+    setCatOptions(
+      [
+        ...angkatanOptions,
+        ...data.categories.map((c) => ({
+          id: c.id,
+          type: 'KATEGORI',
+          title: c.name,
+        })),
+      ].filter((cat) => !categories.map((c) => c.id).includes(cat.id)),
+    );
+  }, [data, categories]);
+
+  const handleDeleteCategory = (id: string) => {
+    form.setValue(
+      'categories',
+      categories.filter((c) => c.id !== id),
+    );
+  };
 
   return (
     <section className="flex w-full flex-wrap items-center gap-x-2 gap-y-4 border-b border-b-[#EBEEEB] px-5 py-3">
@@ -72,9 +82,17 @@ export default function Categories({
       {categories.map((category, idx) => (
         <div
           key={idx}
-          className="-my-2 flex items-center gap-1 rounded-2xl bg-[#305138] px-3 pb-[5px] pt-1.5"
+          className="-my-2 flex items-center gap-2 rounded-2xl bg-[#305138] px-3 pb-[5px] pt-1.5"
         >
           <p className="text-[10px] text-white">{category.title}</p>
+          <Button
+            variant="link"
+            className="p-0"
+            type="button"
+            onClick={() => handleDeleteCategory(category.id)}
+          >
+            <XIcon size={12} className="text-white" />
+          </Button>
         </div>
       ))}
       <Popover open={catDropdownOpen} onOpenChange={setCatDropdownOpen}>
@@ -87,7 +105,10 @@ export default function Categories({
             Enter Categories
           </Button>
         </PopoverTrigger>
-        <PopoverContent className={cn('p-0', !isDesktop && 'w-[70vw]')}>
+        <PopoverContent
+          align="start"
+          className={cn('p-0', !isDesktop && 'w-[70vw]')}
+        >
           <Command>
             <CommandInput placeholder="Select a category..." />
             <CommandList>
