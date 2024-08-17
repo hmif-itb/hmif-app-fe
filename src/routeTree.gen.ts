@@ -25,6 +25,7 @@ import { Route as AppSettingsSettingsItemImport } from './routes/_app/settings/_
 import { Route as AppHomeTestimoniImport } from './routes/_app/home/testimoni'
 import { Route as AppTimelineInfoIdIndexImport } from './routes/_app/timeline/$infoId/index'
 import { Route as AppHomeTestimoniIndexImport } from './routes/_app/home/testimoni/index'
+import { Route as AppHomeNimFinderIndexImport } from './routes/_app/home/nim-finder/index'
 import { Route as AppHomeDingdongIndexImport } from './routes/_app/home/dingdong/index'
 import { Route as AppHomeCalendarIndexImport } from './routes/_app/home/calendar/index'
 import { Route as AppSettingsSettingsItemSubscriptionsIndexImport } from './routes/_app/settings/_settings-item/subscriptions/index'
@@ -103,6 +104,11 @@ const AppTimelineInfoIdIndexRoute = AppTimelineInfoIdIndexImport.update({
 const AppHomeTestimoniIndexRoute = AppHomeTestimoniIndexImport.update({
   path: '/',
   getParentRoute: () => AppHomeTestimoniRoute,
+} as any)
+
+const AppHomeNimFinderIndexRoute = AppHomeNimFinderIndexImport.update({
+  path: '/home/nim-finder/',
+  getParentRoute: () => AppRoute,
 } as any)
 
 const AppHomeDingdongIndexRoute = AppHomeDingdongIndexImport.update({
@@ -245,6 +251,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppHomeDingdongIndexImport
       parentRoute: typeof AppImport
     }
+    '/_app/home/nim-finder/': {
+      id: '/_app/home/nim-finder/'
+      path: '/home/nim-finder'
+      fullPath: '/home/nim-finder'
+      preLoaderRoute: typeof AppHomeNimFinderIndexImport
+      parentRoute: typeof AppImport
+    }
     '/_app/home/testimoni/': {
       id: '/_app/home/testimoni/'
       path: '/'
@@ -328,6 +341,7 @@ export const routeTree = rootRoute.addChildren({
     AppTimelineIndexRoute,
     AppHomeCalendarIndexRoute,
     AppHomeDingdongIndexRoute,
+    AppHomeNimFinderIndexRoute,
     AppTimelineInfoIdIndexRoute,
     AppHomeTestimoniTypeSemesterCourseIdIndexRoute,
   }),
@@ -361,6 +375,7 @@ export const routeTree = rootRoute.addChildren({
         "/_app/timeline/",
         "/_app/home/calendar/",
         "/_app/home/dingdong/",
+        "/_app/home/nim-finder/",
         "/_app/timeline/$infoId/",
         "/_app/home/testimoni/$type/$semester/$courseId/"
       ]
@@ -420,6 +435,10 @@ export const routeTree = rootRoute.addChildren({
     },
     "/_app/home/dingdong/": {
       "filePath": "_app/home/dingdong/index.tsx",
+      "parent": "/_app"
+    },
+    "/_app/home/nim-finder/": {
+      "filePath": "_app/home/nim-finder/index.tsx",
       "parent": "/_app"
     },
     "/_app/home/testimoni/": {

@@ -37,7 +37,7 @@ function MobileView() {
           src="/img/home/nim-finder.svg"
           alt="NIM Finder"
           title="NIM Finder"
-          onClick={() => navigate({ to: '/home' })}
+          onClick={() => navigate({ to: '/home/nim-finder' })}
         />
 
         <NavigationItem
