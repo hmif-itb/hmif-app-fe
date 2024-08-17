@@ -99,7 +99,7 @@ function TextSection({ title, content }: { title: string; content: string }) {
           if (!d) return null;
 
           return (
-            <a key={idx} href={d.ogUrl} target="_blank" rel="noreferrer">
+            <a key={idx} href={d.requestUrl} target="_blank" rel="noreferrer">
               {/* Check if url have opengraph image */}
               {d.ogImage && d.ogImage.length > 0 ? (
                 <div className="flex items-center gap-4">
