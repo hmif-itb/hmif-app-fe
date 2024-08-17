@@ -4,15 +4,8 @@ import { Button } from '~/components/ui/button';
 import CalendarDay from './calendar-day';
 import dayjs from 'dayjs';
 import { useState, useRef, useEffect } from 'react';
-import AddEvent from './add-event';
 import { motion } from 'framer-motion';
 import DesktopAddEvent from './DesktopAddEvent';
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogTrigger,
-} from '~/components/ui/dialog';
 
 interface Event {
   title: string;
@@ -28,7 +21,6 @@ interface EventsByDate {
 function DesktopView({
   currentMonth,
   currentYear,
-  onMonthChange,
 }: {
   currentMonth: number;
   currentYear: number;
@@ -75,7 +67,7 @@ function DesktopView({
   const [showFloatingCategoryModal, setShowFloatingCategoryModal] =
     useState(false);
   const [showAddEventModal, setShowAddEventModal] = useState(false);
-  const [category, setCategory] = useState('');
+  const [, setCategory] = useState('');
 
   const monthName = today.format('MMMM');
   const year = today.year();

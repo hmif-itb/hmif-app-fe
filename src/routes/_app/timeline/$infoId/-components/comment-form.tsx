@@ -1,4 +1,3 @@
-import { Camera, Image, Paperclip } from 'lucide-react';
 import React, { useState } from 'react';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -17,7 +16,7 @@ const TOAST_ID = 'comment-form-toast';
 
 function CommentForm({ repliedInfoId }: ICommentFormProps) {
   const user = useSession();
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [, setSelectedFile] = useState<File | null>(null);
 
   const formMethods = useForm({
     defaultValues: {

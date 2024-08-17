@@ -8,9 +8,9 @@ import Timeline from './timeline';
 function MobileView() {
   const navigate = useNavigate();
 
-  const handleNavigation = (path: string) => {
-    navigate({ to: path });
-  };
+  // const handleNavigation = (path: string) => {
+  //   navigate({ to: path });
+  // };
 
   return (
     <div className="flex flex-col items-center gap-8 font-inter lg:hidden">

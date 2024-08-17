@@ -1,4 +1,4 @@
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { generateDate, months } from '../lib/calendar';
@@ -24,8 +24,6 @@ export default function Calendar({
   className,
   onChange,
   defaultDate,
-  currentMonth,
-  currentYear,
   onMonthChange,
 }: Readonly<ComponentProps>) {
   const days = isMobile

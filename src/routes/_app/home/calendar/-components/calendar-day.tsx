@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import EventLabel from './event-label';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { cn } from '~/lib/utils';
 
 function CalendarDay({
@@ -15,7 +15,7 @@ function CalendarDay({
   events: { title: string; time: string; color: string }[];
 }) {
   const currentDate = dayjs();
-  const [today, setToday] = useState(currentDate);
+  const [today] = useState(currentDate);
 
   // useEffect(() => {
   //   // setToday(currentDate);
