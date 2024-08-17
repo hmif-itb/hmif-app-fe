@@ -59,7 +59,7 @@ self.addEventListener('notificationclick', (e) => {
 });
 
 import { registerRoute } from 'workbox-routing';
-import { NetworkOnly, StaleWhileRevalidate } from 'workbox-strategies';
+import { StaleWhileRevalidate } from 'workbox-strategies';
 
 const assetsExt = [
   '.js',
@@ -77,12 +77,6 @@ registerRoute(
   new StaleWhileRevalidate({
     cacheName: 'assets-cache',
   }),
-);
-
-registerRoute(
-  ({ url }) => url.pathname === '/share-file-handler',
-  new NetworkOnly(),
-  'POST',
 );
 
 let db: IDBPDatabase | null = null;
@@ -110,41 +104,33 @@ interface SharedData {
   }[];
 }
 
-self.addEventListener('fetch', (event) => {
-  const url = new URL(event.request.url);
-  if (
-    event.request.method !== 'POST' ||
-    url.pathname !== '/share-file-handler'
-  ) {
-    return;
-  }
+registerRoute(
+  ({ url }) => url.pathname === '/share-file-handler',
+  async ({ request }) => {
+    // Get the data from the submitted form.
+    const formData = await request.formData();
+    const title = formData.get('title') || '';
+    const text = formData.get('text') || '';
+    const url = formData.get('url') || '';
+    const images = formData.getAll('images') as File[];
+    await storeSharedData({
+      id: 'data',
+      title: title as string,
+      text: text as string,
+      url: url as string,
+      images: await Promise.all(
+        images.map(async (image) => ({
+          name: image.name,
+          type: image.type,
+          data: await image.arrayBuffer(),
+        })),
+      ),
+    });
 
-  event.respondWith(
-    (async () => {
-      // Get the data from the submitted form.
-      const formData = await event.request.formData();
-      const title = formData.get('title') || '';
-      const text = formData.get('text') || '';
-      const url = formData.get('url') || '';
-      const images = formData.getAll('images') as File[];
-      await storeSharedData({
-        id: 'data',
-        title: title as string,
-        text: text as string,
-        url: url as string,
-        images: await Promise.all(
-          images.map(async (image) => ({
-            name: image.name,
-            type: image.type,
-            data: await image.arrayBuffer(),
-          })),
-        ),
-      });
-
-      return Response.redirect('/add-announcement', 303);
-    })(),
-  );
-});
+    return Response.redirect('/add-announcement', 303);
+  },
+  'POST',
+);
 
 async function storeSharedData(data: SharedData): Promise<void> {
   const db = await openDatabase();
