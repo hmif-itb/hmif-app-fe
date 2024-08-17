@@ -7,9 +7,9 @@ interface CourseCardProps {
 
 export default function CourseCard({ courseData }: CourseCardProps) {
   return (
-    <Link to={courseData?.dingdongUrl ?? ''} target="_blank">
+    <Link to={courseData?.dingdongUrl ?? ''} className="group" target="_blank">
       <div className="relative flex w-full items-center rounded-xl">
-        <div className="z-10 flex w-full items-center rounded-xl bg-white transition-all duration-300 ease-out">
+        <div className="z-10 flex w-full items-center rounded-xl bg-white transition-all duration-300 ease-out group-hover:bg-gray-200">
           <div className="flex items-center gap-4 px-5 py-4">
             <div className="flex items-center gap-4">
               <img src="/img/home/folder.svg" className="size-6" alt="Folder" />

@@ -18,8 +18,8 @@ function DesktopView() {
     <div className="hidden size-full max-h-full flex-col overflow-hidden lg:flex">
       <HeaderTitle />
       <div className="flex h-0 flex-1">
-        <div className="flex flex-1 flex-col items-center self-stretch overflow-y-auto border-r border-gray-300 py-8">
-          <div className="flex-1 bg-white">
+        <div className="flex flex-1 flex-col items-center self-stretch overflow-y-auto border-r border-gray-300 px-6 py-8">
+          <div className="w-full flex-1 bg-white">
             <div className="mb-6 flex items-center justify-start">
               <button
                 onClick={() => {
