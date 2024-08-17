@@ -12,7 +12,11 @@ export function renderInfoContent(content: string, urls: string[]) {
     return isLink ? (
       <a
         key={idx}
-        href={cleanedWord}
+        href={
+          cleanedWord.startsWith('http')
+            ? cleanedWord
+            : `https://${cleanedWord}`
+        }
         target="_blank"
         rel="noreferrer"
         className="text-blue-400"
