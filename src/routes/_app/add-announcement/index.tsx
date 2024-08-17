@@ -164,6 +164,7 @@ export function AddAnnouncementPage({
         <form
           className="max-h-full overflow-y-auto"
           onSubmit={form.handleSubmit(onSubmit)}
+          noValidate
         >
           <TopSection
             form={form}
