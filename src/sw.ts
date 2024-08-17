@@ -1,3 +1,4 @@
+import { IDBPDatabase, openDB } from 'idb';
 import { clientsClaim } from 'workbox-core';
 import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching';
 
@@ -56,34 +57,9 @@ self.addEventListener('notificationclick', (e) => {
     }),
   );
 });
-self.addEventListener('fetch', (event) => {
-  const url = new URL(event.request.url);
-  if (
-    event.request.method !== 'POST' ||
-    url.pathname !== '/share-file-handler'
-  ) {
-    return;
-  }
-
-  event.respondWith(
-    (async () => {
-      // Get the data from the submitted form.
-      const formData = await event.request.formData();
-
-      // Get the submitted files.
-      const imageFiles = formData.get('images');
-
-      // Send the files to the frontend app.
-      postMessage({ type: 'imageData', data: imageFiles });
-
-      // TODO: Redirect the user to a URL that shows the imported files.
-      return Response.redirect('/display-new-files', 303);
-    })(),
-  );
-});
 
 import { registerRoute } from 'workbox-routing';
-import { StaleWhileRevalidate } from 'workbox-strategies';
+import { NetworkOnly, StaleWhileRevalidate } from 'workbox-strategies';
 
 const assetsExt = [
   '.js',
@@ -102,3 +78,71 @@ registerRoute(
     cacheName: 'assets-cache',
   }),
 );
+
+registerRoute('/share-file-handler', new NetworkOnly(), 'POST');
+
+let db: IDBPDatabase | null = null;
+
+async function openDatabase() {
+  if (!db) {
+    db = await openDB('SharedContentDB', 1, {
+      upgrade(db) {
+        db.createObjectStore('sharedContent', { keyPath: 'id' });
+      },
+    });
+  }
+  return db;
+}
+
+interface SharedData {
+  id: string;
+  title: string;
+  text: string;
+  url: string;
+  images?: {
+    name: string;
+    type: string;
+    data: ArrayBuffer;
+  }[];
+}
+
+self.addEventListener('fetch', (event) => {
+  const url = new URL(event.request.url);
+  if (
+    event.request.method !== 'POST' ||
+    url.pathname.startsWith('/share-file-handler')
+  ) {
+    return;
+  }
+
+  event.respondWith(
+    (async () => {
+      // Get the data from the submitted form.
+      const formData = await event.request.formData();
+      const title = formData.get('title') || '';
+      const text = formData.get('text') || '';
+      const url = formData.get('url') || '';
+      const images = formData.getAll('images') as File[];
+      await storeSharedData({
+        id: 'data',
+        title: title as string,
+        text: text as string,
+        url: url as string,
+        images: await Promise.all(
+          images.map(async (image) => ({
+            name: image.name,
+            type: image.type,
+            data: await image.arrayBuffer(),
+          })),
+        ),
+      });
+
+      return Response.redirect('/add-announcement', 303);
+    })(),
+  );
+});
+
+async function storeSharedData(data: SharedData): Promise<void> {
+  const db = await openDatabase();
+  await db.put('sharedContent', data);
+}

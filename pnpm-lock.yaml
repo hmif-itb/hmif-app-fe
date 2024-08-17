@@ -80,6 +80,9 @@ importers:
       framer-motion:
         specifier: ^11.3.21
         version: 11.3.21(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      idb:
+        specifier: ^8.0.0
+        version: 8.0.0
       lucide-react:
         specifier: ^0.368.0
         version: 0.368.0(react@18.3.1)
@@ -113,9 +116,6 @@ importers:
       vaul:
         specifier: ^0.9.1
         version: 0.9.1(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      workbox-routing:
-        specifier: ^7.1.0
-        version: 7.1.0
       workbox-strategies:
         specifier: ^7.1.0
         version: 7.1.0
@@ -198,6 +198,9 @@ importers:
       workbox-precaching:
         specifier: ^7.0.0
         version: 7.0.0
+      workbox-routing:
+        specifier: ^7.1.0
+        version: 7.1.0
 
 packages:
 
@@ -2734,6 +2737,9 @@ packages:
   idb@7.1.1:
     resolution: {integrity: sha512-gchesWBzyvGHRO9W8tzUWFDycow5gwjvFKfyV9FF32Y7F50yZMp7mP+T2mJIWFx49zicqyC4uefHM17o6xKIVQ==}
 
+  idb@8.0.0:
+    resolution: {integrity: sha512-l//qvlAKGmQO31Qn7xdzagVPPaHTxXx199MhrAFuVBTPqydcPYBWjkrbv4Y0ktB+GmWOiwHl237UUOrLmQxLvw==}
+
   ignore@5.3.1:
     resolution: {integrity: sha512-5Fytz/IraMjqpwfd34ke28PTVMjZjJG2MPn5t7OE4eUCUNf8BAa7b5WUS9/Qvr6mwOQS7Mk6vdsMno5he+T8Xw==}
     engines: {node: '>= 4'}
@@ -3856,7 +3862,6 @@ packages:
 
   workbox-google-analytics@7.0.0:
     resolution: {integrity: sha512-MEYM1JTn/qiC3DbpvP2BVhyIH+dV/5BjHk756u9VbwuAhu0QHyKscTnisQuz21lfRpOwiS9z4XdqeVAKol0bzg==}
-    deprecated: It is not compatible with newer versions of GA starting with v4, as long as you are using GAv3 it should be ok, but the package is not longer being maintained
 
   workbox-navigation-preload@7.0.0:
     resolution: {integrity: sha512-juWCSrxo/fiMz3RsvDspeSLGmbgC0U9tKqcUPZBCf35s64wlaLXyn2KdHHXVQrb2cqF7I0Hc9siQalainmnXJA==}
@@ -6731,6 +6736,8 @@ snapshots:
       - supports-color
 
   idb@7.1.1: {}
+
+  idb@8.0.0: {}
 
   ignore@5.3.1: {}
 

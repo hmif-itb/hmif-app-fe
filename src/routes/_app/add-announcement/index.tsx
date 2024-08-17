@@ -1,12 +1,15 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { useState } from 'react';
+import { XIcon } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 import { api } from '~/api/client';
 import { PresignedURL } from '~/api/generated';
 import DocumentIcon from '~/assets/icons/add-announcement/document.svg';
 import { Form } from '~/components/ui/form';
+import { deleteSharedData, getSharedData } from '~/lib/share-db';
 import { cn } from '~/lib/utils';
 import Categories from './-components/Categories';
 import Content from './-components/Content';
@@ -14,11 +17,12 @@ import Headline from './-components/Headline';
 import MediaInput from './-components/MediaInput';
 import TopSection from './-components/TopSection';
 import { FormSchema, FormSchemaType } from './-constants';
-import toast from 'react-hot-toast';
-import { XIcon } from 'lucide-react';
 
 export const Route = createFileRoute('/_app/add-announcement/')({
   component: AddAnnouncementPage,
+  onLeave() {
+    deleteSharedData();
+  },
 });
 
 export type FileUpload = {
@@ -49,6 +53,31 @@ export function AddAnnouncementPage({
       categories: [],
     },
   });
+
+  const { data: sharedData } = useQuery({
+    queryKey: ['shareddata'],
+    staleTime: 0,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+    networkMode: 'always',
+    queryFn: getSharedData,
+  });
+
+  const setValue = form.setValue;
+
+  useEffect(() => {
+    if (sharedData) {
+      setValue('headline', sharedData.title);
+      setValue('announcement', sharedData.text);
+      setFiles(
+        sharedData.images?.map((image) => {
+          const file = new File([image.data], image.name, { type: image.type });
+          return { url: URL.createObjectURL(file), file };
+        }) ?? [],
+      );
+    }
+  }, [sharedData, setValue]);
 
   const mobileHandleSuccess = () => navigate({ to: '/home' });
   const desktopHandleSuccess = () =>

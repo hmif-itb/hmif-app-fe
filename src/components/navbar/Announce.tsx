@@ -1,8 +1,9 @@
-import { Button } from '../ui/button';
-import MegaphoneIcon from '~/assets/icons/megaphone.svg';
-import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
 import { getRouteApi } from '@tanstack/react-router';
+import MegaphoneIcon from '~/assets/icons/megaphone.svg';
+import { deleteSharedData } from '~/lib/share-db';
 import { AddAnnouncementPage } from '~/routes/_app/add-announcement';
+import { Button } from '../ui/button';
+import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
 
 const routeApi = getRouteApi('/_app');
 
@@ -29,6 +30,7 @@ export default function Announce(): JSX.Element {
                 showAnnounce: undefined,
               }),
             });
+            deleteSharedData();
           }
         }}
       >
