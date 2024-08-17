@@ -19,7 +19,6 @@ import { Route as AppSettingsImport } from './routes/_app/settings'
 import { Route as AppTimelineIndexImport } from './routes/_app/timeline/index'
 import { Route as AppSettingsIndexImport } from './routes/_app/settings/index'
 import { Route as AppHomeIndexImport } from './routes/_app/home/index'
-import { Route as AppDummyCalIndexImport } from './routes/_app/dummy-cal/index'
 import { Route as AppAddEventIndexImport } from './routes/_app/add-event/index'
 import { Route as AppAddAnnouncementIndexImport } from './routes/_app/add-announcement/index'
 import { Route as AppSettingsSettingsItemImport } from './routes/_app/settings/_settings-item'
@@ -73,11 +72,6 @@ const AppSettingsIndexRoute = AppSettingsIndexImport.update({
 
 const AppHomeIndexRoute = AppHomeIndexImport.update({
   path: '/home/',
-  getParentRoute: () => AppRoute,
-} as any)
-
-const AppDummyCalIndexRoute = AppDummyCalIndexImport.update({
-  path: '/dummy-cal/',
   getParentRoute: () => AppRoute,
 } as any)
 
@@ -216,13 +210,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAddEventIndexImport
       parentRoute: typeof AppImport
     }
-    '/_app/dummy-cal/': {
-      id: '/_app/dummy-cal/'
-      path: '/dummy-cal'
-      fullPath: '/dummy-cal'
-      preLoaderRoute: typeof AppDummyCalIndexImport
-      parentRoute: typeof AppImport
-    }
     '/_app/home/': {
       id: '/_app/home/'
       path: '/home'
@@ -337,7 +324,6 @@ export const routeTree = rootRoute.addChildren({
     }),
     AppAddAnnouncementIndexRoute,
     AppAddEventIndexRoute,
-    AppDummyCalIndexRoute,
     AppHomeIndexRoute,
     AppTimelineIndexRoute,
     AppHomeCalendarIndexRoute,
@@ -371,7 +357,6 @@ export const routeTree = rootRoute.addChildren({
         "/_app/home/testimoni",
         "/_app/add-announcement/",
         "/_app/add-event/",
-        "/_app/dummy-cal/",
         "/_app/home/",
         "/_app/timeline/",
         "/_app/home/calendar/",
@@ -415,10 +400,6 @@ export const routeTree = rootRoute.addChildren({
     },
     "/_app/add-event/": {
       "filePath": "_app/add-event/index.tsx",
-      "parent": "/_app"
-    },
-    "/_app/dummy-cal/": {
-      "filePath": "_app/dummy-cal/index.tsx",
       "parent": "/_app"
     },
     "/_app/home/": {

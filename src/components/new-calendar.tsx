@@ -9,9 +9,9 @@ type ComponentProps = {
   isMobile: boolean;
   className?: string;
   onChange?: (date: Date) => void;
-  currentMonth: number;
-  currentYear: number;
-  onMonthChange: (newMonth: number) => void;
+  currentMonth?: number;
+  currentYear?: number;
+  onMonthChange?: (newMonth: number) => void;
   defaultDate?: Date;
 };
 
@@ -72,7 +72,9 @@ export default function Calendar({
                 <ChevronLeft
                   className={cn(!isMobile && 'size-[15px]', 'cursor-pointer')}
                   onClick={() => {
-                    onMonthChange(today.month() - 1);
+                    if (onMonthChange) {
+                      onMonthChange(today.month() - 1);
+                    }
                     setToday(today.month(today.month() - 1));
                   }}
                 />
@@ -89,7 +91,9 @@ export default function Calendar({
                 <ChevronRight
                   className={cn(!isMobile && 'size-[15px]', 'cursor-pointer')}
                   onClick={() => {
-                    onMonthChange(today.month() + 1);
+                    if (onMonthChange) {
+                      onMonthChange(today.month() + 1);
+                    }
                     setToday(today.month(today.month() + 1));
                   }}
                 />

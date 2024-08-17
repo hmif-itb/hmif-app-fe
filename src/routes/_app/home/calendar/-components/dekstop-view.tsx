@@ -5,6 +5,14 @@ import CalendarDay from './calendar-day';
 import dayjs from 'dayjs';
 import { useState, useRef, useEffect } from 'react';
 import AddEvent from './add-event';
+import { motion } from 'framer-motion';
+import DesktopAddEvent from './DesktopAddEvent';
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogTrigger,
+} from '~/components/ui/dialog';
 
 interface Event {
   title: string;
@@ -112,6 +120,7 @@ function DesktopView({
 
   const categoryModalRef = useRef<HTMLDivElement>(null);
   const addEventModalRef = useRef<HTMLDivElement>(null);
+  const mainRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -141,40 +150,44 @@ function DesktopView({
   }, [showFloatingCategoryModal, showAddEventModal]);
 
   return (
-    <div className="hidden size-full max-h-full flex-col lg:flex">
-      <HeaderTitle />
-      <div className="flex flex-row items-center gap-2 border-b border-gray-300 p-4">
-        <div className="font-inter text-3xl font-medium">{monthName}</div>
-        <div className="grow font-inter text-3xl font-normal">{year}</div>
-        <button className="mr-1 rounded-full bg-gray-100 p-2.5">
-          <Search strokeWidth={3} color="#6A778B" size={16} />
-        </button>
-        <Button
-          className="bg-green-300"
-          onClick={() => setShowFloatingCategoryModal(true)}
-        >
-          <div className="flex flex-row items-center gap-2 font-medium">
-            Add event
-            <CirclePlus strokeWidth={2.25} size={18} />
-          </div>
-        </Button>
-      </div>
-      <div className="grid grid-cols-7 py-0.5 text-center font-medium">
-        {daysOfWeek.map((day) => (
-          <div key={day}>{day}</div>
-        ))}
-      </div>
-      <div className="grid grid-cols-7 border-l border-t border-gray-300">
-        {calendarDays.map(({ day, isCurrentMonth }, index) => (
-          <CalendarDay
-            key={index}
-            day={day}
-            isCurrentMonth={isCurrentMonth}
-            isWeekend={index % 7 === 5 || index % 7 === 6}
-            events={eventsByDate[day] ?? []}
-          />
-        ))}
-      </div>
+    <div className="relative hidden h-screen w-full flex-col lg:flex">
+      {showAddEventModal && <DesktopAddEvent constraintRef={mainRef} />}
+
+      <motion.div ref={mainRef} className="flex flex-auto flex-col">
+        <HeaderTitle />
+        <div className="flex flex-row items-center gap-2 border-b border-gray-300 p-4">
+          <div className="font-inter text-3xl font-medium">{monthName}</div>
+          <div className="grow font-inter text-3xl font-normal">{year}</div>
+          <button className="mr-1 rounded-full bg-gray-100 p-2.5">
+            <Search strokeWidth={3} color="#6A778B" size={16} />
+          </button>
+          <Button
+            className="bg-green-300"
+            onClick={() => setShowFloatingCategoryModal(true)}
+          >
+            <div className="flex flex-row items-center gap-2 font-medium">
+              Add event
+              <CirclePlus strokeWidth={2.25} size={18} />
+            </div>
+          </Button>
+        </div>
+        <div className="grid grid-cols-7 py-0.5 text-center font-medium">
+          {daysOfWeek.map((day) => (
+            <div key={day}>{day}</div>
+          ))}
+        </div>
+        <div className="grid flex-auto grid-cols-7 grid-rows-5 border-l border-t border-gray-300">
+          {calendarDays.map(({ day, isCurrentMonth }, index) => (
+            <CalendarDay
+              key={index}
+              day={day}
+              isCurrentMonth={isCurrentMonth}
+              isWeekend={index % 7 === 5 || index % 7 === 6}
+              events={eventsByDate[day] ?? []}
+            />
+          ))}
+        </div>
+      </motion.div>
 
       {showFloatingCategoryModal && (
         <div
@@ -196,14 +209,14 @@ function DesktopView({
         </div>
       )}
 
-      {showAddEventModal && (
+      {/* {showAddEventModal && (
         <AddEvent
           category={category}
           setCategory={setCategory}
           showAddEventModal={showAddEventModal}
           setShowAddEventModal={setShowAddEventModal}
         />
-      )}
+      )} */}
     </div>
   );
 }

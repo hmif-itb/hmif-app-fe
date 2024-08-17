@@ -46,7 +46,7 @@ function LeftNavbar() {
       <section className="mt-4 flex size-full flex-1 flex-col items-center justify-between p-0">
         {/* Calendar Preview for Desktop View */}
         {pathname.includes('calendar') ? (
-          <div className="w-full">
+          <div className="-mb-20 w-full">
             <Calendar
               isMobile={false}
               currentMonth={currentMonth}

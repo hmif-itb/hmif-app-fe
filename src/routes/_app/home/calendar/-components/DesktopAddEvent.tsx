@@ -1,11 +1,11 @@
-import { Form, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import CloseIcon from '~/assets/icons/calendar/close.svg';
 import DocsIcon from '~/assets/icons/calendar/docs.svg';
 import ClockIcon from '~/assets/icons/calendar/clock.svg';
 import BookIcon from '~/assets/icons/calendar/book.svg';
-import { FormSchema, FormSchemaType } from '../-constants';
+import { FormSchema, FormSchemaType } from '../-constants.ts';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FormField, FormItem } from '~/components/ui/form';
+import { Form, FormField, FormItem } from '~/components/ui/form';
 import { TextField } from '~/components/ui/textfield';
 import dayjs from 'dayjs';
 import { Button } from '~/components/ui/button';
@@ -48,7 +48,7 @@ export default function DesktopAddEvent(props: Readonly<ComponentProps>) {
       dragMomentum={false}
       dragConstraints={constraintRef}
       dragElastic={0}
-      className="w-[564px] overflow-hidden rounded-2xl bg-white shadow-[0_4px_4px_3px_rgba(0,0,0,0.25)]"
+      className="absolute left-1/3 top-1/3 z-[100] w-[564px] overflow-hidden rounded-2xl bg-white shadow-[0_4px_4px_3px_rgba(0,0,0,0.25)]"
     >
       <div className="flex flex-row justify-end bg-[#D9D9D9] px-4 py-3">
         <img src={CloseIcon} alt="close" className="size-4" />
@@ -109,12 +109,14 @@ export default function DesktopAddEvent(props: Readonly<ComponentProps>) {
             </Popover>
             <div className="flex items-center">
               <TextField
+                readOnly
                 value={startTimeDisplay}
                 inputClassName="font-medium border-none text-base px-0 text-center"
                 className="w-[80px]"
               />
               <p>-</p>
               <TextField
+                readOnly
                 value={endTimeDisplay}
                 inputClassName="font-medium border-none text-base px-0 text-center"
                 className="w-[80px]"

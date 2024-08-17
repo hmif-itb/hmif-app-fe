@@ -29,7 +29,7 @@ function CalendarDay({
   return (
     <div
       className={cn(
-        'flex h-48 flex-col justify-between border-b border-r border-gray-300 p-1',
+        'flex h-auto flex-col justify-between border-b border-r border-gray-300 p-1',
         isWeekend && 'bg-gray-100',
       )}
     >
