@@ -1,15 +1,11 @@
+import { useNavigate } from '@tanstack/react-router';
 import Calendar from '~/components/calendar';
 import HeaderTitle from '~/components/header-title';
 import NavigationItem from './navigation-item';
 import Timeline from './timeline';
-import { useNavigate } from '@tanstack/react-router';
 
 function DesktopView() {
   const navigate = useNavigate();
-
-  const handleNavigation = (path: string) => {
-    navigate({ to: path });
-  };
 
   return (
     <div className="hidden size-full max-h-full flex-col overflow-hidden lg:flex">
@@ -22,28 +18,28 @@ function DesktopView() {
               src="/img/home/folder.svg"
               alt="Ding Dong"
               title="Ding Dong"
-              onClick={() => handleNavigation('/home/dingdong/')}
+              onClick={() => navigate({ to: '/home/dingdong' })}
             />
 
             <NavigationItem
               src="/img/home/calendar.svg"
               alt="Calendar"
               title="Calendar"
-              onClick={() => handleNavigation('/home/calendar/')}
+              onClick={() => navigate({ to: '/home/calendar' })}
             />
 
             <NavigationItem
-              src="/img/home/camera.svg"
-              alt="Tutor"
-              title="Tutor"
-              onClick={() => handleNavigation('/home/')}
+              src="/img/home/nim-finder.svg"
+              alt="NIM Finder"
+              title="NIM Finder"
+              onClick={() => navigate({ to: '/home' })}
             />
 
             <NavigationItem
               src="/img/home/file.svg"
-              alt="Bundel Soal"
-              title="Bundel Soal"
-              onClick={() => handleNavigation('/home/')}
+              alt="Testi Matkul"
+              title="Testi Matkul"
+              onClick={() => navigate({ to: '/home/testimoni' })}
             />
           </section>
 

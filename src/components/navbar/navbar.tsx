@@ -1,14 +1,13 @@
-import BottomNavigationItem from './bottom-navigation-item';
-import HomeIcon from '../icons/home';
 import QuestionMarkIcon from '../icons/question-mark';
 import SettingsIcon from '../icons/settings';
+import BottomNavigationItem from './bottom-navigation-item';
 // import AddEvent from '~/routes/_app/add-event/add-event';
-import Event from './event';
+import HomeFilledIcon from '../icons/home-filled';
 
 function Navbar() {
   return (
     <div className="sticky bottom-0 z-20 flex flex-col justify-end">
-      <nav className="flex w-full justify-between bg-neutral-light px-8 py-2 lg:hidden">
+      <nav className="flex w-full justify-between bg-neutral-light px-8 py-3 lg:hidden">
         <BottomNavigationItem
           to="/timeline"
           Icon={QuestionMarkIcon}
@@ -17,11 +16,11 @@ function Navbar() {
         />
         <BottomNavigationItem
           to="/home"
-          Icon={HomeIcon}
+          Icon={HomeFilledIcon}
           alt="Home"
           title="Home"
         />
-        <Event />
+        {/* <Event /> */}
 
         <BottomNavigationItem
           to="/settings"

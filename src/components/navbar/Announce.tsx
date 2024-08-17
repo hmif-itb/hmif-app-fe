@@ -36,10 +36,10 @@ export default function Announce(): JSX.Element {
           <Button
             variant="solid"
             size="icon-sm"
-            className="flex w-full items-center justify-start gap-8 border-2 border-green-300 bg-yellow-75 pl-4 text-base text-green-300"
+            className="flex w-full items-center justify-start gap-8 border-2 border-green-300 bg-yellow-75 py-1 pl-4 text-base text-green-300"
           >
             <div className="flex size-[2.625rem] items-center justify-center">
-              <img src={MegaphoneIcon} className="size-7" alt="" />
+              <img src={MegaphoneIcon} className="size-5" alt="" />
             </div>
             <span>Announce</span>
           </Button>

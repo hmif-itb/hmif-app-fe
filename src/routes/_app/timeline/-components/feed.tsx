@@ -27,7 +27,7 @@ export default function Feed({ infos, onInView }: ComponentProps) {
               </InView>
             ),
           )
-        : [<FeedLoader />, <FeedLoader />]}
+        : [<FeedLoader key={1} />, <FeedLoader key={2} />]}
     </div>
   );
 }
