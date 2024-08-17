@@ -4,8 +4,10 @@ import { Button } from '~/components/ui/button';
 import CalendarDay from './calendar-day';
 import dayjs from 'dayjs';
 import { useState, useRef, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import DesktopAddEvent from './DesktopAddEvent';
+import { useQuery } from '@tanstack/react-query';
+import { api } from '~/api/client';
 
 interface Event {
   title: string;
@@ -17,6 +19,12 @@ interface Event {
 interface EventsByDate {
   [key: number]: Event[];
 }
+
+type CalendarGroup = {
+  id: string;
+  name: string;
+  category: string;
+};
 
 function DesktopView({
   currentMonth,
@@ -67,7 +75,7 @@ function DesktopView({
   const [showFloatingCategoryModal, setShowFloatingCategoryModal] =
     useState(false);
   const [showAddEventModal, setShowAddEventModal] = useState(false);
-  const [, setCategory] = useState('');
+  const [category, setCategory] = useState<CalendarGroup | null>(null);
 
   const monthName = today.format('MMMM');
   const year = today.year();
@@ -104,7 +112,7 @@ function DesktopView({
     });
   }
 
-  const handleCategoryButtonClick = (selectedCategory: string) => {
+  const handleCategoryButtonClick = (selectedCategory: CalendarGroup) => {
     setCategory(selectedCategory);
     setShowFloatingCategoryModal(false);
     setShowAddEventModal(true);
@@ -113,6 +121,11 @@ function DesktopView({
   const categoryModalRef = useRef<HTMLDivElement>(null);
   const addEventModalRef = useRef<HTMLDivElement>(null);
   const mainRef = useRef<HTMLDivElement | null>(null);
+
+  const { data: groupOptions } = useQuery({
+    queryKey: ['calendarGroup'],
+    queryFn: () => api.calendar.getCalendarGroup(),
+  });
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -143,7 +156,16 @@ function DesktopView({
 
   return (
     <div className="relative hidden h-screen w-full flex-col lg:flex">
-      {showAddEventModal && <DesktopAddEvent constraintRef={mainRef} />}
+      <AnimatePresence>
+        {showAddEventModal && category && (
+          <DesktopAddEvent
+            onSubmitSuccess={() => setShowAddEventModal(false)}
+            onClose={() => setShowAddEventModal(false)}
+            calendarGroup={category}
+            constraintRef={mainRef}
+          />
+        )}
+      </AnimatePresence>
 
       <motion.div ref={mainRef} className="flex flex-auto flex-col">
         <HeaderTitle />
@@ -186,29 +208,18 @@ function DesktopView({
           ref={categoryModalRef}
           className="absolute right-8 top-36 flex w-48 flex-col items-center justify-center rounded-lg bg-white py-3 shadow-xl"
         >
-          <button
-            className="block w-full p-2 text-right text-black hover:bg-gray-200"
-            onClick={() => handleCategoryButtonClick('Akademik')}
-          >
-            Akademik
-          </button>
-          <button
-            className="block w-full p-2 text-right text-black hover:bg-gray-200"
-            onClick={() => handleCategoryButtonClick('Blank')}
-          >
-            Blank
-          </button>
+          {groupOptions?.map((group) => (
+            <Button
+              key={group.id}
+              variant="link"
+              onClick={() => handleCategoryButtonClick(group)}
+              className="w-full p-2 text-right text-black hover:bg-gray-200"
+            >
+              {group.name}
+            </Button>
+          ))}
         </div>
       )}
-
-      {/* {showAddEventModal && (
-        <AddEvent
-          category={category}
-          setCategory={setCategory}
-          showAddEventModal={showAddEventModal}
-          setShowAddEventModal={setShowAddEventModal}
-        />
-      )} */}
     </div>
   );
 }

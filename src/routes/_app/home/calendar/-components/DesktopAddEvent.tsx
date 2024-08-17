@@ -3,9 +3,10 @@ import CloseIcon from '~/assets/icons/calendar/close.svg';
 import DocsIcon from '~/assets/icons/calendar/docs.svg';
 import ClockIcon from '~/assets/icons/calendar/clock.svg';
 import BookIcon from '~/assets/icons/calendar/book.svg';
+import BooksIcon from '~/assets/icons/calendar/books.svg';
 import { FormSchema, FormSchemaType } from '../-constants.ts';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Form, FormField, FormItem } from '~/components/ui/form';
+import { Form, FormControl, FormField, FormItem } from '~/components/ui/form';
 import { TextField } from '~/components/ui/textfield';
 import dayjs from 'dayjs';
 import { Button } from '~/components/ui/button';
@@ -16,20 +17,41 @@ import {
   PopoverTrigger,
 } from '~/components/ui/popover';
 import Calendar from '~/components/new-calendar';
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from '~/components/ui/command.tsx';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { api } from '~/api/client.ts';
+import { cn } from '~/lib/utils.ts';
+import toast from 'react-hot-toast';
 
 type ComponentProps = {
   constraintRef: React.MutableRefObject<HTMLElement | null>;
+  calendarGroup: {
+    id: string;
+    name: string;
+    category: string;
+  };
+  onSubmitSuccess?: () => void;
+  onClose?: () => void;
 };
 
+const TOAST_ID = 'add-event-toast';
+
 export default function DesktopAddEvent(props: Readonly<ComponentProps>) {
-  const { constraintRef } = props;
+  const { constraintRef, calendarGroup, onSubmitSuccess, onClose } = props;
 
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       title: '',
       description: '',
-      category: '',
+      courseId: '',
       start: new Date().toISOString(),
       end: new Date().toISOString(),
     },
@@ -42,20 +64,58 @@ export default function DesktopAddEvent(props: Readonly<ComponentProps>) {
   const startTimeDisplay = dayjs(watchStart).format('hh:mma');
   const endTimeDisplay = dayjs(watchEnd).format('hh:mma');
 
+  const { data: courses } = useQuery({
+    queryKey: ['courses'],
+    queryFn: () => api.course.getlistCourses({}),
+  });
+
+  const postEvent = useMutation({
+    mutationFn: api.calendar.postCalendarEvent.bind(api.calendar),
+    onSuccess: () => {
+      toast.success('Event Added!', { id: TOAST_ID });
+      onSubmitSuccess && onSubmitSuccess();
+    },
+    onError: () => toast.error('Failed to add event', { id: TOAST_ID }),
+  });
+
+  const handleSubmit = async (values: FormSchemaType) => {
+    toast.loading('Please wait...', { id: TOAST_ID });
+    postEvent.mutate({
+      requestBody: {
+        calendarGroupId: calendarGroup.id,
+        courseId: values.courseId,
+        title: values.title,
+        description: values.description,
+        category: calendarGroup.category,
+        start: values.start,
+        end: values.end,
+      },
+    });
+  };
+
   return (
     <motion.div
       drag
       dragMomentum={false}
       dragConstraints={constraintRef}
       dragElastic={0}
+      initial={{ scale: 0.9 }}
+      animate={{ scale: 1 }}
+      exit={{ scale: 0.9, opacity: 0 }}
+      transition={{ duration: 0.1 }}
       className="absolute left-1/3 top-1/3 z-[100] w-[564px] overflow-hidden rounded-2xl bg-white shadow-[0_4px_4px_3px_rgba(0,0,0,0.25)]"
     >
       <div className="flex flex-row justify-end bg-[#D9D9D9] px-4 py-3">
-        <img src={CloseIcon} alt="close" className="size-4" />
+        <Button className="p-0" variant="link" onClick={onClose}>
+          <img src={CloseIcon} alt="close" className="size-4" />
+        </Button>
       </div>
 
       <Form {...form}>
-        <form className="grid grid-cols-[24px_auto] items-center gap-x-5 p-4">
+        <form
+          onSubmit={form.handleSubmit(handleSubmit)}
+          className="grid grid-cols-[24px_auto] items-center gap-x-5 gap-y-2 p-4"
+        >
           <FormField
             control={form.control}
             name="title"
@@ -75,7 +135,7 @@ export default function DesktopAddEvent(props: Readonly<ComponentProps>) {
             )}
           />
 
-          <div className="col-start-2 col-end-2 row-start-2 row-end-2 my-3 flex w-fit items-center gap-2 rounded-lg bg-yellow-75 p-2">
+          <div className="col-start-2 col-end-2 row-start-2 row-end-2 mt-2 flex w-fit items-center gap-2 rounded-lg bg-yellow-75 p-2">
             <img src={BookIcon} alt="" className="size-4" />
             <p className="text-sm font-medium text-green-300">Akademik</p>
           </div>
@@ -95,7 +155,7 @@ export default function DesktopAddEvent(props: Readonly<ComponentProps>) {
                   {dateDisplay}
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-fit rounded-xl p-0 shadow-[0_4px_4px_3px_rgba(0,0,0,0.25)]">
+              <PopoverContent className="z-[110] w-fit rounded-xl p-0 shadow-[0_4px_4px_3px_rgba(0,0,0,0.25)]">
                 <Calendar
                   onChange={(date) => {
                     form.setValue('start', date.toISOString());
@@ -126,16 +186,71 @@ export default function DesktopAddEvent(props: Readonly<ComponentProps>) {
 
           <FormField
             control={form.control}
+            name="courseId"
+            render={({ field }) => (
+              <>
+                <img
+                  src={BooksIcon}
+                  alt=""
+                  className="col-start-1 col-end-1 row-start-4 row-end-4 size-6"
+                />
+
+                <FormItem className="col-start-2 col-end-2 row-start-4 row-end-4">
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant="link"
+                          className={cn(
+                            'p-0',
+                            !field.value && 'text-muted-foreground',
+                          )}
+                        >
+                          {field.value
+                            ? courses?.courses.find((c) => c.id === field.value)
+                                ?.name
+                            : 'Add Subject'}
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+
+                    <PopoverContent className="z-[110] p-0">
+                      <Command>
+                        <CommandInput placeholder="Search course..." />
+                        <CommandList>
+                          <CommandEmpty>No courses found</CommandEmpty>
+                          <CommandGroup>
+                            {courses?.courses.map((c) => (
+                              <CommandItem
+                                value={c.id}
+                                key={c.id}
+                                onSelect={() => form.setValue('courseId', c.id)}
+                              >
+                                {c.name}
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                </FormItem>
+              </>
+            )}
+          />
+
+          <FormField
+            control={form.control}
             name="description"
             render={({ field }) => (
               <>
                 <img
                   src={DocsIcon}
                   alt=""
-                  className="col-start-1 col-end-1 row-start-4 row-end-4 size-6"
+                  className="col-start-1 col-end-1 row-start-5 row-end-5 size-6"
                 />
 
-                <FormItem className="col-start-2 col-end-2 row-start-4 row-end-4">
+                <FormItem className="col-start-2 col-end-2 row-start-5 row-end-5">
                   <TextField
                     placeholder="Add description"
                     inputClassName="font-medium border-none text-base px-0"
@@ -146,7 +261,7 @@ export default function DesktopAddEvent(props: Readonly<ComponentProps>) {
               </>
             )}
           />
-          <div className="col-start-2 col-end-2 row-start-5 row-end-5 flex justify-end pt-[86px]">
+          <div className="col-start-2 col-end-2 row-start-6 row-end-6 flex justify-end pt-[86px]">
             <Button
               size="sm"
               type="submit"
