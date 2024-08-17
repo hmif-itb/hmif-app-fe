@@ -1,11 +1,13 @@
 import { useQueries } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 import dayjs from 'dayjs';
+import { useState } from 'react';
 import { InView } from 'react-intersection-observer';
 import { api } from '~/api/client';
 import { Info } from '~/api/generated';
 import UserInfoProfile from '~/components/user/user-info';
 import { extractUrls } from '~/lib/url-parser';
+import PostInteraction from '../$infoId/-components/post-interaction';
 import { renderInfoContent } from '../$infoId/-helper';
 import FeedLoader from './FeedLoader';
 import Tag from './tag';
@@ -34,6 +36,15 @@ export default function Feed({ infos, onInView }: ComponentProps) {
 }
 
 function UserInfo({ info }: { info: Info }) {
+  const [activeReaction, setActiveReaction] = useState<string | null>(null);
+
+  const toggleReaction = (key: string) => {
+    if (activeReaction === key) {
+      setActiveReaction(null);
+    } else {
+      setActiveReaction(key);
+    }
+  };
   return (
     <div className="my-10">
       <div className="mb-5 text-sm font-bold text-neutral-dark">
@@ -57,6 +68,14 @@ function UserInfo({ info }: { info: Info }) {
       <TagSection
         tags={info.infoCategories?.map((ic) => ic.category.name) ?? []}
       />
+      <div className="pt-5"></div>
+      <PostInteraction
+        reactions={info.reactions}
+        commentsCount={info.comments}
+        isActive={activeReaction === 'post'}
+        toggleReaction={() => toggleReaction('post')}
+        infoId={info.id}
+      />
     </div>
   );
 }
@@ -64,13 +83,16 @@ function UserInfo({ info }: { info: Info }) {
 function TextSection({ title, content }: { title: string; content: string }) {
   const urls = extractUrls(content);
 
-  const { data, isFetching } = useQueries({
+  const { data } = useQueries({
     queries: urls.map((url) => ({
       queryKey: ['openGraph', url],
       queryFn: () =>
         api.openGraph.openGraphScrape({
           url: url.startsWith('http') ? url : `https://${url}`,
         }),
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
+      staleTime: 1000 * 60 * 60 * 24,
     })),
     combine: (result) => {
       return {
@@ -79,8 +101,6 @@ function TextSection({ title, content }: { title: string; content: string }) {
       };
     },
   });
-
-  if (isFetching) return <div>Loading...</div>;
 
   return (
     <div>

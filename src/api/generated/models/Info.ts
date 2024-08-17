@@ -47,7 +47,8 @@ export type Info = {
       name: string;
     };
   }>;
-  reactions?: ReactionAggregate;
+  comments: number;
+  reactions: ReactionAggregate;
   creator: User;
 };
 

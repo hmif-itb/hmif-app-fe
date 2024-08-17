@@ -40,6 +40,7 @@ const Reaction = ({
         });
       } else {
         queryClient.invalidateQueries({ queryKey: ['info', 'detail', infoId] });
+        queryClient.invalidateQueries({ queryKey: ['infos'] });
       }
     },
   });
@@ -59,6 +60,7 @@ const Reaction = ({
         });
       } else {
         queryClient.invalidateQueries({ queryKey: ['info', 'detail', infoId] });
+        queryClient.invalidateQueries({ queryKey: ['infos'] });
       }
     },
   });

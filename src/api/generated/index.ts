@@ -25,6 +25,7 @@ export type { ReactionAggregate } from './models/ReactionAggregate';
 export type { Testimoni } from './models/Testimoni';
 export type { User } from './models/User';
 export type { UserCourse } from './models/UserCourse';
+export type { UserWithRoles } from './models/UserWithRoles';
 export type { ValidationError } from './models/ValidationError';
 
 export { AuthService } from './services/AuthService';
