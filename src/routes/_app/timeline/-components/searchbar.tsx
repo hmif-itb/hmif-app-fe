@@ -1,13 +1,13 @@
 import { forwardRef, useState } from 'react';
 
-import { Drawer, DrawerTrigger, DrawerContent } from '~/components/ui/drawer';
+import { Drawer, DrawerContent, DrawerTrigger } from '~/components/ui/drawer';
 import FilterContent from './filtercontent';
 
 import FilterIcon from '~/assets/icons/searchbar/filter.svg';
 import ReadIcon from '~/assets/icons/searchbar/read.svg';
 import SearchIcon from '~/assets/icons/searchbar/search.svg';
-import { FilterProps } from '../-types';
 import { Input } from '~/components/ui/input';
+import { FilterProps } from '../-types';
 
 type ComponentProps = {
   search: string;
@@ -44,8 +44,8 @@ export default function SearchBar({
       <div className="flex flex-row gap-5 lg:hidden">
         <ThumbToggle
           Icon={ReadIcon}
-          isPressed={props.read}
-          onClick={() => props.setRead(!props.read)}
+          isPressed={props.filter.unread}
+          onClick={() => props.setFilter({ unread: !props.filter.unread })}
         />
         <Drawer>
           <DrawerTrigger

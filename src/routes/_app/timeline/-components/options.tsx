@@ -1,17 +1,17 @@
 import { UseFormReturn } from 'react-hook-form';
-import { RadioGroup, RadioGroupItem } from '~/components/ui/radio-group';
-import { Separator } from '~/components/ui/separator';
-import { FormSchemaType } from '../-constants';
 import {
   FormControl,
   FormField,
   FormItem,
   FormLabel,
 } from '~/components/ui/form';
+import { RadioGroup, RadioGroupItem } from '~/components/ui/radio-group';
+import { Separator } from '~/components/ui/separator';
+import { FormSchemaType } from '../-constants';
 
 type ComponentProps = {
   form: UseFormReturn<FormSchemaType, undefined>;
-  header: 'category' | 'sort' | 'read';
+  header: 'category' | 'sort' | 'unread';
   choices: string[];
 };
 
@@ -40,12 +40,12 @@ export default function Options({ header, choices, form }: ComponentProps) {
                   {choices.map((choice, idx) => (
                     <FormItem
                       key={idx}
-                      className="relative space-y-0 rounded-[265.71px] border border-green-950"
+                      className="relative cursor-pointer space-y-0 rounded-[265.71px] border border-green-950"
                     >
                       <FormControl className="absolute left-2 top-1/2 -translate-y-1/2">
                         <RadioGroupItem className="shrink-0" value={choice} />
                       </FormControl>
-                      <FormLabel className="block size-full py-1 pl-8 pr-3 text-sm font-medium">
+                      <FormLabel className="block size-full cursor-pointer py-1 pl-8 pr-3 text-sm font-medium">
                         {choice}
                       </FormLabel>
                     </FormItem>

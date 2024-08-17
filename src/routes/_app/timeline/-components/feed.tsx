@@ -1,13 +1,14 @@
+import { useQueries } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
+import dayjs from 'dayjs';
+import { InView } from 'react-intersection-observer';
+import { api } from '~/api/client';
 import { Info } from '~/api/generated';
 import UserInfoProfile from '~/components/user/user-info';
-import Tag from './tag';
-import { InView } from 'react-intersection-observer';
-import { extractUrls, removePunctuation } from '~/lib/url-parser';
-import { useQueries } from '@tanstack/react-query';
-import { api } from '~/api/client';
+import { extractUrls } from '~/lib/url-parser';
+import { renderInfoContent } from '../$infoId/-helper';
 import FeedLoader from './FeedLoader';
-import dayjs from 'dayjs';
+import Tag from './tag';
 
 type ComponentProps = {
   infos: Info[];
@@ -66,7 +67,10 @@ function TextSection({ title, content }: { title: string; content: string }) {
   const { data, isFetching } = useQueries({
     queries: urls.map((url) => ({
       queryKey: ['openGraph', url],
-      queryFn: () => api.openGraph.openGraphScrape({ url }),
+      queryFn: () =>
+        api.openGraph.openGraphScrape({
+          url: url.startsWith('http') ? url : `https://${url}`,
+        }),
     })),
     combine: (result) => {
       return {
@@ -80,26 +84,14 @@ function TextSection({ title, content }: { title: string; content: string }) {
 
   return (
     <div>
-      <h1 className="mb-2 text-[20px] font-semibold">{title}</h1>
-      <div className="text-base">
+      {title && (
+        <h4 className="mb-2 whitespace-pre-line text-[20px] font-semibold">
+          {title}
+        </h4>
+      )}
+      <div className="whitespace-pre-line text-base">
         {/* Render text as normal, but if link make it into anchor tag, split it on space and newline */}
-        {content.split(/[\s\n]/).map((word, idx) => {
-          const cleanedWord = removePunctuation(word);
-          const isLink = urls.includes(cleanedWord);
-          return isLink ? (
-            <a
-              key={idx}
-              href={cleanedWord}
-              target="_blank"
-              rel="noreferrer"
-              className="text-blue-400"
-            >
-              {word}
-            </a>
-          ) : (
-            <span key={idx}>{word} </span>
-          );
-        })}
+        {renderInfoContent(content, urls)}
       </div>
       <div className="flex flex-col gap-2">
         {data.map((d, idx) => {

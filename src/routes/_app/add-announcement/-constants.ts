@@ -1,10 +1,7 @@
 import { z } from 'zod';
 
 export const FormSchema = z.object({
-  headline: z
-    .string()
-    .min(1, "Headline can't be empty")
-    .max(100, "Headline can't be more than 100 characters"),
+  headline: z.string().max(100, "Headline can't be more than 100 characters"),
   announcement: z
     .string()
     .min(1, "Announcement can't be empty")
