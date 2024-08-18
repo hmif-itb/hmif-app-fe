@@ -53,7 +53,7 @@ function InfoDetail() {
         <DetailPost info={info} />
         <PostInteraction
           reactions={info.reactions}
-          commentsCount={comments?.length ?? 0}
+          commentsCount={info.comments}
           isActive={activeReaction === 'post'}
           toggleReaction={() => toggleReaction('post')}
           infoId={info.id}

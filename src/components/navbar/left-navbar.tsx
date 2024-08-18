@@ -1,10 +1,11 @@
-import { Link, useLocation } from '@tanstack/react-router';
+import { Link, useLocation, useRouter } from '@tanstack/react-router';
 import dayjs from 'dayjs';
 import { useState } from 'react';
 import HomeFilledIcon from '../icons/home-filled';
 import QuestionMarkIcon from '../icons/question-mark';
 import SettingsIcon from '../icons/settings';
 import Calendar from '../new-calendar';
+import { Button } from '../ui/button';
 import Announce from './Announce';
 import Profile from './profile';
 
@@ -16,6 +17,8 @@ function LeftNavbar() {
   const pathname = useLocation({
     select: (location) => location.pathname,
   });
+  const router = useRouter();
+  const isCalendar = pathname.startsWith('/home/calendar');
 
   // try {
   // isCalendarRoute = useMatch({
@@ -45,7 +48,7 @@ function LeftNavbar() {
 
       <section className="mt-4 flex size-full flex-1 flex-col items-center justify-between p-0">
         {/* Calendar Preview for Desktop View */}
-        {pathname.includes('calendar') ? (
+        {isCalendar ? (
           <div className="-mb-20 w-full">
             <Calendar
               isMobile={false}
@@ -53,46 +56,60 @@ function LeftNavbar() {
               currentYear={currentYear}
               onMonthChange={handleMonthChange}
             />
+            <div className="px-4">
+              <Button
+                onClick={() => {
+                  router.history.back();
+                }}
+                size={'sm'}
+                variant={'outlined'}
+                className="w-full"
+              >
+                Back
+              </Button>
+            </div>
           </div>
-        ) : null}
-
-        {/* Navigation Section */}
-        <section className="mb-4 mt-24 flex w-full flex-col items-center gap-2">
-          <Link
-            to="/home"
-            className={`flex w-full items-center gap-8 border-l-8 border-transparent px-4 py-2 pl-8 hover:bg-yellow-75 data-[status]:border-green-300`}
-            activeProps={{
-              className:
-                'bg-yellow-75 font-bold text-green-300 [&>svg]:fill-green-300 [&>svg]:stroke-neutral-light',
-            }}
-          >
-            <HomeFilledIcon className="size-[2.625rem] fill-transparent stroke-black transition-colors duration-200" />
-            <span>Home</span>
-          </Link>
-          <Link
-            to="/timeline"
-            className={`flex w-full items-center gap-8 border-l-8 border-transparent px-4 py-2 pl-8 hover:bg-yellow-75 data-[status]:border-green-300`}
-            activeProps={{
-              className:
-                'bg-yellow-75 font-bold text-green-300 [&>svg]:fill-green-300 [&>svg]:stroke-neutral-light',
-            }}
-          >
-            <QuestionMarkIcon className="size-[2.625rem] fill-transparent stroke-black transition-colors duration-200" />
-            <span>Info</span>
-          </Link>
-          <Link
-            to="/settings"
-            className={`flex w-full items-center gap-8 border-l-8 border-transparent px-4 py-2 pl-8 hover:bg-yellow-75 data-[status]:border-green-300`}
-            activeProps={{
-              className:
-                'bg-yellow-75 font-bold text-green-300 [&>svg]:fill-green-300 [&>svg]:stroke-neutral-light',
-            }}
-          >
-            <SettingsIcon className="size-[2.625rem] fill-transparent stroke-black transition-colors duration-200" />
-            <span>Settings</span>
-          </Link>
-          <Announce />
-        </section>
+        ) : (
+          <>
+            {/* Navigation Section */}
+            <section className="mb-4 mt-24 flex w-full flex-col items-center gap-2">
+              <Link
+                to="/home"
+                className={`flex w-full items-center gap-8 border-l-8 border-transparent px-4 py-2 pl-8 hover:bg-yellow-75 data-[status]:border-green-300`}
+                activeProps={{
+                  className:
+                    'bg-yellow-75 font-bold text-green-300 [&>svg]:fill-green-300 [&>svg]:stroke-neutral-light',
+                }}
+              >
+                <HomeFilledIcon className="size-[2.625rem] fill-transparent stroke-black transition-colors duration-200" />
+                <span>Home</span>
+              </Link>
+              <Link
+                to="/timeline"
+                className={`flex w-full items-center gap-8 border-l-8 border-transparent px-4 py-2 pl-8 hover:bg-yellow-75 data-[status]:border-green-300`}
+                activeProps={{
+                  className:
+                    'bg-yellow-75 font-bold text-green-300 [&>svg]:fill-green-300 [&>svg]:stroke-neutral-light',
+                }}
+              >
+                <QuestionMarkIcon className="size-[2.625rem] fill-transparent stroke-black transition-colors duration-200" />
+                <span>Info</span>
+              </Link>
+              <Link
+                to="/settings"
+                className={`flex w-full items-center gap-8 border-l-8 border-transparent px-4 py-2 pl-8 hover:bg-yellow-75 data-[status]:border-green-300`}
+                activeProps={{
+                  className:
+                    'bg-yellow-75 font-bold text-green-300 [&>svg]:fill-green-300 [&>svg]:stroke-neutral-light',
+                }}
+              >
+                <SettingsIcon className="size-[2.625rem] fill-transparent stroke-black transition-colors duration-200" />
+                <span>Settings</span>
+              </Link>
+              <Announce />
+            </section>
+          </>
+        )}
       </section>
     </section>
   );

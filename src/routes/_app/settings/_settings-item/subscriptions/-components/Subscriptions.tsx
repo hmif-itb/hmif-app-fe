@@ -1,7 +1,7 @@
 // import { createContext, Dispatch, SetStateAction, useState } from 'react';
-import SubscriptionCard from './SubscriptionCard';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from '~/api/client';
+import SubscriptionCard, { SubscriptionCardLoading } from './SubscriptionCard';
 
 export default function Subscriptions() {
   return <SubscriptionComponent />;
@@ -59,16 +59,24 @@ function SubscriptionComponent() {
         </h1>
       </div>
       <div className="flex flex-col justify-between gap-4">
-        {categories?.categories.map((category) => (
-          <SubscriptionCard
-            key={category.id}
-            categoryData={category}
-            unsubscribed={
-              unsubscribed?.categoryId.includes(category.id) ? true : false
-            }
-            onSwitchChange={handleSwitchChange}
-          />
-        ))}
+        {categories && unsubscribed ? (
+          categories.categories.map((category) => (
+            <SubscriptionCard
+              key={category.id}
+              categoryData={category}
+              unsubscribed={
+                unsubscribed?.categoryId.includes(category.id) ? true : false
+              }
+              onSwitchChange={handleSwitchChange}
+            />
+          ))
+        ) : (
+          <>
+            <SubscriptionCardLoading />
+            <SubscriptionCardLoading />
+            <SubscriptionCardLoading />
+          </>
+        )}
       </div>
     </>
   );

@@ -1,10 +1,11 @@
 import { useNavigate } from '@tanstack/react-router';
+import { CalendarEvent } from '~/api/generated';
 import Calendar from '~/components/calendar';
 import HeaderTitle from '~/components/header-title';
 import NavigationItem from './navigation-item';
 import Timeline from './timeline';
 
-function DesktopView() {
+function DesktopView({ events }: { events?: CalendarEvent[] }) {
   const navigate = useNavigate();
 
   return (

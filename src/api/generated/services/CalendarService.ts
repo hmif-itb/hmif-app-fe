@@ -15,11 +15,10 @@ export class CalendarService {
     requestBody,
   }: {
     requestBody?: {
-      calendarGroupId: string;
       courseId?: string | null;
       title: string;
       description?: string;
-      category?: string;
+      category: 'akademik' | 'himpunan';
       start: string | null;
       end: string | null;
     },
@@ -148,6 +147,7 @@ export class CalendarService {
     id: string;
     name: string;
     category: 'akademik' | 'himpunan';
+    code: string | null;
     googleCalendarUrl: string | null;
   }>> {
     return this.httpRequest.request({

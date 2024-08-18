@@ -1,7 +1,8 @@
 import dayjs from 'dayjs';
-import EventLabel from './event-label';
 import { useState } from 'react';
+import { CalendarEvent } from '~/api/generated';
 import { cn } from '~/lib/utils';
+import EventLabel from './event-label';
 
 function CalendarDay({
   day,
@@ -12,7 +13,7 @@ function CalendarDay({
   day: number;
   isCurrentMonth: boolean;
   isWeekend: boolean;
-  events: { title: string; time: string; color: string }[];
+  events: CalendarEvent[];
 }) {
   const currentDate = dayjs();
   const [today] = useState(currentDate);
@@ -50,8 +51,8 @@ function CalendarDay({
             <EventLabel
               key={index}
               title={event.title}
-              time={event.time}
-              color={event.color}
+              time={dayjs(event.start).format('HH:mm')}
+              color={'teal'}
             />
           ))}
         </div>

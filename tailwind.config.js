@@ -157,5 +157,10 @@ module.exports = {
       },
     },
   },
+  safelist: ['teal', 'yellow', 'red', 'blue'].flatMap((color) => [
+    `bg-${color}-200`,
+    `text-${color}-500`,
+    `border-${color}-500`,
+  ]),
   plugins: [require('tailwindcss-animate')],
 };

@@ -1,22 +1,19 @@
+import { zodResolver } from '@hookform/resolvers/zod';
+import { PopoverClose } from '@radix-ui/react-popover';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import dayjs from 'dayjs';
+import { motion } from 'framer-motion';
+import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
-import CloseIcon from '~/assets/icons/calendar/close.svg';
-import DocsIcon from '~/assets/icons/calendar/docs.svg';
-import ClockIcon from '~/assets/icons/calendar/clock.svg';
+import toast from 'react-hot-toast';
+import { api } from '~/api/client.ts';
 import BookIcon from '~/assets/icons/calendar/book.svg';
 import BooksIcon from '~/assets/icons/calendar/books.svg';
-import { FormSchema, FormSchemaType } from '../-constants.ts';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Form, FormControl, FormField, FormItem } from '~/components/ui/form';
-import { TextField } from '~/components/ui/textfield';
-import dayjs from 'dayjs';
-import { Button } from '~/components/ui/button';
-import { motion } from 'framer-motion';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '~/components/ui/popover';
+import ClockIcon from '~/assets/icons/calendar/clock.svg';
+import CloseIcon from '~/assets/icons/calendar/close.svg';
+import DocsIcon from '~/assets/icons/calendar/docs.svg';
 import Calendar from '~/components/new-calendar';
+import { Button } from '~/components/ui/button';
 import {
   Command,
   CommandEmpty,
@@ -25,18 +22,21 @@ import {
   CommandItem,
   CommandList,
 } from '~/components/ui/command.tsx';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { api } from '~/api/client.ts';
+import { Form, FormControl, FormField, FormItem } from '~/components/ui/form';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '~/components/ui/popover';
+import { TextField } from '~/components/ui/textfield';
 import { cn } from '~/lib/utils.ts';
-import toast from 'react-hot-toast';
+import { FormSchema, FormSchemaType } from '../-constants.ts';
+
+export type CalendarCategory = 'akademik' | 'himpunan';
 
 type ComponentProps = {
   constraintRef: React.MutableRefObject<HTMLElement | null>;
-  calendarGroup: {
-    id: string;
-    name: string;
-    category: string;
-  };
+  category: CalendarCategory;
   onSubmitSuccess?: () => void;
   onClose?: () => void;
 };
@@ -44,7 +44,7 @@ type ComponentProps = {
 const TOAST_ID = 'add-event-toast';
 
 export default function DesktopAddEvent(props: Readonly<ComponentProps>) {
-  const { constraintRef, calendarGroup, onSubmitSuccess, onClose } = props;
+  const { constraintRef, category, onSubmitSuccess, onClose } = props;
 
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(FormSchema),
@@ -69,6 +69,10 @@ export default function DesktopAddEvent(props: Readonly<ComponentProps>) {
     queryFn: () => api.course.getlistCourses({}),
   });
 
+  const filteredCourses = courses?.courses.filter(
+    (course) => course.major !== 'OTHER',
+  );
+
   const postEvent = useMutation({
     mutationFn: api.calendar.postCalendarEvent.bind(api.calendar),
     onSuccess: () => {
@@ -82,16 +86,19 @@ export default function DesktopAddEvent(props: Readonly<ComponentProps>) {
     toast.loading('Please wait...', { id: TOAST_ID });
     postEvent.mutate({
       requestBody: {
-        calendarGroupId: calendarGroup.id,
         courseId: values.courseId,
         title: values.title,
         description: values.description,
-        category: calendarGroup.category,
+        category,
         start: values.start,
         end: values.end,
       },
     });
   };
+
+  // for handling scroll popover inside the dialog
+  // https://github.com/radix-ui/primitives/issues/1159
+  const containerRef = useRef<HTMLFormElement>(null);
 
   return (
     <motion.div
@@ -103,7 +110,7 @@ export default function DesktopAddEvent(props: Readonly<ComponentProps>) {
       animate={{ scale: 1 }}
       exit={{ scale: 0.9, opacity: 0 }}
       transition={{ duration: 0.1 }}
-      className="absolute left-1/3 top-1/3 z-[100] w-[564px] overflow-hidden rounded-2xl bg-white shadow-[0_4px_4px_3px_rgba(0,0,0,0.25)]"
+      className="w-full rounded-2xl bg-white shadow-[0_4px_4px_3px_rgba(0,0,0,0.25)]"
     >
       <div className="flex flex-row justify-end bg-[#D9D9D9] px-4 py-3">
         <Button className="p-0" variant="link" onClick={onClose}>
@@ -115,6 +122,7 @@ export default function DesktopAddEvent(props: Readonly<ComponentProps>) {
         <form
           onSubmit={form.handleSubmit(handleSubmit)}
           className="grid grid-cols-[24px_auto] items-center gap-x-5 gap-y-2 p-4"
+          ref={containerRef}
         >
           <FormField
             control={form.control}
@@ -155,7 +163,12 @@ export default function DesktopAddEvent(props: Readonly<ComponentProps>) {
                   {dateDisplay}
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="z-[110] w-fit rounded-xl p-0 shadow-[0_4px_4px_3px_rgba(0,0,0,0.25)]">
+              <PopoverContent
+                className="w-fit rounded-xl p-0 shadow-[0_4px_4px_3px_rgba(0,0,0,0.25)]"
+                align="center"
+                side="right"
+                container={containerRef.current}
+              >
                 <Calendar
                   onChange={(date) => {
                     form.setValue('start', date.toISOString());
@@ -196,7 +209,7 @@ export default function DesktopAddEvent(props: Readonly<ComponentProps>) {
                 />
 
                 <FormItem className="col-start-2 col-end-2 row-start-4 row-end-4">
-                  <Popover>
+                  <Popover modal={false}>
                     <PopoverTrigger asChild>
                       <FormControl>
                         <Button
@@ -207,26 +220,33 @@ export default function DesktopAddEvent(props: Readonly<ComponentProps>) {
                           )}
                         >
                           {field.value
-                            ? courses?.courses.find((c) => c.id === field.value)
+                            ? filteredCourses?.find((c) => c.id === field.value)
                                 ?.name
                             : 'Add Subject'}
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
 
-                    <PopoverContent className="z-[110] p-0">
+                    <PopoverContent
+                      className="p-0"
+                      align="start"
+                      side="bottom"
+                      container={containerRef.current}
+                    >
                       <Command>
                         <CommandInput placeholder="Search course..." />
-                        <CommandList>
+                        <CommandList className="max-h-52">
                           <CommandEmpty>No courses found</CommandEmpty>
-                          <CommandGroup>
-                            {courses?.courses.map((c) => (
+                          <CommandGroup className="overflow-y-auto">
+                            {filteredCourses?.map((c) => (
                               <CommandItem
                                 value={c.id}
                                 key={c.id}
                                 onSelect={() => form.setValue('courseId', c.id)}
                               >
-                                {c.name}
+                                <PopoverClose className="text-left">
+                                  {c.code} {c.name}
+                                </PopoverClose>
                               </CommandItem>
                             ))}
                           </CommandGroup>

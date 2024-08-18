@@ -1,3 +1,4 @@
+import { Skeleton } from '~/components/ui/skeleton';
 import { Switch } from '~/components/ui/switch';
 
 export interface CategoryData {
@@ -37,4 +38,8 @@ export default function SubscriptionCard({
       </div>
     </div>
   );
+}
+
+export function SubscriptionCardLoading() {
+  return <Skeleton className="h-14 rounded-xl" />;
 }

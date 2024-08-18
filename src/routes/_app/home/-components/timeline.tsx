@@ -1,17 +1,55 @@
+import dayjs, { Dayjs } from 'dayjs';
 import { useState } from 'react';
-import dates from '../-dummy/dates';
-import infos from '../-dummy/info';
+import { useCalendarEvents } from '~/hooks/calendar';
 import Dates from './dates';
 import Schedule from './schedule';
 
 function Timeline() {
-  const [currentDate, setCurrentDate] = useState('21');
-  const [currentInfo, setCurrentInfo] = useState(infos[3].info);
+  const now = dayjs();
+  const year = now.year();
+  const month = now.month() + 1;
 
-  function handleDateClick(date: string) {
-    setCurrentDate(date);
-    setCurrentInfo(infos.find((info) => info.date === date)?.info || []);
+  const leftest = now.subtract(3, 'day');
+  const rightest = now.add(3, 'day');
+
+  const { data: middleEvents } = useCalendarEvents({ month, year });
+  const useLeft = leftest.month() !== now.month();
+  const { data: leftEvents } = useCalendarEvents(
+    {
+      month: leftest.month() + 1,
+      year: leftest.year(),
+    },
+    { enabled: useLeft },
+  );
+
+  const useRight = rightest.month() !== now.month();
+  const { data: rightEvents } = useCalendarEvents(
+    {
+      month: rightest.month() + 1,
+      year: rightest.year(),
+    },
+    {
+      enabled: useRight,
+    },
+  );
+
+  const allEvents = [
+    ...(useLeft ? leftEvents ?? [] : []),
+    ...(middleEvents ?? []),
+    ...(useRight ? rightEvents ?? [] : []),
+  ];
+
+  const dates: Dayjs[] = [];
+
+  for (let i = 0; i < 7; i++) {
+    dates.push(leftest.add(i, 'day'));
   }
+
+  const [currentDate, setCurrentDate] = useState(now);
+
+  const currentEvents = allEvents.filter((event) =>
+    currentDate.isSame(dayjs(event.start), 'date'),
+  );
 
   return (
     <>
@@ -19,10 +57,10 @@ function Timeline() {
       <section className="grid w-full max-w-screen-md grid-cols-7 justify-between gap-1 px-4 sm:gap-4">
         {dates.map((date) => (
           <Dates
-            key={date.date}
+            key={date.toString()}
             date={date}
             currentDate={currentDate}
-            onClick={(date) => handleDateClick(date)}
+            onClick={setCurrentDate}
           />
         ))}
       </section>
@@ -44,13 +82,13 @@ function Timeline() {
 
         {/* Schedule Cards */}
         <div className="flex flex-col">
-          {currentInfo.map((info, idx) => {
+          {currentEvents.map((event, idx) => {
             return (
               <Schedule
-                key={info.id}
-                info={info}
-                isLastIndex={idx === currentInfo.length - 1}
-                isSecondLastIndex={idx === currentInfo.length - 2}
+                key={event.id}
+                event={event}
+                isLastIndex={idx === currentEvents.length - 1}
+                isSecondLastIndex={idx === currentEvents.length - 2}
               />
             );
           })}
