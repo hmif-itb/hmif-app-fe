@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { api } from '~/api/client';
 import SearchIcon from '~/assets/icons/textfield/search.svg';
 import HeaderTitle from '~/components/header-title';
@@ -19,11 +19,8 @@ function NimFinderPage() {
   const { data: searchResult } = useQuery({
     queryKey: ['nim', search],
     queryFn: () => api.userFinder.getUser({ search }),
+    enabled: search.length > 2,
   });
-
-  useEffect(() => {
-    console.log(searchResult);
-  }, [searchResult]);
 
   return (
     <div className="flex size-full h-screen flex-col overflow-hidden">
@@ -51,7 +48,7 @@ function NimFinderPage() {
           <img src={SearchIcon} className="size-4" />
         </TextField>
 
-        <p className="text-center text-white">
+        <p className="text-center text-body-lg text-white">
           {searchResult && `Menampilkan ${searchResult.length} hasil`}
         </p>
 
@@ -61,15 +58,17 @@ function NimFinderPage() {
               <UserInfo
                 key={user.id}
                 name={user.fullName}
+                nameClassName="leading-tight text-body-md"
                 email={
                   user.major === 'IF'
                     ? 'Teknik Informatika'
                     : 'Sistem dan Teknologi Informasi'
                 }
+                emailClassName="text-body-sm mt-1"
                 imageURL={user.picture}
                 avatarClassName="size-10"
               />
-              <p className="text-xs text-muted-foreground lg:text-lg">
+              <p className="self-end pl-1.5 text-xs text-muted-foreground lg:text-body-md">
                 {user.nim}
               </p>
             </div>

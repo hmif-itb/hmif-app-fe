@@ -33,7 +33,11 @@ export default function UserInfo({
 }: ComponentProps): JSX.Element {
   return (
     <div className={cn('flex items-center gap-3', className)}>
-      <Avatar src={imageURL} alt={name} className={avatarClassName} />
+      <Avatar
+        src={imageURL}
+        alt={name}
+        className={cn('flex-shrink-0 text-xs', avatarClassName)}
+      />
 
       <div>
         <h3 className={cn('text-body-lg font-bold', nameClassName)}>{name}</h3>
