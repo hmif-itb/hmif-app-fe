@@ -1,15 +1,12 @@
+import { useNavigate } from '@tanstack/react-router';
+import { CalendarEvent } from '~/api/generated';
 import Calendar from '~/components/calendar';
 import HeaderTitle from '~/components/header-title';
 import NavigationItem from './navigation-item';
 import Timeline from './timeline';
-import { useNavigate } from '@tanstack/react-router';
 
-function DesktopView() {
+function DesktopView({ events }: { events?: CalendarEvent[] }) {
   const navigate = useNavigate();
-
-  const handleNavigation = (path: string) => {
-    navigate({ to: path });
-  };
 
   return (
     <div className="hidden size-full max-h-full flex-col overflow-hidden lg:flex">
@@ -17,33 +14,33 @@ function DesktopView() {
       <div className="flex h-0 flex-1 overflow-hidden">
         <div className="flex min-h-full flex-1 flex-col items-center gap-12 border-r border-gray-300 py-8">
           {/* Top Navigation Section */}
-          <section className="flex w-full max-w-screen-md justify-between gap-4 px-4">
+          <section className="flex w-full max-w-screen-md justify-center gap-12 px-4">
             <NavigationItem
               src="/img/home/folder.svg"
               alt="Ding Dong"
               title="Ding Dong"
-              onClick={() => handleNavigation('/home/dingdong/')}
+              onClick={() => navigate({ to: '/home/dingdong' })}
             />
 
             <NavigationItem
               src="/img/home/calendar.svg"
               alt="Calendar"
               title="Calendar"
-              onClick={() => handleNavigation('/home/calendar/')}
+              onClick={() => navigate({ to: '/home/calendar' })}
             />
 
             <NavigationItem
-              src="/img/home/camera.svg"
-              alt="Tutor"
-              title="Tutor"
-              onClick={() => handleNavigation('/home/')}
+              src="/img/home/nim-finder.svg"
+              alt="NIM Finder"
+              title="NIM Finder"
+              onClick={() => navigate({ to: '/home/nim-finder' })}
             />
 
             <NavigationItem
               src="/img/home/file.svg"
-              alt="Bundel Soal"
-              title="Bundel Soal"
-              onClick={() => handleNavigation('/home/')}
+              alt="Testi Matkul"
+              title="Testi Matkul"
+              onClick={() => navigate({ to: '/home/testimoni' })}
             />
           </section>
 

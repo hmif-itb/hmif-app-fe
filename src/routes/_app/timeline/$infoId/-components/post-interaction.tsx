@@ -1,4 +1,4 @@
-import { useParams } from '@tanstack/react-router';
+import { useNavigate } from '@tanstack/react-router';
 import { Info } from '~/api/generated';
 import Reaction from './reaction';
 
@@ -7,13 +7,17 @@ const PostInteraction = ({
   commentsCount,
   isActive,
   toggleReaction,
+  infoId,
+  isDetail,
 }: {
   reactions: Info['reactions'];
   commentsCount: number;
   isActive: boolean;
   toggleReaction: () => void;
+  infoId: string;
+  isDetail?: boolean;
 }) => {
-  const infoId = useParams({ from: '/_app/timeline/$infoId/' }).infoId;
+  const navigate = useNavigate();
   return (
     <div className="flex items-center space-x-3 border-y border-gray-300 p-2">
       <Reaction
@@ -23,7 +27,13 @@ const PostInteraction = ({
         infoId={infoId}
       />
       <div className="flex space-x-1">
-        <button>
+        <button
+          onClick={() => {
+            if (!isDetail) {
+              navigate({ to: `/timeline/$infoId`, params: { infoId } });
+            }
+          }}
+        >
           <img src="/img/icons/comment.svg" alt="comment" />
         </button>
         <p className="text-xl text-neutral-dark-hover">{commentsCount}</p>

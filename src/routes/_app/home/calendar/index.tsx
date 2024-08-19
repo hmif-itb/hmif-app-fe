@@ -1,19 +1,35 @@
 import { createFileRoute } from '@tanstack/react-router';
-// import MobileView from './-components/mobile-view';
-import DesktopView from './-components/desktop-view';
+import DesktopView from './-components/dekstop-view';
+import { useState } from 'react';
+import dayjs from 'dayjs';
 
 export const Route = createFileRoute('/_app/home/calendar/')({
-  component: Calendar,
+  component: CalendarHome,
 });
 
-function Calendar() {
+function CalendarHome() {
+  const [currentMonth, setCurrentMonth] = useState(dayjs().month());
+  const [currentYear, setCurrentYear] = useState(dayjs().year());
+
+  const handleMonthChange = (newMonth: number) => {
+    if (newMonth < 0) {
+      setCurrentYear(currentYear - 1);
+      setCurrentMonth(11);
+    } else if (newMonth > 11) {
+      setCurrentYear(currentYear + 1);
+      setCurrentMonth(0);
+    } else {
+      setCurrentMonth(newMonth);
+    }
+  };
+
   return (
     <>
-      {/* Show mobile view if the window size <= lg */}
-      {/* <MobileView /> */}
-
-      {/* Show desktop view if the window size > lg */}
-      <DesktopView />
+      <DesktopView
+        currentMonth={currentMonth}
+        currentYear={currentYear}
+        onMonthChange={handleMonthChange}
+      />
     </>
   );
 }

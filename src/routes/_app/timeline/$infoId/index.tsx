@@ -3,12 +3,12 @@ import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 import { api } from '~/api/client';
 import { preloadImages } from '~/lib/image';
+import CommentForm from './-components/comment-form';
 import Comments from './-components/comments';
 import DetailPost from './-components/detail-post';
 import Header from './-components/header';
 import PostInteraction from './-components/post-interaction';
 import { emojiImages } from './-constants/emoji';
-import CommentForm from './-components/comment-form';
 
 export const Route = createFileRoute('/_app/timeline/$infoId/')({
   component: InfoDetail,
@@ -53,11 +53,13 @@ function InfoDetail() {
         <DetailPost info={info} />
         <PostInteraction
           reactions={info.reactions}
-          commentsCount={comments?.length ?? 0}
+          commentsCount={info.comments}
           isActive={activeReaction === 'post'}
           toggleReaction={() => toggleReaction('post')}
+          infoId={info.id}
+          isDetail
         />
-        <CommentForm repliedInfoId="0" />
+        <CommentForm repliedInfoId={info.id} />
         {/* P.S. idk how i should generate the repliedInfoId, sorry. */}
         {comments && (
           <Comments

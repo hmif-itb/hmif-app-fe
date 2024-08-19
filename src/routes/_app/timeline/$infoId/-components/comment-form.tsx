@@ -1,23 +1,16 @@
-import { Camera, Image, Paperclip } from 'lucide-react';
-import React, { useState } from 'react';
-import { useForm, Controller, SubmitHandler } from 'react-hook-form';
-import toast from 'react-hot-toast';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { api } from '~/api/client';
 import { Button } from '~/components/ui/button';
-import { Form, FormItem, FormControl } from '~/components/ui/form';
+import { Form, FormControl, FormItem } from '~/components/ui/form';
+import { Textarea } from '~/components/ui/textarea';
 import Avatar from '~/components/user/avatar';
 import useSession from '~/hooks/auth/useSession';
-import { ICommentFormValues } from '../-interface/comment-form-values';
 import { ICommentFormProps } from '../-interface/comment-form-props';
-import CommentCameraButton from './comment-camera-button';
-import CommentImageButton from './comment-image-button';
-import CommentFileButton from './comment-file-button';
-
-const TOAST_ID = 'comment-form-toast';
+import { ICommentFormValues } from '../-interface/comment-form-values';
 
 function CommentForm({ repliedInfoId }: ICommentFormProps) {
   const user = useSession();
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const formMethods = useForm({
     defaultValues: {
@@ -25,54 +18,25 @@ function CommentForm({ repliedInfoId }: ICommentFormProps) {
     },
   });
 
-  const handleImageCapture = async (blob: Blob) => {
-    const file = new File([blob], 'captured-image.jpg', { type: 'image/jpeg' });
-    setSelectedFile(file);
-  };
+  const submitMutation = useMutation({
+    mutationFn: api.comment.postComment.bind(api.comment),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['info', 'comments', repliedInfoId],
+      });
+      formMethods.reset();
+    },
+  });
 
-  const handleFileSelected = (file: File) => {
-    setSelectedFile(file);
-  };
+  const queryClient = useQueryClient();
 
   const onSubmit: SubmitHandler<ICommentFormValues> = async (data) => {
-    if (!user) {
-      return toast.error('Please log in to your account', {
-        id: TOAST_ID,
-      });
-    }
-
-    const commentData = {
-      id: '', // idk how i should generate the ID, sorry.
-      repliedInfoId: repliedInfoId,
-      creatorId: user.id,
-      content: data.comment,
-      createdAt: new Date().toISOString(),
-      creator: {
-        id: user.id,
-        nim: user.nim,
-        email: user.email,
-        fullName: user.fullName,
-        major: user.major,
-        picture: user.picture,
-        region: user.region,
-        angkatan: user.angkatan,
-        gender: user.gender,
-        membershipStatus: user.membershipStatus,
+    await submitMutation.mutateAsync({
+      requestBody: {
+        content: data.comment,
+        repliedInfoId: repliedInfoId,
       },
-    };
-
-    try {
-      await api.comment.postComment({
-        requestBody: {
-          content: commentData.content,
-          repliedInfoId: commentData.repliedInfoId,
-        },
-      });
-      console.log('sukses');
-      formMethods.reset();
-    } catch (error) {
-      console.error('Failed to post comment:', error);
-    }
+    });
   };
 
   return (
@@ -91,10 +55,10 @@ function CommentForm({ repliedInfoId }: ICommentFormProps) {
                 control={formMethods.control}
                 render={({ field }) => (
                   <FormControl>
-                    <textarea
+                    <Textarea
                       {...field}
                       placeholder="Share your thoughts with a reply"
-                      className="w-full overflow-hidden border-none text-base font-normal text-neutral-darker focus:ring-0"
+                      className="min-h-0 w-full overflow-hidden border-none p-0 text-base font-normal text-neutral-darker focus:ring-0"
                       rows={1}
                       onInput={(e) => {
                         e.currentTarget.style.height = 'auto';
@@ -106,12 +70,7 @@ function CommentForm({ repliedInfoId }: ICommentFormProps) {
               />
             </FormItem>
           </div>
-          <div className="flex content-start items-center border-b border-gray-300 py-3">
-            <div className="grow space-x-1">
-              <CommentCameraButton onCapture={handleImageCapture} />
-              <CommentImageButton onFileSelected={handleFileSelected} />
-              <CommentFileButton onFileSelected={handleFileSelected} />
-            </div>
+          <div className="flex items-center justify-end border-b border-gray-300 py-3">
             <Button type="submit" className="grow-0 bg-green-300">
               Reply
             </Button>

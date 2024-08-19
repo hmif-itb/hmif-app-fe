@@ -1,11 +1,12 @@
 import { forwardRef, useState } from 'react';
 
-import { Drawer, DrawerTrigger, DrawerContent } from '~/components/ui/drawer';
+import { Drawer, DrawerContent, DrawerTrigger } from '~/components/ui/drawer';
 import FilterContent from './filtercontent';
 
 import FilterIcon from '~/assets/icons/searchbar/filter.svg';
 import ReadIcon from '~/assets/icons/searchbar/read.svg';
 import SearchIcon from '~/assets/icons/searchbar/search.svg';
+import { Input } from '~/components/ui/input';
 import { FilterProps } from '../-types';
 
 type ComponentProps = {
@@ -23,12 +24,12 @@ export default function SearchBar({
   return (
     <form className="relative my-10 flex w-full flex-row items-center justify-center gap-5">
       <div className="relative w-[70%] text-xs lg:w-full">
-        <input
+        <Input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           type="text"
           placeholder="Search..."
-          className="w-full rounded-full border border-black py-2 pl-4 shadow-sm outline-none lg:border-2 lg:py-3 lg:text-sm lg:font-semibold"
+          className="h-auto w-full rounded-full border-2 border-black py-2 pl-4 shadow-sm outline-none lg:border-2 lg:py-3 lg:text-sm lg:font-semibold"
           name=""
           id=""
         />
@@ -43,8 +44,8 @@ export default function SearchBar({
       <div className="flex flex-row gap-5 lg:hidden">
         <ThumbToggle
           Icon={ReadIcon}
-          isPressed={props.read}
-          onClick={() => props.setRead(!props.read)}
+          isPressed={props.filter.unread}
+          onClick={() => props.setFilter({ unread: !props.filter.unread })}
         />
         <Drawer>
           <DrawerTrigger
@@ -82,7 +83,7 @@ const ThumbToggle = forwardRef<HTMLButtonElement, ThumbToggleProps>(
         ref={ref}
         className={`${
           isPressed ? `bg-green-900` : `bg-white `
-        } rounded-[14.4px] border-[.8px] border-black p-[.6rem] shadow-sm`}
+        } rounded-[14.4px] border border-black p-[.6rem] shadow-sm`}
         type="button"
         onClick={onClick}
       >

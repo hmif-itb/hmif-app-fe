@@ -1,22 +1,17 @@
 import { useQuery } from '@tanstack/react-query';
-import Options from './options';
-import { DrawerClose, DrawerFooter } from '~/components/ui/drawer';
 import { Button } from '~/components/ui/button';
+import { Drawer, DrawerClose, DrawerFooter } from '~/components/ui/drawer';
+import Options from './options';
 
-import { api } from '~/api/client';
-import { FILTER_DATA, FormSchema, FormSchemaType } from '../-constants';
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { api } from '~/api/client';
 import { Form } from '~/components/ui/form';
-import { FilterProps } from '../-types';
 import useWindowSize from '~/hooks/useWindowSize';
+import { FILTER_DATA, FormSchema, FormSchemaType } from '../-constants';
+import { FilterProps } from '../-types';
 
-export default function Filter({
-  read,
-  setRead,
-  category,
-  setCategory,
-}: FilterProps) {
+export default function Filter({ filter, setFilter }: FilterProps) {
   const windowSize = useWindowSize();
 
   const { data: catData } = useQuery({
@@ -27,14 +22,20 @@ export default function Filter({
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      category: category || '',
-      read: read ? 'Read' : 'Unread',
+      category: filter.category || '',
+      unread: filter.unread ? 'Unread' : 'All',
+      sort: filter.sort
+        ? filter.sort[0].toUpperCase() + filter.sort.slice(1)
+        : 'Newest',
     },
   });
 
   const handleSubmit = (data: FormSchemaType) => {
-    setRead(data.read === 'Read');
-    setCategory(data.category ?? '');
+    setFilter({
+      unread: data.unread === 'Unread',
+      category: data.category,
+      sort: data.sort?.toLowerCase(),
+    });
   };
 
   return (
@@ -47,8 +48,9 @@ export default function Filter({
               variant="link"
               type="button"
               onClick={() => {
-                form.setValue('read', read ? 'Read' : 'Unread');
+                form.setValue('unread', 'All');
                 form.setValue('category', '');
+                form.setValue('sort', 'Newest');
               }}
             >
               <span className="text-[16px] font-semibold text-green-400">
@@ -66,28 +68,30 @@ export default function Filter({
             <Options
               key={idx}
               form={form}
-              header={a.header.toLowerCase() as 'sort' | 'read'}
+              header={a.name.toLowerCase() as 'sort' | 'unread'}
               choices={a.choices}
             />
           ))}
         </div>
         {windowSize.width < 1024 ? (
-          <DrawerFooter className="flex flex-row justify-around">
-            <Button
-              type="submit"
-              className="rounded-full bg-green-300 px-12 py-3 text-white"
-            >
-              Apply
-            </Button>
-            <DrawerClose asChild>
+          <Drawer>
+            <DrawerFooter className="flex flex-row justify-around">
               <Button
-                variant="outlined"
-                className="rounded-full border-2 border-green-300 px-12 py-3 text-green-500"
+                type="submit"
+                className="rounded-full bg-green-300 px-12 py-3 text-white"
               >
-                Cancel
+                Apply
               </Button>
-            </DrawerClose>
-          </DrawerFooter>
+              <DrawerClose asChild>
+                <Button
+                  variant="outlined"
+                  className="rounded-full border-2 border-green-300 px-12 py-3 text-green-500"
+                >
+                  Cancel
+                </Button>
+              </DrawerClose>
+            </DrawerFooter>
+          </Drawer>
         ) : (
           <div className="flex flex-col justify-around gap-4">
             <Button
@@ -96,13 +100,6 @@ export default function Filter({
               className="w-full rounded-full bg-green-300 px-12 py-3 text-white"
             >
               Apply
-            </Button>
-            <Button
-              variant="outlined"
-              size="sm"
-              className="w-full rounded-full border-2 border-green-300 px-12 py-3 text-green-500"
-            >
-              Cancel
             </Button>
           </div>
         )}

@@ -3,16 +3,18 @@ import { z } from 'zod';
 export const FILTER_DATA = [
   {
     header: 'Sort',
+    name: 'sort',
     choices: ['Newest', 'Oldest'],
   },
   {
     header: 'Read',
-    choices: ['Read', 'Unread'],
+    name: 'unread',
+    choices: ['All', 'Unread'],
   },
 ];
 
 export const FormSchema = z.object({
-  read: z.string().optional(),
+  unread: z.string().optional(),
   sort: z.string().optional(),
   category: z.string().optional(),
 });

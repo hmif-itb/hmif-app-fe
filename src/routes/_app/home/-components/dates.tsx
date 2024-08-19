@@ -1,3 +1,4 @@
+import { Dayjs } from 'dayjs';
 import { Dot } from 'lucide-react';
 import { cn } from '~/lib/utils';
 
@@ -6,37 +7,36 @@ function Dates({
   currentDate,
   onClick,
 }: {
-  date: { date: string; day: string };
-  currentDate: string;
-  onClick: (date: string) => void;
+  date: Dayjs;
+  currentDate: Dayjs;
+  onClick: (date: Dayjs) => void;
 }) {
+  const isSame = currentDate.isSame(date, 'date');
   return (
     <button
       className={cn(
         'flex flex-col items-center rounded-xl px-3 py-2 font-inter sm:px-4',
-        currentDate === date.date && 'bg-yellow-100',
+        isSame && 'bg-yellow-100',
       )}
-      onClick={() => onClick(date.date)}
+      onClick={() => onClick(date)}
     >
       <p
         className={cn(
           'text-lg',
-          currentDate === date.date
-            ? 'font-bold text-green-400'
-            : 'font-semibold',
+          isSame ? 'font-bold text-green-400' : 'font-semibold',
         )}
       >
-        {date.date}
+        {date.date()}
       </p>
       <p
         className={cn(
           'text-base',
-          currentDate === date.date ? 'text-green-400' : 'text-[#94A3B8]',
+          isSame ? 'text-green-400' : 'text-[#94A3B8]',
         )}
       >
-        {date.day}
+        {date.format('ddd')}
       </p>
-      {currentDate === date.date && <Dot className="text-green-300" />}
+      {isSame && <Dot className="text-green-300" />}
     </button>
   );
 }

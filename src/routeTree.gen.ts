@@ -19,11 +19,13 @@ import { Route as AppSettingsImport } from './routes/_app/settings'
 import { Route as AppTimelineIndexImport } from './routes/_app/timeline/index'
 import { Route as AppSettingsIndexImport } from './routes/_app/settings/index'
 import { Route as AppHomeIndexImport } from './routes/_app/home/index'
+import { Route as AppAddEventIndexImport } from './routes/_app/add-event/index'
 import { Route as AppAddAnnouncementIndexImport } from './routes/_app/add-announcement/index'
 import { Route as AppSettingsSettingsItemImport } from './routes/_app/settings/_settings-item'
 import { Route as AppHomeTestimoniImport } from './routes/_app/home/testimoni'
 import { Route as AppTimelineInfoIdIndexImport } from './routes/_app/timeline/$infoId/index'
 import { Route as AppHomeTestimoniIndexImport } from './routes/_app/home/testimoni/index'
+import { Route as AppHomeNimFinderIndexImport } from './routes/_app/home/nim-finder/index'
 import { Route as AppHomeDingdongIndexImport } from './routes/_app/home/dingdong/index'
 import { Route as AppHomeCalendarIndexImport } from './routes/_app/home/calendar/index'
 import { Route as AppSettingsSettingsItemSubscriptionsIndexImport } from './routes/_app/settings/_settings-item/subscriptions/index'
@@ -74,6 +76,11 @@ const AppHomeIndexRoute = AppHomeIndexImport.update({
   getParentRoute: () => AppRoute,
 } as any)
 
+const AppAddEventIndexRoute = AppAddEventIndexImport.update({
+  path: '/add-event/',
+  getParentRoute: () => AppRoute,
+} as any)
+
 const AppAddAnnouncementIndexRoute = AppAddAnnouncementIndexImport.update({
   path: '/add-announcement/',
   getParentRoute: () => AppRoute,
@@ -97,6 +104,11 @@ const AppTimelineInfoIdIndexRoute = AppTimelineInfoIdIndexImport.update({
 const AppHomeTestimoniIndexRoute = AppHomeTestimoniIndexImport.update({
   path: '/',
   getParentRoute: () => AppHomeTestimoniRoute,
+} as any)
+
+const AppHomeNimFinderIndexRoute = AppHomeNimFinderIndexImport.update({
+  path: '/home/nim-finder/',
+  getParentRoute: () => AppRoute,
 } as any)
 
 const AppHomeDingdongIndexRoute = AppHomeDingdongIndexImport.update({
@@ -197,6 +209,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAddAnnouncementIndexImport
       parentRoute: typeof AppImport
     }
+    '/_app/add-event/': {
+      id: '/_app/add-event/'
+      path: '/add-event'
+      fullPath: '/add-event'
+      preLoaderRoute: typeof AppAddEventIndexImport
+      parentRoute: typeof AppImport
+    }
     '/_app/home/': {
       id: '/_app/home/'
       path: '/home'
@@ -230,6 +249,13 @@ declare module '@tanstack/react-router' {
       path: '/home/dingdong'
       fullPath: '/home/dingdong'
       preLoaderRoute: typeof AppHomeDingdongIndexImport
+      parentRoute: typeof AppImport
+    }
+    '/_app/home/nim-finder/': {
+      id: '/_app/home/nim-finder/'
+      path: '/home/nim-finder'
+      fullPath: '/home/nim-finder'
+      preLoaderRoute: typeof AppHomeNimFinderIndexImport
       parentRoute: typeof AppImport
     }
     '/_app/home/testimoni/': {
@@ -310,10 +336,12 @@ export const routeTree = rootRoute.addChildren({
       AppHomeTestimoniTypeSemesterIndexRoute,
     }),
     AppAddAnnouncementIndexRoute,
+    AppAddEventIndexRoute,
     AppHomeIndexRoute,
     AppTimelineIndexRoute,
     AppHomeCalendarIndexRoute,
     AppHomeDingdongIndexRoute,
+    AppHomeNimFinderIndexRoute,
     AppTimelineInfoIdIndexRoute,
     AppHomeTestimoniTypeSemesterCourseIdIndexRoute,
   }),
@@ -342,10 +370,12 @@ export const routeTree = rootRoute.addChildren({
         "/_app/settings",
         "/_app/home/testimoni",
         "/_app/add-announcement/",
+        "/_app/add-event/",
         "/_app/home/",
         "/_app/timeline/",
         "/_app/home/calendar/",
         "/_app/home/dingdong/",
+        "/_app/home/nim-finder/",
         "/_app/timeline/$infoId/",
         "/_app/home/testimoni/$type/$semester/$courseId/"
       ]
@@ -383,6 +413,10 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "_app/add-announcement/index.tsx",
       "parent": "/_app"
     },
+    "/_app/add-event/": {
+      "filePath": "_app/add-event/index.tsx",
+      "parent": "/_app"
+    },
     "/_app/home/": {
       "filePath": "_app/home/index.tsx",
       "parent": "/_app"
@@ -401,6 +435,10 @@ export const routeTree = rootRoute.addChildren({
     },
     "/_app/home/dingdong/": {
       "filePath": "_app/home/dingdong/index.tsx",
+      "parent": "/_app"
+    },
+    "/_app/home/nim-finder/": {
+      "filePath": "_app/home/nim-finder/index.tsx",
       "parent": "/_app"
     },
     "/_app/home/testimoni/": {

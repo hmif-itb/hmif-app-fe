@@ -1,22 +1,30 @@
+import dayjs from 'dayjs';
+import { CalendarEvent } from '~/api/generated';
 import { Separator } from '~/components/ui/separator';
 import { cn } from '~/lib/utils';
 import type { Schedule } from '../-dummy/info';
 
 function Schedule({
-  info,
+  event,
   isLastIndex,
   isSecondLastIndex,
 }: {
-  info: Schedule;
+  event: CalendarEvent;
   isLastIndex: boolean;
   isSecondLastIndex: boolean;
 }) {
+  const start = dayjs(event.start);
+  const end = dayjs(event.end);
   return (
     <div className="flex justify-between space-x-6">
       {/* Schedule Time */}
       <div className="flex flex-col">
-        <p className="text-[#212525]">{info.timeStart}</p>
-        <p className="text-[#BCC1CD]">{info.timeEnd}</p>
+        <p className="font-bold text-[#212525]">{start.format('HH:mm')}</p>
+        <p className="text-[#BCC1CD]">
+          {end.isSame(start, 'date')
+            ? end.format('HH:mm')
+            : end.format('DD/MM/YYYY HH:mm')}
+        </p>
       </div>
 
       {/* Schedule Separator and Dots */}
@@ -42,29 +50,29 @@ function Schedule({
       <div
         className={cn(
           'mb-4 flex min-h-36 min-w-[250px] max-w-[300px] flex-col gap-2 rounded-2xl p-4 text-white',
-          info.category === 'Himpunan' ? 'bg-green-300' : 'bg-yellow-300',
+          event.category === 'himpunan' ? 'bg-green-300' : 'bg-yellow-300',
         )}
       >
         <div className="flex justify-between">
-          <p className="font-semibold">{info.title}</p>
+          <p className="font-semibold">{event.title}</p>
           <p className="font-extrabold">∶</p>
         </div>
 
-        <p className="text-sm">{info.description}</p>
+        <p className="text-sm">{event.description}</p>
 
         <div className="flex items-center gap-1">
           <img src="/img/home/location.svg" alt="Location" className="size-4" />
-          <p className="text-sm">{info.location}</p>
+          <p className="text-sm">{}</p>
         </div>
 
         <div className="flex w-fit items-center gap-2 rounded-xl bg-white px-2 py-1">
           <div
             className={cn(
               'size-2 rounded-full',
-              info.category === 'Himpunan' ? 'bg-green-300' : 'bg-yellow-300',
+              event.category === 'Himpunan' ? 'bg-green-300' : 'bg-yellow-300',
             )}
           ></div>
-          <p className="text-xs text-black">{info.category}</p>
+          <p className="text-xs text-black">{event.category}</p>
         </div>
       </div>
     </div>

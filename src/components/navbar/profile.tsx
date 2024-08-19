@@ -1,6 +1,7 @@
 import useSession from '~/hooks/auth/useSession';
 import timeToMessage from '~/lib/time';
 import Avatar from '../user/avatar';
+import { motion } from 'framer-motion';
 
 function Profile() {
   const user = useSession();
@@ -11,7 +12,14 @@ function Profile() {
 
         <div className="text-sm">
           <p>Hi, {user.fullName}!</p>
-          <p className="font-bold">{timeToMessage()}</p>
+          <motion.p
+            initial={{ opacity: 0, translateY: 15 }}
+            animate={{ opacity: 1, translateY: 0 }}
+            transition={{ duration: 1 }}
+            className="font-bold"
+          >
+            {timeToMessage()}
+          </motion.p>
         </div>
       </div>
       {/* <Button className="rounded-[18px] border border-solid border-black bg-yellow-100 p-2">

@@ -1,26 +1,54 @@
 import dayjs from 'dayjs';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { generateDate, months } from '../lib/calendar';
 import { cn } from '../lib/utils';
 import { Separator } from './ui/separator';
+
+type ComponentProps = {
+  isMobile: boolean;
+  className?: string;
+  onChange?: (date: Date) => void;
+  currentMonth?: number;
+  currentYear?: number;
+  onMonthChange?: (newMonth: number) => void;
+  defaultDate?: Date;
+};
 
 /**
  * A calendar component that allows users to navigate through months and select dates.
  * @component
  */
-export default function Calendar({ isMobile }: { isMobile: boolean }) {
+export default function Calendar({
+  isMobile,
+  className,
+  onChange,
+  defaultDate,
+  onMonthChange,
+}: Readonly<ComponentProps>) {
   const days = isMobile
     ? ['Sun', 'Mon', 'Tue', 'Wed', 'Tu', 'Fri', 'Sat']
     : ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
   const currentDate = dayjs();
-  const [today, setToday] = useState(currentDate);
-  const [selectDate, setSelectDate] = useState(currentDate);
+  const [today, setToday] = useState(
+    defaultDate ? dayjs(defaultDate) : currentDate,
+  );
+  const [selectDate, setSelectDate] = useState(
+    defaultDate ? dayjs(defaultDate) : currentDate,
+  );
+
+  useEffect(() => {
+    if (onChange) {
+      onChange(selectDate.toDate());
+    }
+  }, [selectDate, onChange]);
+
   return (
     <div
       className={cn(
-        isMobile ? 'max-w-[400px]' : 'max-w-[250px]',
+        isMobile ? 'max-w-[400px]' : 'max-w-[350px]',
         'flex w-full flex-col items-center justify-center sm:flex-row',
+        className,
       )}
     >
       <div className="relative flex size-full flex-col gap-4">
@@ -42,6 +70,9 @@ export default function Calendar({ isMobile }: { isMobile: boolean }) {
                 <ChevronLeft
                   className={cn(!isMobile && 'size-[15px]', 'cursor-pointer')}
                   onClick={() => {
+                    if (onMonthChange) {
+                      onMonthChange(today.month() - 1);
+                    }
                     setToday(today.month(today.month() - 1));
                   }}
                 />
@@ -58,6 +89,9 @@ export default function Calendar({ isMobile }: { isMobile: boolean }) {
                 <ChevronRight
                   className={cn(!isMobile && 'size-[15px]', 'cursor-pointer')}
                   onClick={() => {
+                    if (onMonthChange) {
+                      onMonthChange(today.month() + 1);
+                    }
                     setToday(today.month(today.month() + 1));
                   }}
                 />

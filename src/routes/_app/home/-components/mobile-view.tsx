@@ -1,16 +1,17 @@
 import { Separator } from '@radix-ui/react-separator';
+import { useNavigate } from '@tanstack/react-router';
+import { CalendarEvent } from '~/api/generated';
 import Calendar from '~/components/calendar';
 import Profile from '~/components/navbar/profile';
 import NavigationItem from './navigation-item';
 import Timeline from './timeline';
-import { useNavigate } from '@tanstack/react-router';
 
-function MobileView() {
+function MobileView({ events }: { events?: CalendarEvent[] }) {
   const navigate = useNavigate();
 
-  const handleNavigation = (path: string) => {
-    navigate({ to: path });
-  };
+  // const handleNavigation = (path: string) => {
+  //   navigate({ to: path });
+  // };
 
   return (
     <div className="flex flex-col items-center gap-8 font-inter lg:hidden">
@@ -23,28 +24,28 @@ function MobileView() {
           src="/img/home/folder.svg"
           alt="Ding Dong"
           title="Ding Dong"
-          onClick={() => handleNavigation('/home/dingdong/')}
+          onClick={() => navigate({ to: '/home/dingdong' })}
         />
 
         <NavigationItem
           src="/img/home/calendar.svg"
           alt="Calendar"
           title="Calendar"
-          onClick={() => handleNavigation('/home/')}
+          onClick={() => navigate({ to: '/home/calendar' })}
         />
 
         <NavigationItem
-          src="/img/home/camera.svg"
-          alt="Tutor"
-          title="Tutor"
-          onClick={() => handleNavigation('/home/')}
+          src="/img/home/nim-finder.svg"
+          alt="NIM Finder"
+          title="NIM Finder"
+          onClick={() => navigate({ to: '/home/nim-finder' })}
         />
 
         <NavigationItem
           src="/img/home/file.svg"
-          alt="Bundel Soal"
-          title="Bundel Soal"
-          onClick={() => handleNavigation('/home/')}
+          alt="Testi Matkul"
+          title="Testi Matkul"
+          onClick={() => navigate({ to: '/home/testimoni' })}
         />
       </section>
 

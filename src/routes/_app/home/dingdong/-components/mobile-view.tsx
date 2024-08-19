@@ -1,56 +1,16 @@
-import { useState } from 'react';
 import UserInfo from '~/components/user/user-info';
 import useSession from '~/hooks/auth/useSession';
-import CourseCard, { CourseData } from './course-card';
+import CourseCard from './course-card';
+import { useQuery } from '@tanstack/react-query';
+import { api } from '~/api/client';
 
 function MobileView() {
   const user = useSession();
-  const coursesData: CourseData[] = [
-    {
-      courseId: '1',
-      code: 'IF4031',
-      name: 'Manajemen Perangkat Lunak',
-      class: 3,
-      credits: 3,
-    },
-    {
-      courseId: '2',
-      code: 'IF4050',
-      name: 'Pemrograman Web',
-      class: 1,
-      credits: 5,
-    },
-    {
-      courseId: '3',
-      code: 'IF4031',
-      name: 'Manajemen Perangkat Lunak',
-      class: 3,
-      credits: 3,
-    },
-    {
-      courseId: '4',
-      code: 'IF4050',
-      name: 'Pemrograman Web',
-      class: 1,
-      credits: 5,
-    },
-    {
-      courseId: '5',
-      code: 'IF4031',
-      name: 'Manajemen Perangkat Lunak',
-      class: 3,
-      credits: 3,
-    },
-    {
-      courseId: '6',
-      code: 'IF4050',
-      name: 'Pemrograman Web',
-      class: 1,
-      credits: 5,
-    },
-  ];
 
-  const [currCourses] = useState(coursesData);
+  const { data: currCourses } = useQuery({
+    queryKey: ['currentCourses'],
+    queryFn: () => api.course.getCurrentUserCourse(),
+  });
 
   return (
     <div className="flex h-full flex-col gap-3 overflow-hidden pt-3 lg:hidden">
@@ -69,8 +29,8 @@ function MobileView() {
         </div>
         <div className="flex flex-col justify-between gap-4">
           <div className={`flex flex-col gap-4`}>
-            {currCourses.map((course) => (
-              <CourseCard key={course.courseId} courseData={course} />
+            {currCourses?.map((course) => (
+              <CourseCard key={course.courseId} courseData={course.course} />
             ))}
           </div>
         </div>
