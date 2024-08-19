@@ -58,7 +58,7 @@ function LeftNavbar() {
               currentYear={currentYear}
               onMonthChange={handleMonthChange}
             />
-            <div className="m-4 flex h-[36%] flex-col gap-2 overflow-y-scroll">
+            <div className="m-4 flex h-2/5 flex-col gap-2">
               <SidebarEvents
                 currentDate={currentDate}
                 currentMonth={currentMonth}
@@ -69,7 +69,7 @@ function LeftNavbar() {
         ) : null}
         {/* Navigation Section */}
         <section
-          className={`mb-4 ${isCalendar ? '' : 'mt-24'} flex w-full flex-col items-center gap-2`}
+          className={`mb-4 ${isCalendar ? '' : 'mt-24'} flex w-full flex-col items-center gap-2 bg-white`}
         >
           <Link
             to="/home"

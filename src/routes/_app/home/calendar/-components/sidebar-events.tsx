@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import SidebarEventLabel from './sidebar-event-label';
 import { api } from '~/api/client';
 import { useQuery } from '@tanstack/react-query';
@@ -16,7 +15,7 @@ export default function SidebarEvents({
   currentYear,
 }: SidebarProps) {
   const { data: akademik } = useQuery({
-    queryKey: ['calendarEvents'],
+    queryKey: ['akademikEvents'],
     queryFn: () =>
       api.calendar.getCalendarEvent({
         category: 'Akademik',
@@ -25,7 +24,7 @@ export default function SidebarEvents({
   });
 
   const { data: himpunan } = useQuery({
-    queryKey: ['calendarEvents'],
+    queryKey: ['himpunanEvents'],
     queryFn: () =>
       api.calendar.getCalendarEvent({
         category: 'Himpunan',
@@ -42,22 +41,28 @@ export default function SidebarEvents({
 
   return (
     <>
-      <p className="text-lg font-bold">Akademik</p>
-      <div className="flex h-full flex-col gap-1.5 overflow-y-scroll">
-        {akademik?.map((event, index) => {
-          return isToday(event.start) ? (
-            <SidebarEventLabel key={index} event={event} />
-          ) : null;
-        })}
-      </div>
-      <p className="text-lg font-bold">Himpunan</p>
-      <div className="flex h-full flex-col gap-1.5 overflow-y-scroll">
-        {himpunan?.map((event, index) => {
-          return isToday(event.start) ? (
-            <SidebarEventLabel key={index} event={event} />
-          ) : null;
-        })}
-      </div>
+      <section className="flex h-full flex-col gap-2">
+        <div className="flex h-1/2 flex-col">
+          <p className="text-lg font-bold">Akademik</p>
+          <div className="flex h-full flex-col gap-1.5 overflow-y-scroll">
+            {akademik?.map((event, index) => {
+              return isToday(event.start) ? (
+                <SidebarEventLabel key={index} event={event} />
+              ) : null;
+            })}
+          </div>
+        </div>
+        <div className="flex h-1/2 flex-col">
+          <p className="text-lg font-bold">Himpunan</p>
+          <div className="flex flex-col gap-1.5 overflow-y-scroll">
+            {himpunan?.map((event, index) => {
+              return isToday(event.start) ? (
+                <SidebarEventLabel key={index} event={event} />
+              ) : null;
+            })}
+          </div>
+        </div>
+      </section>
     </>
   );
 }
