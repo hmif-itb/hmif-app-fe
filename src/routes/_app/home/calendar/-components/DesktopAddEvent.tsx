@@ -243,6 +243,7 @@ export default function DesktopAddEvent(props: Readonly<ComponentProps>) {
                                 value={c.id}
                                 key={c.id}
                                 onSelect={() => form.setValue('courseId', c.id)}
+                                className="cursor-pointer"
                               >
                                 <PopoverClose className="text-left">
                                   {c.code} {c.name}
