@@ -1,12 +1,11 @@
 import { Separator } from '@radix-ui/react-separator';
 import { useNavigate } from '@tanstack/react-router';
-import { CalendarEvent } from '~/api/generated';
 import Calendar from '~/components/calendar';
 import Profile from '~/components/navbar/profile';
 import NavigationItem from './navigation-item';
 import Timeline from './timeline';
 
-function MobileView({ events }: { events?: CalendarEvent[] }) {
+function MobileView() {
   const navigate = useNavigate();
 
   // const handleNavigation = (path: string) => {
@@ -46,6 +45,13 @@ function MobileView({ events }: { events?: CalendarEvent[] }) {
           alt="Testi Matkul"
           title="Testi Matkul"
           onClick={() => navigate({ to: '/home/testimoni' })}
+        />
+
+        <NavigationItem
+          src="/img/home/file.svg"
+          alt="Info Lomba"
+          title="Info Lomba"
+          onClick={() => navigate({ to: '/home/competition' })}
         />
       </section>
 

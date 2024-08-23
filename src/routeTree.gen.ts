@@ -27,6 +27,7 @@ import { Route as AppTimelineInfoIdIndexImport } from './routes/_app/timeline/$i
 import { Route as AppHomeTestimoniIndexImport } from './routes/_app/home/testimoni/index'
 import { Route as AppHomeNimFinderIndexImport } from './routes/_app/home/nim-finder/index'
 import { Route as AppHomeDingdongIndexImport } from './routes/_app/home/dingdong/index'
+import { Route as AppHomeCompetitionIndexImport } from './routes/_app/home/competition/index'
 import { Route as AppHomeCalendarIndexImport } from './routes/_app/home/calendar/index'
 import { Route as AppSettingsSettingsItemSubscriptionsIndexImport } from './routes/_app/settings/_settings-item/subscriptions/index'
 import { Route as AppSettingsSettingsItemCoursesIndexImport } from './routes/_app/settings/_settings-item/courses/index'
@@ -113,6 +114,11 @@ const AppHomeNimFinderIndexRoute = AppHomeNimFinderIndexImport.update({
 
 const AppHomeDingdongIndexRoute = AppHomeDingdongIndexImport.update({
   path: '/home/dingdong/',
+  getParentRoute: () => AppRoute,
+} as any)
+
+const AppHomeCompetitionIndexRoute = AppHomeCompetitionIndexImport.update({
+  path: '/home/competition/',
   getParentRoute: () => AppRoute,
 } as any)
 
@@ -244,6 +250,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppHomeCalendarIndexImport
       parentRoute: typeof AppImport
     }
+    '/_app/home/competition/': {
+      id: '/_app/home/competition/'
+      path: '/home/competition'
+      fullPath: '/home/competition'
+      preLoaderRoute: typeof AppHomeCompetitionIndexImport
+      parentRoute: typeof AppImport
+    }
     '/_app/home/dingdong/': {
       id: '/_app/home/dingdong/'
       path: '/home/dingdong'
@@ -340,6 +353,7 @@ export const routeTree = rootRoute.addChildren({
     AppHomeIndexRoute,
     AppTimelineIndexRoute,
     AppHomeCalendarIndexRoute,
+    AppHomeCompetitionIndexRoute,
     AppHomeDingdongIndexRoute,
     AppHomeNimFinderIndexRoute,
     AppTimelineInfoIdIndexRoute,
@@ -374,6 +388,7 @@ export const routeTree = rootRoute.addChildren({
         "/_app/home/",
         "/_app/timeline/",
         "/_app/home/calendar/",
+        "/_app/home/competition/",
         "/_app/home/dingdong/",
         "/_app/home/nim-finder/",
         "/_app/timeline/$infoId/",
@@ -431,6 +446,10 @@ export const routeTree = rootRoute.addChildren({
     },
     "/_app/home/calendar/": {
       "filePath": "_app/home/calendar/index.tsx",
+      "parent": "/_app"
+    },
+    "/_app/home/competition/": {
+      "filePath": "_app/home/competition/index.tsx",
       "parent": "/_app"
     },
     "/_app/home/dingdong/": {

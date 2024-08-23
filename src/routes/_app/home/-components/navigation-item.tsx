@@ -12,7 +12,7 @@ function NavigationItem({
   onClick: () => void;
 }) {
   return (
-    <div className="flex flex-col items-center gap-3 text-center text-xs md:text-base">
+    <div className="flex flex-col items-center gap-3 text-center text-[10px] md:text-sm">
       <Button
         size={'sm'}
         className="flex size-14 items-center justify-center rounded-full border border-solid border-black bg-white md:size-16"

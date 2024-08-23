@@ -2,6 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { CalendarCategory } from '../models/CalendarCategory';
 import type { CalendarEvent } from '../models/CalendarEvent';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import type { BaseHttpRequest } from '../core/BaseHttpRequest';
@@ -18,7 +19,7 @@ export class CalendarService {
       courseId?: string | null;
       title: string;
       description?: string;
-      category: 'akademik' | 'himpunan';
+      category: CalendarCategory;
       start: string | null;
       end: string | null;
     },

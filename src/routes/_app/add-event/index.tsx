@@ -1,19 +1,19 @@
-import { createFileRoute } from '@tanstack/react-router';
-import { Form } from '~/components/ui/form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { EventSchema, eventSchema } from './-constants';
-import { Button } from '~/components/ui/button';
-import { DrawerHeader, DrawerTitle, DrawerClose } from '~/components/ui/drawer';
 import { useMutation } from '@tanstack/react-query';
-import Title from './-components/title';
-import Description from './-components/description';
-import CalendarGroup from './-components/calendar-group';
-import Courses from './-components/course';
-import DatePicker from './-components/date-picker';
-import Categories from './-components/categories';
+import { createFileRoute } from '@tanstack/react-router';
+import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { api } from '~/api/client';
+import { Button } from '~/components/ui/button';
+import { DrawerClose, DrawerHeader, DrawerTitle } from '~/components/ui/drawer';
+import { Form } from '~/components/ui/form';
+import CalendarGroup from './-components/calendar-group';
+import Categories from './-components/categories';
+import Courses from './-components/course';
+import DatePicker from './-components/date-picker';
+import Description from './-components/description';
+import Title from './-components/title';
+import { EventSchema, eventSchema } from './-constants';
 
 export const Route = createFileRoute('/_app/add-event/')({
   component: AddEventPage,
@@ -56,11 +56,10 @@ export function AddEventPage({ setDrawer }: ComponentProps) {
       toast.loading('Please wait...', { id: TOAST_ID });
       postEvent.mutate({
         requestBody: {
-          calendarGroupId: values.calendarGroupId,
           courseId: values.courseId,
           title: values.title,
           description: values.description,
-          category: values.category,
+          category: values.category as 'akademik' | 'himpunan',
           start: values.start,
           end: values.end,
         },
