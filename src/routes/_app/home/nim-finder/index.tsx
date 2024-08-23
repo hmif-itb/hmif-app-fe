@@ -29,7 +29,7 @@ function NimFinderPage() {
       </div>
 
       <main className="flex size-full max-h-screen flex-col items-center gap-3 overflow-hidden bg-[url(/img/login/login-bg.jpg)] px-5 md:bg-[url(/img/login/login-bg-desktop.jpg)] lg:px-[52px]">
-        <h1 className="mb-3 mt-[70px] text-4xl italic text-white">
+        <h1 className="mb-3 mt-[50px] text-4xl italic text-white">
           <span className="font-bold not-italic">NIM</span> Finder
         </h1>
 

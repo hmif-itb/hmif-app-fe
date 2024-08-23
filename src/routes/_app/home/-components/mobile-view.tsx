@@ -46,6 +46,13 @@ function MobileView() {
           title="Testi Matkul"
           onClick={() => navigate({ to: '/home/testimoni' })}
         />
+
+        <NavigationItem
+          src="/img/home/file.svg"
+          alt="Info Lomba"
+          title="Info Lomba"
+          onClick={() => navigate({ to: '/home/competition' })}
+        />
       </section>
 
       {/* Calendar Section */}
