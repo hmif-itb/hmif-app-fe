@@ -1,36 +1,22 @@
-import { Link, useLocation, useRouter } from '@tanstack/react-router';
+import { Link, useLocation } from '@tanstack/react-router';
 import dayjs from 'dayjs';
 import { useState } from 'react';
 import HomeFilledIcon from '../icons/home-filled';
 import QuestionMarkIcon from '../icons/question-mark';
 import SettingsIcon from '../icons/settings';
 import Calendar from '../new-calendar';
-import { Button } from '../ui/button';
-import Announce from '../../routes/_app/timeline/-components/Announce';
 import Profile from './profile';
 import SidebarEvents from '~/routes/_app/home/calendar/-components/sidebar-events';
 
 function LeftNavbar() {
-  const [currentDate, setCurrentDate] = useState(dayjs().date());
+  const [currentDate] = useState(dayjs().date());
   const [currentMonth, setCurrentMonth] = useState(dayjs().month());
   const [currentYear, setCurrentYear] = useState(dayjs().year());
-  // let isCalendarRoute = false;
 
   const pathname = useLocation({
     select: (location) => location.pathname,
   });
-  const router = useRouter();
   const isCalendar = pathname.startsWith('/home/calendar');
-
-  // try {
-  // isCalendarRoute = useMatch({
-  //   from: '/_app/home/calendar/',
-  //   // exact: true,
-  // });
-  // } catch (error) {
-  // Handle the error or leave it empty to silently fail
-  // console.error('Error matching route:', error);
-  // }
 
   const handleMonthChange = (newMonth: number) => {
     if (newMonth < 0) {

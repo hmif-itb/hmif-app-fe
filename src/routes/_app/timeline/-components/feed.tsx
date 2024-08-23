@@ -11,17 +11,9 @@ import PostInteraction from '../$infoId/-components/post-interaction';
 import { renderInfoContent } from '../$infoId/-helper';
 import FeedLoader from './FeedLoader';
 import Tag from './tag';
-import HamburgerIcon from '~/assets/icons/timeline/hamburger.svg';
-import MarkAsReadIcon from '~/assets/icons/timeline/mark-as-read.svg';
-import TrashIcon from '~/assets/icons/timeline/trash.svg';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '~/components/ui/popover';
-import { Button } from '~/components/ui/button';
 import useSession from '~/hooks/auth/useSession';
 import toast from 'react-hot-toast';
+import CardPopover from './CardPopover';
 
 type ComponentProps = {
   infos: Info[];
@@ -97,42 +89,12 @@ function UserInfo({ info }: { info: Info }) {
           avatarClassName="size-[3.25rem]"
         />
 
-        <Popover>
-          <PopoverTrigger>
-            <img src={HamburgerIcon} className="size-5" alt="" />
-          </PopoverTrigger>
-
-          <PopoverContent className="w-fit px-4 py-3" align="end">
-            <ul className="flex flex-col gap-4">
-              <li className="leading-none">
-                <Button
-                  onClick={() => readInfo.mutate({ infoId: info.id })}
-                  variant="link"
-                  className="p-0 text-xs font-normal md:text-sm"
-                >
-                  <img
-                    src={MarkAsReadIcon}
-                    className="size-4 md:size-5"
-                    alt=""
-                  />
-                  Mark as read
-                </Button>
-              </li>
-              {info.creatorId === user?.id && (
-                <li className="leading-none">
-                  <Button
-                    variant="link"
-                    className="p-0 text-xs font-normal text-[#FF3B30] md:text-sm"
-                    onClick={handleDeleteInfo}
-                  >
-                    <img src={TrashIcon} className="size-4 md:size-5" alt="" />
-                    Delete
-                  </Button>
-                </li>
-              )}
-            </ul>
-          </PopoverContent>
-        </Popover>
+        <CardPopover
+          showRead
+          onRead={() => readInfo.mutate({ infoId: info.id })}
+          showDelete={info.creatorId === user?.id}
+          onDelete={info.creatorId === user?.id ? handleDeleteInfo : undefined}
+        />
       </div>
       <TextSection title={info.title} content={info.content} />
       {/* TODO: handle other than image */}

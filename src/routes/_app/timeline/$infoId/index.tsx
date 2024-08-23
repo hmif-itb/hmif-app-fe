@@ -35,7 +35,7 @@ function InfoDetail() {
     mutationFn: api.info.readInfo.bind(api.info),
   });
 
-  useEffect(() => readInfo.mutate({ infoId }), [readInfo, infoId]);
+  useEffect(() => readInfo.mutate({ infoId }), []);
 
   const [activeReaction, setActiveReaction] = useState<string | null>(null);
 

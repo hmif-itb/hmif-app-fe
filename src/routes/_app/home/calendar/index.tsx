@@ -31,7 +31,7 @@ function CalendarHome() {
         currentYear={currentYear}
         onMonthChange={handleMonthChange}
       />
-      <MobileView currentMonth={currentMonth} currentYear={currentYear} />
+      <MobileView />
     </>
   );
 }

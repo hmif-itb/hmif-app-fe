@@ -31,8 +31,6 @@ const PostText = ({
 
   if (isFetching) return <div>Loading...</div>;
 
-  if (data.length > 0) console.log(data);
-
   return (
     <div className="flex-col space-y-2">
       {title && (

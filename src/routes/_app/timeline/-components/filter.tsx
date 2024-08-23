@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { Button } from '~/components/ui/button';
-import { Drawer, DrawerClose, DrawerFooter } from '~/components/ui/drawer';
+import { DrawerClose, DrawerFooter } from '~/components/ui/drawer';
 import Options from './options';
 
 import { zodResolver } from '@hookform/resolvers/zod';

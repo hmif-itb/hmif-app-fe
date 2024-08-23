@@ -10,13 +10,7 @@ interface EventsByDate {
   [key: string]: CalendarEvent[];
 }
 
-export default function MobileView({
-  currentMonth,
-  currentYear,
-}: {
-  currentMonth: number;
-  currentYear: number;
-}) {
+export default function MobileView() {
   const { data: allEvents } = useQuery({
     queryKey: ['allCalendarEvents'],
     queryFn: () => {

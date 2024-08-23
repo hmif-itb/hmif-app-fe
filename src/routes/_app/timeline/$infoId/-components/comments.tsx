@@ -3,6 +3,13 @@ import { CommentWithReactions } from '~/api/generated';
 import UserInfo from '~/components/user/user-info';
 import { formatDate } from '~/utils/format-date';
 import Reaction from './reaction';
+import CardPopover from '../../-components/CardPopover';
+import useSession from '~/hooks/auth/useSession';
+import { useMutation } from '@tanstack/react-query';
+import { api, queryClient } from '~/api/client';
+import toast from 'react-hot-toast';
+
+const TOAST_ID = 'delete-comment-toast';
 
 const Comments = ({
   comments,
@@ -41,14 +48,39 @@ const CommentComponent = ({
   toggleReaction: () => void;
   infoId: string;
 }) => {
+  const user = useSession();
+
+  const deleteComment = useMutation({
+    mutationFn: api.comment.deleteComment.bind(api.comment),
+    onMutate: () => toast.loading('Deleting comment...', { id: TOAST_ID }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['info', 'comments', infoId] });
+      toast.success('Comment deleted', { id: TOAST_ID });
+    },
+    onError: () => toast.error('Failed to delete comment', { id: TOAST_ID }),
+  });
+
   return (
     <div className="flex-row space-y-3">
-      <UserInfo
-        name={commentData.creator.fullName}
-        email={commentData.creator.email}
-        imageURL={commentData.creator.picture}
-        avatarClassName="size-9"
-      />
+      <div className="flex items-start justify-between gap-2">
+        <UserInfo
+          name={commentData.creator.fullName}
+          email={commentData.creator.email}
+          imageURL={commentData.creator.picture}
+          avatarClassName="size-9"
+        />
+
+        {commentData.creatorId === user.id && (
+          <CardPopover
+            showDelete
+            onDelete={
+              commentData.creatorId === user.id
+                ? () => deleteComment.mutate({ commentId: commentData.id })
+                : undefined
+            }
+          />
+        )}
+      </div>
       <p>{commentData.content}</p>
       <div className="flex items-center space-x-1">
         {/* wait for reactions backend */}
