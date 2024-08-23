@@ -62,7 +62,10 @@ export default function SearchBar({
             }}
             className="z-[100] bg-[#EAEEEB] p-0"
           >
-            <FilterContent {...props} />
+            <FilterContent
+              {...props}
+              handleCloseDrawer={() => openDrawer(false)}
+            />
           </DrawerContent>
         </Drawer>
       </div>

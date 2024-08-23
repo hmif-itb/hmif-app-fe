@@ -1,6 +1,6 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { api } from '~/api/client';
 import { preloadImages } from '~/lib/image';
 import CommentForm from './-components/comment-form';
@@ -30,6 +30,12 @@ function InfoDetail() {
         .getCommentsList({ infoId, sort: 'oldest' })
         .then((res) => res.comment),
   });
+
+  const readInfo = useMutation({
+    mutationFn: api.info.readInfo.bind(api.info),
+  });
+
+  useEffect(() => readInfo.mutate({ infoId }), [readInfo, infoId]);
 
   const [activeReaction, setActiveReaction] = useState<string | null>(null);
 

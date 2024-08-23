@@ -11,7 +11,11 @@ import useWindowSize from '~/hooks/useWindowSize';
 import { FILTER_DATA, FormSchema, FormSchemaType } from '../-constants';
 import { FilterProps } from '../-types';
 
-export default function Filter({ filter, setFilter }: FilterProps) {
+export default function Filter({
+  filter,
+  setFilter,
+  handleCloseDrawer,
+}: FilterProps) {
   const windowSize = useWindowSize();
 
   const { data: catData } = useQuery({
@@ -74,25 +78,29 @@ export default function Filter({ filter, setFilter }: FilterProps) {
           ))}
         </div>
         {windowSize.width < 1024 ? (
-          <Drawer>
-            <DrawerFooter className="flex flex-row justify-around">
+          // <Drawer>
+          <DrawerFooter className="flex flex-row justify-between px-0">
+            <DrawerClose asChild>
               <Button
                 type="submit"
                 className="rounded-full bg-green-300 px-12 py-3 text-white"
+                onClick={handleCloseDrawer}
               >
                 Apply
               </Button>
-              <DrawerClose asChild>
-                <Button
-                  variant="outlined"
-                  className="rounded-full border-2 border-green-300 px-12 py-3 text-green-500"
-                >
-                  Cancel
-                </Button>
-              </DrawerClose>
-            </DrawerFooter>
-          </Drawer>
+            </DrawerClose>
+            <DrawerClose asChild>
+              <Button
+                variant="outlined"
+                className="rounded-full border-2 border-green-300 px-12 py-3 text-green-500"
+                onClick={handleCloseDrawer}
+              >
+                Cancel
+              </Button>
+            </DrawerClose>
+          </DrawerFooter>
         ) : (
+          // </Drawer>
           <div className="flex flex-col justify-around gap-4">
             <Button
               type="submit"

@@ -9,4 +9,5 @@ export type FilterProps = {
     category?: string;
     sort?: string;
   }) => void;
+  handleCloseDrawer?: () => void;
 };

@@ -57,7 +57,7 @@ function Timeline() {
     fetchNextPage,
     isFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: ['infos', search, unread, category],
+    queryKey: ['infos', search, unread, category, sort],
     queryFn: ({ pageParam }) =>
       api.info
         .getListInfo({
