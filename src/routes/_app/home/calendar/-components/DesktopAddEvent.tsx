@@ -7,7 +7,6 @@ import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { api } from '~/api/client.ts';
-import BookIcon from '~/assets/icons/calendar/book.svg';
 import BooksIcon from '~/assets/icons/calendar/books.svg';
 import ClockIcon from '~/assets/icons/calendar/clock.svg';
 import CloseIcon from '~/assets/icons/calendar/close.svg';
@@ -86,7 +85,7 @@ export default function DesktopAddEvent(props: Readonly<ComponentProps>) {
     toast.loading('Please wait...', { id: TOAST_ID });
     postEvent.mutate({
       requestBody: {
-        courseId: values.courseId,
+        courseId: category === 'akademik' ? values.courseId : undefined,
         title: values.title,
         description: values.description,
         category,
@@ -112,7 +111,7 @@ export default function DesktopAddEvent(props: Readonly<ComponentProps>) {
       transition={{ duration: 0.1 }}
       className="w-full rounded-2xl bg-white shadow-[0_4px_4px_3px_rgba(0,0,0,0.25)]"
     >
-      <div className="flex flex-row justify-end bg-[#D9D9D9] px-4 py-3">
+      <div className="flex flex-row justify-end rounded-t-2xl bg-[#D9D9D9] px-4 py-3">
         <Button className="p-0" variant="link" onClick={onClose}>
           <img src={CloseIcon} alt="close" className="size-4" />
         </Button>
@@ -144,8 +143,8 @@ export default function DesktopAddEvent(props: Readonly<ComponentProps>) {
           />
 
           <div className="col-start-2 col-end-2 row-start-2 row-end-2 mt-2 flex w-fit items-center gap-2 rounded-lg bg-yellow-75 p-2">
-            <img src={BookIcon} alt="" className="size-4" />
-            <p className="text-sm font-medium text-green-300">Akademik</p>
+            {/* <img src={BookIcon} alt="" className="size-4" /> */}
+            <p className="text-sm font-medium text-green-300">{category}</p>
           </div>
 
           <img
@@ -196,68 +195,73 @@ export default function DesktopAddEvent(props: Readonly<ComponentProps>) {
               />
             </div>
           </div>
+          {category === 'akademik' && (
+            <FormField
+              control={form.control}
+              name="courseId"
+              render={({ field }) => (
+                <>
+                  <img
+                    src={BooksIcon}
+                    alt=""
+                    className="col-start-1 col-end-1 row-start-4 row-end-4 size-6"
+                  />
 
-          <FormField
-            control={form.control}
-            name="courseId"
-            render={({ field }) => (
-              <>
-                <img
-                  src={BooksIcon}
-                  alt=""
-                  className="col-start-1 col-end-1 row-start-4 row-end-4 size-6"
-                />
+                  <FormItem className="col-start-2 col-end-2 row-start-4 row-end-4">
+                    <Popover modal={false}>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant="link"
+                            className={cn(
+                              'p-0',
+                              !field.value && 'text-muted-foreground',
+                            )}
+                          >
+                            {field.value
+                              ? filteredCourses?.find(
+                                  (c) => c.id === field.value,
+                                )?.name
+                              : 'Add Subject'}
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
 
-                <FormItem className="col-start-2 col-end-2 row-start-4 row-end-4">
-                  <Popover modal={false}>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant="link"
-                          className={cn(
-                            'p-0',
-                            !field.value && 'text-muted-foreground',
-                          )}
-                        >
-                          {field.value
-                            ? filteredCourses?.find((c) => c.id === field.value)
-                                ?.name
-                            : 'Add Subject'}
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-
-                    <PopoverContent
-                      className="p-0"
-                      align="start"
-                      side="bottom"
-                      container={containerRef.current}
-                    >
-                      <Command>
-                        <CommandInput placeholder="Search course..." />
-                        <CommandList className="max-h-52">
-                          <CommandEmpty>No courses found</CommandEmpty>
-                          <CommandGroup className="overflow-y-auto">
-                            {filteredCourses?.map((c) => (
-                              <CommandItem
-                                value={c.id}
-                                key={c.id}
-                                onSelect={() => form.setValue('courseId', c.id)}
-                              >
-                                <PopoverClose className="text-left">
-                                  {c.code} {c.name}
-                                </PopoverClose>
-                              </CommandItem>
-                            ))}
-                          </CommandGroup>
-                        </CommandList>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
-                </FormItem>
-              </>
-            )}
-          />
+                      <PopoverContent
+                        className="p-0"
+                        align="start"
+                        side="bottom"
+                        container={containerRef.current}
+                      >
+                        <Command>
+                          <CommandInput placeholder="Search course..." />
+                          <CommandList className="max-h-52">
+                            <CommandEmpty>No courses found</CommandEmpty>
+                            <CommandGroup className="overflow-y-auto">
+                              {filteredCourses?.map((c) => (
+                                <CommandItem
+                                  value={c.id}
+                                  key={c.id}
+                                  onSelect={() =>
+                                    form.setValue('courseId', c.id)
+                                  }
+                                  className="cursor-pointer"
+                                >
+                                  <PopoverClose className="text-left">
+                                    {c.code} {c.name}
+                                  </PopoverClose>
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
+                  </FormItem>
+                </>
+              )}
+            />
+          )}
 
           <FormField
             control={form.control}

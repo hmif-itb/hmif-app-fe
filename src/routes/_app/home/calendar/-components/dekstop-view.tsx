@@ -118,6 +118,7 @@ function DesktopView({
         <DialogContent
           className="w-[564px] rounded-none border-none bg-transparent p-0"
           hideCloseButton
+          overlayClassName="bg-transparent"
         >
           {category && (
             <DesktopAddEvent

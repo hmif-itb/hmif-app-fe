@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import DesktopView from './-components/dekstop-view';
 import { useState } from 'react';
 import dayjs from 'dayjs';
+import MobileView from './-components/mobile-view';
 
 export const Route = createFileRoute('/_app/home/calendar/')({
   component: CalendarHome,
@@ -30,6 +31,7 @@ function CalendarHome() {
         currentYear={currentYear}
         onMonthChange={handleMonthChange}
       />
+      <MobileView currentMonth={currentMonth} currentYear={currentYear} />
     </>
   );
 }

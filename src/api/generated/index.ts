@@ -10,6 +10,7 @@ export { CancelablePromise, CancelError } from './core/CancelablePromise';
 export { OpenAPI } from './core/OpenAPI';
 export type { OpenAPIConfig } from './core/OpenAPI';
 
+export type { CalendarCategory } from './models/CalendarCategory';
 export type { CalendarEvent } from './models/CalendarEvent';
 export type { Comment } from './models/Comment';
 export type { CommentWithReactions } from './models/CommentWithReactions';
