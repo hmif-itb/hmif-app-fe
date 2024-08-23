@@ -4,6 +4,7 @@ import SearchBar from './searchbar';
 import HeaderTitle from '~/components/header-title';
 import FilterCard from './filtercard';
 import { FilterProps } from '../-types';
+import Announce from '~/routes/_app/timeline/-components/Announce';
 
 type ComponentProps = {
   infos: Info[];
@@ -20,6 +21,8 @@ export default function DesktopView({
   return (
     <div className="hidden flex-col lg:flex">
       <HeaderTitle />
+      <Announce />
+
       <div className="flex flex-row justify-evenly">
         <div className="w-[65%]">
           <Feed onInView={onInView} infos={infos} />

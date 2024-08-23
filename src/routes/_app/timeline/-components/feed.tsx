@@ -1,4 +1,4 @@
-import { useQueries } from '@tanstack/react-query';
+import { useMutation, useQueries, useQueryClient } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 import dayjs from 'dayjs';
 import { useState } from 'react';
@@ -11,11 +11,24 @@ import PostInteraction from '../$infoId/-components/post-interaction';
 import { renderInfoContent } from '../$infoId/-helper';
 import FeedLoader from './FeedLoader';
 import Tag from './tag';
+import HamburgerIcon from '~/assets/icons/timeline/hamburger.svg';
+import MarkAsReadIcon from '~/assets/icons/timeline/mark-as-read.svg';
+import TrashIcon from '~/assets/icons/timeline/trash.svg';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '~/components/ui/popover';
+import { Button } from '~/components/ui/button';
+import useSession from '~/hooks/auth/useSession';
+import toast from 'react-hot-toast';
 
 type ComponentProps = {
   infos: Info[];
   onInView: () => void;
 };
+
+const TOAST_ID = 'delete-info-toast-feed';
 
 export default function Feed({ infos, onInView }: ComponentProps) {
   return (
@@ -36,6 +49,7 @@ export default function Feed({ infos, onInView }: ComponentProps) {
 }
 
 function UserInfo({ info }: { info: Info }) {
+  const user = useSession();
   const [activeReaction, setActiveReaction] = useState<string | null>(null);
 
   const toggleReaction = (key: string) => {
@@ -45,18 +59,81 @@ function UserInfo({ info }: { info: Info }) {
       setActiveReaction(key);
     }
   };
+
+  const queryClient = useQueryClient();
+
+  const readInfo = useMutation({
+    mutationFn: api.info.readInfo.bind(api.info),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['infos'] });
+    },
+  });
+
+  const deleteInfo = useMutation({
+    mutationFn: api.info.deleteInfo.bind(api.info),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['infos'] });
+      toast.success('Info deleted', { id: TOAST_ID });
+    },
+    onError: () => toast.error('Failed to delete info', { id: TOAST_ID }),
+  });
+
+  const handleDeleteInfo = () => {
+    toast.loading('Please wait...', { id: TOAST_ID });
+    deleteInfo.mutate({ infoId: info.id });
+  };
+
   return (
     <div className="my-10">
       <div className="mb-5 text-sm font-bold text-neutral-dark">
         {dayjs(info.createdAt).format('DD MMM YYYY HH:mm')}
       </div>
-      <UserInfoProfile
-        name={info.creator.fullName}
-        imageURL={info.creator.picture}
-        email={info.creator.email}
-        className="mb-5"
-        avatarClassName="size-[3.25rem]"
-      />
+      <div className="flex items-start justify-between gap-2">
+        <UserInfoProfile
+          name={info.creator.fullName}
+          imageURL={info.creator.picture}
+          email={info.creator.email}
+          className="mb-5"
+          avatarClassName="size-[3.25rem]"
+        />
+
+        <Popover>
+          <PopoverTrigger>
+            <img src={HamburgerIcon} className="size-5" alt="" />
+          </PopoverTrigger>
+
+          <PopoverContent className="w-fit px-4 py-3" align="end">
+            <ul className="flex flex-col gap-4">
+              <li className="leading-none">
+                <Button
+                  onClick={() => readInfo.mutate({ infoId: info.id })}
+                  variant="link"
+                  className="p-0 text-xs font-normal md:text-sm"
+                >
+                  <img
+                    src={MarkAsReadIcon}
+                    className="size-4 md:size-5"
+                    alt=""
+                  />
+                  Mark as read
+                </Button>
+              </li>
+              {info.creatorId === user?.id && (
+                <li className="leading-none">
+                  <Button
+                    variant="link"
+                    className="p-0 text-xs font-normal text-[#FF3B30] md:text-sm"
+                    onClick={handleDeleteInfo}
+                  >
+                    <img src={TrashIcon} className="size-4 md:size-5" alt="" />
+                    Delete
+                  </Button>
+                </li>
+              )}
+            </ul>
+          </PopoverContent>
+        </Popover>
+      </div>
       <TextSection title={info.title} content={info.content} />
       {/* TODO: handle other than image */}
       <ImageSection images={info.infoMedias?.map((im) => im.media.url) ?? []} />

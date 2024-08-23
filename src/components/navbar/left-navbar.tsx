@@ -6,7 +6,7 @@ import QuestionMarkIcon from '../icons/question-mark';
 import SettingsIcon from '../icons/settings';
 import Calendar from '../new-calendar';
 import { Button } from '../ui/button';
-import Announce from './Announce';
+import Announce from '../../routes/_app/timeline/-components/Announce';
 import Profile from './profile';
 import SidebarEvents from '~/routes/_app/home/calendar/-components/sidebar-events';
 
@@ -104,9 +104,6 @@ function LeftNavbar() {
             <SettingsIcon className="size-[2.625rem] fill-transparent stroke-black transition-colors duration-200" />
             <span>Settings</span>
           </Link>
-
-          {/* Hide Announce if in Calendar View */}
-          {isCalendar ? null : <Announce />}
         </section>
       </section>
     </section>
