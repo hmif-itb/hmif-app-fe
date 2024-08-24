@@ -69,14 +69,10 @@ function Timeline() {
       <section className="mt-2 flex w-full max-w-screen-md flex-col gap-4 px-6 lg:mt-10">
         <p className="self-start font-semibold">Schedule Today</p>
 
-        <div className="flex justify-between px-2 text-[#BCC1CD]">
-          <div className="flex gap-8">
+        <div className="flex justify-between px-1 text-[#BCC1CD]">
+          <div className="flex gap-14">
             <p>Time</p>
             <p>Agenda</p>
-          </div>
-
-          <div>
-            <img src="/img/home/filter.svg" alt="Filter" className="size-6" />
           </div>
         </div>
 

@@ -9,6 +9,7 @@ import { AuthService } from './services/AuthService';
 import { CalendarService } from './services/CalendarService';
 import { CategoryService } from './services/CategoryService';
 import { CommentService } from './services/CommentService';
+import { CompetitionsService } from './services/CompetitionsService';
 import { CourseService } from './services/CourseService';
 import { InfoService } from './services/InfoService';
 import { MediaService } from './services/MediaService';
@@ -25,6 +26,7 @@ export class ApiClient {
   public readonly calendar: CalendarService;
   public readonly category: CategoryService;
   public readonly comment: CommentService;
+  public readonly competitions: CompetitionsService;
   public readonly course: CourseService;
   public readonly info: InfoService;
   public readonly media: MediaService;
@@ -52,6 +54,7 @@ export class ApiClient {
     this.calendar = new CalendarService(this.request);
     this.category = new CategoryService(this.request);
     this.comment = new CommentService(this.request);
+    this.competitions = new CompetitionsService(this.request);
     this.course = new CourseService(this.request);
     this.info = new InfoService(this.request);
     this.media = new MediaService(this.request);

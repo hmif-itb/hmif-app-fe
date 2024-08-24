@@ -148,7 +148,7 @@ function DesktopView({
                 </div>
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="flex-col items-center justify-center rounded-lg bg-white py-3 shadow-xl">
+            <PopoverContent className="w-40 flex-col items-center justify-center rounded-lg bg-white py-3 shadow-xl">
               <Button
                 variant="link"
                 onClick={() => handleCategoryButtonClick('himpunan')}

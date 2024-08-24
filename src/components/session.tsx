@@ -2,11 +2,13 @@ import { useQuery } from '@tanstack/react-query';
 import { Navigate } from '@tanstack/react-router';
 import { createContext, useEffect } from 'react';
 import { api } from '~/api/client';
-import { User } from '~/api/generated';
+import { UserWithRoles } from '~/api/generated';
 import { setupNotification } from '~/lib/push';
 import { saveUserCache } from '~/lib/session';
 
-export const SessionContext = createContext<User>(null as unknown as User);
+export const SessionContext = createContext<UserWithRoles>(
+  null as unknown as UserWithRoles,
+);
 
 export default function SessionProvider({
   children,

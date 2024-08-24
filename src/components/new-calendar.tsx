@@ -41,7 +41,7 @@ export default function Calendar({
     if (onChange) {
       onChange(selectDate.toDate());
     }
-  }, [selectDate, onChange]);
+  }, [selectDate]);
 
   return (
     <div

@@ -1,39 +1,32 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
-import { createFileRoute } from '@tanstack/react-router';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { api } from '~/api/client';
+import { api, queryClient } from '~/api/client';
 import { Button } from '~/components/ui/button';
 import { DrawerClose, DrawerHeader, DrawerTitle } from '~/components/ui/drawer';
 import { Form } from '~/components/ui/form';
-import CalendarGroup from './-components/calendar-group';
-import Categories from './-components/categories';
-import Courses from './-components/course';
-import DatePicker from './-components/date-picker';
-import Description from './-components/description';
-import Title from './-components/title';
-import { EventSchema, eventSchema } from './-constants';
-
-export const Route = createFileRoute('/_app/add-event/')({
-  component: AddEventPage,
-});
+import Courses from './mobile-add-event/course';
+import DatePicker from './mobile-add-event/date-picker';
+import Description from './mobile-add-event/description';
+import Title from './mobile-add-event/title';
+import { EventSchema, eventSchema } from './mobile-add-event/-constants';
+import { CalendarCategory } from '~/api/generated';
 
 const TOAST_ID = 'add-event-toast';
 
 type ComponentProps = {
   setDrawer: React.Dispatch<React.SetStateAction<boolean>>;
+  category: CalendarCategory;
 };
 
-export function AddEventPage({ setDrawer }: ComponentProps) {
+export function MobileAddEvent({ setDrawer, category }: ComponentProps) {
   const form = useForm<EventSchema>({
     resolver: zodResolver(eventSchema),
     defaultValues: {
-      calendarGroupId: '',
-      courseId: '',
+      courseId: '0',
       title: '',
       description: '',
-      category: '',
       start: new Date().toISOString(),
       end: new Date().toISOString(),
     },
@@ -46,20 +39,20 @@ export function AddEventPage({ setDrawer }: ComponentProps) {
       setTimeout(() => {
         setDrawer(false);
       }, 1000);
+      queryClient.invalidateQueries({ queryKey: ['calendar-events'] });
     },
     onError: () => toast.error('Failed to post event', { id: TOAST_ID }),
   });
 
   function onSubmit(values: EventSchema) {
     try {
-      console.log(values);
       toast.loading('Please wait...', { id: TOAST_ID });
       postEvent.mutate({
         requestBody: {
-          courseId: values.courseId,
+          courseId: category === 'akademik' ? values.courseId : undefined,
           title: values.title,
           description: values.description,
-          category: values.category as 'akademik' | 'himpunan',
+          category,
           start: values.start,
           end: values.end,
         },
@@ -92,11 +85,9 @@ export function AddEventPage({ setDrawer }: ComponentProps) {
         </DrawerHeader>
         <div className="divide-y divide-dashed">
           <Title form={form} />
-          <Description form={form} />
           <DatePicker form={form} />
-          <CalendarGroup form={form} />
-          <Courses form={form} />
-          <Categories form={form} />
+          {category === 'akademik' ? <Courses form={form} /> : null}
+          <Description form={form} />
         </div>
       </form>
     </Form>

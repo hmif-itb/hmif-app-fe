@@ -4,7 +4,7 @@ import {
   FormItem,
   FormMessage,
 } from '~/components/ui/form';
-import { ComponentProps } from '../-constants';
+import { ComponentProps } from './-constants';
 import {
   Popover,
   PopoverContent,
@@ -23,6 +23,8 @@ import { cn } from '~/lib/utils';
 import { ChevronDown, Check } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '~/api/client';
+import { PopoverClose } from '@radix-ui/react-popover';
+import { useRef } from 'react';
 
 export default function Courses({ form }: ComponentProps): JSX.Element {
   const { data } = useQuery({
@@ -30,8 +32,10 @@ export default function Courses({ form }: ComponentProps): JSX.Element {
     queryFn: () => api.course.getlistCourses({}),
   });
 
+  const containerRef = useRef<HTMLDivElement>(null);
+
   return (
-    <div>
+    <div ref={containerRef}>
       <FormField
         control={form.control}
         name="courseId"
@@ -43,10 +47,10 @@ export default function Courses({ form }: ComponentProps): JSX.Element {
                   <Button
                     role="combobox"
                     className={cn(
-                      'w-full justify-between rounded-none bg-white px-[12px] py-[8px] text-[14px] text-black',
+                      'w-full justify-between rounded-none bg-white px-4 py-[8px] font-normal text-black',
                     )}
                   >
-                    <div className="flex">
+                    <div className="flex items-center">
                       <span>
                         {field.value
                           ? data?.courses.find(
@@ -62,12 +66,12 @@ export default function Courses({ form }: ComponentProps): JSX.Element {
                   </Button>
                 </FormControl>
               </PopoverTrigger>
-              <PopoverContent className="w-[95%] p-0">
+              <PopoverContent className="p-0" container={containerRef.current}>
                 <Command>
                   <CommandInput placeholder="Select a course.." />
-                  <CommandList>
-                    <CommandEmpty>No language found.</CommandEmpty>
-                    <CommandGroup>
+                  <CommandList className="max-h-52">
+                    <CommandEmpty>No courses found.</CommandEmpty>
+                    <CommandGroup className="overflow-y-auto">
                       {data?.courses.map((course) => (
                         <CommandItem
                           value={course.name}
@@ -84,7 +88,9 @@ export default function Courses({ form }: ComponentProps): JSX.Element {
                                 : 'opacity-0',
                             )}
                           />
-                          {course.name}
+                          <PopoverClose className="w-full text-left">
+                            {course.name}
+                          </PopoverClose>
                         </CommandItem>
                       ))}
                     </CommandGroup>

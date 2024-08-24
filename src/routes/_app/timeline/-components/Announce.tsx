@@ -42,7 +42,7 @@ export default function Announce(): JSX.Element {
           <Button
             variant="solid"
             size="icon-sm"
-            className="z-[200] size-[70px] bg-green-200"
+            className="z-[200] size-[70px] bg-green-200 shadow-[0_4px_4px_0_rgba(0,0,0,0.25)]"
           >
             <img src={MegaphoneIcon} className="size-8" alt="" />
           </Button>

@@ -33,6 +33,7 @@ export { AuthService } from './services/AuthService';
 export { CalendarService } from './services/CalendarService';
 export { CategoryService } from './services/CategoryService';
 export { CommentService } from './services/CommentService';
+export { CompetitionsService } from './services/CompetitionsService';
 export { CourseService } from './services/CourseService';
 export { InfoService } from './services/InfoService';
 export { MediaService } from './services/MediaService';

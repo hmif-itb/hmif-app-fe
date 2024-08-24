@@ -35,7 +35,10 @@ const GrowingTextarea = React.forwardRef<
           }
         }}
         className="col-start-1 col-end-2 row-start-1 row-end-2 h-full"
-        inputClassName={cn('resize-none overflow-hidden break-all', className)}
+        inputClassName={cn(
+          'resize-none overflow-hidden break-words',
+          className,
+        )}
         inputContainerClassName="h-full"
         ref={ref}
         {...props}

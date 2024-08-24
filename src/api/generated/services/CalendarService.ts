@@ -97,12 +97,8 @@ export class CalendarService {
   }: {
     eventId: string,
     requestBody?: {
-      courseId?: string | null;
       title?: string;
       description?: string;
-      category?: string;
-      academicYear?: number | null;
-      academicSemesterCode?: 'Ganjil' | 'Genap' | null;
       start?: string | null;
       end?: string | null;
     },

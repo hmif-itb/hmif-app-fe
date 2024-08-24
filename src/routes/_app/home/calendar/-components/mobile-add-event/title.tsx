@@ -5,7 +5,7 @@ import {
   FormMessage,
 } from '~/components/ui/form';
 import { Input } from '~/components/ui/input';
-import { ComponentProps } from '../-constants';
+import { ComponentProps } from './-constants';
 
 export default function Title({ form }: ComponentProps): JSX.Element {
   return (
@@ -20,7 +20,7 @@ export default function Title({ form }: ComponentProps): JSX.Element {
                 type="text"
                 id="title"
                 placeholder="Add title"
-                className="border-none py-6 text-[20px] outline-none"
+                className="rounded-none border-none px-4 py-6 text-[20px] outline-none"
                 {...field}
               />
             </FormControl>

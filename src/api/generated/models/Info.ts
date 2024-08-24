@@ -14,6 +14,7 @@ export type Info = {
   infoMedias?: Array<{
     infoId: string;
     mediaId: string;
+    order: number;
     media: {
       id: string;
       creatorId: string;

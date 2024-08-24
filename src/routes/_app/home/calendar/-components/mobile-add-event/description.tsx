@@ -1,5 +1,5 @@
 import { FormField, FormItem, FormControl } from '~/components/ui/form';
-import { ComponentProps } from '../-constants';
+import { ComponentProps } from './-constants';
 import { GrowingTextarea } from '~/components/ui/growingtextarea';
 
 export default function Description({ form }: ComponentProps): JSX.Element {
@@ -15,7 +15,7 @@ export default function Description({ form }: ComponentProps): JSX.Element {
                 maxLength={500}
                 placeholder="Description"
                 iconClassName="!size-3 !top-auto bottom-1 !translate-y-0 !right-14"
-                className="outline-none"
+                className="rounded-none border-none px-4 outline-none"
                 {...field}
               />
             </FormControl>
