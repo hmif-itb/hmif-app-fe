@@ -1,30 +1,31 @@
 import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
+import { CompetitionCategories } from '~/api/generated';
 import CalendarIcon from '~/assets/icons/competition/calendar.svg';
 import LinkIcon from '~/assets/icons/competition/link.svg';
 import MoneyIcon from '~/assets/icons/competition/money.svg';
 
 type ComponentProps = {
-  title: string;
+  name: string;
   organizer: string;
-  categories: string[];
-  startDate: Date;
-  endDate: Date;
+  categories: CompetitionCategories;
+  registrationStart: Date;
+  registrationDeadline: Date;
   link?: string;
-  entranceFee?: number;
+  price?: number;
   imageURL?: string;
 };
 
 export default function CompetitionCard(props: Readonly<ComponentProps>) {
   const {
-    title,
+    name,
     organizer,
     categories,
-    startDate,
-    endDate,
+    registrationStart,
+    registrationDeadline,
     link,
-    entranceFee,
+    price,
     imageURL,
   } = props;
 
@@ -46,7 +47,7 @@ export default function CompetitionCard(props: Readonly<ComponentProps>) {
       >
         <div className="flex w-full justify-between gap-2 p-4">
           <div className="flex w-1/2 flex-col gap-1.5">
-            <h2 className="font-semibold">{title}</h2>
+            <h2 className="font-semibold">{name}</h2>
             <p className="text-xs">{organizer}</p>
           </div>
 
@@ -69,8 +70,8 @@ export default function CompetitionCard(props: Readonly<ComponentProps>) {
             <div className="flex items-center gap-1 text-xs">
               <img src={CalendarIcon} className="size-4" alt="" />
               <p className="text-balance">
-                {dayjs(startDate).format('DD-MM-YYYY')} -{' '}
-                {dayjs(endDate).format('DD-MM-YYYY')}
+                {dayjs(registrationStart).format('DD-MM-YYYY')} -{' '}
+                {dayjs(registrationDeadline).format('DD-MM-YYYY')}
               </p>
             </div>
 
@@ -86,11 +87,11 @@ export default function CompetitionCard(props: Readonly<ComponentProps>) {
 
           <div className="flex items-center gap-1 text-xs">
             <img src={MoneyIcon} className="size-4" alt="" />
-            {entranceFee && entranceFee > 0
+            {price && price > 0
               ? new Intl.NumberFormat('id', {
                   style: 'currency',
                   currency: 'IDR',
-                }).format(entranceFee)
+                }).format(price)
               : 'FREE'}
           </div>
         </div>

@@ -1,5 +1,5 @@
 import HeaderTitle from '~/components/header-title';
-import Timeline from './../../-components/timeline';
+import Timeline from '../../../../../components/schedule/timeline';
 import CourseCard from './course-card';
 import { ChevronLeft } from 'lucide-react';
 import { useRouter } from '@tanstack/react-router';

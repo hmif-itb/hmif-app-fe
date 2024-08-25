@@ -1,34 +1,50 @@
 import { createFileRoute } from '@tanstack/react-router';
 import HeaderTitle from '~/components/header-title';
 import CompetitionCard from './-components/CompetitionCard';
+import { Button } from '~/components/ui/button';
+import PlusIcon from '~/assets/icons/plus.svg';
+import { useState } from 'react';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { api } from '~/api/client';
+import { InView } from 'react-intersection-observer';
 
 export const Route = createFileRoute('/_app/home/competition/')({
   component: CompetitionPage,
 });
-
-const dummyCards = [
-  {
-    title: 'IT Today 2024',
-    organizer: 'HIMALKOM IPB',
-    categories: ['UI/UX', 'CTF'],
-    startDate: new Date(),
-    endDate: new Date(),
-    link: 'https://ittoday.web.id/',
-    entranceFee: 999999,
-  },
-  {
-    title: 'IT Today 2024',
-    organizer: 'HIMALKOM IPB',
-    categories: ['UI/UX', 'CTF'],
-    startDate: new Date(),
-    endDate: new Date(),
-    link: 'https://ittoday.web.id/',
-    imageURL:
-      'https://plus.unsplash.com/premium_photo-1680087014917-904bb37c5191?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8ZnJlZXxlbnwwfHwwfHx8MA%3D%3D',
-  },
-];
-
 function CompetitionPage() {
+  const PAGE_SIZE = 0;
+
+  const [addCompetitionOpen, setAddCompetitionOpen] = useState(false);
+
+  const {
+    data: competitions,
+    fetchNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
+    queryKey: ['competitions'],
+    queryFn: ({ pageParam }) =>
+      api.competitions
+        .getCompetitionList({
+          offset: pageParam,
+        })
+        .then((res) =>
+          res.competitions.map((c) => ({
+            ...c,
+            registrationStart: new Date(c.registrationStart),
+            registrationDeadline: new Date(c.registrationDeadline),
+            price: c.price ? +c.price : undefined,
+            imageURL: c.medias?.[0].media.url,
+          })),
+        ),
+    initialPageParam: 0,
+    getNextPageParam: (_1, _2, lastOffset) => lastOffset + PAGE_SIZE,
+  });
+
+  const fetchWhenInView = () =>
+    !isFetchingNextPage &&
+    (competitions?.pages.flatMap((p) => p).length ?? 1) % PAGE_SIZE === 0 &&
+    fetchNextPage();
+
   return (
     <div className="flex size-full h-screen flex-col overflow-hidden">
       <div className="hidden w-full bg-white lg:block">
@@ -37,16 +53,34 @@ function CompetitionPage() {
 
       <main className="flex size-full max-h-screen flex-col items-center gap-3 overflow-hidden bg-[url(/img/login/login-bg.jpg)] px-8 md:bg-[url(/img/login/login-bg-desktop.jpg)] lg:px-[52px]">
         <h1 className="mt-[50px] w-full text-left text-4xl font-bold text-white">
-          Competitions
+          Competition
         </h1>
 
         <ul className="flex flex-col gap-4 overflow-auto pb-16 pt-6">
-          {dummyCards.map((d, idx) => (
-            <li key={idx}>
-              <CompetitionCard {...d} />
-            </li>
-          ))}
+          {competitions?.pages
+            .flatMap((c) => c)
+            .map((competition, idx) =>
+              idx < competitions?.pages.flatMap((c) => c).length - 2 ? (
+                <li key={competition.id}>
+                  <CompetitionCard {...competition} />
+                </li>
+              ) : (
+                <InView
+                  key={competition.id}
+                  onChange={(inView) => inView && fetchWhenInView()}
+                >
+                  <CompetitionCard {...competition} />
+                </InView>
+              ),
+            )}
         </ul>
+
+        <Button
+          onClick={() => setAddCompetitionOpen(true)}
+          className="fixed bottom-24 right-5 z-20 rounded-full border border-green-300 bg-yellow-75 p-5"
+        >
+          <img src={PlusIcon} className="size-8" alt="" />
+        </Button>
       </main>
     </div>
   );

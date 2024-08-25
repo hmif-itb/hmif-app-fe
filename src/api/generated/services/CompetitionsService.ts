@@ -2,6 +2,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { Competition } from '../models/Competition';
+import type { CompetitionCategories } from '../models/CompetitionCategories';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import type { BaseHttpRequest } from '../core/BaseHttpRequest';
 export class CompetitionsService {
@@ -21,7 +23,7 @@ export class CompetitionsService {
       price?: string | null;
       sourceUrl: string;
       registrationUrl: string;
-      type: 'Competitive Programming' | 'Capture The Flag' | 'Data Science / Data Analytics' | 'UI/UX' | 'Game Development' | 'Business IT Case' | 'Innovation' | 'Web Development';
+      categories?: CompetitionCategories;
       mediaUrls?: Array<string>;
     },
   }): CancelablePromise<{
@@ -33,7 +35,7 @@ export class CompetitionsService {
     price: string | null;
     sourceUrl: string;
     registrationUrl: string;
-    type: 'Competitive Programming' | 'Capture The Flag' | 'Data Science / Data Analytics' | 'UI/UX' | 'Game Development' | 'Business IT Case' | 'Innovation' | 'Web Development';
+    categories: Array<'Competitive Programming' | 'Capture The Flag' | 'Data Science / Data Analytics' | 'UI/UX' | 'Game Development' | 'Business IT Case' | 'Innovation' | 'Web Development'>;
     createdAt: string;
     medias?: Array<{
       competitionId: string;
@@ -76,7 +78,7 @@ export class CompetitionsService {
       price?: string | null;
       sourceUrl?: string;
       registrationUrl?: string;
-      type?: 'Competitive Programming' | 'Capture The Flag' | 'Data Science / Data Analytics' | 'UI/UX' | 'Game Development' | 'Business IT Case' | 'Innovation' | 'Web Development';
+      categories?: CompetitionCategories;
       mediaUrls?: Array<string>;
     },
   }): CancelablePromise<{
@@ -88,7 +90,7 @@ export class CompetitionsService {
     price: string | null;
     sourceUrl: string;
     registrationUrl: string;
-    type: 'Competitive Programming' | 'Capture The Flag' | 'Data Science / Data Analytics' | 'UI/UX' | 'Game Development' | 'Business IT Case' | 'Innovation' | 'Web Development';
+    categories: Array<'Competitive Programming' | 'Capture The Flag' | 'Data Science / Data Analytics' | 'UI/UX' | 'Game Development' | 'Business IT Case' | 'Innovation' | 'Web Development'>;
     createdAt: string;
     medias?: Array<{
       competitionId: string;
@@ -142,18 +144,7 @@ export class CompetitionsService {
     category?: 'Competitive Programming' | 'Capture The Flag' | 'Data Science / Data Analytics' | 'UI/UX' | 'Game Development' | 'Business IT Case' | 'Innovation' | 'Web Development',
     offset?: number | null,
   }): CancelablePromise<{
-    competitions: Array<{
-      id: string;
-      name: string;
-      organizer: string;
-      registrationStart: string;
-      registrationDeadline: string;
-      price: string | null;
-      sourceUrl: string;
-      registrationUrl: string;
-      type: 'Competitive Programming' | 'Capture The Flag' | 'Data Science / Data Analytics' | 'UI/UX' | 'Game Development' | 'Business IT Case' | 'Innovation' | 'Web Development';
-      createdAt: string;
-    }>;
+    competitions: Array<Competition>;
   }> {
     return this.httpRequest.request({
       method: 'GET',
@@ -170,7 +161,7 @@ export class CompetitionsService {
     });
   }
   /**
-   * @returns any Successfully deleted comment
+   * @returns Competition Successfully deleted comment
    * @throws ApiError
    */
   public deleteCompetition({
@@ -180,18 +171,7 @@ export class CompetitionsService {
      * Id of fetched/deleted competitions
      */
     competitionId: string,
-  }): CancelablePromise<{
-    id: string;
-    name: string;
-    organizer: string;
-    registrationStart: string;
-    registrationDeadline: string;
-    price: string | null;
-    sourceUrl: string;
-    registrationUrl: string;
-    type: 'Competitive Programming' | 'Capture The Flag' | 'Data Science / Data Analytics' | 'UI/UX' | 'Game Development' | 'Business IT Case' | 'Innovation' | 'Web Development';
-    createdAt: string;
-  }> {
+  }): CancelablePromise<Competition> {
     return this.httpRequest.request({
       method: 'DELETE',
       url: '/api/competition/{competitionId}',

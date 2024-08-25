@@ -1,7 +1,7 @@
 import dayjs, { Dayjs } from 'dayjs';
 import { useState } from 'react';
 import { useCalendarEvents } from '~/hooks/calendar';
-import Dates from './dates';
+import Dates from '~/routes/_app/home/-components/dates';
 import Schedule from './schedule';
 
 function Timeline() {
@@ -70,7 +70,7 @@ function Timeline() {
         <p className="self-start font-semibold">Schedule Today</p>
 
         <div className="flex justify-between px-1 text-[#BCC1CD]">
-          <div className="flex gap-14">
+          <div className="flex gap-[60px]">
             <p>Time</p>
             <p>Agenda</p>
           </div>

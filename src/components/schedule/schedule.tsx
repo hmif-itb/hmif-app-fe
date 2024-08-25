@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import { CalendarEvent } from '~/api/generated';
 import { Separator } from '~/components/ui/separator';
 import { cn } from '~/lib/utils';
-import type { Schedule } from '../-dummy/info';
+import type { Schedule } from '~/routes/_app/home/-dummy/info';
 
 function Schedule({
   event,
@@ -18,7 +18,7 @@ function Schedule({
   return (
     <div className="flex w-full justify-between space-x-6">
       {/* Schedule Time */}
-      <div className="flex flex-col">
+      <div className="flex w-[50px] shrink-0 flex-col">
         <p className="font-bold text-[#212525]">{start.format('HH:mm')}</p>
         <p className="text-[#BCC1CD]">
           {end.isSame(start, 'date')

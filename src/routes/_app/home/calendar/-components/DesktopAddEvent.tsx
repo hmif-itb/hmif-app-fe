@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { api } from '~/api/client.ts';
+import { api, queryClient } from '~/api/client.ts';
 import BooksIcon from '~/assets/icons/calendar/books.svg';
 import ClockIcon from '~/assets/icons/calendar/clock.svg';
 import CloseIcon from '~/assets/icons/calendar/close.svg';
@@ -76,6 +76,7 @@ export default function DesktopAddEvent(props: Readonly<ComponentProps>) {
     mutationFn: api.calendar.postCalendarEvent.bind(api.calendar),
     onSuccess: () => {
       toast.success('Event Added!', { id: TOAST_ID });
+      queryClient.invalidateQueries({ queryKey: ['calendar-events'] });
       onSubmitSuccess && onSubmitSuccess();
     },
     onError: () => toast.error('Failed to add event', { id: TOAST_ID }),
