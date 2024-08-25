@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { api } from '~/api/client';
 import { InView } from 'react-intersection-observer';
+import { AddCompetitionDrawer } from './-components/AddCompetitionDrawer';
 
 export const Route = createFileRoute('/_app/home/competition/')({
   component: CompetitionPage,
@@ -81,6 +82,11 @@ function CompetitionPage() {
         >
           <img src={PlusIcon} className="size-8" alt="" />
         </Button>
+
+        <AddCompetitionDrawer
+          isOpen={addCompetitionOpen}
+          setOpen={setAddCompetitionOpen}
+        />
       </main>
     </div>
   );

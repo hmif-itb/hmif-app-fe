@@ -1,12 +1,6 @@
 import { z } from 'zod';
 import { UseFormReturn } from 'react-hook-form';
-
-function isGreater(date1: string, date2: string): boolean {
-  const firstDate = new Date(date1);
-  const secondDate = new Date(date2);
-
-  return firstDate >= secondDate;
-}
+import { isGreater } from '~/lib/date';
 
 export const eventSchema = z
   .object({
