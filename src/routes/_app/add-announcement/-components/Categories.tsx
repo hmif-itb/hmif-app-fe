@@ -82,16 +82,16 @@ export default function Categories({
       {categories.map((category, idx) => (
         <div
           key={idx}
-          className="-my-2 flex items-center gap-2 rounded-2xl bg-[#305138] px-3 pb-[5px] pt-1.5"
+          className="-my-2 flex items-center gap-2 rounded-2xl bg-[#305138] pb-[5px] pl-3 pr-2 pt-1.5"
         >
           <p className="text-[10px] text-white">{category.title}</p>
           <Button
             variant="link"
-            className="p-0"
+            className="rounded-full bg-white p-0.5"
             type="button"
             onClick={() => handleDeleteCategory(category.id)}
           >
-            <XIcon size={12} className="text-white" />
+            <XIcon size={10} className="text-black" />
           </Button>
         </div>
       ))}

@@ -27,6 +27,7 @@ function CompetitionPage() {
       api.competitions
         .getCompetitionList({
           offset: pageParam,
+          sort: 'deadline',
         })
         .then((res) =>
           res.competitions.map((c) => ({
@@ -34,7 +35,10 @@ function CompetitionPage() {
             registrationStart: new Date(c.registrationStart),
             registrationDeadline: new Date(c.registrationDeadline),
             price: c.price ? +c.price : undefined,
-            imageURL: c.medias?.[0].media.url,
+            imageURL:
+              (c.medias?.length || 0) >= 1
+                ? c.medias?.[0].media.url
+                : undefined,
           })),
         ),
     initialPageParam: 0,

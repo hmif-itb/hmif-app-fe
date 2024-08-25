@@ -7,16 +7,15 @@ export const CompetitionSchema = z
     organizer: z.string().min(1),
     registrationStart: z.string().datetime(),
     registrationDeadline: z.string().datetime(),
-    price: z.number().optional(),
-    registrationURL: z.string().url().optional(),
-    sourceURL: z.string().url().optional(),
+    price: z.coerce.number().optional(),
+    registrationURL: z.string().url(),
+    sourceURL: z.string().url(),
     categories: z
       .object({
         id: z.string().min(1),
         title: z.string().min(1),
       })
-      .array()
-      .optional(),
+      .array(),
   })
   .refine(
     (data) => isGreater(data.registrationDeadline, data.registrationStart),

@@ -9,20 +9,34 @@ import DrawerForm from '~/components/drawer-form/DrawerForm';
 import DrawerTextField from '~/components/drawer-form/DrawerTextField';
 import DrawerDatePicker from '~/components/drawer-form/DrawerDatePicker';
 import DrawerMultiSelect from '~/components/drawer-form/DrawerMultiSelect';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import PersonIcon from '~/assets/icons/competition/person.svg';
 import MoneyIcon from '~/assets/icons/competition/money.svg';
 import LinkIcon from '~/assets/icons/competition/link.svg';
 import ClockIcon from '~/assets/icons/competition/clock.svg';
 import CategoryIcon from '~/assets/icons/competition/category.svg';
+import { useMutation } from '@tanstack/react-query';
+import { api, queryClient } from '~/api/client';
+import toast from 'react-hot-toast';
+import { CompetitionCategories, PresignedURL } from '~/api/generated';
+import DrawerAttachment from '~/components/drawer-form/DrawerAttachment';
+import { FileUpload } from '~/routes/_app/add-announcement';
 
 type ComponentProps = {
   isOpen: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+const TOAST_ID = 'add-competition-toast';
+
 export function AddCompetitionDrawer(props: Readonly<ComponentProps>) {
   const { isOpen, setOpen } = props;
+
+  const [image, setImage] = useState<FileUpload>({
+    url: '',
+    file: new File([''], 'filename'),
+  });
+  const [pendingUpload, setPendingUpload] = useState<string>('');
 
   const form = useForm<CompetitionSchemaType>({
     resolver: zodResolver(CompetitionSchema),
@@ -41,11 +55,61 @@ export function AddCompetitionDrawer(props: Readonly<ComponentProps>) {
   useEffect(() => {
     if (!isOpen) {
       form.reset();
+      setImage({ url: '', file: new File([''], 'filename') });
     }
   }, [isOpen]);
 
-  const onSubmit = (values: CompetitionSchemaType) => {
-    console.log(values);
+  const postCompetition = useMutation({
+    mutationFn: api.competitions.createCompetition.bind(api.competitions),
+    onSuccess: () => {
+      toast.success('Competition Posted!', { id: TOAST_ID });
+      queryClient.invalidateQueries({ queryKey: ['competitions'] });
+      setOpen(false);
+      setPendingUpload('');
+    },
+    onError: () => toast.error('Failed to post competition', { id: TOAST_ID }),
+  });
+
+  const postMediaUpload = useMutation({
+    mutationFn: api.media.createPresignedUrl.bind(api.media),
+  });
+
+  const onSubmit = async (values: CompetitionSchemaType) => {
+    toast.loading('Please wait...', { id: TOAST_ID });
+
+    try {
+      if (!pendingUpload) {
+        const presignedUrl: PresignedURL = await postMediaUpload.mutateAsync({
+          requestBody: {
+            fileName: image.file.name.split('.')[0],
+            fileType: image.file.name.split('.').at(-1) ?? '',
+          },
+        });
+        await fetch(presignedUrl.presignedUrl, {
+          method: 'PUT',
+          body: image.file,
+        }).then(() => setPendingUpload(presignedUrl.mediaUrl));
+      }
+
+      postCompetition.mutate({
+        requestBody: {
+          name: values.title,
+          organizer: values.organizer,
+          registrationStart: values.registrationStart,
+          registrationDeadline: values.registrationDeadline,
+          price: values.price ? values.price.toString() : '0',
+          registrationUrl: values.registrationURL,
+          sourceUrl: values.sourceURL,
+          categories: values.categories.map(
+            (c) => c.title,
+          ) as CompetitionCategories,
+          mediaUrls: [pendingUpload],
+        },
+      });
+    } catch (err) {
+      console.log(err);
+      toast.error('Failed to post competition', { id: TOAST_ID });
+    }
   };
 
   return (
@@ -113,6 +177,14 @@ export function AddCompetitionDrawer(props: Readonly<ComponentProps>) {
         name="sourceURL"
         placeholder="Add Source Link"
         inputClassName="py-3 text-base"
+        iconClassName="size-5 opacity-0"
+      />
+
+      <DrawerAttachment
+        icon={LinkIcon}
+        image={image}
+        setImage={setImage}
+        placeholder="Add Attachment"
         iconClassName="size-5 opacity-0"
       />
     </DrawerForm>

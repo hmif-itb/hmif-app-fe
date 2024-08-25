@@ -29,7 +29,7 @@ export default function DrawerForm<T extends FieldValues>(
       <DrawerContent className="h-[95%] bg-[#F9F9F9]">
         <Form {...form}>
           <form
-            className="h-full bg-white"
+            className="h-full overflow-auto bg-white"
             onSubmit={form.handleSubmit(onSubmit)}
           >
             <DrawerHeader className="flex flex-row items-baseline justify-between bg-[#F9F9F9] px-4 py-3">
