@@ -6,12 +6,12 @@ import {
 import { Button } from '~/components/ui/button';
 import Calendar from '~/components/new-calendar';
 import dayjs from 'dayjs';
-import { DrawerFormProps } from './DrawerForm';
 import { FieldPath, FieldValues } from 'react-hook-form';
 import clsx from 'clsx';
+import { FormProps } from './-types';
 
-interface DrawerDatePickerProps<TFV extends FieldValues>
-  extends Pick<DrawerFormProps<TFV>, 'form'> {
+interface DatePickerProps<TFV extends FieldValues>
+  extends Pick<FormProps<TFV>, 'form'> {
   name: FieldPath<TFV>;
   placeholder: string;
   icon?: string;
@@ -19,8 +19,8 @@ interface DrawerDatePickerProps<TFV extends FieldValues>
   className?: string;
 }
 
-export default function DrawerDatePicker<T extends FieldValues>(
-  props: Readonly<DrawerDatePickerProps<T>>,
+export default function DatePicker<T extends FieldValues>(
+  props: Readonly<DatePickerProps<T>>,
 ): JSX.Element {
   const { form, name, placeholder, icon, iconClassName, className } = props;
 
@@ -39,7 +39,7 @@ export default function DrawerDatePicker<T extends FieldValues>(
             variant="link"
             type="button"
             className={clsx(
-              'w-full justify-start p-0 text-base font-normal',
+              'w-full justify-start p-0 text-base font-normal lg:text-lg',
               dateDisplay === 'Invalid Date' && 'text-[#64748B]',
             )}
           >

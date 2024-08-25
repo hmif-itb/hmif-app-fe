@@ -1,4 +1,4 @@
-import { FieldValues, UseFormReturn } from 'react-hook-form';
+import { FieldValues } from 'react-hook-form';
 import { Button } from '../ui/button';
 import {
   Drawer,
@@ -8,19 +8,10 @@ import {
   DrawerTitle,
 } from '../ui/drawer';
 import { Form } from '../ui/form';
+import { FormProps } from './-types';
 
-// eslint-disable-next-line
-export interface DrawerFormProps<TFV extends FieldValues, TC = any, TTV extends FieldValues | undefined = undefined> {
-  form: UseFormReturn<TFV, TC, TTV>;
-  isOpen: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  onSubmit: (values: TFV) => void;
-  title: string;
-  children: React.ReactNode[] | React.ReactNode;
-}
-
-export default function DrawerForm<T extends FieldValues>(
-  props: Readonly<DrawerFormProps<T>>,
+export default function MobileForm<T extends FieldValues>(
+  props: Readonly<Omit<FormProps<T>, 'constraintRef'>>,
 ) {
   const { form, isOpen, setOpen, onSubmit, children, title } = props;
 
@@ -31,6 +22,7 @@ export default function DrawerForm<T extends FieldValues>(
           <form
             className="h-full overflow-auto bg-white"
             onSubmit={form.handleSubmit(onSubmit)}
+            autoComplete="off"
           >
             <DrawerHeader className="flex flex-row items-baseline justify-between bg-[#F9F9F9] px-4 py-3">
               <DrawerClose
@@ -49,6 +41,7 @@ export default function DrawerForm<T extends FieldValues>(
                 Submit
               </Button>
             </DrawerHeader>
+
             <div className="divide-y divide-dashed">{children}</div>
           </form>
         </Form>

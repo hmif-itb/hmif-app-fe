@@ -1,36 +1,38 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import {
   CategoryOptions,
   CompetitionSchema,
   CompetitionSchemaType,
 } from '../-constants';
-import { zodResolver } from '@hookform/resolvers/zod';
-import FormTextField from '~/components/custom-form/FormTextField';
-import DatePicker from '~/components/custom-form/DatePicker';
-import MultiSelect from '~/components/custom-form/MultiSelect';
 import { useEffect, useState } from 'react';
-import PersonIcon from '~/assets/icons/competition/person.svg';
-import MoneyIcon from '~/assets/icons/competition/money.svg';
-import LinkIcon from '~/assets/icons/competition/link.svg';
-import ClockIcon from '~/assets/icons/competition/clock.svg';
-import CategoryIcon from '~/assets/icons/competition/category.svg';
+import { FileUpload } from '~/routes/_app/add-announcement';
 import { useMutation } from '@tanstack/react-query';
 import { api, queryClient } from '~/api/client';
 import toast from 'react-hot-toast';
 import { CompetitionCategories, PresignedURL } from '~/api/generated';
+import ClockIcon from '~/assets/icons/competition/clock.svg';
+import PersonIcon from '~/assets/icons/competition/person.svg';
+import CategoryIcon from '~/assets/icons/competition/category.svg';
+import MoneyIcon from '~/assets/icons/competition/money.svg';
+import LinkIcon from '~/assets/icons/competition/link.svg';
+import DatePicker from '~/components/custom-form/DatePicker';
+import DesktopTitleField from '~/components/custom-form/DesktopTitleField';
+import FormTextField from '~/components/custom-form/FormTextField';
+import MultiSelect from '~/components/custom-form/MultiSelect';
 import Attachment from '~/components/custom-form/Attachment';
-import { FileUpload } from '~/routes/_app/add-announcement';
-import MobileForm from '~/components/custom-form/MobileForm';
+import DesktopForm from '~/components/custom-form/DesktopForm';
 
 type ComponentProps = {
   isOpen: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  constraintRef: React.MutableRefObject<HTMLElement | null>;
 };
 
 const TOAST_ID = 'add-competition-toast';
 
-export function AddCompetitionDrawer(props: Readonly<ComponentProps>) {
-  const { isOpen, setOpen } = props;
+export default function AddCompetitionDialog(props: Readonly<ComponentProps>) {
+  const { isOpen, setOpen, constraintRef } = props;
 
   const [image, setImage] = useState<FileUpload>({
     url: '',
@@ -78,7 +80,7 @@ export function AddCompetitionDrawer(props: Readonly<ComponentProps>) {
     toast.loading('Please wait...', { id: TOAST_ID });
 
     try {
-      if (!pendingUpload) {
+      if (!pendingUpload && image.url) {
         const presignedUrl: PresignedURL = await postMediaUpload.mutateAsync({
           requestBody: {
             fileName: image.file.name.split('.')[0],
@@ -131,22 +133,23 @@ export function AddCompetitionDrawer(props: Readonly<ComponentProps>) {
     }
   };
 
+  if (!isOpen) {
+    return null;
+  }
+
   return (
-    <MobileForm
+    <DesktopForm
       form={form}
-      onSubmit={onSubmit}
-      isOpen={isOpen}
       setOpen={setOpen}
-      title="New Competition"
+      onSubmit={onSubmit}
+      constraintRef={constraintRef}
     >
-      <FormTextField form={form} name="title" placeholder="Add Title" />
-      <FormTextField
-        icon={PersonIcon}
+      <DesktopTitleField
+        icon={ClockIcon}
         form={form}
-        name="organizer"
-        placeholder="Add Organizer"
-        inputClassName="py-3 text-base"
-        iconClassName="size-6"
+        name="title"
+        placeholder="Add Competition Name"
+        iconClassName="size-6 opacity-0"
       />
 
       <DatePicker
@@ -155,6 +158,7 @@ export function AddCompetitionDrawer(props: Readonly<ComponentProps>) {
         name="registrationStart"
         placeholder="Add registration start date"
         iconClassName="size-6"
+        className="pb-2"
       />
       <DatePicker
         icon={ClockIcon}
@@ -162,6 +166,16 @@ export function AddCompetitionDrawer(props: Readonly<ComponentProps>) {
         name="registrationDeadline"
         placeholder="Add registration end date"
         iconClassName="size-6 opacity-0"
+        className="py-2"
+      />
+
+      <FormTextField
+        icon={PersonIcon}
+        form={form}
+        name="organizer"
+        placeholder="Add Organizer"
+        inputClassName="py-3 text-lg"
+        iconClassName="size-6"
       />
 
       <MultiSelect
@@ -206,6 +220,6 @@ export function AddCompetitionDrawer(props: Readonly<ComponentProps>) {
         placeholder="Add Attachment"
         iconClassName="size-5 opacity-0"
       />
-    </MobileForm>
+    </DesktopForm>
   );
 }

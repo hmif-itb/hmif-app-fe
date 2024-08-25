@@ -1,11 +1,11 @@
 import { FieldPath, FieldValues } from 'react-hook-form';
-import { DrawerFormProps } from './DrawerForm';
 import { FormControl, FormField, FormItem } from '../ui/form';
 import clsx from 'clsx';
 import { TextField } from '../ui/textfield';
+import { FormProps } from './-types';
 
-interface DrawerTextFieldProps<TFV extends FieldValues>
-  extends Pick<DrawerFormProps<TFV>, 'form'> {
+interface FormTextFieldProps<TFV extends FieldValues>
+  extends Pick<FormProps<TFV>, 'form'> {
   name: FieldPath<TFV>;
   placeholder: string;
   className?: string;
@@ -15,8 +15,8 @@ interface DrawerTextFieldProps<TFV extends FieldValues>
   type?: string;
 }
 
-export default function DrawerTextField<T extends FieldValues>(
-  props: Readonly<DrawerTextFieldProps<T>>,
+export default function FormTextField<T extends FieldValues>(
+  props: Readonly<FormTextFieldProps<T>>,
 ) {
   const {
     form,

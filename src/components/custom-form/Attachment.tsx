@@ -13,7 +13,7 @@ type ComponentProps = {
   iconClassName?: string;
 };
 
-export default function DrawerAttachment(props: Readonly<ComponentProps>) {
+export default function Attachment(props: Readonly<ComponentProps>) {
   const { image, setImage, placeholder, className, icon, iconClassName } =
     props;
 
@@ -21,7 +21,7 @@ export default function DrawerAttachment(props: Readonly<ComponentProps>) {
 
   if (image.url) {
     return (
-      <div className="relative w-full p-3">
+      <div className="relative w-full p-3 lg:px-0">
         <a href={URL.createObjectURL(image.file)} target="_blank">
           <img
             src={image.url}
@@ -30,7 +30,7 @@ export default function DrawerAttachment(props: Readonly<ComponentProps>) {
           />
         </a>
         <button
-          className="absolute right-2.5 top-2.5 rounded-full border-2 border-black bg-gray-300"
+          className="absolute right-2.5 top-2.5 rounded-full border-2 border-black bg-gray-300 lg:right-0"
           onClick={() =>
             setImage({ url: '', file: new File([''], 'filename') })
           }
