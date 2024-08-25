@@ -12,7 +12,7 @@ type ComponentProps = {
   categories: CompetitionCategories;
   registrationStart: Date;
   registrationDeadline: Date;
-  link?: string;
+  registrationUrl?: string;
   price?: number;
   imageURL?: string;
 };
@@ -24,7 +24,7 @@ export default function CompetitionCard(props: Readonly<ComponentProps>) {
     categories,
     registrationStart,
     registrationDeadline,
-    link,
+    registrationUrl,
     price,
     imageURL,
   } = props;
@@ -75,11 +75,11 @@ export default function CompetitionCard(props: Readonly<ComponentProps>) {
               </p>
             </div>
 
-            {link && (
+            {registrationUrl && (
               <div className="flex items-center gap-1 text-xs">
                 <img src={LinkIcon} className="size-4" alt="" />
-                <Link to={link} target="_blank" rel="noreferrer">
-                  {link}
+                <Link to={registrationUrl} target="_blank" rel="noreferrer">
+                  {registrationUrl}
                 </Link>
               </div>
             )}
