@@ -2,7 +2,6 @@ import dayjs from 'dayjs';
 import { CalendarEvent } from '~/api/generated';
 import { Separator } from '~/components/ui/separator';
 import { cn } from '~/lib/utils';
-import type { Schedule } from '~/routes/_app/home/-dummy/info';
 
 function Schedule({
   event,
