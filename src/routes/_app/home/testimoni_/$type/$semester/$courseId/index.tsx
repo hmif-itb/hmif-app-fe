@@ -1,12 +1,12 @@
+import { useQuery } from '@tanstack/react-query';
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { z } from 'zod';
+import { api } from '~/api/client';
 import { Button } from '~/components/ui/button';
 import UserInfo from '~/components/user/user-info';
-import TestiContent from './-components/TestiContent';
 import { cn } from '~/lib/utils';
-import { z } from 'zod';
-import { useQuery } from '@tanstack/react-query';
-import { api } from '~/api/client';
+import TestiContent from './-components/TestiContent';
 
 const testiSearchSchema = z.object({
   page: z.number().optional(),
@@ -81,37 +81,50 @@ function TestimoniListPage(): JSX.Element {
         />
 
         <div className="mt-6 flex w-full flex-col gap-4">
-          <TestiContent
-            title={type === 'teknik-informatika' ? 'Overview' : 'Kesan'}
-            content={
-              (type === 'teknik-informatika'
-                ? data?.content?.overview
-                : data?.content?.impressions) ?? ''
-            }
-          />
+          {data?.content?.overview && (
+            <TestiContent
+              title={'Overview'}
+              content={data?.content?.overview}
+            />
+          )}
+          {data?.content?.impressions && (
+            <TestiContent
+              title={'Kesan'}
+              content={data?.content?.impressions}
+            />
+          )}
 
-          <TestiContent
-            title={type === 'teknik-informatika' ? 'Tugas' : 'Tantangan'}
-            content={
-              (type === 'teknik-informatika'
-                ? data?.content?.assignments
-                : data?.content?.challenges) ?? ''
-            }
-          />
+          {data?.content?.assignments && (
+            <TestiContent
+              title={'Tugas'}
+              content={data?.content?.assignments}
+            />
+          )}
 
-          <TestiContent
-            title={type === 'teknik-informatika' ? 'Dosen' : 'Saran'}
-            content={
-              (type === 'teknik-informatika'
-                ? data?.content?.lecturer_review
-                : data?.content?.advice) ?? ''
-            }
-          />
+          {data?.content?.challenges && (
+            <TestiContent
+              title={'Tantangan'}
+              content={data?.content?.challenges}
+            />
+          )}
 
-          <p className="text-sm text-[#2F754A]">
-            <span className="font-semibold">Dosen:</span>{' '}
-            {data?.content?.lecturer}
-          </p>
+          {data?.content?.lecturer_review && (
+            <TestiContent
+              title={'Review Dosen'}
+              content={data?.content?.lecturer_review}
+            />
+          )}
+
+          {data?.content?.advice && (
+            <TestiContent title={'Saran'} content={data?.content?.advice} />
+          )}
+
+          {data?.content?.lecturer && (
+            <p className="text-sm text-[#2F754A]">
+              <span className="font-semibold">Dosen:</span>{' '}
+              {data?.content?.lecturer}
+            </p>
+          )}
         </div>
       </section>
 
