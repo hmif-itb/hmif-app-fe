@@ -1,20 +1,24 @@
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 import { Plus } from 'lucide-react';
-import { useState, useEffect } from 'react';
-import { Button } from '~/components/ui/button';
-import CourseCard from './CourseCard';
+import { useEffect, useState } from 'react';
 import { api } from '~/api/client';
-import { useMutation, useQuery } from '@tanstack/react-query';
 import { UserCourse } from '~/api/generated';
+import { Button } from '~/components/ui/button';
+import { useUserAcademic } from '~/hooks/useUserAcademic';
+import { isMobile } from '~/lib/device';
+import CourseCard from './CourseCard';
 
 export default function MyCourses() {
   const [isEditing, setIsEditing] = useState(false);
   const [swipedCourse, setSwipedCourse] = useState<string | null>(null);
   const [currCourses, setCurrCourses] = useState<UserCourse[]>([]);
   const [deletedCourses, setDeletedCourses] = useState<string[]>([]);
+  const queryClient = useQueryClient();
   const handleSwipe = (courseId: string) => {
     setSwipedCourse(courseId);
   };
+  const { userAcademic } = useUserAcademic();
 
   const handleReset = () => {
     setSwipedCourse(null);
@@ -24,6 +28,7 @@ export default function MyCourses() {
     mutationFn: api.course.deleteUserCourse.bind(api.course),
     onSuccess: () => {
       setSwipedCourse(null);
+      queryClient.invalidateQueries({ queryKey: ['currentCourses'] });
     },
     onError: (error) => {
       console.error(error);
@@ -48,10 +53,19 @@ export default function MyCourses() {
   return (
     <>
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-[30px] font-bold text-white antialiased">
-          Your Courses
-        </h1>
-        <p className="text-sm text-[#D4D6D4]">SEMESTER 4</p>
+        <div className="">
+          <h1 className="text-heading-lg font-bold text-white antialiased">
+            {isEditing ? 'Edit Courses' : 'Your Courses'}
+          </h1>
+          {isEditing && isMobile() && (
+            <p className="text-body-md text-neutral-normal">
+              Swipe left to delete course
+            </p>
+          )}
+        </div>
+        <p className="text-sm text-[#D4D6D4]">
+          {userAcademic?.semester ? `SEMESTER ${userAcademic.semester}` : ''}
+        </p>
       </div>
       <div className="flex flex-col justify-between gap-4">
         <div className={`flex flex-col gap-4`}>
@@ -72,6 +86,15 @@ export default function MyCourses() {
               }}
             />
           ))}
+        </div>
+        <div className="flex justify-between rounded-2xl bg-[#fbfbfb] px-6 py-4 text-heading-sm font-bold">
+          <span>Jumlah SKS</span>
+          <span className="font-medium">
+            {currCourses.reduce(
+              (acc, curr) => acc + (curr.course?.credits || 0),
+              0,
+            )}
+          </span>
         </div>
         {isEditing ? (
           <div className="flex flex-col gap-10">

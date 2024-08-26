@@ -45,7 +45,7 @@ export default function SettingsMobile() {
         <div className="flex flex-1 items-center">
           <Button
             variant={'link'}
-            className="w-full text-[#8E8E93]"
+            className="w-full text-[#FF3B30]"
             onClick={() => logout()}
           >
             Log out

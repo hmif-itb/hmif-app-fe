@@ -4,6 +4,7 @@ import { queryClient } from '~/api/client';
 import LeftNavbar from '~/components/navbar/left-navbar';
 import Navbar from '~/components/navbar/navbar';
 import SessionProvider from '~/components/session';
+import { initialLoadUserAcademic } from '~/hooks/useUserAcademic';
 import { loadUserCache } from '~/lib/session';
 
 const appSearchSchema = z.object({
@@ -15,6 +16,7 @@ export const Route = createFileRoute('/_app')({
   validateSearch: (search) => appSearchSchema.parse(search),
   loader: () => {
     const user = loadUserCache();
+    initialLoadUserAcademic();
     // not logged in based on local storage
     if (user === null) {
       queryClient.setQueryData(['me'], null);

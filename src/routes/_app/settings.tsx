@@ -6,7 +6,6 @@ import {
   useRouterState,
 } from '@tanstack/react-router';
 import { ChevronLeft } from 'lucide-react';
-import HeaderTitle from '~/components/header-title';
 import { Button } from '~/components/ui/button';
 import useLogout from '~/hooks/auth/useLogout';
 import {
@@ -27,12 +26,9 @@ function SettingsLayout() {
   const { logout } = useLogout();
   return (
     <div className="flex h-full flex-col overflow-hidden">
-      <div className="hidden lg:block">
-        <HeaderTitle />
-      </div>
       <div className="flex-1 overflow-y-auto bg-green-50">
         <div className="mx-auto flex h-full max-w-screen-lg flex-col lg:px-8">
-          <h1 className="my-8 hidden items-center space-x-12 text-heading-lg font-bold lg:flex">
+          <h1 className="my-6 hidden items-center space-x-12 text-heading-lg font-bold lg:flex">
             {selectedSettings && (
               <button
                 onClick={() => {
@@ -69,7 +65,7 @@ function SettingsLayout() {
               <div className="flex-1" />
               <Button
                 variant={'link'}
-                className="w-full text-[#8E8E93]"
+                className="w-full text-[#FF3B30]"
                 onClick={() => logout()}
               >
                 Log out

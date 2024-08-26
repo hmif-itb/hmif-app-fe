@@ -1,8 +1,10 @@
-import useSession from '~/hooks/auth/useSession';
 import UserInfo from '~/components/user/user-info';
+import useSession from '~/hooks/auth/useSession';
+import { useUserAcademic } from '~/hooks/useUserAcademic';
 
 function SettingsDekstop() {
   const user = useSession();
+  const { userAcademic } = useUserAcademic();
   return (
     <div className="hidden px-6 py-[3.25rem] lg:block">
       <UserInfo
@@ -18,6 +20,7 @@ function SettingsDekstop() {
         <ProfileItem title="NIM" text={user.nim} />
         <ProfileItem title="Jenis Keanggotaan" text={user.membershipStatus} />
         <ProfileItem title="Angkatan" text={`${user.major}'${user.angkatan}`} />
+        <ProfileItem title="Semester" text={`${userAcademic?.semester}`} />
       </ul>
     </div>
   );
