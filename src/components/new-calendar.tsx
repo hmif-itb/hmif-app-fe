@@ -56,7 +56,7 @@ export default function Calendar({
           <div className="flex w-full items-center justify-between gap-10 px-2">
             <h1 className="select-none">
               <span className="font-bold">{months[today.month()]}</span>{' '}
-              {isMobile && today.year()}
+              {today.year()}
             </h1>
             <div className={cn(isMobile ? 'gap-2' : 'gap-4', 'flex')}>
               <div

@@ -1,27 +1,24 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import {
-  CategoryOptions,
-  CompetitionSchema,
-  CompetitionSchemaType,
-} from '../-constants';
-import { useEffect, useState } from 'react';
-import { FileUpload } from '~/routes/_app/add-announcement';
 import { useMutation } from '@tanstack/react-query';
-import { api, queryClient } from '~/api/client';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
+import { api, queryClient } from '~/api/client';
 import { CompetitionCategories, PresignedURL } from '~/api/generated';
-import ClockIcon from '~/assets/icons/competition/clock.svg';
-import PersonIcon from '~/assets/icons/competition/person.svg';
 import CategoryIcon from '~/assets/icons/competition/category.svg';
-import MoneyIcon from '~/assets/icons/competition/money.svg';
+import ClockIcon from '~/assets/icons/competition/clock.svg';
 import LinkIcon from '~/assets/icons/competition/link.svg';
+import MoneyIcon from '~/assets/icons/competition/money.svg';
+import PersonIcon from '~/assets/icons/competition/person.svg';
+import Attachment from '~/components/custom-form/Attachment';
 import DatePicker from '~/components/custom-form/DatePicker';
+import DesktopForm from '~/components/custom-form/DesktopForm';
 import DesktopTitleField from '~/components/custom-form/DesktopTitleField';
 import FormTextField from '~/components/custom-form/FormTextField';
 import MultiSelect from '~/components/custom-form/MultiSelect';
-import Attachment from '~/components/custom-form/Attachment';
-import DesktopForm from '~/components/custom-form/DesktopForm';
+import { FileUpload } from '~/routes/_app/add-announcement';
+import { CompetitionSchema, CompetitionSchemaType } from '../-constants';
+import { useCompetitionCategories } from '../-useCompetitionCategories';
 
 type ComponentProps = {
   isOpen: boolean;
@@ -39,6 +36,7 @@ export default function AddCompetitionDialog(props: Readonly<ComponentProps>) {
     file: new File([''], 'filename'),
   });
   const [pendingUpload, setPendingUpload] = useState<string>('');
+  const categoryOptions = useCompetitionCategories();
 
   const form = useForm<CompetitionSchemaType>({
     resolver: zodResolver(CompetitionSchema),
@@ -182,7 +180,7 @@ export default function AddCompetitionDialog(props: Readonly<ComponentProps>) {
         icon={CategoryIcon}
         form={form}
         name="categories"
-        options={CategoryOptions}
+        options={categoryOptions}
         placeholder="Choose Category"
         iconClassName="size-6"
       />

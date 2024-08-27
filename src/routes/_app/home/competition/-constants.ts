@@ -26,26 +26,3 @@ export const CompetitionSchema = z
   );
 
 export type CompetitionSchemaType = z.infer<typeof CompetitionSchema>;
-
-export const CategoryOptions = [
-  {
-    id: 'Competitive Programming',
-    title: 'Competitive Programming',
-  },
-  {
-    id: 'UI/UX',
-    title: 'UI/UX',
-  },
-  {
-    id: 'Web Development',
-    title: 'Web Development',
-  },
-  {
-    id: 'Game Development',
-    title: 'Game Development',
-  },
-  {
-    id: 'Innovation',
-    title: 'Innovation',
-  },
-];

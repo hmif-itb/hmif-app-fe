@@ -9,6 +9,16 @@ import type { BaseHttpRequest } from '../core/BaseHttpRequest';
 export class CompetitionsService {
   constructor(public readonly httpRequest: BaseHttpRequest) {}
   /**
+   * @returns CompetitionCategories Fetched competition categories
+   * @throws ApiError
+   */
+  public getCompetitionCategories(): CancelablePromise<CompetitionCategories> {
+    return this.httpRequest.request({
+      method: 'GET',
+      url: '/api/competitions/categories',
+    });
+  }
+  /**
    * @returns any Created competition
    * @throws ApiError
    */
@@ -58,6 +68,46 @@ export class CompetitionsService {
       mediaType: 'application/json',
       errors: {
         400: `Bad request`,
+      },
+    });
+  }
+  /**
+   * @returns any Fetched list of competitions
+   * @throws ApiError
+   */
+  public getCompetitionList({
+    filter,
+    sort = 'created',
+    category,
+    offset,
+  }: {
+    /**
+     * is active or not
+     */
+    filter?: string,
+    /**
+     * Sort info competitions
+     */
+    sort?: 'created' | 'deadline',
+    /**
+     * category info competitions
+     */
+    category?: 'Competitive Programming' | 'Capture The Flag' | 'Data Science / Data Analytics' | 'UI/UX' | 'Game Development' | 'Business IT Case' | 'Innovation' | 'Web Development',
+    offset?: number | null,
+  }): CancelablePromise<{
+    competitions: Array<Competition>;
+  }> {
+    return this.httpRequest.request({
+      method: 'GET',
+      url: '/api/competitions',
+      query: {
+        'filter': filter,
+        'sort': sort,
+        'category': category,
+        'offset': offset,
+      },
+      errors: {
+        400: `Bad request: validation error`,
       },
     });
   }
@@ -121,46 +171,6 @@ export class CompetitionsService {
     });
   }
   /**
-   * @returns any Fetched list of competitions
-   * @throws ApiError
-   */
-  public getCompetitionList({
-    filter,
-    sort = 'created',
-    category,
-    offset,
-  }: {
-    /**
-     * is active or not
-     */
-    filter?: string,
-    /**
-     * Sort info competitions
-     */
-    sort?: 'created' | 'deadline',
-    /**
-     * category info competitions
-     */
-    category?: 'Competitive Programming' | 'Capture The Flag' | 'Data Science / Data Analytics' | 'UI/UX' | 'Game Development' | 'Business IT Case' | 'Innovation' | 'Web Development',
-    offset?: number | null,
-  }): CancelablePromise<{
-    competitions: Array<Competition>;
-  }> {
-    return this.httpRequest.request({
-      method: 'GET',
-      url: '/api/competition',
-      query: {
-        'filter': filter,
-        'sort': sort,
-        'category': category,
-        'offset': offset,
-      },
-      errors: {
-        400: `Bad request: validation error`,
-      },
-    });
-  }
-  /**
    * @returns Competition Successfully deleted comment
    * @throws ApiError
    */
@@ -174,7 +184,7 @@ export class CompetitionsService {
   }): CancelablePromise<Competition> {
     return this.httpRequest.request({
       method: 'DELETE',
-      url: '/api/competition/{competitionId}',
+      url: '/api/competitions/{competitionId}',
       path: {
         'competitionId': competitionId,
       },

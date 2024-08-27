@@ -10,7 +10,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '~/components/ui/popover';
+import useSession from '~/hooks/auth/useSession';
 import { useCalendarEvents } from '~/hooks/calendar';
+import { isInRoles } from '~/lib/roles';
 import CalendarDay from './calendar-day';
 import DesktopAddEvent, { CalendarCategory } from './DesktopAddEvent';
 
@@ -29,6 +31,7 @@ function DesktopView({
   const today = dayjs().month(currentMonth).year(currentYear);
   const lastMonth = today.subtract(1, 'month');
   const nextMonth = today.add(1, 'month');
+  const user = useSession();
   const { data: events } = useCalendarEvents({
     month: currentMonth + 1,
     year: currentYear,
@@ -138,33 +141,38 @@ function DesktopView({
           <button className="mr-1 rounded-full bg-gray-100 p-2.5">
             <Search strokeWidth={3} color="#6A778B" size={16} />
           </button>
-
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button className="bg-green-300">
-                <div className="flex flex-row items-center gap-2 font-medium">
-                  Add event
-                  <CirclePlus strokeWidth={2.25} size={18} />
-                </div>
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-40 flex-col items-center justify-center rounded-lg bg-white py-3 shadow-xl">
-              <Button
-                variant="link"
-                onClick={() => handleCategoryButtonClick('himpunan')}
-                className="w-full p-2 text-right text-black hover:bg-gray-200"
-              >
-                Himpunan
-              </Button>
-              <Button
-                variant="link"
-                onClick={() => handleCategoryButtonClick('akademik')}
-                className="w-full p-2 text-right text-black hover:bg-gray-200"
-              >
-                Akademik
-              </Button>
-            </PopoverContent>
-          </Popover>
+          {isInRoles(user, ['ring1', 'akademik']) && (
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button className="bg-green-300">
+                  <div className="flex flex-row items-center gap-2 font-medium">
+                    Add event
+                    <CirclePlus strokeWidth={2.25} size={18} />
+                  </div>
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-40 flex-col items-center justify-center rounded-lg bg-white py-3 shadow-xl">
+                {isInRoles(user, ['ring1']) && (
+                  <Button
+                    variant="link"
+                    onClick={() => handleCategoryButtonClick('himpunan')}
+                    className="w-full p-2 text-right text-black hover:bg-gray-200"
+                  >
+                    Himpunan
+                  </Button>
+                )}
+                {isInRoles(user, ['akademik']) && (
+                  <Button
+                    variant="link"
+                    onClick={() => handleCategoryButtonClick('akademik')}
+                    className="w-full p-2 text-right text-black hover:bg-gray-200"
+                  >
+                    Akademik
+                  </Button>
+                )}
+              </PopoverContent>
+            </Popover>
+          )}
         </div>
         <div className="grid grid-cols-7 py-0.5 text-center font-medium">
           {daysOfWeek.map((day) => (

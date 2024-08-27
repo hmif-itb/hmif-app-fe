@@ -1,13 +1,13 @@
+import clsx from 'clsx';
+import dayjs from 'dayjs';
+import { FieldPath, FieldValues } from 'react-hook-form';
+import Calendar from '~/components/new-calendar';
+import { Button } from '~/components/ui/button';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '~/components/ui/popover';
-import { Button } from '~/components/ui/button';
-import Calendar from '~/components/new-calendar';
-import dayjs from 'dayjs';
-import { FieldPath, FieldValues } from 'react-hook-form';
-import clsx from 'clsx';
 import { FormProps } from './-types';
 
 interface DatePickerProps<TFV extends FieldValues>
@@ -26,7 +26,7 @@ export default function DatePicker<T extends FieldValues>(
 
   const watchDate = form.watch(name);
 
-  const dateDisplay = dayjs(watchDate).format('dddd, MMMM DD');
+  const dateDisplay = dayjs(watchDate).format('dddd, MMMM DD YYYY');
 
   return (
     <Popover>
@@ -54,7 +54,7 @@ export default function DatePicker<T extends FieldValues>(
         <Calendar
           onChange={(date) => {
             // eslint-disable-next-line
-              form.setValue(name, date.toISOString() as any);
+            form.setValue(name, date.toISOString() as any);
           }}
           isMobile={false}
           defaultDate={watchDate && new Date(watchDate)}

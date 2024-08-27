@@ -1,15 +1,17 @@
-import { createFileRoute, useRouter } from '@tanstack/react-router';
-import CompetitionCard from './-components/CompetitionCard';
-import { Button } from '~/components/ui/button';
-import PlusIcon from '~/assets/icons/plus.svg';
-import PlusCircle from '~/assets/icons/competition/plus-circle.svg';
-import { useRef, useState } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { api } from '~/api/client';
-import { InView } from 'react-intersection-observer';
-import { AddCompetitionDrawer } from './-components/AddCompetitionDrawer';
-import AddCompetitionDialog from './-components/AddCompetitionDialog';
+import { createFileRoute, useRouter } from '@tanstack/react-router';
 import { ChevronLeft } from 'lucide-react';
+import { useRef, useState } from 'react';
+import { InView } from 'react-intersection-observer';
+import { api } from '~/api/client';
+import PlusCircle from '~/assets/icons/competition/plus-circle.svg';
+import PlusIcon from '~/assets/icons/plus.svg';
+import { Button } from '~/components/ui/button';
+import useSession from '~/hooks/auth/useSession';
+import { isInRoles } from '~/lib/roles';
+import AddCompetitionDialog from './-components/AddCompetitionDialog';
+import { AddCompetitionDrawer } from './-components/AddCompetitionDrawer';
+import CompetitionCard from './-components/CompetitionCard';
 
 export const Route = createFileRoute('/_app/home/competition/')({
   component: CompetitionPage,
@@ -23,6 +25,8 @@ function CompetitionPage() {
   const constraintRef = useRef<HTMLDivElement>(null);
 
   const router = useRouter();
+
+  const user = useSession();
 
   const {
     data: competitions,
@@ -86,14 +90,15 @@ function CompetitionPage() {
             <h1 className="text-left text-4xl font-bold text-white lg:text-5xl">
               Competition
             </h1>
-
-            <Button
-              onClick={() => setDialogOpen(true)}
-              className="hidden bg-yellow-300 px-3 py-2 text-xs lg:flex"
-            >
-              Add New Competition
-              <img src={PlusCircle} className="size-4" alt="" />
-            </Button>
+            {isInRoles(user, ['cnc']) && (
+              <Button
+                onClick={() => setDialogOpen(true)}
+                className="hidden bg-yellow-300 px-3 py-2 text-xs lg:flex"
+              >
+                Add New Competition
+                <img src={PlusCircle} className="size-4" alt="" />
+              </Button>
+            )}
           </div>
 
           <ul className="flex flex-col gap-4 overflow-auto pb-28 pt-6 lg:grid lg:grid-cols-2 lg:gap-10 lg:px-4 lg:pt-3">

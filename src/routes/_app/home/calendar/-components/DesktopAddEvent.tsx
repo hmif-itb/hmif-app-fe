@@ -59,7 +59,7 @@ export default function DesktopAddEvent(props: Readonly<ComponentProps>) {
   const watchStart = form.watch('start');
   const watchEnd = form.watch('end');
 
-  const dateDisplay = dayjs(watchStart).format('dddd, MMMM DD');
+  const dateDisplay = dayjs(watchStart).format('dddd, DD-MM-YYYY');
   const startTimeDisplay = dayjs(watchStart).format('hh:mma');
   const endTimeDisplay = dayjs(watchEnd).format('hh:mma');
 
