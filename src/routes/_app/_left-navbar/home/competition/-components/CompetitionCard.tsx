@@ -31,20 +31,17 @@ export default function CompetitionCard(props: Readonly<ComponentProps>) {
 
   return (
     <div className="w-full overflow-hidden rounded-xl">
-      {imageURL && (
+      {imageURL ? (
         <img
           src={imageURL}
           className="aspect-[3/4] w-full object-cover object-center"
           alt="poster"
         ></img>
+      ) : (
+        <div className="aspect-[3/4] w-full bg-gradient-to-br from-blue-300 to-blue-500"></div>
       )}
 
-      <div
-        className={clsx(
-          'relative z-[1] w-full rounded-xl bg-[#F7F6FA]',
-          imageURL && '-mt-2',
-        )}
-      >
+      <div className="relative z-[1] -mt-2 w-full rounded-xl bg-[#F7F6FA]">
         <div className="flex w-full justify-between gap-2 p-4">
           <div className="flex w-1/2 flex-col gap-1.5">
             <h2 className="font-semibold">{name}</h2>
