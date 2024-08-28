@@ -76,38 +76,44 @@ function UserInfo({ info }: { info: Info }) {
   };
 
   return (
-    <div className="my-10">
-      <div className="mb-5 text-sm font-bold text-neutral-dark">
-        {dayjs(info.createdAt).format('DD MMM YYYY HH:mm')}
-      </div>
-      <div className="flex items-start justify-between gap-2">
-        <UserInfoProfile
-          name={info.creator.fullName}
-          imageURL={info.creator.picture}
-          email={info.creator.email}
-          className="mb-5"
-          avatarClassName="size-[3.25rem]"
-        />
+    <div className="my-3 rounded-xl border border-[#EBEEEB]">
+      <div className="p-4">
+        <div className="mb-5 text-sm font-bold text-neutral-dark">
+          {dayjs(info.createdAt).format('DD MMM YYYY HH:mm')}
+        </div>
+        <div className="flex items-start justify-between gap-2">
+          <UserInfoProfile
+            name={info.creator.fullName}
+            imageURL={info.creator.picture}
+            email={info.creator.email}
+            className="mb-5"
+            avatarClassName="size-[3.25rem]"
+          />
 
-        <CardPopover
-          showRead
-          onRead={() => readInfo.mutate({ infoId: info.id })}
-          showDelete={info.creatorId === user?.id}
-          onDelete={info.creatorId === user?.id ? handleDeleteInfo : undefined}
+          <CardPopover
+            showRead
+            onRead={() => readInfo.mutate({ infoId: info.id })}
+            showDelete={info.creatorId === user?.id}
+            onDelete={
+              info.creatorId === user?.id ? handleDeleteInfo : undefined
+            }
+          />
+        </div>
+        <TextSection title={info.title} content={info.content} />
+        {/* TODO: handle other than image */}
+        <ImageSection
+          images={info.infoMedias?.map((im) => im.media.url) ?? []}
+        />
+        <div className="mt-4 font-bold text-green-300">
+          <Link to="/timeline/$infoId" params={{ infoId: info.id }}>
+            Show more
+          </Link>
+        </div>
+        <TagSection
+          tags={info.infoCategories?.map((ic) => ic.category.name) ?? []}
         />
       </div>
-      <TextSection title={info.title} content={info.content} />
-      {/* TODO: handle other than image */}
-      <ImageSection images={info.infoMedias?.map((im) => im.media.url) ?? []} />
-      <div className="mt-4 font-bold text-green-300">
-        <Link to="/timeline/$infoId" params={{ infoId: info.id }}>
-          Show more
-        </Link>
-      </div>
-      <TagSection
-        tags={info.infoCategories?.map((ic) => ic.category.name) ?? []}
-      />
-      <div className="pt-5"></div>
+      <div></div>
       <PostInteraction
         reactions={info.reactions}
         commentsCount={info.comments}
