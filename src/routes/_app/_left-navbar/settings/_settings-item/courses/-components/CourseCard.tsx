@@ -1,7 +1,9 @@
 import clsx from 'clsx';
 import { useRef } from 'react';
 import { UserCourse } from '~/api/generated';
+import { Button } from '~/components/ui/button';
 import { isMobile } from '~/lib/device';
+import TrashIcon from '~/assets/icons/course/trash.svg';
 
 interface CourseCardProps {
   deleteable?: boolean;
@@ -48,15 +50,6 @@ export default function CourseCard({
     }
   };
 
-  const handleMouseEnter = () => {
-    if (!deleteable || isMobile()) return;
-    onSwipe(courseData.courseId);
-  };
-  const handleMouseLeave = () => {
-    if (!deleteable || isMobile()) return;
-    onReset();
-  };
-
   const formatClass = (cls: number) =>
     cls.toLocaleString(undefined, { minimumIntegerDigits: 2 });
 
@@ -66,16 +59,14 @@ export default function CourseCard({
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
     >
       <div
         className={clsx(
-          `z-10 flex items-center rounded-xl bg-white transition-all duration-300 ease-out`,
+          `z-10 flex items-center justify-between rounded-xl bg-white px-5 transition-all duration-300 ease-out`,
           isSwiped ? 'w-[85%]' : 'w-full',
         )}
       >
-        <div className="flex items-center gap-4 px-5 py-4">
+        <div className="flex items-center gap-4 py-4">
           <div className="flex h-min flex-col items-center gap-1 rounded-md bg-[#305138] px-3 py-2">
             <p className="text-xs text-white">SKS</p>
             <p className="text-2xl font-medium leading-6 text-white">
@@ -92,6 +83,13 @@ export default function CourseCard({
             </p>
           </div>
         </div>
+
+        <Button
+          onClick={onDelete}
+          className="hidden rounded-full bg-[#B01212] p-2 lg:block"
+        >
+          <img src={TrashIcon} alt="Delete" className="size-4" />
+        </Button>
       </div>
       {isSwiped && (
         <button

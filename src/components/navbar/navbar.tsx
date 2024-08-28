@@ -11,7 +11,7 @@ function Navbar() {
       initial={{ bottom: -100 }}
       animate={{ bottom: 0 }}
       transition={{ duration: 1 }}
-      className="fixed z-20 flex w-full flex-col justify-end"
+      className="fixed z-20 flex w-full flex-col justify-end overflow-hidden"
     >
       <nav className="flex w-full justify-between bg-neutral-light px-8 py-3 lg:hidden">
         <BottomNavigationItem
