@@ -55,7 +55,7 @@ function InfoDetail() {
   return (
     <div className="w-full flex-1">
       <Header />
-      <div className="max-w-screen-md flex-col space-y-4 p-4">
+      <div className="sflex-col space-y-4 p-4">
         <DetailPost info={info} />
         <PostInteraction
           reactions={info.reactions}
