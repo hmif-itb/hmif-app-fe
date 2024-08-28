@@ -1,7 +1,7 @@
 import dayjs, { Dayjs } from 'dayjs';
 import { useState } from 'react';
 import { useCalendarEvents } from '~/hooks/calendar';
-import Dates from '~/routes/_app/home/-components/dates';
+import Dates from '~/routes/_app/_left-navbar/home/-components/dates';
 import Schedule from './schedule';
 
 function Timeline() {

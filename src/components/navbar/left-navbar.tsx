@@ -1,61 +1,18 @@
-import { Link, useLocation } from '@tanstack/react-router';
-import dayjs from 'dayjs';
-import { useState } from 'react';
+import { Link } from '@tanstack/react-router';
 import HomeFilledIcon from '../icons/home-filled';
 import QuestionMarkIcon from '../icons/question-mark';
 import SettingsIcon from '../icons/settings';
-import Calendar from '../new-calendar';
 import Profile from './profile';
-import SidebarEvents from '~/routes/_app/home/calendar/-components/sidebar-events';
 
 function LeftNavbar() {
-  const [currentDate] = useState(dayjs().date());
-  const [currentMonth, setCurrentMonth] = useState(dayjs().month());
-  const [currentYear, setCurrentYear] = useState(dayjs().year());
-
-  const pathname = useLocation({
-    select: (location) => location.pathname,
-  });
-  const isCalendar = pathname.startsWith('/home/calendar');
-
-  const handleMonthChange = (newMonth: number) => {
-    if (newMonth < 0) {
-      setCurrentYear(currentYear - 1);
-      setCurrentMonth(11);
-    } else if (newMonth > 11) {
-      setCurrentYear(currentYear + 1);
-      setCurrentMonth(0);
-    } else {
-      setCurrentMonth(newMonth);
-    }
-  };
-
   return (
     <section className="sticky top-0 hidden min-h-full w-[325px] shrink-0 flex-col border-r border-gray-300 lg:flex">
       <Profile />
 
       <section className="mt-5 flex size-full flex-1 flex-col items-center justify-between p-0">
-        {/* Calendar Preview for Desktop View */}
-        {isCalendar ? (
-          <div className="-mb-20 w-full">
-            <Calendar
-              isMobile={false}
-              currentMonth={currentMonth}
-              currentYear={currentYear}
-              onMonthChange={handleMonthChange}
-            />
-            <div className="m-4 flex h-2/5 flex-col gap-2">
-              <SidebarEvents
-                currentDate={currentDate}
-                currentMonth={currentMonth}
-                currentYear={currentYear}
-              />
-            </div>
-          </div>
-        ) : null}
         {/* Navigation Section */}
         <section
-          className={`mb-4 ${isCalendar ? '' : 'mt-24'} flex w-full flex-col items-center gap-2 bg-white`}
+          className={`mb-4 mt-24 flex w-full flex-col items-center gap-2 bg-white`}
         >
           <Link
             to="/home"

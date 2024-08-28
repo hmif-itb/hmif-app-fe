@@ -1,7 +1,6 @@
 import { Outlet, createFileRoute, redirect } from '@tanstack/react-router';
 import { z } from 'zod';
 import { queryClient } from '~/api/client';
-import LeftNavbar from '~/components/navbar/left-navbar';
 import Navbar from '~/components/navbar/navbar';
 import SessionProvider from '~/components/session';
 import { initialLoadUserAcademic } from '~/hooks/useUserAcademic';
@@ -32,11 +31,8 @@ function AppLayout() {
   return (
     <SessionProvider>
       <main className="mx-auto size-full max-w-screen-md lg:flex lg:max-w-none lg:overflow-y-auto">
-        <LeftNavbar />
-        <div className="flex h-full flex-1 flex-col lg:block">
-          <Outlet />
-          <Navbar />
-        </div>
+        <Outlet />
+        <Navbar />
       </main>
     </SessionProvider>
   );

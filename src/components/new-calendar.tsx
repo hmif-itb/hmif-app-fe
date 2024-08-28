@@ -8,6 +8,8 @@ import { Separator } from './ui/separator';
 type ComponentProps = {
   isMobile: boolean;
   className?: string;
+  dateClassName?: string;
+  dayClassName?: string;
   onChange?: (date: Date) => void;
   currentMonth?: number;
   currentYear?: number;
@@ -22,6 +24,8 @@ type ComponentProps = {
 export default function Calendar({
   isMobile,
   className,
+  dateClassName,
+  dayClassName,
   onChange,
   defaultDate,
   onMonthChange,
@@ -105,7 +109,10 @@ export default function Calendar({
             return (
               <div
                 key={index}
-                className="grid select-none place-content-center text-center text-sm text-[#8F9BB3]"
+                className={cn(
+                  'grid select-none place-content-center text-center text-sm text-[#8F9BB3]',
+                  dayClassName,
+                )}
               >
                 {day}
               </div>
@@ -136,6 +143,7 @@ export default function Calendar({
                         ? 'text-white'
                         : '',
                       'grid size-8 cursor-pointer select-none place-content-center transition-all hover:bg-[#E2C66F]/50',
+                      dateClassName,
                     )}
                     onClick={() => {
                       setSelectDate(date);
