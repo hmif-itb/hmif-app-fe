@@ -1,9 +1,10 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '~/api/client';
 import { setupNotification } from '~/lib/push';
 import { invalidateSession } from '~/lib/session';
 
 export default function useLogout() {
+  const queryClient = useQueryClient();
   const logoutMutation = useMutation({
     mutationFn: async () => {
       const subscription = await setupNotification();
@@ -16,6 +17,7 @@ export default function useLogout() {
     },
     onSuccess() {
       invalidateSession(null);
+      queryClient.invalidateQueries({ predicate: () => true });
     },
   });
 

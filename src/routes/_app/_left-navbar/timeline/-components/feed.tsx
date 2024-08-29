@@ -1,19 +1,20 @@
 import { useMutation, useQueries, useQueryClient } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
+import clsx from 'clsx';
 import dayjs from 'dayjs';
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 import { InView } from 'react-intersection-observer';
 import { api } from '~/api/client';
 import { Info } from '~/api/generated';
 import UserInfoProfile from '~/components/user/user-info';
+import useSession from '~/hooks/auth/useSession';
 import { extractUrls } from '~/lib/url-parser';
 import PostInteraction from '../$infoId/-components/post-interaction';
 import { renderInfoContent } from '../$infoId/-helper';
+import CardPopover from './CardPopover';
 import FeedLoader from './FeedLoader';
 import Tag from './tag';
-import useSession from '~/hooks/auth/useSession';
-import toast from 'react-hot-toast';
-import CardPopover from './CardPopover';
 
 type ComponentProps = {
   infos: Info[];
@@ -76,7 +77,12 @@ function UserInfo({ info }: { info: Info }) {
   };
 
   return (
-    <div className="my-3 rounded-xl border border-[#EBEEEB]">
+    <div
+      className={clsx(
+        'my-3 rounded-xl border border-[#EBEEEB]',
+        info.isRead ? 'bg-white' : 'bg-[#F2F4F2]',
+      )}
+    >
       <div className="p-4">
         <div className="mb-5 text-sm font-bold text-neutral-dark">
           {dayjs(info.createdAt).format('DD MMM YYYY HH:mm')}

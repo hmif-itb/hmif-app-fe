@@ -1,12 +1,13 @@
+import { useState } from 'react';
+import HamburgerIcon from '~/assets/icons/timeline/hamburger.svg';
+import MarkAsReadIcon from '~/assets/icons/timeline/mark-as-read.svg';
+import TrashIcon from '~/assets/icons/timeline/trash.svg';
 import { Button } from '~/components/ui/button';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '~/components/ui/popover';
-import HamburgerIcon from '~/assets/icons/timeline/hamburger.svg';
-import MarkAsReadIcon from '~/assets/icons/timeline/mark-as-read.svg';
-import TrashIcon from '~/assets/icons/timeline/trash.svg';
 
 type ComponentProps = {
   showRead?: boolean;
@@ -17,9 +18,10 @@ type ComponentProps = {
 
 export default function CardPopover(props: Readonly<ComponentProps>) {
   const { showRead, onRead, showDelete, onDelete } = props;
+  const [open, setOpen] = useState(false);
 
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger>
         <img src={HamburgerIcon} className="size-5" alt="" />
       </PopoverTrigger>
@@ -29,7 +31,10 @@ export default function CardPopover(props: Readonly<ComponentProps>) {
           {showRead && (
             <li className="leading-none">
               <Button
-                onClick={onRead}
+                onClick={() => {
+                  onRead?.();
+                  setOpen(false);
+                }}
                 variant="link"
                 className="p-0 text-xs font-normal md:text-sm"
               >
@@ -43,7 +48,10 @@ export default function CardPopover(props: Readonly<ComponentProps>) {
               <Button
                 variant="link"
                 className="p-0 text-xs font-normal text-[#FF3B30] md:text-sm"
-                onClick={onDelete}
+                onClick={() => {
+                  onDelete?.();
+                  setOpen(false);
+                }}
               >
                 <img src={TrashIcon} className="size-4 md:size-5" alt="" />
                 Delete

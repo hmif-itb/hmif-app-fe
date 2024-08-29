@@ -90,6 +90,7 @@ export class InfoService {
         name: string;
       };
     }>;
+    isRead?: boolean;
   }> {
     return this.httpRequest.request({
       method: 'POST',

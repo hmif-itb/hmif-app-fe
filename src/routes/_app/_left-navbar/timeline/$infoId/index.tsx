@@ -1,6 +1,6 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { api } from '~/api/client';
 import { preloadImages } from '~/lib/image';
 import CommentForm from './-components/comment-form';
@@ -31,11 +31,15 @@ function InfoDetail() {
         .then((res) => res.comment),
   });
 
-  const readInfo = useMutation({
-    mutationFn: api.info.readInfo.bind(api.info),
+  useQuery({
+    queryKey: ['readinfo', infoId],
+    queryFn: () => api.info.readInfo({ infoId }),
+    enabled: !!info,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    refetchOnMount: false,
+    staleTime: Infinity,
   });
-
-  useEffect(() => readInfo.mutate({ infoId }), []);
 
   const [activeReaction, setActiveReaction] = useState<string | null>(null);
 
@@ -55,7 +59,7 @@ function InfoDetail() {
   return (
     <div className="w-full flex-1">
       <Header />
-      <div className="sflex-col space-y-4 p-4">
+      <div className="flex-col space-y-4 p-4">
         <DetailPost info={info} />
         <PostInteraction
           reactions={info.reactions}

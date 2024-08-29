@@ -51,5 +51,6 @@ export type Info = {
   comments: number;
   reactions: ReactionAggregate;
   creator: User;
+  isRead?: boolean;
 };
 
