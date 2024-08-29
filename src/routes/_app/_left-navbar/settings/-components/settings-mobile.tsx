@@ -21,7 +21,7 @@ export default function SettingsMobile() {
         </h3>
         <p className="text-body-lg text-neutral-normal-hover">{user.email}</p>
       </div>
-      <div className="flex flex-1 flex-col rounded-t-2xl bg-green-50 px-7 py-9">
+      <div className="flex flex-1 flex-col overflow-y-auto rounded-t-2xl bg-green-50 px-7 py-9 pb-28">
         <ul className="flex flex-col gap-1 rounded-[0.375rem] bg-white">
           <ProfileItem title="NIM" text={user.nim} />
           <ProfileItem title="Jenis Keanggotaan" text={user.membershipStatus} />
@@ -42,7 +42,7 @@ export default function SettingsMobile() {
             </Link>
           ))}
         </div>
-        <div className="flex flex-1 items-center">
+        <div className="mt-4 flex flex-1 items-center">
           <Button
             variant={'link'}
             className="w-full text-[#FF3B30]"

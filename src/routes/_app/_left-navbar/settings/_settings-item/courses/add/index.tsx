@@ -81,7 +81,7 @@ function AddCourseComponent() {
       </div>
 
       {/* Buttons Section */}
-      <section className="sticky -bottom-6 -mx-4 -mb-6 flex justify-between gap-3 bg-[#30764B] px-8 py-4">
+      <section className="sticky -bottom-8 -mx-4 -mb-6 flex justify-between gap-3 bg-[#30764B] px-8 py-4 lg:-bottom-6">
         <Button
           variant="outlined"
           className="flex-1 border-2 border-[#E8C55F] font-medium text-[#E8C55F]"
