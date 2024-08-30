@@ -2,7 +2,6 @@ import clsx from 'clsx';
 import { useRef } from 'react';
 import { UserCourse } from '~/api/generated';
 import { Button } from '~/components/ui/button';
-import { isMobile } from '~/lib/device';
 import TrashIcon from '~/assets/icons/course/trash.svg';
 
 interface CourseCardProps {

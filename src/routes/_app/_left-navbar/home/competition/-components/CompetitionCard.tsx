@@ -1,5 +1,4 @@
 import { Link } from '@tanstack/react-router';
-import clsx from 'clsx';
 import dayjs from 'dayjs';
 import { CompetitionCategories } from '~/api/generated';
 import CalendarIcon from '~/assets/icons/competition/calendar.svg';

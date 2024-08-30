@@ -30,6 +30,7 @@ import {
 import { TextField } from '~/components/ui/textfield';
 import { cn } from '~/lib/utils.ts';
 import { FormSchema, FormSchemaType } from '../-constants.ts';
+import generateTimeOptions from '~/lib/generateTimeOptions.ts';
 
 export type CalendarCategory = 'akademik' | 'himpunan';
 
@@ -41,6 +42,8 @@ type ComponentProps = {
 };
 
 const TOAST_ID = 'add-event-toast';
+
+const TimeOptions = generateTimeOptions();
 
 export default function DesktopAddEvent(props: Readonly<ComponentProps>) {
   const { constraintRef, category, onSubmitSuccess, onClose } = props;
@@ -60,8 +63,8 @@ export default function DesktopAddEvent(props: Readonly<ComponentProps>) {
   const watchEnd = form.watch('end');
 
   const dateDisplay = dayjs(watchStart).format('dddd, DD-MM-YYYY');
-  const startTimeDisplay = dayjs(watchStart).format('hh:mma');
-  const endTimeDisplay = dayjs(watchEnd).format('hh:mma');
+  const startTimeDisplay = dayjs(watchStart).format('HH:mm');
+  const endTimeDisplay = dayjs(watchEnd).format('HH:mm');
 
   const { data: courses } = useQuery({
     queryKey: ['courses'],
@@ -153,7 +156,7 @@ export default function DesktopAddEvent(props: Readonly<ComponentProps>) {
             alt=""
             className="col-start-1 col-end-1 row-start-3 row-end-3 size-6"
           />
-          <div className="col-start-2 col-end-2 row-start-3 row-end-3 flex items-center gap-5">
+          <div className="col-start-2 col-end-2 row-start-3 row-end-3 flex items-center gap-24">
             <Popover>
               <PopoverTrigger asChild>
                 <Button
@@ -181,19 +184,101 @@ export default function DesktopAddEvent(props: Readonly<ComponentProps>) {
               </PopoverContent>
             </Popover>
             <div className="flex items-center">
-              <TextField
-                readOnly
-                value={startTimeDisplay}
-                inputClassName="font-medium border-none text-base px-0 text-center"
-                className="w-[80px]"
-              />
+              <Popover modal={false}>
+                <PopoverTrigger asChild>
+                  <TextField
+                    readOnly
+                    value={startTimeDisplay}
+                    inputClassName="font-medium border-none text-base px-0 text-center"
+                    className="w-[60px]"
+                  />
+                </PopoverTrigger>
+
+                <PopoverContent
+                  className="w-fit p-0"
+                  align="start"
+                  side="bottom"
+                  container={containerRef.current}
+                >
+                  <Command className="w-[80px] min-w-0">
+                    <CommandInput placeholder="Search" disableIcon />
+                    <CommandList className="max-h-52 w-full px-1">
+                      <CommandEmpty>Enter a valid time</CommandEmpty>
+                      <CommandGroup className="overflow-y-auto">
+                        {TimeOptions?.map((opt) => (
+                          <CommandItem
+                            value={opt.display}
+                            key={opt.display}
+                            onSelect={() => {
+                              const [hour, minute] = opt.display.split(':');
+                              const newDate = dayjs(watchStart)
+                                .hour(parseInt(hour))
+                                .minute(parseInt(minute))
+                                .toISOString();
+                              form.setValue('start', newDate);
+                            }}
+                            className="cursor-pointer"
+                          >
+                            <PopoverClose className="text-left">
+                              {opt.display}
+                            </PopoverClose>
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
               <p>-</p>
-              <TextField
-                readOnly
-                value={endTimeDisplay}
-                inputClassName="font-medium border-none text-base px-0 text-center"
-                className="w-[80px]"
-              />
+              <Popover modal={false}>
+                <PopoverTrigger asChild>
+                  <TextField
+                    readOnly
+                    value={endTimeDisplay}
+                    inputClassName="font-medium border-none text-base px-0 text-center"
+                    className="w-[60px]"
+                  />
+                </PopoverTrigger>
+
+                <PopoverContent
+                  className="w-fit p-0"
+                  align="start"
+                  side="bottom"
+                  container={containerRef.current}
+                >
+                  <Command className="w-[80px] min-w-0">
+                    <CommandInput
+                      placeholder="Search"
+                      className="placeholder:text-xs"
+                      disableIcon
+                    />
+                    <CommandList className="max-h-52 w-full px-1">
+                      <CommandEmpty>Enter a valid time</CommandEmpty>
+                      <CommandGroup className="overflow-y-auto">
+                        {TimeOptions?.map((opt) => (
+                          <CommandItem
+                            value={opt.display}
+                            key={opt.display}
+                            onSelect={() => {
+                              const [hour, minute] = opt.display.split(':');
+                              const newDate = dayjs(watchStart)
+                                .hour(parseInt(hour))
+                                .minute(parseInt(minute))
+                                .toISOString();
+                              form.setValue('end', newDate);
+                            }}
+                            className="flex cursor-pointer justify-center"
+                          >
+                            <PopoverClose className="text-center">
+                              {opt.display}
+                            </PopoverClose>
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
             </div>
           </div>
           {category === 'akademik' && (
