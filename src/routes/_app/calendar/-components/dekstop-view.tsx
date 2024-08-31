@@ -76,7 +76,7 @@ function DesktopView({
     return acc;
   }, {} as EventsByDate);
 
-  const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   const [showAddEventModal, setShowAddEventModal] = useState(false);
   const [category, setCategory] = useState<'himpunan' | 'akademik' | null>(
     null,

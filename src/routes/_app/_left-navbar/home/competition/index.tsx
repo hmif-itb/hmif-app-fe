@@ -63,11 +63,11 @@ function CompetitionPage() {
     fetchNextPage();
 
   return (
-    <div className="flex size-full h-screen flex-col overflow-hidden bg-green-50">
-      <div
-        className="relative mx-auto flex w-full flex-col items-center lg:max-w-screen-lg lg:px-8"
-        ref={constraintRef}
-      >
+    <div
+      ref={constraintRef}
+      className="flex size-full h-screen flex-col overflow-hidden bg-green-50"
+    >
+      <div className="relative mx-auto flex max-h-screen w-full flex-col items-center lg:max-w-screen-lg lg:px-8">
         <Button
           variant="link"
           className="my-6 hidden w-full justify-start gap-8 p-0 text-3xl font-medium lg:flex"
@@ -79,7 +79,7 @@ function CompetitionPage() {
           <span>Back</span>
         </Button>
 
-        <main className="flex size-full max-h-screen flex-col items-center gap-3 overflow-hidden bg-[url(/img/login/login-bg.jpg)] bg-no-repeat px-8 md:bg-[url(/img/login/login-bg-desktop.jpg)] lg:max-w-screen-lg lg:rounded-2xl lg:px-[82px]">
+        <main className="flex max-h-screen w-full flex-col items-center gap-3 overflow-hidden bg-[url(/img/login/login-bg.jpg)] bg-no-repeat px-8 md:bg-[url(/img/login/login-bg-desktop.jpg)] lg:max-w-screen-lg lg:rounded-t-2xl lg:px-[82px]">
           <AddCompetitionDialog
             isOpen={dialogOpen}
             setOpen={setDialogOpen}

@@ -12,7 +12,7 @@ export default function Announce(): JSX.Element {
   const { showAnnounce } = routeApi.useSearch();
 
   return (
-    <div className="fixed bottom-16 right-[28vw]">
+    <div className="fixed bottom-16 right-[28vw] z-50">
       <Dialog
         open={showAnnounce ?? false}
         onOpenChange={(open) => {

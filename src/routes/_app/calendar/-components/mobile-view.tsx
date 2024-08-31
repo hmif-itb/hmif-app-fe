@@ -63,7 +63,7 @@ export default function MobileView() {
         </div>
 
         {/* Schedule Cards */}
-        <div className="flex w-full flex-auto flex-col py-1">
+        <div className="flex w-full flex-auto flex-col py-1 pb-28">
           {selectedEvents.map((event, idx) => {
             return (
               <Schedule
