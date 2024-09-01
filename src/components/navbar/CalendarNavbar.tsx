@@ -128,7 +128,7 @@ export default function CalendarNavbar() {
           className={`flex w-full items-center gap-8 border-l-8 border-transparent px-4 py-2 pl-8 hover:bg-yellow-75 data-[status]:border-green-300`}
         >
           <QuestionMarkIcon className="size-[2.625rem] fill-transparent stroke-black transition-colors duration-200" />
-          <span>Info</span>
+          <span>Timeline</span>
         </Link>
         <Link
           to="/settings"
