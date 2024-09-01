@@ -13,9 +13,15 @@ type ComponentProps = {
   form: UseFormReturn<FormSchemaType, undefined>;
   header: 'category' | 'sort' | 'unread';
   choices: string[];
+  onChange: () => void; // Added onChange prop to trigger auto-refresh
 };
 
-export default function Options({ header, choices, form }: ComponentProps) {
+export default function Options({
+  header,
+  choices,
+  form,
+  onChange, // Destructure onChange prop
+}: ComponentProps) {
   if (choices.length < 2) {
     return <div></div>;
   }
@@ -33,7 +39,10 @@ export default function Options({ header, choices, form }: ComponentProps) {
             <FormControl>
               <RadioGroup
                 value={field.value}
-                onValueChange={field.onChange}
+                onValueChange={(value) => {
+                  field.onChange(value); // Update the form value
+                  onChange(); // Trigger the auto-refresh on change
+                }}
                 defaultValue={field.value}
               >
                 <div className="flex gap-4">

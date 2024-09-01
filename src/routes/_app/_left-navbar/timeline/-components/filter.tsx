@@ -42,6 +42,11 @@ export default function Filter({
     });
   };
 
+  // Function to auto-submit form on option change
+  const handleOptionChange = () => {
+    form.handleSubmit(handleSubmit)(); // Auto-submit the form
+  };
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="px-10">
@@ -55,6 +60,7 @@ export default function Filter({
                 form.setValue('unread', 'All');
                 form.setValue('category', '');
                 form.setValue('sort', 'Newest');
+                handleSubmit(form.getValues()); // Auto-refresh after reset
               }}
             >
               <span className="text-[16px] font-semibold text-green-400">
@@ -67,6 +73,7 @@ export default function Filter({
             form={form}
             header="category"
             choices={catData?.categories.map((c) => c.name) ?? []}
+            onChange={handleOptionChange} // Auto-submit on change
           />
           {FILTER_DATA.map((a, idx) => (
             <Options
@@ -74,6 +81,7 @@ export default function Filter({
               form={form}
               header={a.name.toLowerCase() as 'sort' | 'unread'}
               choices={a.choices}
+              onChange={handleOptionChange} // Auto-submit on change
             />
           ))}
         </div>
