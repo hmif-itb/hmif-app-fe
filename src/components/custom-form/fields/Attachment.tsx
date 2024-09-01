@@ -5,8 +5,8 @@ import clsx from 'clsx';
 import { XIcon } from 'lucide-react';
 
 type ComponentProps = {
-  image: FileUpload;
-  setImage: React.Dispatch<React.SetStateAction<FileUpload>>;
+  image: FileUpload | null;
+  setImage: React.Dispatch<React.SetStateAction<FileUpload | null>>;
   placeholder: string;
   className?: string;
   icon?: string;
@@ -19,7 +19,7 @@ export default function Attachment(props: Readonly<ComponentProps>) {
 
   const galleryInputRef = useRef<HTMLInputElement | null>(null);
 
-  if (image.url) {
+  if (image) {
     return (
       <div className="relative w-full p-3 lg:px-0">
         <a href={URL.createObjectURL(image.file)} target="_blank">

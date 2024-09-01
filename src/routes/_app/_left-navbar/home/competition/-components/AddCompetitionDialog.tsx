@@ -1,10 +1,4 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import toast from 'react-hot-toast';
-import { api, queryClient } from '~/api/client';
-import { CompetitionCategories, PresignedURL } from '~/api/generated';
+import { useEffect } from 'react';
 import CategoryIcon from '~/assets/icons/competition/category.svg';
 import ClockIcon from '~/assets/icons/clock.svg';
 import LinkIcon from '~/assets/icons/competition/link.svg';
@@ -16,9 +10,7 @@ import DesktopForm from '~/components/custom-form/DesktopForm';
 import DesktopTitleField from '~/components/custom-form/fields/DesktopTitleField';
 import FormTextField from '~/components/custom-form/fields/FormTextField';
 import MultiSelect from '~/components/custom-form/fields/MultiSelect';
-import { FileUpload } from '~/routes/_app/_left-navbar/add-announcement';
-import { CompetitionSchema, CompetitionSchemaType } from '../-constants';
-import { useCompetitionCategories } from '../-useCompetitionCategories';
+import useAddCompetition from '../-useAddCompetition';
 
 type ComponentProps = {
   isOpen: boolean;
@@ -26,110 +18,20 @@ type ComponentProps = {
   constraintRef: React.MutableRefObject<HTMLElement | null>;
 };
 
-const TOAST_ID = 'add-competition-toast';
-
 export default function AddCompetitionDialog(props: Readonly<ComponentProps>) {
   const { isOpen, setOpen, constraintRef } = props;
 
-  const [image, setImage] = useState<FileUpload>({
-    url: '',
-    file: new File([''], 'filename'),
-  });
-  const [pendingUpload, setPendingUpload] = useState<string>('');
-  const categoryOptions = useCompetitionCategories();
-
-  const form = useForm<CompetitionSchemaType>({
-    resolver: zodResolver(CompetitionSchema),
-    defaultValues: {
-      title: '',
-      organizer: '',
-      registrationStart: '',
-      registrationDeadline: '',
-      price: 0,
-      registrationURL: '',
-      sourceURL: '',
-      categories: [],
-    },
-  });
+  const { categoryOptions, form, onSubmit, image, setImage } =
+    useAddCompetition({
+      onSubmitSuccess: () => setOpen(false),
+    });
 
   useEffect(() => {
     if (!isOpen) {
       form.reset();
-      setImage({ url: '', file: new File([''], 'filename') });
+      setImage(null);
     }
   }, [isOpen]);
-
-  const postCompetition = useMutation({
-    mutationFn: api.competitions.createCompetition.bind(api.competitions),
-    onSuccess: () => {
-      toast.success('Competition Posted!', { id: TOAST_ID });
-      queryClient.invalidateQueries({ queryKey: ['competitions'] });
-      setOpen(false);
-      setPendingUpload('');
-    },
-    onError: () => toast.error('Failed to post competition', { id: TOAST_ID }),
-  });
-
-  const postMediaUpload = useMutation({
-    mutationFn: api.media.createPresignedUrl.bind(api.media),
-  });
-
-  const onSubmit = async (values: CompetitionSchemaType) => {
-    toast.loading('Please wait...', { id: TOAST_ID });
-
-    try {
-      if (!pendingUpload && image.url) {
-        const presignedUrl: PresignedURL = await postMediaUpload.mutateAsync({
-          requestBody: {
-            fileName: image.file.name.split('.')[0],
-            fileType: image.file.name.split('.').at(-1) ?? '',
-          },
-        });
-        await fetch(presignedUrl.presignedUrl, {
-          method: 'PUT',
-          body: image.file,
-        }).then(() =>
-          setPendingUpload(() => {
-            postCompetition.mutate({
-              requestBody: {
-                name: values.title,
-                organizer: values.organizer,
-                registrationStart: values.registrationStart,
-                registrationDeadline: values.registrationDeadline,
-                price: values.price ? values.price.toString() : '0',
-                registrationUrl: values.registrationURL,
-                sourceUrl: values.sourceURL,
-                categories: values.categories.map(
-                  (c) => c.title,
-                ) as CompetitionCategories,
-                mediaUrls: [presignedUrl.mediaUrl],
-              },
-            });
-            return presignedUrl.mediaUrl;
-          }),
-        );
-      } else {
-        postCompetition.mutate({
-          requestBody: {
-            name: values.title,
-            organizer: values.organizer,
-            registrationStart: values.registrationStart,
-            registrationDeadline: values.registrationDeadline,
-            price: values.price ? values.price.toString() : '0',
-            registrationUrl: values.registrationURL,
-            sourceUrl: values.sourceURL,
-            categories: values.categories.map(
-              (c) => c.title,
-            ) as CompetitionCategories,
-            mediaUrls: [pendingUpload],
-          },
-        });
-      }
-    } catch (err) {
-      console.log(err);
-      toast.error('Failed to post competition', { id: TOAST_ID });
-    }
-  };
 
   if (!isOpen) {
     return null;
