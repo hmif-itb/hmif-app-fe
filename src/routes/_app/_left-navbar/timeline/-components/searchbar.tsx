@@ -26,12 +26,19 @@ export default function SearchBar({
     setSearch('');
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault(); // Disable Enter key from submitting the form
+    }
+  };
+
   return (
     <form className="relative my-10 flex w-full flex-row items-center justify-center gap-5">
       <div className="relative w-[70%] text-xs lg:w-full">
         <Input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
+          onKeyDown={handleKeyDown}
           type="text"
           placeholder="Search..."
           className="h-auto w-full rounded-full border-2 border-black py-2 pl-4 shadow-sm outline-none lg:border-2 lg:py-3 lg:text-sm lg:font-semibold"
