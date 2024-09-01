@@ -1,10 +1,9 @@
 import dayjs from 'dayjs';
 import { motion } from 'framer-motion';
-import { CirclePlus, Search } from 'lucide-react';
+import { CirclePlus } from 'lucide-react';
 import { useMemo, useRef, useState } from 'react';
 import { CalendarEvent } from '~/api/generated';
 import { Button } from '~/components/ui/button';
-import { Dialog, DialogContent } from '~/components/ui/dialog';
 import {
   Popover,
   PopoverContent,
@@ -14,9 +13,10 @@ import useSession from '~/hooks/auth/useSession';
 import { useCalendarEvents } from '~/hooks/calendar';
 import { isInRoles } from '~/lib/roles';
 import CalendarDay from './calendar-day';
-import DesktopAddEvent, { CalendarCategory } from './DesktopAddEvent';
+import { CalendarCategory } from '../-archive/DesktopAddEvent';
 import { getRouteApi } from '@tanstack/react-router';
 import { generateDate } from '~/lib/calendar';
+import AddEventDialog from './AddEventDialog';
 
 interface EventsByDate {
   [key: string]: CalendarEvent[];
@@ -99,30 +99,19 @@ function DesktopView({
 
   return (
     <div className="relative hidden h-screen w-full flex-col lg:flex">
-      <Dialog open={showAddEventModal}>
-        <DialogContent
-          className="w-[564px] rounded-none border-none bg-transparent p-0"
-          hideCloseButton
-          overlayClassName="bg-transparent"
-        >
-          {category && (
-            <DesktopAddEvent
-              onSubmitSuccess={() => setShowAddEventModal(false)}
-              onClose={() => setShowAddEventModal(false)}
-              constraintRef={mainRef}
-              category={category}
-            />
-          )}
-        </DialogContent>
-      </Dialog>
+      {category && (
+        <AddEventDialog
+          isOpen={showAddEventModal}
+          setOpen={setShowAddEventModal}
+          constraintRef={mainRef}
+          category={category}
+        />
+      )}
 
       <motion.div ref={mainRef} className="flex h-full flex-auto flex-col">
         <div className="flex flex-row items-center gap-2 border-b border-gray-300 p-4">
           <div className="font-inter text-3xl font-medium">{monthName}</div>
           <div className="grow font-inter text-3xl font-normal">{year}</div>
-          <button className="mr-1 rounded-full bg-gray-100 p-2.5">
-            <Search strokeWidth={3} color="#6A778B" size={16} />
-          </button>
           {isInRoles(user, ['ring1', 'akademik']) && (
             <Popover>
               <PopoverTrigger asChild>
@@ -133,7 +122,7 @@ function DesktopView({
                   </div>
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-40 flex-col items-center justify-center rounded-lg bg-white py-3 shadow-xl">
+              <PopoverContent className="w-40 flex-col items-center justify-center rounded-lg bg-white p-1 shadow-xl">
                 {isInRoles(user, ['ring1']) && (
                   <Button
                     variant="link"

@@ -2,9 +2,9 @@ import PlusIcon from '~/assets/icons/plus.svg';
 import BookIcon from '~/assets/icons/calendar/book-white.svg';
 import { Button } from '~/components/ui/button';
 import { motion, Variants } from 'framer-motion';
-import { Drawer, DrawerContent } from '~/components/ui/drawer';
-import { MobileAddEvent } from '../MobileAddEvent';
 import { useState } from 'react';
+import AddEventDrawer from './AddEventDrawer';
+import { CalendarCategory } from '~/api/generated';
 
 type ComponentProps = {
   roles: string[];
@@ -109,18 +109,11 @@ export default function AddButtons(props: Readonly<ComponentProps>) {
         </motion.div>
       </div>
 
-      <Drawer
-        onOpenChange={setAddEventOpen}
-        open={addEventOpen}
-        shouldScaleBackground
-      >
-        <DrawerContent className="h-[95%] bg-white">
-          <MobileAddEvent
-            category={category as 'akademik' | 'himpunan'}
-            setDrawer={setAddEventOpen}
-          />
-        </DrawerContent>
-      </Drawer>
+      <AddEventDrawer
+        isOpen={addEventOpen}
+        setOpen={setAddEventOpen}
+        category={category as CalendarCategory}
+      />
     </>
   );
 }

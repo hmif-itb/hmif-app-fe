@@ -18,11 +18,6 @@ function CalendarDay({
   const currentDate = dayjs();
   const [today] = useState(currentDate);
 
-  // useEffect(() => {
-  //   // setToday(currentDate);
-  //   console.log('kena', currentDate);
-  // }, [currentDate]);
-
   const isToday = day === today.date() && isCurrentMonth;
 
   const formattedDay = day.toString().padStart(2, '0');

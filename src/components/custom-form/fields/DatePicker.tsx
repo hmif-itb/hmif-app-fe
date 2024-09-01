@@ -8,7 +8,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '~/components/ui/popover';
-import { FormProps } from './-types';
+import { FormProps } from '../-types';
 
 interface DatePickerProps<TFV extends FieldValues>
   extends Pick<FormProps<TFV>, 'form'> {
@@ -26,7 +26,7 @@ export default function DatePicker<T extends FieldValues>(
 
   const watchDate = form.watch(name);
 
-  const dateDisplay = dayjs(watchDate).format('dddd, MMMM DD YYYY');
+  const dateDisplay = dayjs(watchDate).format('dddd, DD MMMM YYYY');
 
   return (
     <Popover>

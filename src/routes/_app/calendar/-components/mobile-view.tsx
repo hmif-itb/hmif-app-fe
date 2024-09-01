@@ -6,7 +6,7 @@ import dayjs from 'dayjs';
 import { useCalendarEvents } from '~/hooks/calendar';
 import { useEffect, useMemo, useState } from 'react';
 import useSession from '~/hooks/auth/useSession';
-import AddButtons from './mobile-add-event/AddButtons';
+import AddButtons from './AddButtons';
 
 interface EventsByDate {
   [key: string]: CalendarEvent[];

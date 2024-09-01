@@ -1,8 +1,8 @@
 import { FieldPath, FieldValues } from 'react-hook-form';
-import { FormField, FormItem } from '../ui/form';
-import { TextField } from '../ui/textfield';
+import { FormField, FormItem } from '../../ui/form';
+import { TextField } from '../../ui/textfield';
 import clsx from 'clsx';
-import { FormProps } from './-types';
+import { FormProps } from '../-types';
 
 interface DesktopTitleFieldProps<TFV extends FieldValues>
   extends Pick<FormProps<TFV>, 'form'> {

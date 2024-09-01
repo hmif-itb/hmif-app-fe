@@ -14,7 +14,7 @@ import { useState } from 'react';
 import { Button } from '~/components/ui/button';
 import { XIcon } from 'lucide-react';
 import clsx from 'clsx';
-import { FormProps } from './-types';
+import { FormProps } from '../-types';
 
 type MultiSelectOption = {
   id: string;

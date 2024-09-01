@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { FileUpload } from '~/routes/_app/_left-navbar/add-announcement';
-import { Button } from '../ui/button';
+import { Button } from '../../ui/button';
 import clsx from 'clsx';
 import { XIcon } from 'lucide-react';
 
