@@ -83,12 +83,14 @@ export default function CourseCard({
           </div>
         </div>
 
-        <Button
-          onClick={onDelete}
-          className="hidden rounded-full bg-[#B01212] p-2 lg:block"
-        >
-          <img src={TrashIcon} alt="Delete" className="size-4" />
-        </Button>
+        {deleteable && (
+          <Button
+            onClick={onDelete}
+            className="hidden rounded-full bg-[#B01212] p-2 lg:block"
+          >
+            <img src={TrashIcon} alt="Delete" className="size-4" />
+          </Button>
+        )}
       </div>
       {isSwiped && (
         <button

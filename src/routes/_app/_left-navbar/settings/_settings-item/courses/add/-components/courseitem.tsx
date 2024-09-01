@@ -14,7 +14,9 @@ export default function CourseItem({
   const { selectedClass, setSelectedClass } = useContext(SelectedClassContext);
   const { selectedCourses, setSelectedCourses } = useContext(CourseContext);
 
-  const isSelected = selectedClass === kelas;
+  const isSelected =
+    selectedClass === kelas &&
+    selectedCourses.some((course) => course.courseId === courseId);
 
   const handleSelect = () => {
     if (isSelected) {

@@ -36,7 +36,7 @@ const PostText = ({
       {title && (
         <h1 className="whitespace-pre-line text-xl font-semibold">{title}</h1>
       )}
-      <div className="whitespace-pre-line text-base">
+      <div className="whitespace-pre-line break-words text-base">
         {/* Render text as normal, but if link make it into anchor tag, split it on space and newline */}
         {renderInfoContent(content, urls)}
       </div>

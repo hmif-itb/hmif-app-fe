@@ -56,6 +56,7 @@ function Timeline() {
     data: infos,
     fetchNextPage,
     isFetchingNextPage,
+    isFetching,
   } = useInfiniteQuery({
     queryKey: ['infos', search, unread, category, sort],
     queryFn: ({ pageParam }) =>
@@ -87,6 +88,7 @@ function Timeline() {
     <>
       {windowSize.width < 1024 ? (
         <MobileView
+          isFetching={isFetching}
           search={search ?? ''}
           setSearch={setSearch}
           infos={infos?.pages.flatMap((p) => p) ?? []}
@@ -100,6 +102,7 @@ function Timeline() {
         />
       ) : (
         <DesktopView
+          isFetching={isFetching}
           search={search ?? ''}
           setSearch={setSearch}
           infos={infos?.pages.flatMap((p) => p) ?? []}
@@ -122,5 +125,3 @@ function Timeline() {
     </>
   );
 }
-
-// TODO: Mobile view, background drawernya meninggoy

@@ -19,14 +19,15 @@ import Tag from './tag';
 type ComponentProps = {
   infos: Info[];
   onInView: () => void;
+  isFetching: boolean;
 };
 
 const TOAST_ID = 'delete-info-toast-feed';
 
-export default function Feed({ infos, onInView }: ComponentProps) {
+export default function Feed({ infos, onInView, isFetching }: ComponentProps) {
   return (
     <div className="w-full">
-      {infos.length > 0
+      {!isFetching
         ? infos.map((info, idx) =>
             idx < infos.length - 2 ? (
               <UserInfo key={info.id} info={info} />

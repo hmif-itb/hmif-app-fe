@@ -11,11 +11,13 @@ type ComponentProps = {
   search: string;
   setSearch: (value: string) => void;
   onInView: () => void;
+  isFetching: boolean;
 } & FilterProps;
 
 export default function DesktopView({
   infos,
   onInView,
+  isFetching,
   ...props
 }: ComponentProps) {
   return (
@@ -25,7 +27,7 @@ export default function DesktopView({
 
       <div className="flex w-full flex-row justify-evenly overflow-y-auto">
         <div className="w-[65%] grow-0">
-          <Feed onInView={onInView} infos={infos} />
+          <Feed isFetching={isFetching} onInView={onInView} infos={infos} />
         </div>
         <div className="sticky top-0 flex h-fit w-[30%] flex-col items-center">
           <SearchBar {...props} />

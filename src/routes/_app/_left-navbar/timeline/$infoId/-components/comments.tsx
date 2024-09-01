@@ -83,7 +83,7 @@ const CommentComponent = ({
           />
         )}
       </div>
-      <p>{commentData.content}</p>
+      <p className="break-words">{commentData.content}</p>
       <div className="flex items-center space-x-1">
         {/* wait for reactions backend */}
         <Reaction
