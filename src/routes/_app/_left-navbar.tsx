@@ -9,7 +9,7 @@ function LeftNavbarLayout() {
   return (
     <>
       <LeftNavbar />
-      <div className="flex h-full flex-1 flex-col lg:block">
+      <div className="flex h-full flex-auto flex-col overflow-x-hidden lg:block">
         <Outlet />
       </div>
     </>

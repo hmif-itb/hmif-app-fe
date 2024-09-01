@@ -19,12 +19,12 @@ export default function DesktopView({
   ...props
 }: ComponentProps) {
   return (
-    <div className="hidden flex-col lg:flex">
+    <div className="hidden h-screen w-full max-w-full flex-col overflow-hidden lg:flex">
       <HeaderTitle />
       <Announce />
 
-      <div className="flex flex-row justify-evenly">
-        <div className="w-[65%]">
+      <div className="flex w-full flex-row justify-evenly overflow-y-auto">
+        <div className="w-[65%] grow-0">
           <Feed onInView={onInView} infos={infos} />
         </div>
         <div className="sticky top-0 flex h-fit w-[30%] flex-col items-center">

@@ -160,7 +160,7 @@ function TextSection({ title, content }: { title: string; content: string }) {
           {title}
         </h4>
       )}
-      <div className="whitespace-pre-line text-base">
+      <div className="whitespace-pre-line break-words text-base">
         {/* Render text as normal, but if link make it into anchor tag, split it on space and newline */}
         {renderInfoContent(content, urls)}
       </div>

@@ -115,6 +115,7 @@ export default function Categories({
               {catOptions.map((cat, idx) => (
                 <CommandItem
                   value={cat.id}
+                  keywords={[cat.title]}
                   onSelect={(val) => {
                     const cat = catOptions.find((c) => c.id === val);
                     if (!cat) return;

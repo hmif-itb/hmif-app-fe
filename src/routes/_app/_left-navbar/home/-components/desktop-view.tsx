@@ -43,7 +43,7 @@ function DesktopView() {
             />
 
             <NavigationItem
-              src="/img/home/file.svg"
+              src="/img/home/badge.svg"
               alt="Info Lomba"
               title="Info Lomba"
               onClick={() => navigate({ to: '/home/competition' })}

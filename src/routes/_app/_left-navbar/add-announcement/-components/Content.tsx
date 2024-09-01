@@ -25,7 +25,7 @@ export default function Content({
           <div className="relative">
             <FormControl>
               <Element
-                maxLength={500}
+                maxLength={1000}
                 className={cn(
                   !isDesktop
                     ? 'text-red min-h-[153px] rounded-none border-y border-y-[#EBEEEB] px-6 py-4 text-base'
