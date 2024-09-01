@@ -5,7 +5,7 @@ import FilterContent from './filtercontent';
 
 import FilterIcon from '~/assets/icons/searchbar/filter.svg';
 import ReadIcon from '~/assets/icons/searchbar/read.svg';
-import SearchIcon from '~/assets/icons/searchbar/search.svg';
+import CloseIcon from '~/assets/icons/calendar/close.svg';
 import { Input } from '~/components/ui/input';
 import { FilterProps } from '../-types';
 
@@ -21,6 +21,11 @@ export default function SearchBar({
 }: ComponentProps) {
   const [drawerState, openDrawer] = useState(false);
 
+  const handleClearSearch = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault(); // Prevent form submission
+    setSearch('');
+  };
+
   return (
     <form className="relative my-10 flex w-full flex-row items-center justify-center gap-5">
       <div className="relative w-[70%] text-xs lg:w-full">
@@ -33,10 +38,13 @@ export default function SearchBar({
           name=""
           id=""
         />
-        <button className="absolute right-0 top-1/2 -translate-y-1/2 rounded-full bg-green-900 p-[.57rem] lg:p-[.8rem]">
+        <button
+          className="absolute right-1 top-1/2 -translate-y-1/2 rounded-full p-[.57rem] lg:p-[.8rem]"
+          onClick={handleClearSearch}
+        >
           <img
-            alt="Search Button"
-            src={SearchIcon}
+            alt="Clear Button"
+            src={CloseIcon}
             className="size-4 lg:size-5"
           />
         </button>

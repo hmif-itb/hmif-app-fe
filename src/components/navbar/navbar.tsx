@@ -17,8 +17,8 @@ function Navbar() {
         <BottomNavigationItem
           to="/timeline"
           Icon={QuestionMarkIcon}
-          alt="Info"
-          title="Info"
+          alt="Timeline"
+          title="Timeline"
         />
         <BottomNavigationItem
           to="/home"

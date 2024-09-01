@@ -34,7 +34,7 @@ function LeftNavbar() {
             }}
           >
             <QuestionMarkIcon className="size-[2.625rem] fill-transparent stroke-black transition-colors duration-200" />
-            <span>Info</span>
+            <span>Timeline</span>
           </Link>
           <Link
             to="/settings"
