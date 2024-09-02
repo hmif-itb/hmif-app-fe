@@ -1,5 +1,5 @@
 import CoursesIcon from '~/assets/icons/settings/courses.svg';
-import SettingsIcon from '~/assets/icons/settings/settings.svg';
+import ProfileIcon from '~/assets/icons/settings/profile.svg';
 import SubscriptionIcon from '~/assets/icons/settings/subscription.svg';
 
 export const settingsOptions = [
@@ -17,8 +17,8 @@ export const settingsOptions = [
 
 export const desktopSettingsOptions = [
   {
-    icon: SettingsIcon,
-    title: 'Settings',
+    icon: ProfileIcon,
+    title: 'Profile',
     href: '/settings',
   },
   ...settingsOptions,

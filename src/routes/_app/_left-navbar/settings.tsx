@@ -38,7 +38,7 @@ function SettingsLayout() {
                 <ChevronLeft className="size-8" />
               </button>
             )}
-            <span>{selectedSettings?.title ?? 'Settings'}</span>
+            <span>{selectedSettings?.title ?? 'Profile'}</span>
           </h1>
           <div className="flex flex-1 overflow-hidden lg:rounded-xl lg:bg-white lg:shadow-lg">
             <div className="hidden w-72 flex-col border-r border-neutral-normal-active py-9 lg:flex">
