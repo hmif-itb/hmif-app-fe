@@ -151,15 +151,19 @@ function DesktopView({
           ))}
         </div>
         <div className="grid min-h-0 flex-auto grid-cols-7 grid-rows-6 border-l border-t border-gray-300">
-          {calendarDays?.map(({ date, currentMonth }, index) => (
-            <CalendarDay
-              key={index}
-              day={date.date()}
-              isCurrentMonth={currentMonth}
-              isWeekend={index % 7 === 5 || index % 7 === 6}
-              events={eventsByDate[date.format('MMDD')] ?? []}
-            />
-          ))}
+          {calendarDays?.map(
+            ({ date, currentMonth: isCurrentMonth }, index) => (
+              <CalendarDay
+                key={index}
+                day={date.date()}
+                isCurrentMonth={isCurrentMonth}
+                isWeekend={index % 7 === 5 || index % 7 === 6}
+                events={eventsByDate[date.format('MMDD')] ?? []}
+                selectedMonth={selectedMonth || currentMonth}
+                selectedYear={selectedYear || currentYear}
+              />
+            ),
+          )}
         </div>
       </motion.div>
     </div>

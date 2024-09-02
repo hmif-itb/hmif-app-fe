@@ -1,5 +1,4 @@
 import dayjs from 'dayjs';
-import { useState } from 'react';
 import { CalendarEvent } from '~/api/generated';
 import { cn } from '~/lib/utils';
 import EventLabel from './event-label';
@@ -9,16 +8,19 @@ function CalendarDay({
   isCurrentMonth,
   isWeekend,
   events,
+  selectedMonth,
+  selectedYear,
 }: {
   day: number;
   isCurrentMonth: boolean;
   isWeekend: boolean;
   events: CalendarEvent[];
+  selectedMonth: number;
+  selectedYear: number;
 }) {
-  const currentDate = dayjs();
-  const [today] = useState(currentDate);
-
-  const isToday = day === today.date() && isCurrentMonth;
+  const isToday =
+    dayjs().isSame(dayjs().date(day).month(selectedMonth).year(selectedYear)) &&
+    isCurrentMonth;
 
   const formattedDay = day.toString().padStart(2, '0');
 
