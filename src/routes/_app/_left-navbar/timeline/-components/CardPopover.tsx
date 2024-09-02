@@ -11,7 +11,8 @@ import {
 
 type ComponentProps = {
   showRead?: boolean;
-  onRead?: () => void;
+  isRead?: boolean;
+  onRead?: (unread: boolean) => void;
   showDelete?: boolean;
   onDelete?: () => void;
 };
@@ -32,14 +33,14 @@ export default function CardPopover(props: Readonly<ComponentProps>) {
             <li className="leading-none">
               <Button
                 onClick={() => {
-                  onRead?.();
+                  onRead?.(!!props.isRead);
                   setOpen(false);
                 }}
                 variant="link"
                 className="p-0 text-xs font-normal md:text-sm"
               >
                 <img src={MarkAsReadIcon} className="size-4 md:size-5" alt="" />
-                Mark as read
+                {props.isRead ? 'Mark as unread' : 'Mark as read'}
               </Button>
             </li>
           )}

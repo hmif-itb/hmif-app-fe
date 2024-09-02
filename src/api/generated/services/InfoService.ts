@@ -14,8 +14,15 @@ export class InfoService {
    */
   public readInfo({
     infoId,
+    requestBody,
   }: {
+    /**
+     * Id of info
+     */
     infoId: string,
+    requestBody?: {
+      unread?: boolean;
+    },
   }): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'POST',
@@ -23,6 +30,8 @@ export class InfoService {
       path: {
         'infoId': infoId,
       },
+      body: requestBody,
+      mediaType: 'application/json',
       errors: {
         400: `Bad request`,
       },

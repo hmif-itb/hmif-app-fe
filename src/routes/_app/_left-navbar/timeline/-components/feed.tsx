@@ -99,7 +99,10 @@ function UserInfo({ info }: { info: Info }) {
 
           <CardPopover
             showRead
-            onRead={() => readInfo.mutate({ infoId: info.id })}
+            onRead={(unread) =>
+              readInfo.mutate({ infoId: info.id, requestBody: { unread } })
+            }
+            isRead={info.isRead}
             showDelete={info.creatorId === user?.id}
             onDelete={
               info.creatorId === user?.id ? handleDeleteInfo : undefined
