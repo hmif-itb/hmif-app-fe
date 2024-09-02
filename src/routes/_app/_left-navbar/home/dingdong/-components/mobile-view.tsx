@@ -1,11 +1,13 @@
-import UserInfo from '~/components/user/user-info';
-import useSession from '~/hooks/auth/useSession';
-import CourseCard from './course-card';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '~/api/client';
+import UserInfo from '~/components/user/user-info';
+import useSession from '~/hooks/auth/useSession';
+import { useUserAcademic } from '~/hooks/useUserAcademic';
+import CourseCard from './course-card';
 
 function MobileView() {
   const user = useSession();
+  const { userAcademic } = useUserAcademic();
 
   const { data: currCourses } = useQuery({
     queryKey: ['currentCourses'],
@@ -25,7 +27,9 @@ function MobileView() {
           <h1 className="text-[30px] font-bold text-white antialiased">
             Dingdong
           </h1>
-          <p className="text-sm text-[#D4D6D4]">STI-SEMESTER 4</p>
+          <p className="text-sm text-[#D4D6D4]">
+            {user.major} SEMESTER {userAcademic?.semester}
+          </p>
         </div>
         <div className="flex flex-col justify-between gap-4">
           <div className={`flex flex-col gap-4`}>
