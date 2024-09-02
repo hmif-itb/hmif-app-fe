@@ -55,7 +55,7 @@ function SubscriptionComponent() {
     <>
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-[30px] font-bold text-white antialiased">
-          Subscription
+          Notification
         </h1>
       </div>
       <div className="flex flex-col justify-between gap-4">

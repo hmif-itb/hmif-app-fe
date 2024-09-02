@@ -10,7 +10,7 @@ export const settingsOptions = [
   },
   {
     icon: SubscriptionIcon,
-    title: 'Subscription',
+    title: 'Notification',
     href: '/settings/subscriptions',
   },
 ] as const;
