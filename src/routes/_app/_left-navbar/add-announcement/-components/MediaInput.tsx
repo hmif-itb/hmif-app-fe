@@ -35,7 +35,7 @@ export default function MediaInput({
       <div
         className={cn(
           'flex w-full items-center border-t border-[#EBEEEB] bg-white px-5',
-          !isDesktop && 'absolute bottom-0 left-0',
+          !isDesktop && 'absolute bottom-20 left-0',
         )}
       >
         <Dialog open={captureOpen} onOpenChange={setCaptureOpen}>
