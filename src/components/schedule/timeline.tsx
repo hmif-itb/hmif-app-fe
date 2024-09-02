@@ -66,7 +66,7 @@ function Timeline() {
       </section>
 
       {/* Schedule Section */}
-      <section className="mt-2 flex w-full max-w-screen-md flex-col gap-4 px-6 pb-28 lg:mt-10">
+      <section className="mt-2 flex w-full max-w-screen-md flex-col gap-4 px-6 pb-28 lg:mt-10 lg:pb-6">
         <p className="self-start font-semibold">Schedule Today</p>
 
         <div className="flex justify-between px-1 text-[#BCC1CD]">

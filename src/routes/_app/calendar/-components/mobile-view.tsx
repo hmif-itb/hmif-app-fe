@@ -1,11 +1,11 @@
+import { Separator } from '@radix-ui/react-separator';
+import dayjs from 'dayjs';
+import { useEffect, useMemo, useState } from 'react';
+import { CalendarEvent } from '~/api/generated';
 import Calendar from '~/components/new-calendar';
 import Schedule from '~/components/schedule/schedule';
-import { Separator } from '@radix-ui/react-separator';
-import { CalendarEvent } from '~/api/generated';
-import dayjs from 'dayjs';
-import { useCalendarEvents } from '~/hooks/calendar';
-import { useEffect, useMemo, useState } from 'react';
 import useSession from '~/hooks/auth/useSession';
+import { useCalendarEvents } from '~/hooks/calendar';
 import AddButtons from './AddButtons';
 
 interface EventsByDate {
@@ -63,7 +63,7 @@ export default function MobileView() {
         </div>
 
         {/* Schedule Cards */}
-        <div className="flex w-full flex-auto flex-col py-1 pb-28">
+        <div className="flex w-full flex-auto flex-col py-1 pb-28 lg:pb-6">
           {selectedEvents.map((event, idx) => {
             return (
               <Schedule

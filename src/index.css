@@ -90,6 +90,36 @@
       -ms-overflow-style: none; /* IE and Edge */
       scrollbar-width: none; /* Firefox */
     }
+    /* Chrome, Edge and Safari */
+    *::-webkit-scrollbar {
+      height: 8px;
+      width: 8px;
+    }
+    *::-webkit-scrollbar-track {
+      border-radius: 3px;
+      background-color: #dfe9eb;
+    }
+
+    *::-webkit-scrollbar-track:hover {
+      background-color: #dfe9eb;
+    }
+
+    *::-webkit-scrollbar-track:active {
+      background-color: #c8d1d3;
+    }
+
+    *::-webkit-scrollbar-thumb {
+      border-radius: 3px;
+      @apply bg-green-300;
+    }
+
+    *::-webkit-scrollbar-thumb:hover {
+      @apply bg-green-200;
+    }
+
+    *::-webkit-scrollbar-thumb:active {
+      @apply bg-green-200;
+    }
   }
 }
 

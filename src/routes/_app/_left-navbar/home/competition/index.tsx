@@ -101,7 +101,7 @@ function CompetitionPage() {
             )}
           </div>
 
-          <ul className="flex flex-col gap-4 overflow-auto pb-28 pt-6 lg:grid lg:grid-cols-2 lg:gap-10 lg:px-4 lg:pt-3">
+          <ul className="flex flex-col gap-4 overflow-auto pb-28 pt-6 lg:grid lg:grid-cols-2 lg:gap-10 lg:px-4 lg:pb-6 lg:pt-3">
             {competitions?.pages
               .flatMap((c) => c)
               .map((competition, idx) =>

@@ -32,7 +32,7 @@ export default function Options({
       name={header}
       render={({ field }) => (
         <FormItem>
-          <div className="my-5">
+          <div className="my-4">
             <h2 className="text-base font-semibold capitalize">{header}</h2>
             <Separator className="mb-3 mt-1 bg-gray-500" />
 
@@ -45,7 +45,7 @@ export default function Options({
                 }}
                 defaultValue={field.value}
               >
-                <div className="flex gap-4">
+                <div className="flex flex-wrap gap-2">
                   {choices.map((choice, idx) => (
                     <FormItem
                       key={idx}

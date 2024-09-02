@@ -52,7 +52,7 @@ function NimFinderPage() {
           {searchResult && `Menampilkan ${searchResult.length} hasil`}
         </p>
 
-        <ul className="flex w-full flex-col gap-3 overflow-auto pb-28">
+        <ul className="flex w-full flex-col gap-3 overflow-auto pb-28 lg:pb-6">
           {searchResult?.map((user) => (
             <div className="flex w-full items-center justify-between rounded-lg bg-white p-3 lg:px-5">
               <UserInfo

@@ -49,10 +49,12 @@ export default function Filter({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="px-10">
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="px-6">
         <div>
           <div className="flex items-baseline justify-between px-0">
-            <h1 className="text-[24px] font-bold text-green-400">Filters</h1>
+            <h1 className="text-heading-md font-bold text-green-400">
+              Filters
+            </h1>
             <Button
               variant="link"
               type="button"
@@ -63,7 +65,7 @@ export default function Filter({
                 handleSubmit(form.getValues()); // Auto-refresh after reset
               }}
             >
-              <span className="text-[16px] font-semibold text-green-400">
+              <span className="text-body-lg font-semibold text-green-400">
                 Reset
               </span>
             </Button>
