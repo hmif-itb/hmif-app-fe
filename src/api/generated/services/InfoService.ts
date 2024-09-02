@@ -2,6 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { Angkatan } from '../models/Angkatan';
 import type { Course } from '../models/Course';
 import type { Info } from '../models/Info';
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -93,11 +94,7 @@ export class InfoService {
     infoAngkatan?: Array<{
       infoId: string;
       angkatanId: string;
-      angkatan: {
-        id: string;
-        year: number;
-        name: string;
-      };
+      angkatan: Angkatan;
     }>;
     isRead?: boolean;
   }> {

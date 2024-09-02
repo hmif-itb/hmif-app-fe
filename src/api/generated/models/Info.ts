@@ -2,6 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { Angkatan } from './Angkatan';
 import type { Course } from './Course';
 import type { ReactionAggregate } from './ReactionAggregate';
 import type { User } from './User';
@@ -42,11 +43,7 @@ export type Info = {
   infoAngkatan?: Array<{
     infoId: string;
     angkatanId: string;
-    angkatan: {
-      id: string;
-      year: number;
-      name: string;
-    };
+    angkatan: Angkatan;
   }>;
   comments: number;
   reactions: ReactionAggregate;

@@ -1,3 +1,10 @@
+import { useQuery } from '@tanstack/react-query';
+import { XIcon } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { UseFormReturn, useWatch } from 'react-hook-form';
+import { api } from '~/api/client';
+import HashIcon from '~/assets/icons/add-announcement/hash.svg';
+import { Button } from '~/components/ui/button';
 import {
   Command,
   CommandInput,
@@ -9,40 +16,28 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '~/components/ui/popover';
-import HashIcon from '~/assets/icons/add-announcement/hash.svg';
-import { UseFormReturn, useWatch } from 'react-hook-form';
-import { FormSchemaType } from '../-constants';
-import { useEffect, useState } from 'react';
-import { Button } from '~/components/ui/button';
+import { useAngkatanList } from '~/hooks/useAngkatanList';
 import { cn } from '~/lib/utils';
-import { api } from '~/api/client';
-import { useQuery } from '@tanstack/react-query';
-import { XIcon } from 'lucide-react';
+import { FormSchemaType } from '../-constants';
 
 type ComponentProps = {
   form: UseFormReturn<FormSchemaType>;
   isDesktop?: boolean;
 };
 
-const angkatanOptions = [
-  {
-    id: 'ANG-1',
-    type: 'ANGKATAN',
-    title: '2021',
-  },
-  {
-    id: 'ANG-2',
-    type: 'ANGKATAN',
-    title: '2022',
-  },
-];
-
 export default function Categories({
   form,
   isDesktop,
 }: ComponentProps): JSX.Element {
   const [catDropdownOpen, setCatDropdownOpen] = useState(false);
-  const [catOptions, setCatOptions] = useState(angkatanOptions);
+  const angkatanList = useAngkatanList();
+  const [catOptions, setCatOptions] = useState<
+    {
+      id: string;
+      type: string;
+      title: string;
+    }[]
+  >([]);
 
   const categories = useWatch({
     control: form.control,
@@ -56,18 +51,32 @@ export default function Categories({
   });
 
   useEffect(() => {
-    if (!data?.categories) return;
-    setCatOptions(
-      [
-        ...angkatanOptions,
+    const options: typeof catOptions = [];
+    if (angkatanList) {
+      options.push(
+        ...angkatanList.map((a) => ({
+          id: a.id,
+          type: 'ANGKATAN',
+          title: `${a.year} ${a.name}`,
+        })),
+      );
+    }
+    if (data) {
+      options.push(
         ...data.categories.map((c) => ({
           id: c.id,
           type: 'KATEGORI',
           title: c.name,
         })),
-      ].filter((cat) => !categories.map((c) => c.id).includes(cat.id)),
+      );
+    }
+    setCatOptions(
+      options.filter(
+        (cat) =>
+          !categories.some((c) => c.id === cat.id && c.type === cat.type),
+      ),
     );
-  }, [data, categories]);
+  }, [data, categories, angkatanList]);
 
   const handleDeleteCategory = (id: string) => {
     form.setValue(

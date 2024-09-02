@@ -9,6 +9,7 @@ import { api } from '~/api/client';
 import { Info } from '~/api/generated';
 import UserInfoProfile from '~/components/user/user-info';
 import useSession from '~/hooks/auth/useSession';
+import { getInfoTag } from '~/lib/info';
 import { extractUrls } from '~/lib/url-parser';
 import PostInteraction from '../$infoId/-components/post-interaction';
 import { renderInfoContent } from '../$infoId/-helper';
@@ -119,9 +120,7 @@ function UserInfo({ info }: { info: Info }) {
             Show more
           </Link>
         </div>
-        <TagSection
-          tags={info.infoCategories?.map((ic) => ic.category.name) ?? []}
-        />
+        <TagSection tags={getInfoTag(info)} />
       </div>
       <div></div>
       <PostInteraction
@@ -209,7 +208,7 @@ function TextSection({ title, content }: { title: string; content: string }) {
   );
 }
 
-function TagSection({ tags }: { tags: string[] }) {
+export function TagSection({ tags }: { tags: string[] }) {
   return (
     <div className="mt-3 flex flex-wrap gap-3">
       {tags.map((tag, idx) => (

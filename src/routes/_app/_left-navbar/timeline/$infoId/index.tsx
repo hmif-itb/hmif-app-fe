@@ -33,7 +33,8 @@ function InfoDetail() {
 
   useQuery({
     queryKey: ['readinfo', infoId],
-    queryFn: () => api.info.readInfo({ infoId }),
+    queryFn: () =>
+      api.info.readInfo({ infoId, requestBody: { unread: false } }),
     enabled: !!info,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,

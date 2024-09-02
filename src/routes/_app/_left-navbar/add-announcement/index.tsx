@@ -134,6 +134,9 @@ export function AddAnnouncementPage({
           forCategories: values.categories
             .filter((c) => c.type === 'KATEGORI')
             .map((c) => c.id),
+          forAngkatan: values.categories
+            .filter((c) => c.type === 'ANGKATAN')
+            .map((c) => c.id),
           mediaUrls: pendingUpload,
         },
       });

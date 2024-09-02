@@ -1,13 +1,14 @@
-import { Info } from '~/api/generated';
-import PostCategories from './post-categories';
-import PostPhotos from './post-photos';
-import PostText from './post-text';
-import UserInfo from '~/components/user/user-info';
-import { Dialog, DialogContent } from '~/components/ui/dialog';
 import { DialogTrigger } from '@radix-ui/react-dialog';
 import { useState } from 'react';
-import { Button } from '~/components/ui/button';
+import { Info } from '~/api/generated';
 import ArrowRightIcon from '~/assets/icons/timeline/arrow-right.svg';
+import { Button } from '~/components/ui/button';
+import { Dialog, DialogContent } from '~/components/ui/dialog';
+import UserInfo from '~/components/user/user-info';
+import { getInfoTag } from '~/lib/info';
+import { TagSection } from '../../-components/feed';
+import PostPhotos from './post-photos';
+import PostText from './post-text';
 
 const DetailPost = ({ info }: { info: Info }) => {
   const [imageIdx, setImageIdx] = useState(0);
@@ -80,9 +81,7 @@ const DetailPost = ({ info }: { info: Info }) => {
           </DialogContent>
         </Dialog>
       )}
-      <PostCategories
-        tags={info.infoCategories?.map((ic) => ic.category.name) || []}
-      />
+      <TagSection tags={getInfoTag(info)} />
     </div>
   );
 };
