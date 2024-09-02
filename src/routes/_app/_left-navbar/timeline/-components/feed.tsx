@@ -7,6 +7,7 @@ import toast from 'react-hot-toast';
 import { InView } from 'react-intersection-observer';
 import { api } from '~/api/client';
 import { Info } from '~/api/generated';
+import { InfoPhotosCarousel } from '~/components/info/info-photos-carousel';
 import UserInfoProfile from '~/components/user/user-info';
 import useSession from '~/hooks/auth/useSession';
 import { getInfoTag } from '~/lib/info';
@@ -112,9 +113,9 @@ function UserInfo({ info }: { info: Info }) {
         </div>
         <TextSection title={info.title} content={info.content} />
         {/* TODO: handle other than image */}
-        <ImageSection
-          images={info.infoMedias?.map((im) => im.media.url) ?? []}
-        />
+        {info.infoMedias && info.infoMedias.length > 0 && (
+          <InfoPhotosCarousel medias={info.infoMedias} />
+        )}
         <div className="mt-4 font-bold text-green-300">
           <Link to="/timeline/$infoId" params={{ infoId: info.id }}>
             Show more
@@ -214,88 +215,6 @@ export function TagSection({ tags }: { tags: string[] }) {
       {tags.map((tag, idx) => (
         <Tag key={idx} tag={tag} />
       ))}
-    </div>
-  );
-}
-
-function ImageSection({ images }: { images: string[] }) {
-  if (images.length === 0) return null;
-  return (
-    <div className="mt-5 w-full">
-      {images.length === 1 ? (
-        <div className="grid grid-cols-1 gap-4">
-          <div className="relative">
-            <img
-              src={images[0]}
-              alt="Post"
-              className="size-full max-w-96 rounded-lg border object-cover"
-            />
-          </div>
-        </div>
-      ) : images.length === 2 ? (
-        <div className="flex max-h-96 gap-4 overflow-hidden">
-          <div className="relative w-1/2">
-            <img
-              src={images[0]}
-              alt="Post"
-              className="size-full max-w-96 rounded-l-lg border object-cover"
-            />
-          </div>
-          <div className="relative w-1/2">
-            <img
-              src={images[1]}
-              alt="Post"
-              className="size-full max-w-96 rounded-r-lg border object-cover"
-            />
-          </div>
-        </div>
-      ) : images.length === 3 ? (
-        <div className="grid grid-cols-2 gap-4 overflow-hidden">
-          <img
-            src={images[0]}
-            alt="Post"
-            className="row-span-2 size-full max-w-96 rounded-l-lg border object-cover"
-          />
-          <img
-            src={images[1]}
-            alt="Post"
-            className="h-96 w-full max-w-96 rounded-tr-lg border object-cover"
-          />
-          <img
-            src={images[2]}
-            alt="Post"
-            className="h-96 w-full max-w-96 rounded-br-lg border object-cover"
-          />
-        </div>
-      ) : (
-        <div className="grid grid-cols-2 gap-4 overflow-hidden">
-          <img
-            alt="Post"
-            className="h-96 w-full max-w-96 rounded-tl-lg border object-cover"
-            src={images[0]}
-          />
-          <img
-            alt="Post"
-            className="h-96 w-full max-w-96 rounded-tr-lg border object-cover"
-            src={images[1]}
-          />
-          <img
-            alt="Post"
-            className="h-96 w-full max-w-96 rounded-bl-lg border object-cover"
-            src={images[2]}
-          />
-          <div className="relative size-full rounded-br-lg border text-center">
-            <img
-              alt="Post"
-              className="h-96 w-full max-w-96 rounded-br-lg border object-cover brightness-50"
-              src={images[3]}
-            />
-            <div className="absolute inset-0 flex items-center justify-center text-lg font-medium text-white">
-              {images.length - 3}+
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
