@@ -43,13 +43,9 @@ function CommentForm({ repliedInfoId }: ICommentFormProps) {
     <Form {...formMethods}>
       <form onSubmit={formMethods.handleSubmit(onSubmit)}>
         <div className="flex flex-col">
-          <div className="flex flex-row content-start items-start space-x-4 border-b border-gray-300 pb-4">
-            <Avatar
-              src={user.picture}
-              alt={user.fullName}
-              className="size-10"
-            />
-            <FormItem className="flex-1 pt-2">
+          <div className="flex flex-row content-start items-start gap-x-4 border-b border-gray-300 pb-4">
+            <Avatar src={user.picture} alt={user.fullName} className="size-8" />
+            <FormItem className="flex-1">
               <Controller
                 name="comment"
                 control={formMethods.control}
@@ -58,7 +54,7 @@ function CommentForm({ repliedInfoId }: ICommentFormProps) {
                     <Textarea
                       {...field}
                       placeholder="Share your thoughts with a reply"
-                      className="min-h-0 w-full overflow-hidden border-none p-0 text-base font-normal text-neutral-darker focus:ring-0"
+                      className="min-h-0 w-full overflow-hidden border-none px-1 py-0 text-xs font-normal text-neutral-darker focus:ring-0 lg:text-sm"
                       rows={1}
                       onInput={(e) => {
                         e.currentTarget.style.height = 'auto';
@@ -69,9 +65,7 @@ function CommentForm({ repliedInfoId }: ICommentFormProps) {
                 )}
               />
             </FormItem>
-          </div>
-          <div className="flex items-center justify-end border-b border-gray-300 py-3">
-            <Button type="submit" className="grow-0 bg-green-300">
+            <Button type="submit" className="grow-0 bg-green-300" size={'sm'}>
               Reply
             </Button>
           </div>

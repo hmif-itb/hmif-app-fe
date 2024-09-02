@@ -58,7 +58,7 @@ function InfoDetail() {
   }
 
   return (
-    <div className="w-full flex-1">
+    <div className="w-full flex-1 pb-24 lg:pb-2">
       <Header />
       <div className="flex-col space-y-4 p-4">
         <DetailPost info={info} />
