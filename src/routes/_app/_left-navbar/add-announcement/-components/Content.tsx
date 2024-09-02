@@ -2,6 +2,7 @@ import { UseFormReturn } from 'react-hook-form';
 import { FormControl, FormField, FormItem } from '~/components/ui/form';
 import { GrowingTextarea } from '~/components/ui/growingtextarea';
 import { Textarea } from '~/components/ui/textarea';
+import { MAX_INFO_ANNOUNCEMENT_LENGTH } from '~/lib/constants';
 import { cn } from '~/lib/utils';
 import { FormSchemaType } from '../-constants';
 
@@ -25,7 +26,7 @@ export default function Content({
           <div className="relative">
             <FormControl>
               <Element
-                maxLength={1000}
+                maxLength={MAX_INFO_ANNOUNCEMENT_LENGTH}
                 className={cn(
                   !isDesktop
                     ? 'text-red min-h-[153px] rounded-none border-y border-y-[#EBEEEB] px-6 py-4 text-base'

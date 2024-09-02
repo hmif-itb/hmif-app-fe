@@ -1,11 +1,23 @@
 import { z } from 'zod';
+import {
+  MAX_INFO_ANNOUNCEMENT_LENGTH,
+  MAX_INFO_TITLE_LENGTH,
+} from '~/lib/constants';
 
 export const FormSchema = z.object({
-  headline: z.string().max(100, "Headline can't be more than 100 characters"),
+  headline: z
+    .string()
+    .max(
+      MAX_INFO_TITLE_LENGTH,
+      `Headline can't be more than ${MAX_INFO_TITLE_LENGTH} characters`,
+    ),
   announcement: z
     .string()
     .min(1, "Announcement can't be empty")
-    .max(1000, "Announcement can't be more than 1000 characters"),
+    .max(
+      MAX_INFO_ANNOUNCEMENT_LENGTH,
+      `Announcement can't be more than ${MAX_INFO_ANNOUNCEMENT_LENGTH} characters`,
+    ),
   categories: z
     .object({
       id: z.string(),

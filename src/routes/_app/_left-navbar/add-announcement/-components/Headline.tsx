@@ -1,6 +1,7 @@
 import { UseFormReturn } from 'react-hook-form';
 import { FormControl, FormField, FormItem } from '~/components/ui/form';
 import { TextField } from '~/components/ui/textfield';
+import { MAX_INFO_TITLE_LENGTH } from '~/lib/constants';
 import { cn } from '~/lib/utils';
 import { FormSchemaType } from '../-constants';
 
@@ -22,7 +23,7 @@ export default function Headline({
           <div className="relative">
             <FormControl>
               <TextField
-                maxLength={50}
+                maxLength={MAX_INFO_TITLE_LENGTH}
                 placeholder="Headline announcement"
                 inputClassName={cn(
                   'rounded-none border-y border-y-[#EBEEEB] text-body-xl py-4 px-6 font-bold',
