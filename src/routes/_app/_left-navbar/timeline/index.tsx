@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
+import { useRef, useState } from 'react';
 import { z } from 'zod';
 import { api } from '~/api/client';
 import MegaphoneIcon from '~/assets/icons/megaphone.svg';
@@ -24,17 +25,25 @@ export const Route = createFileRoute('/_app/_left-navbar/timeline/')({
 function Timeline() {
   const PAGE_SIZE = 10;
   const windowSize = useWindowSize();
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const navigate = useNavigate({ from: Route.fullPath });
   const { search, unread, category, sort } = Route.useSearch();
+  const [searchInput, setSearchInput] = useState(search ?? '');
 
   const setSearch = (value: string) => {
-    navigate({
-      search: (prev) => ({
-        ...prev,
-        search: value || undefined,
-      }),
-    });
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    setSearchInput(value);
+    timeoutRef.current = setTimeout(() => {
+      navigate({
+        search: (prev) => ({
+          ...prev,
+          search: value || undefined,
+        }),
+      });
+    }, 500);
   };
 
   const setFilter: FilterProps['setFilter'] = (data) => {
@@ -56,7 +65,7 @@ function Timeline() {
     data: infos,
     fetchNextPage,
     isFetchingNextPage,
-    isFetching,
+    isLoading,
   } = useInfiniteQuery({
     queryKey: ['infos', search, unread, category, sort],
     queryFn: ({ pageParam }) =>
@@ -84,12 +93,13 @@ function Timeline() {
     (infos?.pages.flatMap((p) => p).length ?? 1) % PAGE_SIZE === 0 &&
     fetchNextPage();
 
+  // TODO: fetching next page loading
   return (
     <>
       {windowSize.width < 1024 ? (
         <MobileView
-          isFetching={isFetching}
-          search={search ?? ''}
+          isFetching={isLoading}
+          search={searchInput}
           setSearch={setSearch}
           infos={infos?.pages.flatMap((p) => p) ?? []}
           onInView={fetchWhenInView}
@@ -102,8 +112,8 @@ function Timeline() {
         />
       ) : (
         <DesktopView
-          isFetching={isFetching}
-          search={search ?? ''}
+          isFetching={isLoading}
+          search={searchInput}
           setSearch={setSearch}
           infos={infos?.pages.flatMap((p) => p) ?? []}
           onInView={fetchWhenInView}

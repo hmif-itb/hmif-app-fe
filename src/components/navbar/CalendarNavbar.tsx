@@ -1,11 +1,11 @@
+import { getRouteApi, Link } from '@tanstack/react-router';
 import dayjs from 'dayjs';
 import { useState } from 'react';
-import Calendar from '~/components/new-calendar';
-import SidebarEvents from './sidebar-events';
 import HomeFilledIcon from '~/components/icons/home-filled';
 import QuestionMarkIcon from '~/components/icons/question-mark';
 import SettingsIcon from '~/components/icons/settings';
-import { getRouteApi, Link } from '@tanstack/react-router';
+import Calendar from '~/components/new-calendar';
+import SidebarEvents from './sidebar-events';
 
 const routeApi = getRouteApi('/_app/calendar/');
 
