@@ -1,9 +1,14 @@
 import dayjs from 'dayjs';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { CalendarEvent } from '~/api/generated';
 import { generateDate, months } from '../lib/calendar';
 import { cn } from '../lib/utils';
 import { Separator } from './ui/separator';
+
+export interface EventsByDate {
+  [key: string]: CalendarEvent[];
+}
 
 type ComponentProps = {
   isMobile: boolean;
@@ -15,6 +20,7 @@ type ComponentProps = {
   currentYear?: number;
   onMonthChange?: (newMonth: number) => void;
   defaultDate?: Date;
+  eventsByDate?: EventsByDate;
 };
 
 /**
@@ -29,6 +35,7 @@ export default function Calendar({
   onChange,
   defaultDate,
   onMonthChange,
+  eventsByDate,
 }: Readonly<ComponentProps>) {
   const days = isMobile
     ? ['Sun', 'Mon', 'Tue', 'Wed', 'Tu', 'Fri', 'Sat']
@@ -123,12 +130,13 @@ export default function Calendar({
         <div className="relative grid grid-cols-7">
           {generateDate(today.month(), today.year()).map(
             ({ date, currentMonth, today }, index) => {
+              const events = eventsByDate?.[date.format('MMDD')]?.slice(0, 2);
               return (
                 <div
                   key={index}
                   className="relative grid place-content-center p-1 text-center text-sm"
                 >
-                  <h1
+                  <span
                     className={cn(
                       currentMonth ? 'text-[#2E2E2E]' : 'text-[#8E8E93]',
                       today ? 'bg-green-100' : '',
@@ -152,12 +160,12 @@ export default function Calendar({
                     {isMobile
                       ? date.date()
                       : date.date().toString().padStart(2, '0')}
-                  </h1>
-                  {isMobile &&
-                    selectDate.toDate().toDateString() ===
-                      date.toDate().toDateString() && (
-                      <div className="absolute -bottom-1 flex place-self-center">
+                  </span>
+                  {events && (
+                    <div className="absolute -bottom-1 flex place-self-center">
+                      {events.map((event, index) => (
                         <svg
+                          key={index}
                           width="5"
                           height="6"
                           viewBox="0 0 5 6"
@@ -168,44 +176,17 @@ export default function Calendar({
                             cx="2.84001"
                             cy="2.94035"
                             r="1.48"
-                            stroke="#00B383"
+                            stroke={
+                              event.category === 'himpunan'
+                                ? '#00B383'
+                                : '#735BF2'
+                            }
                             strokeWidth="1.2"
                           />
                         </svg>
-
-                        <svg
-                          width="6"
-                          height="6"
-                          viewBox="0 0 6 6"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <circle
-                            cx="2.99992"
-                            cy="2.94035"
-                            r="1.48"
-                            stroke="#735BF2"
-                            strokeWidth="1.2"
-                          />
-                        </svg>
-
-                        <svg
-                          width="5"
-                          height="6"
-                          viewBox="0 0 5 6"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <circle
-                            cx="2.16008"
-                            cy="2.94035"
-                            r="1.48"
-                            stroke="#0095FF"
-                            strokeWidth="1.2"
-                          />
-                        </svg>
-                      </div>
-                    )}
+                      ))}
+                    </div>
+                  )}
                 </div>
               );
             },

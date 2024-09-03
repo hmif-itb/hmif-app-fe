@@ -19,12 +19,17 @@ function SidebarEventLabel({ event }: { event: CalendarEvent }) {
   const containerClassNames = `flex-1 truncate text-sm font-semibold ${textColorClass}`;
 
   return (
-    <div className="flex w-full flex-row items-center py-0.5 text-xs">
+    <a
+      href={event.googleCalendarUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex w-full flex-row items-center py-0.5 text-xs"
+    >
       <p className={containerClassNames}>● {event.title}</p>
       <p className="text-sm font-semibold">
         {dayjs(event.start).format('HH:mm')}
       </p>
-    </div>
+    </a>
   );
 }
 

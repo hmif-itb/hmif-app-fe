@@ -83,7 +83,7 @@ export default function Calendar() {
                       events?.find((event) =>
                         dayjs(event.start).isSame(date, 'date'),
                       )
-                        ? 'bg-[#FBBC05]'
+                        ? 'bg-yellow-300/50'
                         : '',
                     )}
                     onClick={() => {

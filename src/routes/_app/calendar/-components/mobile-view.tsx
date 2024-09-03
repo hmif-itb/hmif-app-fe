@@ -2,15 +2,11 @@ import { Separator } from '@radix-ui/react-separator';
 import dayjs from 'dayjs';
 import { useEffect, useMemo, useState } from 'react';
 import { CalendarEvent } from '~/api/generated';
-import Calendar from '~/components/new-calendar';
+import Calendar, { EventsByDate } from '~/components/new-calendar';
 import Schedule from '~/components/schedule/schedule';
 import useSession from '~/hooks/auth/useSession';
-import { useCalendarEvents } from '~/hooks/calendar';
+import { useThreeMonthCalendarEvents } from '~/hooks/calendar';
 import AddButtons from './AddButtons';
-
-interface EventsByDate {
-  [key: string]: CalendarEvent[];
-}
 
 export default function MobileView() {
   const now = dayjs();
@@ -21,8 +17,8 @@ export default function MobileView() {
   const [selectedEvents, setSelectedEvents] = useState<CalendarEvent[]>([]);
   const [btnOpen, setBtnOpen] = useState(false);
 
-  const { data: allEvents } = useCalendarEvents({
-    month: now.month() + 1,
+  const allEvents = useThreeMonthCalendarEvents({
+    month: now.month(),
     year: now.year(),
   });
 
@@ -47,7 +43,11 @@ export default function MobileView() {
 
   return (
     <div className="flex h-screen w-full flex-col items-center gap-2 overflow-auto px-4 pt-4 lg:hidden">
-      <Calendar onChange={(date) => setSelectedDate(date)} isMobile={true} />
+      <Calendar
+        onChange={(date) => setSelectedDate(date)}
+        isMobile={true}
+        eventsByDate={eventsByDate}
+      />
 
       <Separator />
 

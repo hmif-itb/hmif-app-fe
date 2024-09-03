@@ -1,3 +1,4 @@
+import { getRouteApi } from '@tanstack/react-router';
 import dayjs from 'dayjs';
 import { motion } from 'framer-motion';
 import { CirclePlus } from 'lucide-react';
@@ -10,13 +11,12 @@ import {
   PopoverTrigger,
 } from '~/components/ui/popover';
 import useSession from '~/hooks/auth/useSession';
-import { useCalendarEvents } from '~/hooks/calendar';
-import { isInRoles } from '~/lib/roles';
-import CalendarDay from './calendar-day';
-import { CalendarCategory } from '../-archive/DesktopAddEvent';
-import { getRouteApi } from '@tanstack/react-router';
+import { useThreeMonthCalendarEvents } from '~/hooks/calendar';
 import { generateDate } from '~/lib/calendar';
+import { isInRoles } from '~/lib/roles';
+import { CalendarCategory } from '../-archive/DesktopAddEvent';
 import AddEventDialog from './AddEventDialog';
+import CalendarDay from './calendar-day';
 
 interface EventsByDate {
   [key: string]: CalendarEvent[];
@@ -44,26 +44,10 @@ function DesktopView({
     .month(selectedMonth || today.month())
     .year(selectedYear || today.year());
 
-  const { data: events } = useCalendarEvents({
-    month: (selectedMonth || currentMonth) + 1,
+  const allEvents = useThreeMonthCalendarEvents({
+    month: selectedMonth || currentMonth,
     year: selectedYear || currentYear,
   });
-
-  const { data: lastEvents } = useCalendarEvents({
-    month: lastMonth.month() + 1,
-    year: lastMonth.year(),
-  });
-
-  const { data: nextEvents } = useCalendarEvents({
-    month: nextMonth.month() + 1,
-    year: nextMonth.year(),
-  });
-
-  const allEvents = [
-    ...(lastEvents ?? []),
-    ...(events ?? []),
-    ...(nextEvents ?? []),
-  ];
 
   // TODO: event with more than one day
 
