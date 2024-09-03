@@ -2,9 +2,9 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { Angkatan } from '../models/Angkatan';
 import type { Course } from '../models/Course';
 import type { Info } from '../models/Info';
-import type { ReactionAggregate } from '../models/ReactionAggregate';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import type { BaseHttpRequest } from '../core/BaseHttpRequest';
 export class InfoService {
@@ -15,8 +15,15 @@ export class InfoService {
    */
   public readInfo({
     infoId,
+    requestBody,
   }: {
+    /**
+     * Id of info
+     */
     infoId: string,
+    requestBody?: {
+      unread?: boolean;
+    },
   }): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'POST',
@@ -24,6 +31,8 @@ export class InfoService {
       path: {
         'infoId': infoId,
       },
+      body: requestBody,
+      mediaType: 'application/json',
       errors: {
         400: `Bad request`,
       },
@@ -57,6 +66,7 @@ export class InfoService {
     infoMedias?: Array<{
       infoId: string;
       mediaId: string;
+      order: number;
       media: {
         id: string;
         creatorId: string;
@@ -84,13 +94,9 @@ export class InfoService {
     infoAngkatan?: Array<{
       infoId: string;
       angkatanId: string;
-      angkatan: {
-        id: string;
-        year: number;
-        name: string;
-      };
+      angkatan: Angkatan;
     }>;
-    reactions?: ReactionAggregate;
+    isRead?: boolean;
   }> {
     return this.httpRequest.request({
       method: 'POST',

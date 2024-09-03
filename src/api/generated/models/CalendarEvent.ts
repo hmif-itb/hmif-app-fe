@@ -3,18 +3,17 @@
 /* tslint:disable */
 /* eslint-disable */
 export type CalendarEvent = {
-  id?: string | null;
-  created?: string | null;
-  updated?: string | null;
-  summary?: string | null;
-  description?: string | null;
-  start?: {
-    dateTime?: string | null;
-    timeZone?: string | null;
-  };
-  end?: {
-    dateTime?: string | null;
-    timeZone?: string | null;
-  };
+  id: string;
+  calendarGroupId: string;
+  courseId: string | null;
+  title: string;
+  description: string;
+  category: string;
+  academicYear: number | null;
+  academicSemesterCode: 'Ganjil' | 'Genap' | null;
+  start: string;
+  end: string;
+  googleCalendarUrl: string;
+  googleCalendarId: string;
 };
 

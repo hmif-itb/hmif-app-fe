@@ -114,6 +114,14 @@ module.exports = {
           80: '#8C0000',
           100: '#660000',
         },
+        purple: {
+          200: '#E0D8F1',
+          500: '#6A2C91',
+        },
+        red: {
+          200: '#F9D6D6',
+          500: '#A70000',
+        },
       },
       borderRadius: {
         lg: 'var(--radius)',
@@ -149,5 +157,10 @@ module.exports = {
       },
     },
   },
+  safelist: ['teal', 'yellow', 'red', 'blue'].flatMap((color) => [
+    `bg-${color}-200`,
+    `text-${color}-500`,
+    `border-${color}-500`,
+  ]),
   plugins: [require('tailwindcss-animate')],
 };

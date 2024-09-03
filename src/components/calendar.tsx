@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState } from 'react';
+import { useCalendarEvents } from '~/hooks/calendar';
 import { generateDate, months } from '../lib/calendar';
 import { cn } from '../lib/utils';
 
@@ -13,6 +14,11 @@ export default function Calendar() {
   const currentDate = dayjs();
   const [today, setToday] = useState(currentDate);
   const [selectDate, setSelectDate] = useState(currentDate);
+  const year = today.year();
+  const month = today.month() + 1;
+
+  const { data: events } = useCalendarEvents({ month, year });
+
   return (
     <div className="flex w-full flex-col items-center justify-center sm:flex-row">
       <div className="relative flex flex-col gap-4 rounded-xl p-8">
@@ -36,9 +42,9 @@ export default function Calendar() {
             >
               Today
             </h1> */}
-            <h1 className="select-none text-gray-300">
+            <span className="select-none text-neutral-light">
               {months[today.month()]} {today.year()}
-            </h1>
+            </span>
             <ChevronRight
               className="cursor-pointer text-yellow-300 transition-all hover:scale-105"
               onClick={() => {
@@ -52,7 +58,7 @@ export default function Calendar() {
             return (
               <div
                 key={index}
-                className="grid select-none place-content-center text-center text-sm font-semibold text-gray-300"
+                className="grid select-none place-content-center text-center text-sm font-semibold text-neutral-light"
               >
                 {day}
               </div>
@@ -66,24 +72,26 @@ export default function Calendar() {
               return (
                 <div
                   key={index}
-                  className="grid place-content-center p-1 text-center text-sm text-gray-300"
+                  className="grid place-content-center p-1 text-center text-sm text-neutral-light"
                 >
-                  <h1
+                  <span
                     className={cn(
                       currentMonth ? '' : 'text-gray-400',
                       today ? 'bg-green-100' : '',
-                      selectDate.toDate().toDateString() ===
-                        date.toDate().toDateString()
-                        ? 'bg-[#FBBC05]'
-                        : '',
+                      selectDate.isSame(date, 'date') ? 'bg-[#FBBC05]' : '',
                       'grid size-8 cursor-pointer select-none place-content-center rounded-full font-bold transition-all hover:bg-green-500',
+                      events?.find((event) =>
+                        dayjs(event.start).isSame(date, 'date'),
+                      )
+                        ? 'bg-yellow-300/50'
+                        : '',
                     )}
                     onClick={() => {
                       setSelectDate(date);
                     }}
                   >
                     {date.date()}
-                  </h1>
+                  </span>
                 </div>
               );
             },

@@ -111,12 +111,14 @@ export class CourseService {
     semester,
     type,
     credits,
+    search,
   }: {
     curriculumYear?: number | null,
     major?: 'IF' | 'STI' | 'OTHER',
     semester?: number | null,
     type?: 'Mandatory' | 'Elective',
     credits?: number | null,
+    search?: string,
   }): CancelablePromise<{
     courses: Array<Course>;
   }> {
@@ -129,6 +131,7 @@ export class CourseService {
         'semester': semester,
         'type': type,
         'credits': credits,
+        'search': search,
       },
       errors: {
         400: `Bad request`,

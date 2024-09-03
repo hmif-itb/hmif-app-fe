@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { queryClient } from '~/api/client';
-import { User } from '~/api/generated';
+import { User, UserWithRoles } from '~/api/generated';
 
 export function invalidateSession(user?: User | null) {
   if (user === undefined) {
@@ -27,18 +27,21 @@ const userSchema = z
     gender: z.union([z.literal('F'), z.literal('M')]),
     membershipStatus: z.string(),
     picture: z.string(),
+    roles: z.array(z.string()),
   })
   .nullable();
 
 export function loadUserCache() {
-  const queryClientUser = queryClient.getQueryData<User | null>(['me']);
+  const queryClientUser = queryClient.getQueryData<UserWithRoles | null>([
+    'me',
+  ]);
   if (queryClientUser !== undefined) {
     return queryClientUser;
   }
   try {
     const user = localStorage.getItem('user');
     if (!user) return undefined;
-    return userSchema.parse(JSON.parse(user));
+    return userSchema.parse(JSON.parse(user)) as UserWithRoles;
   } catch (error) {
     return undefined;
   }

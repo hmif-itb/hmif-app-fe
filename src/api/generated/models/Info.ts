@@ -2,6 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { Angkatan } from './Angkatan';
 import type { Course } from './Course';
 import type { ReactionAggregate } from './ReactionAggregate';
 import type { User } from './User';
@@ -14,6 +15,7 @@ export type Info = {
   infoMedias?: Array<{
     infoId: string;
     mediaId: string;
+    order: number;
     media: {
       id: string;
       creatorId: string;
@@ -41,13 +43,11 @@ export type Info = {
   infoAngkatan?: Array<{
     infoId: string;
     angkatanId: string;
-    angkatan: {
-      id: string;
-      year: number;
-      name: string;
-    };
+    angkatan: Angkatan;
   }>;
-  reactions?: ReactionAggregate;
+  comments: number;
+  reactions: ReactionAggregate;
   creator: User;
+  isRead?: boolean;
 };
 

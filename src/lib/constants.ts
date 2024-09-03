@@ -1,0 +1,3 @@
+export const MAX_INFO_TITLE_LENGTH = 100;
+export const MAX_INFO_ANNOUNCEMENT_LENGTH = 1000;
+export const DEBOUNCE_TIME = 500;

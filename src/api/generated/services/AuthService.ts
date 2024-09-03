@@ -3,6 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { User } from '../models/User';
+import type { UserWithRoles } from '../models/UserWithRoles';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import type { BaseHttpRequest } from '../core/BaseHttpRequest';
 export class AuthService {
@@ -100,10 +101,10 @@ export class AuthService {
     });
   }
   /**
-   * @returns User Login succesful
+   * @returns UserWithRoles Login succesful
    * @throws ApiError
    */
-  public getMe(): CancelablePromise<User> {
+  public getMe(): CancelablePromise<UserWithRoles> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/api/me',

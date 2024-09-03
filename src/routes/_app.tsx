@@ -1,9 +1,9 @@
 import { Outlet, createFileRoute, redirect } from '@tanstack/react-router';
 import { z } from 'zod';
 import { queryClient } from '~/api/client';
-import LeftNavbar from '~/components/navbar/left-navbar';
 import Navbar from '~/components/navbar/navbar';
 import SessionProvider from '~/components/session';
+import { initialLoadUserAcademic } from '~/hooks/useUserAcademic';
 import { loadUserCache } from '~/lib/session';
 
 const appSearchSchema = z.object({
@@ -15,6 +15,7 @@ export const Route = createFileRoute('/_app')({
   validateSearch: (search) => appSearchSchema.parse(search),
   loader: () => {
     const user = loadUserCache();
+    initialLoadUserAcademic();
     // not logged in based on local storage
     if (user === null) {
       queryClient.setQueryData(['me'], null);
@@ -29,13 +30,10 @@ export const Route = createFileRoute('/_app')({
 function AppLayout() {
   return (
     <SessionProvider>
-      <main className="mx-auto size-full max-w-screen-md lg:flex lg:max-w-none lg:overflow-y-auto">
-        <LeftNavbar />
-        <div className="flex h-full flex-1 flex-col lg:block">
-          <Outlet />
-          <Navbar />
-        </div>
+      <main className="mx-auto size-full max-w-screen-md overflow-y-auto overflow-x-hidden lg:flex lg:max-w-none">
+        <Outlet />
       </main>
+      <Navbar />
     </SessionProvider>
   );
 }

@@ -9,6 +9,7 @@ import { AuthService } from './services/AuthService';
 import { CalendarService } from './services/CalendarService';
 import { CategoryService } from './services/CategoryService';
 import { CommentService } from './services/CommentService';
+import { CompetitionsService } from './services/CompetitionsService';
 import { CourseService } from './services/CourseService';
 import { InfoService } from './services/InfoService';
 import { MediaService } from './services/MediaService';
@@ -17,6 +18,7 @@ import { PushService } from './services/PushService';
 import { ReactionService } from './services/ReactionService';
 import { TestimoniService } from './services/TestimoniService';
 import { UnsubscribeService } from './services/UnsubscribeService';
+import { UserFinderService } from './services/UserFinderService';
 import { UserProfileService } from './services/UserProfileService';
 type HttpRequestConstructor = new (config: OpenAPIConfig) => BaseHttpRequest;
 export class ApiClient {
@@ -24,6 +26,7 @@ export class ApiClient {
   public readonly calendar: CalendarService;
   public readonly category: CategoryService;
   public readonly comment: CommentService;
+  public readonly competitions: CompetitionsService;
   public readonly course: CourseService;
   public readonly info: InfoService;
   public readonly media: MediaService;
@@ -32,6 +35,7 @@ export class ApiClient {
   public readonly reaction: ReactionService;
   public readonly testimoni: TestimoniService;
   public readonly unsubscribe: UnsubscribeService;
+  public readonly userFinder: UserFinderService;
   public readonly userProfile: UserProfileService;
   public readonly request: BaseHttpRequest;
   constructor(config?: Partial<OpenAPIConfig>, HttpRequest: HttpRequestConstructor = FetchHttpRequest) {
@@ -50,6 +54,7 @@ export class ApiClient {
     this.calendar = new CalendarService(this.request);
     this.category = new CategoryService(this.request);
     this.comment = new CommentService(this.request);
+    this.competitions = new CompetitionsService(this.request);
     this.course = new CourseService(this.request);
     this.info = new InfoService(this.request);
     this.media = new MediaService(this.request);
@@ -58,6 +63,7 @@ export class ApiClient {
     this.reaction = new ReactionService(this.request);
     this.testimoni = new TestimoniService(this.request);
     this.unsubscribe = new UnsubscribeService(this.request);
+    this.userFinder = new UserFinderService(this.request);
     this.userProfile = new UserProfileService(this.request);
   }
 }

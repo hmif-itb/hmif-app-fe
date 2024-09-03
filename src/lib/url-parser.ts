@@ -29,8 +29,8 @@
 export function extractUrls(text: string): string[] {
   const urlRegex =
     /\b((?:(https?|ftp):\/\/)?(?:\S+(?::\S*)?@)?(?:www\.)?(?!-)[A-Za-z0-9-]{1,63}(?<!-)\.[A-Za-z]{2,6}(?:\.[A-Za-z]{2,6})?(?::\d{1,5})?(?:\/\S*)?)\b/g;
-  const urls = text.match(urlRegex);
-  return urls || [];
+  const urls = text.match(urlRegex) || [];
+  return [...new Set(urls)];
 }
 
 /**
