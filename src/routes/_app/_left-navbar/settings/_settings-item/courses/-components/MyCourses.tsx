@@ -47,7 +47,7 @@ export default function MyCourses() {
   }, [currentCourses]);
 
   if (!currentCourses) {
-    return <div>Loading...</div>;
+    return <div></div>;
   }
 
   return (

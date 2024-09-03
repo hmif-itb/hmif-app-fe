@@ -3,6 +3,7 @@ import { useRef } from 'react';
 import SearchIcon from '~/assets/icons/searchbar/search.svg';
 import { Button } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';
+import { DEBOUNCE_TIME } from '~/lib/constants';
 
 type ComponentProps = {
   children?: JSX.Element[];
@@ -50,7 +51,7 @@ export default function TestiListMain({
                 if (timeoutRef.current) {
                   clearTimeout(timeoutRef.current);
                 }
-                setTimeout(() => onSearchChange(e.target.value), 500);
+                setTimeout(() => onSearchChange(e.target.value), DEBOUNCE_TIME);
               }}
               className="h-12 w-full rounded-l-lg rounded-r-none px-4 font-semibold"
               name="search"

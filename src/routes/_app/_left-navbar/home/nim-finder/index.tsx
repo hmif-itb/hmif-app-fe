@@ -6,6 +6,7 @@ import SearchIcon from '~/assets/icons/textfield/search.svg';
 import HeaderTitle from '~/components/header-title';
 import { TextField } from '~/components/ui/textfield';
 import UserInfo from '~/components/user/user-info';
+import { DEBOUNCE_TIME } from '~/lib/constants';
 
 export const Route = createFileRoute('/_app/_left-navbar/home/nim-finder/')({
   component: NimFinderPage,
@@ -40,7 +41,7 @@ function NimFinderPage() {
             if (timeoutRef.current) {
               clearTimeout(timeoutRef.current);
             }
-            setTimeout(() => setSearch(e.target.value), 500);
+            setTimeout(() => setSearch(e.target.value), DEBOUNCE_TIME);
           }}
           className="h-12 w-full rounded-lg font-semibold"
           name="search"

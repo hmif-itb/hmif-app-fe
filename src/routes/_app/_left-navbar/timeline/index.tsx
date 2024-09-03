@@ -6,6 +6,7 @@ import { z } from 'zod';
 import { api } from '~/api/client';
 import MegaphoneIcon from '~/assets/icons/megaphone.svg';
 import useWindowSize from '~/hooks/useWindowSize';
+import { DEBOUNCE_TIME } from '~/lib/constants';
 import DesktopView from './-components/desktop-view';
 import MobileView from './-components/mobile-view';
 import { FilterProps } from './-types';
@@ -43,7 +44,7 @@ function Timeline() {
           search: value || undefined,
         }),
       });
-    }, 500);
+    }, DEBOUNCE_TIME);
   };
 
   const setFilter: FilterProps['setFilter'] = (data) => {

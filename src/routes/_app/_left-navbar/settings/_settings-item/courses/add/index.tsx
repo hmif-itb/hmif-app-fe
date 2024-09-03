@@ -75,7 +75,7 @@ function AddCourseComponent() {
 
       <div className="flex flex-1 flex-col gap-6">
         {/* Search Bar Section */}
-        <CourseSearchBar search={search} onSearchChange={setSearch} />
+        <CourseSearchBar onSearchChange={setSearch} />
         {/* Course Card Section */}
         <CardList search={search} />
       </div>
