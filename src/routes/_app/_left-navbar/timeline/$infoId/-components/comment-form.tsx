@@ -8,6 +8,7 @@ import Avatar from '~/components/user/avatar';
 import useSession from '~/hooks/auth/useSession';
 import { ICommentFormProps } from '../-interface/comment-form-props';
 import { ICommentFormValues } from '../-interface/comment-form-values';
+import { INFO_QUERY_KEY } from '~/api/constants';
 
 function CommentForm({ repliedInfoId }: ICommentFormProps) {
   const user = useSession();
@@ -22,7 +23,7 @@ function CommentForm({ repliedInfoId }: ICommentFormProps) {
     mutationFn: api.comment.postComment.bind(api.comment),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['info', 'comments', repliedInfoId],
+        queryKey: [INFO_QUERY_KEY, 'comments', repliedInfoId],
       });
       formMethods.reset();
     },

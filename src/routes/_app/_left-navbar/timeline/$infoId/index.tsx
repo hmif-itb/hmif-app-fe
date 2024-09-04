@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 import { api } from '~/api/client';
+import { INFO_QUERY_KEY } from '~/api/constants';
 import { preloadImages } from '~/lib/image';
 import CommentForm from './-components/comment-form';
 import Comments from './-components/comments';
@@ -20,11 +21,11 @@ export const Route = createFileRoute('/_app/_left-navbar/timeline/$infoId/')({
 function InfoDetail() {
   const { infoId } = Route.useParams();
   const { data: info } = useQuery({
-    queryKey: ['info', 'detail', infoId],
+    queryKey: [INFO_QUERY_KEY, 'detail', infoId],
     queryFn: () => api.info.getInfoById({ infoId }),
   });
   const { data: comments } = useQuery({
-    queryKey: ['info', 'comments', infoId],
+    queryKey: [INFO_QUERY_KEY, 'comments', infoId],
     queryFn: () =>
       api.comment
         .getCommentsList({ infoId, sort: 'oldest' })

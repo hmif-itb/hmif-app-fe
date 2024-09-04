@@ -1,13 +1,14 @@
+import { useMutation } from '@tanstack/react-query';
 import { useParams } from '@tanstack/react-router';
+import toast from 'react-hot-toast';
+import { api, queryClient } from '~/api/client';
+import { INFO_QUERY_KEY } from '~/api/constants';
 import { CommentWithReactions } from '~/api/generated';
 import UserInfo from '~/components/user/user-info';
-import { formatDate } from '~/utils/format-date';
-import Reaction from './reaction';
-import CardPopover from '../../-components/CardPopover';
 import useSession from '~/hooks/auth/useSession';
-import { useMutation } from '@tanstack/react-query';
-import { api, queryClient } from '~/api/client';
-import toast from 'react-hot-toast';
+import { formatDate } from '~/utils/format-date';
+import CardPopover from '../../-components/CardPopover';
+import Reaction from './reaction';
 
 const TOAST_ID = 'delete-comment-toast';
 
@@ -56,7 +57,9 @@ const CommentComponent = ({
     mutationFn: api.comment.deleteComment.bind(api.comment),
     onMutate: () => toast.loading('Deleting comment...', { id: TOAST_ID }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['info', 'comments', infoId] });
+      queryClient.invalidateQueries({
+        queryKey: [INFO_QUERY_KEY, 'comments', infoId],
+      });
       toast.success('Comment deleted', { id: TOAST_ID });
     },
     onError: () => toast.error('Failed to delete comment', { id: TOAST_ID }),
