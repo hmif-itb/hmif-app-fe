@@ -12,6 +12,7 @@ import { CommentService } from './services/CommentService';
 import { CompetitionsService } from './services/CompetitionsService';
 import { CourseService } from './services/CourseService';
 import { InfoService } from './services/InfoService';
+import { MarkdownService } from './services/MarkdownService';
 import { MediaService } from './services/MediaService';
 import { OpenGraphService } from './services/OpenGraphService';
 import { PushService } from './services/PushService';
@@ -29,6 +30,7 @@ export class ApiClient {
   public readonly competitions: CompetitionsService;
   public readonly course: CourseService;
   public readonly info: InfoService;
+  public readonly markdown: MarkdownService;
   public readonly media: MediaService;
   public readonly openGraph: OpenGraphService;
   public readonly push: PushService;
@@ -57,6 +59,7 @@ export class ApiClient {
     this.competitions = new CompetitionsService(this.request);
     this.course = new CourseService(this.request);
     this.info = new InfoService(this.request);
+    this.markdown = new MarkdownService(this.request);
     this.media = new MediaService(this.request);
     this.openGraph = new OpenGraphService(this.request);
     this.push = new PushService(this.request);

@@ -154,6 +154,7 @@ export class CourseService {
       name: string;
       credits?: number | null;
       dingdongUrl?: string | null;
+      isActive?: boolean;
     },
   }): CancelablePromise<Course> {
     return this.httpRequest.request({
@@ -205,6 +206,7 @@ export class CourseService {
       name?: string;
       credits?: number | null;
       dingdongUrl?: string | null;
+      isActive?: boolean;
     },
   }): CancelablePromise<Course> {
     return this.httpRequest.request({
