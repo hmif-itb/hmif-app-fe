@@ -1,11 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { XIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { api } from '~/api/client';
+import { INFO_LIST_QUERY_KEY } from '~/api/constants';
 import { PresignedURL } from '~/api/generated';
 import DocumentIcon from '~/assets/icons/add-announcement/document.svg';
 import { Form } from '~/components/ui/form';
@@ -79,13 +80,16 @@ export function AddAnnouncementPage({
     }
   }, [sharedData, setValue]);
 
-  const mobileHandleSuccess = () => navigate({ to: '/home' });
+  const queryClient = useQueryClient();
+
+  const mobileHandleSuccess = () => navigate({ to: '/timeline' });
   const desktopHandleSuccess = () =>
     navigate({ search: (prev) => ({ ...prev, showAnnounce: undefined }) });
 
   const postInfo = useMutation({
     mutationFn: api.info.createInfo.bind(api.info),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [INFO_LIST_QUERY_KEY] });
       toast.success('Announced!', { id: TOAST_ID });
       setPendingUpload([]);
       setTimeout(isDesktop ? desktopHandleSuccess : mobileHandleSuccess, 1000);

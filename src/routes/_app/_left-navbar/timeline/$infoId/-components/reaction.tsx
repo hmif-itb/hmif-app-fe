@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { api } from '~/api/client';
+import { INFO_LIST_QUERY_KEY, INFO_QUERY_KEY } from '~/api/constants';
 import { Info } from '~/api/generated';
 import { Button } from '~/components/ui/button';
 import { cn } from '~/lib/utils';
@@ -36,11 +37,13 @@ const Reaction = ({
     onSuccess() {
       if (commentId) {
         queryClient.invalidateQueries({
-          queryKey: ['info', 'comments', infoId],
+          queryKey: [INFO_QUERY_KEY, 'comments', infoId],
         });
       } else {
-        queryClient.invalidateQueries({ queryKey: ['info', 'detail', infoId] });
-        queryClient.invalidateQueries({ queryKey: ['infos'] });
+        queryClient.invalidateQueries({
+          queryKey: [INFO_QUERY_KEY, 'detail', infoId],
+        });
+        queryClient.invalidateQueries({ queryKey: [INFO_LIST_QUERY_KEY] });
       }
     },
   });
@@ -56,11 +59,13 @@ const Reaction = ({
     onSuccess() {
       if (commentId) {
         queryClient.invalidateQueries({
-          queryKey: ['info', 'comments', infoId],
+          queryKey: [INFO_QUERY_KEY, 'comments', infoId],
         });
       } else {
-        queryClient.invalidateQueries({ queryKey: ['info', 'detail', infoId] });
-        queryClient.invalidateQueries({ queryKey: ['infos'] });
+        queryClient.invalidateQueries({
+          queryKey: [INFO_QUERY_KEY, 'detail', infoId],
+        });
+        queryClient.invalidateQueries({ queryKey: [INFO_LIST_QUERY_KEY] });
       }
     },
   });

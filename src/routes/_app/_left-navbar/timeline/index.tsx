@@ -4,6 +4,7 @@ import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { useRef, useState } from 'react';
 import { z } from 'zod';
 import { api } from '~/api/client';
+import { INFO_LIST_QUERY_KEY, INFO_QUERY_KEY } from '~/api/constants';
 import MegaphoneIcon from '~/assets/icons/megaphone.svg';
 import useWindowSize from '~/hooks/useWindowSize';
 import { DEBOUNCE_TIME } from '~/lib/constants';
@@ -68,7 +69,7 @@ function Timeline() {
     isFetchingNextPage,
     isLoading,
   } = useInfiniteQuery({
-    queryKey: ['infos', search, unread, category, sort],
+    queryKey: [INFO_LIST_QUERY_KEY, search, unread, category, sort],
     queryFn: ({ pageParam }) =>
       api.info
         .getListInfo({
@@ -81,7 +82,7 @@ function Timeline() {
         .then((res) => {
           const infos = res.infos;
           infos.forEach((info) => {
-            queryClient.setQueryData(['info', 'detail', info.id], info);
+            queryClient.setQueryData([INFO_QUERY_KEY, 'detail', info.id], info);
           });
           return infos;
         }),
