@@ -13,5 +13,6 @@ export type Course = {
   name: string;
   credits: number | null;
   dingdongUrl: string | null;
+  isActive: boolean;
 };
 

@@ -31,6 +31,7 @@ import { Route as AppLeftNavbarHomeNimFinderIndexImport } from './routes/_app/_l
 import { Route as AppLeftNavbarHomeDingdongIndexImport } from './routes/_app/_left-navbar/home/dingdong/index'
 import { Route as AppLeftNavbarHomeCompetitionIndexImport } from './routes/_app/_left-navbar/home/competition/index'
 import { Route as AppLeftNavbarSettingsSettingsItemSubscriptionsIndexImport } from './routes/_app/_left-navbar/settings/_settings-item/subscriptions/index'
+import { Route as AppLeftNavbarSettingsSettingsItemCreditsIndexImport } from './routes/_app/_left-navbar/settings/_settings-item/credits/index'
 import { Route as AppLeftNavbarSettingsSettingsItemCoursesIndexImport } from './routes/_app/_left-navbar/settings/_settings-item/courses/index'
 import { Route as AppLeftNavbarHomeTestimoniTypeIndexImport } from './routes/_app/_left-navbar/home/testimoni/$type/index'
 import { Route as AppLeftNavbarSettingsSettingsItemCoursesAddIndexImport } from './routes/_app/_left-navbar/settings/_settings-item/courses/add/index'
@@ -149,6 +150,12 @@ const AppLeftNavbarHomeCompetitionIndexRoute =
 const AppLeftNavbarSettingsSettingsItemSubscriptionsIndexRoute =
   AppLeftNavbarSettingsSettingsItemSubscriptionsIndexImport.update({
     path: '/subscriptions/',
+    getParentRoute: () => AppLeftNavbarSettingsSettingsItemRoute,
+  } as any)
+
+const AppLeftNavbarSettingsSettingsItemCreditsIndexRoute =
+  AppLeftNavbarSettingsSettingsItemCreditsIndexImport.update({
+    path: '/credits/',
     getParentRoute: () => AppLeftNavbarSettingsSettingsItemRoute,
   } as any)
 
@@ -326,6 +333,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppLeftNavbarSettingsSettingsItemCoursesIndexImport
       parentRoute: typeof AppLeftNavbarSettingsSettingsItemImport
     }
+    '/_app/_left-navbar/settings/_settings-item/credits/': {
+      id: '/_app/_left-navbar/settings/_settings-item/credits/'
+      path: '/credits'
+      fullPath: '/settings/credits'
+      preLoaderRoute: typeof AppLeftNavbarSettingsSettingsItemCreditsIndexImport
+      parentRoute: typeof AppLeftNavbarSettingsSettingsItemImport
+    }
     '/_app/_left-navbar/settings/_settings-item/subscriptions/': {
       id: '/_app/_left-navbar/settings/_settings-item/subscriptions/'
       path: '/subscriptions'
@@ -367,6 +381,7 @@ export const routeTree = rootRoute.addChildren({
         AppLeftNavbarSettingsSettingsItemRoute:
           AppLeftNavbarSettingsSettingsItemRoute.addChildren({
             AppLeftNavbarSettingsSettingsItemCoursesIndexRoute,
+            AppLeftNavbarSettingsSettingsItemCreditsIndexRoute,
             AppLeftNavbarSettingsSettingsItemSubscriptionsIndexRoute,
             AppLeftNavbarSettingsSettingsItemCoursesAddIndexRoute,
           }),
@@ -467,6 +482,7 @@ export const routeTree = rootRoute.addChildren({
       "parent": "/_app/_left-navbar/settings",
       "children": [
         "/_app/_left-navbar/settings/_settings-item/courses/",
+        "/_app/_left-navbar/settings/_settings-item/credits/",
         "/_app/_left-navbar/settings/_settings-item/subscriptions/",
         "/_app/_left-navbar/settings/_settings-item/courses/add/"
       ]
@@ -513,6 +529,10 @@ export const routeTree = rootRoute.addChildren({
     },
     "/_app/_left-navbar/settings/_settings-item/courses/": {
       "filePath": "_app/_left-navbar/settings/_settings-item/courses/index.tsx",
+      "parent": "/_app/_left-navbar/settings/_settings-item"
+    },
+    "/_app/_left-navbar/settings/_settings-item/credits/": {
+      "filePath": "_app/_left-navbar/settings/_settings-item/credits/index.tsx",
       "parent": "/_app/_left-navbar/settings/_settings-item"
     },
     "/_app/_left-navbar/settings/_settings-item/subscriptions/": {

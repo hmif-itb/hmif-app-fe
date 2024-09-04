@@ -162,5 +162,5 @@ module.exports = {
     `text-${color}-500`,
     `border-${color}-500`,
   ]),
-  plugins: [require('tailwindcss-animate')],
+  plugins: [require('tailwindcss-animate'), require('@tailwindcss/typography')],
 };
