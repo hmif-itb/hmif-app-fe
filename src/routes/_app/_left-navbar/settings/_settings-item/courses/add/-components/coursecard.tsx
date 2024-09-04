@@ -1,3 +1,5 @@
+import { createContext, Dispatch, SetStateAction, useState } from 'react';
+import { Course } from '~/api/generated';
 import ArrowDownIcon from '~/assets/icons/course/ArrowDown.svg';
 import {
   AccordionContent,
@@ -5,8 +7,6 @@ import {
   AccordionTrigger,
 } from '~/components/ui/accordion';
 import CourseItem from './courseitem';
-import { Course } from '~/api/generated';
-import { createContext, Dispatch, SetStateAction, useState } from 'react';
 
 export const SelectedClassContext = createContext<{
   selectedClass: number;
@@ -26,16 +26,18 @@ export default function CourseCard({ course }: { course: Course }) {
     >
       <div
         // eslint-disable-next-line tailwindcss/no-custom-classname
-        className={`content flex items-center justify-between rounded-lg bg-white p-5`}
+        className={`content flex items-center justify-between rounded-lg bg-white px-4 py-2 text-body-md`}
       >
-        <div className="flex gap-5">
-          <div className="flex size-12 flex-col items-center justify-center rounded-md bg-green-900 text-neutral-light">
-            <p className="pt-1 text-[8px] leading-none">SKS</p>
-            <p className="text-xl font-bold leading-6">{course.credits}</p>
+        <div className="flex items-center gap-4">
+          <div className="flex h-min flex-col items-center gap-1 rounded-md bg-[#305138] px-3 py-2">
+            <p className="text-xs text-white">SKS</p>
+            <p className="text-heading-sm font-medium leading-6 text-white">
+              {course.credits}
+            </p>
           </div>
           <div className="flex flex-col">
-            <p className="text-lg font-bold">{course.code}</p>
-            <p className="text-sm">{course.name}</p>
+            <p className="font-bold">{course.code}</p>
+            <p className="">{course.name}</p>
           </div>
         </div>
         <AccordionTrigger type="button">

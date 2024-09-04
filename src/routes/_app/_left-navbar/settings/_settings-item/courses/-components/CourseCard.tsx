@@ -1,8 +1,8 @@
 import clsx from 'clsx';
 import { useRef } from 'react';
 import { UserCourse } from '~/api/generated';
-import { Button } from '~/components/ui/button';
 import TrashIcon from '~/assets/icons/course/trash.svg';
+import { Button } from '~/components/ui/button';
 
 interface CourseCardProps {
   deleteable?: boolean;
@@ -54,21 +54,21 @@ export default function CourseCard({
 
   return (
     <div
-      className="relative flex w-full items-center rounded-xl"
+      className="relative flex w-full items-center rounded-xl text-body-md"
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
       <div
         className={clsx(
-          `z-10 flex items-center justify-between rounded-xl bg-white px-5 transition-all duration-300 ease-out`,
+          `z-10 flex items-center justify-between rounded-xl bg-white px-4 transition-all duration-300 ease-out`,
           isSwiped ? 'w-[85%]' : 'w-full',
         )}
       >
-        <div className="flex items-center gap-4 py-4">
+        <div className="flex items-center gap-4 py-3">
           <div className="flex h-min flex-col items-center gap-1 rounded-md bg-[#305138] px-3 py-2">
             <p className="text-xs text-white">SKS</p>
-            <p className="text-2xl font-medium leading-6 text-white">
+            <p className="text-heading-sm font-medium leading-6 text-white">
               {courseData.course?.credits}
             </p>
           </div>
