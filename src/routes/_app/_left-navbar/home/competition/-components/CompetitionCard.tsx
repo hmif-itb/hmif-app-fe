@@ -74,7 +74,15 @@ export default function CompetitionCard(props: Readonly<ComponentProps>) {
             {registrationUrl && (
               <div className="flex items-center gap-1 text-xs">
                 <img src={LinkIcon} className="size-4" alt="" />
-                <Link to={registrationUrl} target="_blank" rel="noreferrer">
+                <Link
+                  to={
+                    registrationUrl.startsWith('http')
+                      ? registrationUrl
+                      : `https://${registrationUrl}`
+                  }
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   {registrationUrl}
                 </Link>
               </div>

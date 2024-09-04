@@ -8,8 +8,8 @@ export const CompetitionSchema = z
     registrationStart: z.string().datetime(),
     registrationDeadline: z.string().datetime(),
     price: z.coerce.number().optional(),
-    registrationURL: z.string().url(),
-    sourceURL: z.string().url(),
+    registrationURL: z.string(),
+    sourceURL: z.string(),
     categories: z
       .object({
         id: z.string().min(1),

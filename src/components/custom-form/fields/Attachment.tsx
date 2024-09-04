@@ -1,8 +1,8 @@
+import clsx from 'clsx';
+import { XIcon } from 'lucide-react';
 import { useRef } from 'react';
 import { FileUpload } from '~/routes/_app/_left-navbar/add-announcement';
 import { Button } from '../../ui/button';
-import clsx from 'clsx';
-import { XIcon } from 'lucide-react';
 
 type ComponentProps = {
   image: FileUpload | null;
@@ -30,6 +30,7 @@ export default function Attachment(props: Readonly<ComponentProps>) {
           />
         </a>
         <button
+          type="button"
           className="absolute right-2.5 top-2.5 rounded-full border-2 border-black bg-gray-300 lg:right-0"
           onClick={() =>
             setImage({ url: '', file: new File([''], 'filename') })
