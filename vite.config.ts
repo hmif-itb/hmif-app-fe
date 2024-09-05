@@ -1,14 +1,15 @@
-import { sentryVitePlugin } from '@sentry/vite-plugin';
 import { TanStackRouterVite } from '@tanstack/router-vite-plugin';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import { defineConfig, loadEnv } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
+import { VitePluginRadar } from 'vite-plugin-radar';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd());
   const appName = env.VITE_APP_NAME || 'PIPS!';
+  const analyticsId = env.VITE_ANALYTICS_ID || null;
   return {
     resolve: {
       alias: {
@@ -17,6 +18,15 @@ export default defineConfig(({ mode }) => {
     },
 
     plugins: [
+      ...(analyticsId
+        ? [
+            VitePluginRadar({
+              analytics: {
+                id: analyticsId,
+              },
+            }),
+          ]
+        : []),
       VitePWA({
         strategies: 'injectManifest',
         registerType: 'autoUpdate',
@@ -131,13 +141,6 @@ export default defineConfig(({ mode }) => {
       }),
       react(),
       TanStackRouterVite(),
-      sentryVitePlugin({
-        org: 'hmif',
-        project: 'hmif-app-fe',
-        url: 'https://errors.hmif.dev',
-        debug: true,
-        disable: true,
-      }),
     ],
 
     build: {
