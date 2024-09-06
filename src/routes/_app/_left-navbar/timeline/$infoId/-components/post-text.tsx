@@ -5,9 +5,11 @@ import { renderInfoContent } from '../-helper';
 import { IPost } from '../-interface/IPost';
 
 const PostText = ({
+  infoId,
   title,
   content,
 }: {
+  infoId: string;
   title: IPost['title'];
   content: IPost['content'];
 }) => {
@@ -38,7 +40,7 @@ const PostText = ({
       )}
       <div className="whitespace-pre-line break-words text-base">
         {/* Render text as normal, but if link make it into anchor tag, split it on space and newline */}
-        {renderInfoContent(content, urls)}
+        {renderInfoContent(infoId, content, urls)}
       </div>
       <div className="flex flex-col gap-2">
         {data.map((d, idx) => {

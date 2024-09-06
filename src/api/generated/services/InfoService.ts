@@ -3,8 +3,10 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { Angkatan } from '../models/Angkatan';
+import type { Category } from '../models/Category';
 import type { Course } from '../models/Course';
 import type { Info } from '../models/Info';
+import type { UserGroup } from '../models/UserGroup';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import type { BaseHttpRequest } from '../core/BaseHttpRequest';
 export class InfoService {
@@ -56,6 +58,7 @@ export class InfoService {
         courseId: string;
         class?: number;
       }>;
+      forGroups?: Array<string>;
     },
   }): CancelablePromise<{
     id: string;
@@ -79,11 +82,7 @@ export class InfoService {
     infoCategories?: Array<{
       infoId: string;
       categoryId: string;
-      category: {
-        id: string;
-        name: string;
-        requiredPush: boolean;
-      };
+      category: Category;
     }>;
     infoCourses?: Array<{
       infoId: string;
@@ -96,6 +95,7 @@ export class InfoService {
       angkatanId: string;
       angkatan: Angkatan;
     }>;
+    infoGroups?: Array<UserGroup>;
     isRead?: boolean;
   }> {
     return this.httpRequest.request({

@@ -3,6 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { User } from '../models/User';
+import type { UserGroups } from '../models/UserGroups';
 import type { UserWithRoles } from '../models/UserWithRoles';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import type { BaseHttpRequest } from '../core/BaseHttpRequest';
@@ -112,6 +113,16 @@ export class AuthService {
         401: `Bad request: authorization (not logged in) error`,
         500: `Bad request`,
       },
+    });
+  }
+  /**
+   * @returns UserGroups Get user groups
+   * @throws ApiError
+   */
+  public getUserGroups(): CancelablePromise<UserGroups> {
+    return this.httpRequest.request({
+      method: 'GET',
+      url: '/api/auth/groups',
     });
   }
 }

@@ -3,6 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { Angkatan } from '../models/Angkatan';
+import type { Category } from '../models/Category';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import type { BaseHttpRequest } from '../core/BaseHttpRequest';
 export class CategoryService {
@@ -12,42 +13,13 @@ export class CategoryService {
    * @throws ApiError
    */
   public getListCategory(): CancelablePromise<{
-    categories: Array<{
-      id: string;
-      name: string;
-      requiredPush: boolean;
-    }>;
+    categories: Array<Category>;
   }> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/api/category',
       errors: {
         400: `Bad request`,
-      },
-    });
-  }
-  /**
-   * @returns any Get category by id
-   * @throws ApiError
-   */
-  public getCategoryById({
-    categoryId,
-  }: {
-    categoryId: string,
-  }): CancelablePromise<{
-    id: string;
-    name: string;
-    requiredPush: boolean;
-  }> {
-    return this.httpRequest.request({
-      method: 'GET',
-      url: '/api/category/{categoryId}',
-      path: {
-        'categoryId': categoryId,
-      },
-      errors: {
-        400: `Bad request`,
-        404: `Category not found`,
       },
     });
   }
@@ -59,6 +31,18 @@ export class CategoryService {
     return this.httpRequest.request({
       method: 'GET',
       url: '/api/angkatan',
+    });
+  }
+  /**
+   * @returns any Get list of categories
+   * @throws ApiError
+   */
+  public getInfoListCategory(): CancelablePromise<{
+    categories: Array<Category>;
+  }> {
+    return this.httpRequest.request({
+      method: 'GET',
+      url: '/api/category/info',
     });
   }
 }

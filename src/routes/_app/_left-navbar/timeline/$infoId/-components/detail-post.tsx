@@ -13,7 +13,7 @@ const DetailPost = ({ info }: { info: Info }) => {
         email={info.creator.email}
         imageURL={info.creator.picture}
       />
-      <PostText title={info.title} content={info.content} />
+      <PostText infoId={info.id} title={info.title} content={info.content} />
       {info.infoMedias && info.infoMedias.length > 0 && (
         <InfoPhotosCarousel medias={info.infoMedias} />
       )}
