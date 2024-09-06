@@ -1,5 +1,4 @@
 import { useMutation, useQueries, useQueryClient } from '@tanstack/react-query';
-import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
 import { useState } from 'react';
@@ -112,16 +111,15 @@ function UserInfo({ info }: { info: Info }) {
             }
           />
         </div>
-        <TextSection title={info.title} content={info.content} />
+        <TextSection
+          title={info.title}
+          content={info.content}
+          infoId={info.id}
+        />
         {/* TODO: handle other than image */}
         {info.infoMedias && info.infoMedias.length > 0 && (
           <InfoPhotosCarousel medias={info.infoMedias} />
         )}
-        <div className="mt-4 font-bold text-green-300">
-          <Link to="/timeline/$infoId" params={{ infoId: info.id }}>
-            Show more
-          </Link>
-        </div>
         <TagSection tags={getInfoTag(info)} />
       </div>
       <div></div>
@@ -136,7 +134,15 @@ function UserInfo({ info }: { info: Info }) {
   );
 }
 
-function TextSection({ title, content }: { title: string; content: string }) {
+function TextSection({
+  infoId,
+  title,
+  content,
+}: {
+  infoId: string;
+  title: string;
+  content: string;
+}) {
   const urls = extractUrls(content);
 
   const { data } = useQueries({
@@ -167,7 +173,7 @@ function TextSection({ title, content }: { title: string; content: string }) {
       )}
       <div className="whitespace-pre-line break-words text-base">
         {/* Render text as normal, but if link make it into anchor tag, split it on space and newline */}
-        {renderInfoContent(content, urls)}
+        {renderInfoContent(infoId, content, urls, true)}
       </div>
       <div className="flex flex-col gap-2">
         {data.map((d, idx) => {
