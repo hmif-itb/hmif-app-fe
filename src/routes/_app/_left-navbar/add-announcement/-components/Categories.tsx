@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { XIcon } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { UseFormReturn, useWatch } from 'react-hook-form';
 import { api } from '~/api/client';
 import HashIcon from '~/assets/icons/add-announcement/hash.svg';
@@ -31,13 +31,6 @@ export default function Categories({
 }: ComponentProps): JSX.Element {
   const [catDropdownOpen, setCatDropdownOpen] = useState(false);
   const angkatanList = useAngkatanList();
-  const [catOptions, setCatOptions] = useState<
-    {
-      id: string;
-      type: string;
-      title: string;
-    }[]
-  >([]);
 
   const categories = useWatch({
     control: form.control,
@@ -46,37 +39,55 @@ export default function Categories({
   });
 
   const { data } = useQuery({
-    queryKey: ['categories'],
-    queryFn: () => api.category.getListCategory(),
+    queryKey: ['categories', 'info'],
+    queryFn: () => api.category.getInfoListCategory(),
   });
 
-  useEffect(() => {
-    const options: typeof catOptions = [];
-    if (angkatanList) {
+  const { data: groups } = useQuery({
+    queryKey: ['user-groups'],
+    queryFn: () => api.auth.getUserGroups(),
+  });
+
+  const catOptions = useMemo(() => {
+    const options: FormSchemaType['categories'] = [];
+    const anyAngkatan = categories.some((c) => c.type === 'ANGKATAN');
+    const anyGroup = categories.some((c) => c.type === 'GROUP');
+
+    // only allow one of angkatan or group
+    if (angkatanList && !anyGroup) {
       options.push(
         ...angkatanList.map((a) => ({
           id: a.id,
-          type: 'ANGKATAN',
+          type: 'ANGKATAN' as const,
           title: `${a.year} ${a.name}`,
         })),
       );
     }
+
     if (data) {
       options.push(
         ...data.categories.map((c) => ({
           id: c.id,
-          type: 'KATEGORI',
+          type: 'KATEGORI' as const,
           title: c.name,
         })),
       );
     }
-    setCatOptions(
-      options.filter(
-        (cat) =>
-          !categories.some((c) => c.id === cat.id && c.type === cat.type),
-      ),
+
+    if (groups && !anyAngkatan) {
+      options.push(
+        ...groups.map((g) => ({
+          id: g.role,
+          type: 'GROUP' as const,
+          title: g.group,
+        })),
+      );
+    }
+
+    return options.filter(
+      (cat) => !categories.some((c) => c.id === cat.id && c.type === cat.type),
     );
-  }, [data, categories, angkatanList]);
+  }, [data, categories, angkatanList, groups]);
 
   const handleDeleteCategory = (id: string) => {
     form.setValue(
@@ -142,7 +153,11 @@ export default function Categories({
                     key={idx}
                     className={cn(
                       'items-center gap-1 rounded-2xl px-3',
-                      cat.type === 'ANGKATAN' ? 'bg-[#E7613E]' : 'bg-[#E5B52B]',
+                      cat.type === 'ANGKATAN'
+                        ? 'bg-[#E7613E]'
+                        : cat.type === 'GROUP'
+                          ? 'bg-[#E5B52B]'
+                          : 'bg-[#305138]',
                     )}
                   >
                     <p className="text-[10px] uppercase text-white">

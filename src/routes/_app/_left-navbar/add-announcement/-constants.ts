@@ -21,7 +21,7 @@ export const FormSchema = z.object({
   categories: z
     .object({
       id: z.string(),
-      type: z.string(),
+      type: z.enum(['KATEGORI', 'ANGKATAN', 'GROUP']),
       title: z.string(),
     })
     .array(),

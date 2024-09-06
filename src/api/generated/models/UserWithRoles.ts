@@ -4,6 +4,6 @@
 /* eslint-disable */
 import type { User } from './User';
 export type UserWithRoles = (User & {
-  roles: Array<'akademik' | 'cnc' | 'ring1'>;
+  roles: Array<'ring1' | 'ring12' | 'akademik' | 'cnc' | 'de' | 'dpp'>;
 });
 

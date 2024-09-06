@@ -11,7 +11,7 @@ import { Info } from '~/api/generated';
 import { InfoPhotosCarousel } from '~/components/info/info-photos-carousel';
 import UserInfoProfile from '~/components/user/user-info';
 import useSession from '~/hooks/auth/useSession';
-import { getInfoTag } from '~/lib/info';
+import { getInfoTag, InfoTag } from '~/lib/info';
 import { extractUrls } from '~/lib/url-parser';
 import PostInteraction from '../$infoId/-components/post-interaction';
 import { renderInfoContent } from '../$infoId/-helper';
@@ -210,7 +210,7 @@ function TextSection({ title, content }: { title: string; content: string }) {
   );
 }
 
-export function TagSection({ tags }: { tags: string[] }) {
+export function TagSection({ tags }: { tags: InfoTag[] }) {
   return (
     <div className="mt-3 flex flex-wrap gap-3">
       {tags.map((tag, idx) => (

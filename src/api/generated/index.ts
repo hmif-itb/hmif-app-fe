@@ -13,6 +13,7 @@ export type { OpenAPIConfig } from './core/OpenAPI';
 export type { Angkatan } from './models/Angkatan';
 export type { CalendarCategory } from './models/CalendarCategory';
 export type { CalendarEvent } from './models/CalendarEvent';
+export type { Category } from './models/Category';
 export type { Comment } from './models/Comment';
 export type { CommentWithReactions } from './models/CommentWithReactions';
 export type { Competition } from './models/Competition';
@@ -30,6 +31,8 @@ export type { ReactionAggregate } from './models/ReactionAggregate';
 export type { Testimoni } from './models/Testimoni';
 export type { User } from './models/User';
 export type { UserCourse } from './models/UserCourse';
+export type { UserGroup } from './models/UserGroup';
+export type { UserGroups } from './models/UserGroups';
 export type { UserWithRoles } from './models/UserWithRoles';
 export type { ValidationError } from './models/ValidationError';
 

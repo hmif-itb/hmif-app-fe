@@ -3,9 +3,11 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { Angkatan } from './Angkatan';
+import type { Category } from './Category';
 import type { Course } from './Course';
 import type { ReactionAggregate } from './ReactionAggregate';
 import type { User } from './User';
+import type { UserGroup } from './UserGroup';
 export type Info = {
   id: string;
   creatorId: string;
@@ -28,11 +30,7 @@ export type Info = {
   infoCategories?: Array<{
     infoId: string;
     categoryId: string;
-    category: {
-      id: string;
-      name: string;
-      requiredPush: boolean;
-    };
+    category: Category;
   }>;
   infoCourses?: Array<{
     infoId: string;
@@ -45,6 +43,7 @@ export type Info = {
     angkatanId: string;
     angkatan: Angkatan;
   }>;
+  infoGroups?: Array<UserGroup>;
   comments: number;
   reactions: ReactionAggregate;
   creator: User;
