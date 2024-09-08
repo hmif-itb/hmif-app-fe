@@ -1,3 +1,4 @@
+import { sentryVitePlugin } from '@sentry/vite-plugin';
 import { TanStackRouterVite } from '@tanstack/router-vite-plugin';
 import react from '@vitejs/plugin-react';
 import path from 'path';
@@ -141,6 +142,12 @@ export default defineConfig(({ mode }) => {
       }),
       react(),
       TanStackRouterVite(),
+      sentryVitePlugin({
+        authToken: env.SENTRY_AUTH_TOKEN,
+        org: env.SENTRY_ORG || 'hmif',
+        project: env.SENTRY_PROJECT || 'hmif-app-fe',
+        disable: !env.VITE_SENTRY_DSN,
+      }),
     ],
 
     build: {

@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { AnimationProps, motion } from 'framer-motion';
 import { useState } from 'react';
 import { api } from '~/api/client';
 import { INFO_LIST_QUERY_KEY, INFO_QUERY_KEY } from '~/api/constants';
@@ -6,7 +7,6 @@ import { Info } from '~/api/generated';
 import { Button } from '~/components/ui/button';
 import { cn } from '~/lib/utils';
 import { emojiImages } from '../-constants/emoji';
-import { AnimationProps, motion } from 'framer-motion';
 
 const BounceAnimation: AnimationProps = {
   initial: { translateY: 20, opacity: 0 },
@@ -218,7 +218,7 @@ const Reaction = ({
                 emojiImages[reaction.reaction as keyof typeof emojiImages] ??
                 '';
               return (
-                <div className="relative">
+                <div className="relative" key={index}>
                   {reaction.count > 1 && (
                     <div className="absolute -bottom-1 -right-0 z-10 rounded-full bg-slate-200 px-1 text-[10px]">
                       {reaction.count}

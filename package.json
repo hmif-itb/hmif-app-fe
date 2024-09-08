@@ -7,7 +7,7 @@
     "api": "openapi --input http://127.0.0.1:5000/doc --output src/api/generated --indent 2 --useUnionTypes --useOptions --name ApiClient",
     "api-staging": "openapi --input https://api.app-staging.hmif.dev/doc --output src/api/generated --indent 2 --useUnionTypes --useOptions --name ApiClient",
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc && vite build && node delete-sourcemap.js",
     "lint": "eslint . --ext ts,tsx",
     "lint:debug": "eslint ./src --debug",
     "lint:fix": "eslint ./src --fix",

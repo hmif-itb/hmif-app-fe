@@ -10,4 +10,5 @@ export type FilterProps = {
     sort?: string;
   }) => void;
   handleCloseDrawer?: () => void;
+  isMobile?: boolean;
 };
