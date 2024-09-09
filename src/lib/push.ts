@@ -18,7 +18,7 @@ export async function setupNotification() {
           typeof json.endpoint === 'string' &&
           typeof json.keys === 'object'
         ) {
-          await api.push.registerPush({
+          api.push.registerPush({
             requestBody: json,
           });
         }
