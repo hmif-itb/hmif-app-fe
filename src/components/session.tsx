@@ -4,6 +4,7 @@ import { createContext, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { api } from '~/api/client';
 import { UserWithRoles } from '~/api/generated';
+import { isMobile } from '~/lib/device';
 import { setupNotification } from '~/lib/push';
 import { saveUserCache, tryToLoadUserLocalStorage } from '~/lib/session';
 import { Button } from './ui/button';
@@ -38,7 +39,7 @@ export default function SessionProvider({
 
   const queryClient = useQueryClient();
 
-  const askForNotif = Boolean(data && !subs && !isPending);
+  const askForNotif = Boolean(isMobile() && data && !subs && !isPending);
 
   useEffect(() => {
     if (data !== undefined) {
