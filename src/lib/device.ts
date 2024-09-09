@@ -33,3 +33,7 @@ export function isiOS() {
     import.meta.env.VITE_FORCE_IOS === 'true'
   );
 }
+
+export function isAndroid() {
+  return isMobile() && !isiOS();
+}

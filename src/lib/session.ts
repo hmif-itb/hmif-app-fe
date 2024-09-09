@@ -47,6 +47,14 @@ export function loadUserCache() {
   }
 }
 
+export function tryToLoadUserLocalStorage() {
+  const user = localStorage.getItem('user');
+  if (!user) {
+    throw new Error('User not found');
+  }
+  return userSchema.parse(JSON.parse(user)) as UserWithRoles;
+}
+
 export function saveUserCache(user: User | null) {
   localStorage.setItem('user', JSON.stringify(user));
 }
