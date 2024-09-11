@@ -57,7 +57,7 @@ export default function SessionProvider({
   }
   return (
     <SessionContext.Provider value={data}>
-      <Dialog open={askForNotif}>
+      {/* <Dialog open={askForNotif}>
         <DialogContent hideCloseButton>
           <DialogDescription className="text-black">
             You cannot use this app because notification permission is not
@@ -89,7 +89,7 @@ export default function SessionProvider({
             </Button>
           </div>
         </DialogContent>
-      </Dialog>
+      </Dialog> */}
       {children}
     </SessionContext.Provider>
   );
