@@ -15,7 +15,7 @@ const PostText = ({
 }) => {
   const urls = extractUrls(content);
 
-  const { data, isFetching } = useQueries({
+  const { data } = useQueries({
     queries: urls.map((url) => ({
       queryKey: ['openGraph', url],
       queryFn: () =>
@@ -30,8 +30,6 @@ const PostText = ({
       };
     },
   });
-
-  if (isFetching) return <div>Loading...</div>;
 
   return (
     <div className="flex-col space-y-2">

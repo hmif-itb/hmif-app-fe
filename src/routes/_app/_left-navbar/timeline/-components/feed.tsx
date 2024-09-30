@@ -1,4 +1,5 @@
 import { useMutation, useQueries, useQueryClient } from '@tanstack/react-query';
+import { useRouter } from '@tanstack/react-router';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
 import { useState } from 'react';
@@ -123,13 +124,16 @@ function UserInfo({ info }: { info: Info }) {
         <TagSection tags={getInfoTag(info)} />
       </div>
       <div></div>
-      <PostInteraction
-        reactions={info.reactions}
-        commentsCount={info.comments}
-        isActive={activeReaction === 'post'}
-        toggleReaction={() => toggleReaction('post')}
-        infoId={info.id}
-      />
+      <div className="flex items-center justify-between">
+        <PostInteraction
+          reactions={info.reactions}
+          commentsCount={info.comments}
+          isActive={activeReaction === 'post'}
+          toggleReaction={() => toggleReaction('post')}
+          infoId={info.id}
+        />
+        <InfoShare info={info} />
+      </div>
     </div>
   );
 }
@@ -222,6 +226,41 @@ export function TagSection({ tags }: { tags: InfoTag[] }) {
       {tags.map((tag, idx) => (
         <Tag key={idx} tag={tag} />
       ))}
+    </div>
+  );
+}
+
+export function InfoShare({ info }: { info: Info }) {
+  const router = useRouter();
+  return (
+    <div className="px-4">
+      <button
+        onClick={() => {
+          const pathname = router.buildLocation({
+            to: '/timeline/$infoId',
+            params: { infoId: info.id },
+          }).href;
+          const url = `${window.location.origin}${pathname}`;
+          navigator.share({
+            text: `${info.title}\n\nFrom HMIF App (PIPS!): ${url}`,
+          });
+        }}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className="size-6"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z"
+          />
+        </svg>
+      </button>
     </div>
   );
 }
