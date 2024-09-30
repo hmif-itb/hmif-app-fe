@@ -242,7 +242,7 @@ export function InfoShare({ info }: { info: Info }) {
           }).href;
           const url = `${window.location.origin}${pathname}`;
           navigator.share({
-            text: `${info.title}\n\nFrom HMIF App (PIPS!): ${url}`,
+            text: `${info.title}\n\nFrom HMIF App (PIPS!)\n${url}`,
           });
         }}
       >
