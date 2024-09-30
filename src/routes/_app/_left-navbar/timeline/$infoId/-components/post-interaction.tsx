@@ -19,7 +19,7 @@ const PostInteraction = ({
 }) => {
   const navigate = useNavigate();
   return (
-    <div className="flex items-center space-x-3 border-t border-[#EBEEEB] px-4 py-3">
+    <div className="flex items-center space-x-3 py-3">
       <Reaction
         reactions={reactions}
         isActive={isActive}
