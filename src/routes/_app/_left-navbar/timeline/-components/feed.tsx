@@ -124,7 +124,7 @@ function UserInfo({ info }: { info: Info }) {
         <TagSection tags={getInfoTag(info)} />
       </div>
       <div></div>
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between border-t border-[#EBEEEB] px-4">
         <PostInteraction
           reactions={info.reactions}
           commentsCount={info.comments}
@@ -233,7 +233,7 @@ export function TagSection({ tags }: { tags: InfoTag[] }) {
 export function InfoShare({ info }: { info: Info }) {
   const router = useRouter();
   return (
-    <div className="px-4">
+    <div>
       <button
         onClick={() => {
           const pathname = router.buildLocation({

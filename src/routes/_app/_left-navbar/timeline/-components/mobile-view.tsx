@@ -18,7 +18,7 @@ export default function MobileView({
   ...props
 }: ComponentProps) {
   return (
-    <div className="mx-5 mt-10 max-w-screen-md flex-1 pb-24 lg:hidden">
+    <div className="mx-4 mt-10 max-w-screen-md flex-1 pb-24 lg:hidden">
       <h1 className="text-[24px] font-bold antialiased">Timeline</h1>
       <SearchBar {...props} />
       <Feed isFetching={isFetching} onInView={onInView} infos={infos} />

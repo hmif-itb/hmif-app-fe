@@ -64,7 +64,7 @@ function InfoDetail() {
       <Header />
       <div className="flex-col space-y-4 p-4">
         <DetailPost info={info} />
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between border-t border-[#EBEEEB] ">
           <PostInteraction
             reactions={info.reactions}
             commentsCount={info.comments}
