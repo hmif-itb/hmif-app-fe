@@ -55,7 +55,7 @@ function TestimoniListPage(): JSX.Element {
   const pages = generatePageArray(currentPage, testiLength);
 
   return (
-    <main className="h-screen w-full overflow-auto bg-[url('/images/courses/gradient.png')] p-8 pb-40">
+    <main className="h-screen w-full overflow-auto bg-[url('/img/login/login-bg.jpg')] p-8 pb-40">
       <header className="text-white">
         <Link from={Route.fullPath} to="..">
           <Button
