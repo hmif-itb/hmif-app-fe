@@ -7,6 +7,7 @@ import { Button } from '~/components/ui/button';
 import UserInfo from '~/components/user/user-info';
 import { cn } from '~/lib/utils';
 import TestiContent from './-components/TestiContent';
+import { majorMap } from '~/routes/_app/_left-navbar/home/testimoni/-constants.ts';
 
 const testiSearchSchema = z.object({
   page: z.number().optional(),
@@ -30,7 +31,7 @@ function generatePageArray(currentPage: number, maxPage: number) {
 }
 
 function TestimoniListPage(): JSX.Element {
-  const { courseId } = Route.useParams();
+  const { type, semester: semString, courseId } = Route.useParams();
   const { page } = Route.useSearch();
   const currentPage = page ?? 1;
 
@@ -54,22 +55,46 @@ function TestimoniListPage(): JSX.Element {
   const testiLength = data?.length ?? 0;
   const pages = generatePageArray(currentPage, testiLength);
 
+  const majorName = majorMap.get(type);
+  const semesterLink =
+    semString === 'other' ? undefined : parseInt(semString, 10);
+  const majorLink =
+    majorName == 'IF' ? 'teknik-informatika' : 'sistem-dan-teknologi-informasi';
+
   return (
     <main className="h-screen w-full overflow-auto bg-[url('/images/courses/gradient.png')] p-8 pb-40">
-      <header className="text-white">
-        <Link from={Route.fullPath} to="..">
-          <Button
-            variant="link"
-            size="icon-md"
-            className="gap-1 px-0 text-white"
-          >
-            <ChevronLeft className="size-4" />
-            <span className="text-sm">Back</span>
-          </Button>
-        </Link>
-        <h1 className="text-3xl font-semibold">
-          {courseData?.code} {courseData?.name}
-        </h1>
+      <header className="flex flex-row items-end justify-between text-white">
+        <div>
+          <Link from={Route.fullPath} to="..">
+            <Button
+              variant="link"
+              size="icon-md"
+              className="gap-1 px-0 text-white"
+            >
+              <ChevronLeft className="size-4" />
+              <span className="text-sm">Back</span>
+            </Button>
+          </Link>
+          <h1 className="text-3xl font-semibold">
+            {courseData?.code} {courseData?.name}
+          </h1>
+        </div>
+        <div className="flex h-full items-end justify-end">
+          <div>
+            <Link to={`/home/testimoni/${majorLink}`}>
+              <p className="mr-2 inline-block cursor-pointer text-sm text-[#D4D6D4]">
+                {majorName}
+              </p>
+            </Link>
+            {semesterLink && (
+              <Link to={`/home/testimoni/${majorLink}/${semesterLink}`}>
+                <p className="inline-block cursor-pointer text-sm text-[#D4D6D4]">
+                  / Semester {semesterLink}
+                </p>
+              </Link>
+            )}
+          </div>
+        </div>
       </header>
 
       <section className="mt-9 w-full rounded-lg bg-white p-6">

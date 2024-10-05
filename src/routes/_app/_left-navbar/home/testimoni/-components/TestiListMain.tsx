@@ -21,6 +21,14 @@ export default function TestiListMain({
   const { type } = useParams({ strict: false });
   const timeoutRef = useRef<number | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const [majorName, semester] = major?.split(' / ') ?? [];
+  const majorLink =
+    majorName == 'IF' ? 'teknik-informatika' : 'sistem-dan-teknologi-informasi';
+  const [_, semesterLink] = semester
+    ? semester == 'Mata Kuliah Pilihan'
+      ? ['', 'other']
+      : semester.toLowerCase().split(' ')
+    : ['', ''];
 
   return (
     <section className="flex-1 overflow-y-auto rounded-t-2xl bg-[url('/images/courses/gradient.png')] bg-cover bg-no-repeat px-4 pb-28 pt-10 lg:rounded-none lg:pb-6">
@@ -28,7 +36,20 @@ export default function TestiListMain({
         <h1 className="text-[30px] font-bold text-white antialiased">
           Testimoni
         </h1>
-        <p className="text-sm text-[#D4D6D4]">{major}</p>
+        <div>
+          <Link to={`/home/testimoni/${majorLink}`}>
+            <p className="mr-2 inline-block cursor-pointer text-sm text-[#D4D6D4]">
+              {majorName}
+            </p>
+          </Link>
+          {semester && (
+            <Link to={`/home/testimoni/${majorLink}/${semesterLink}`}>
+              <p className="inline-block cursor-pointer text-sm text-[#D4D6D4]">
+                / {semester}
+              </p>
+            </Link>
+          )}
+        </div>
       </div>
 
       <div className="flex w-full flex-col gap-8">
