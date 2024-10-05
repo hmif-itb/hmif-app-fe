@@ -86,13 +86,16 @@ function TestimoniListPage(): JSX.Element {
                 {majorName}
               </p>
             </Link>
-            {semesterLink && (
+            {
               <Link to={`/home/testimoni/${majorLink}/${semesterLink}`}>
                 <p className="inline-block cursor-pointer text-sm text-[#D4D6D4]">
-                  / Semester {semesterLink}
+                  /{' '}
+                  {semesterLink == undefined
+                    ? 'Mata Kuliah Pilihan'
+                    : `Semester ${semesterLink}`}
                 </p>
               </Link>
-            )}
+            }
           </div>
         </div>
       </header>
