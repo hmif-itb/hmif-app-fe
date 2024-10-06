@@ -13,20 +13,34 @@ export default function CardList({ search }: { search: string }) {
       }),
   });
 
-  if (!data) {
+  const { data: currentCourses } = useQuery({
+    queryKey: ['currentCourses'],
+    queryFn: () => api.course.getCurrentUserCourse(),
+  });
+
+  if (!data || !currentCourses) {
     return [...Array(5)].map((_, index) => (
       <Skeleton key={index} className="h-24 w-full" />
     ));
   }
+
+  const filteredCourses = data.courses.filter(
+    (course) =>
+      !currentCourses.some(
+        (currentCourse) => currentCourse.courseId === course.id // Adjust property as per your structure
+      )
+  );
 
   return (
     <Accordion
       type="multiple"
       className="no-scrollbar flex flex-col gap-4 overflow-y-auto rounded-lg"
     >
-      {data.courses.map((course, index) => (
-        <CourseCard key={index} course={course} />
-      ))}
+      {filteredCourses.length > 0 ? (
+        filteredCourses.map((course, index) => <CourseCard key={index} course={course} />)
+      ) : (
+        <div>No courses available.</div>
+      )}
     </Accordion>
   );
 }
