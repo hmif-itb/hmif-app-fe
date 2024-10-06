@@ -79,6 +79,37 @@ function UserInfo({ info }: { info: Info }) {
     deleteInfo.mutate({ infoId: info.id });
   };
 
+  const handleReannounceInfo = (info: Info) => {
+    const requestBody = {
+      title: info.title,
+      content: info.content,
+      forCategories: info.infoCategories
+        ? info.infoCategories.map((c) => c.categoryId)
+        : [],
+      forAngkatan: info.infoAngkatan
+        ? info.infoAngkatan.map((a) => a.angkatanId)
+        : [],
+      forGroups: info.infoGroups
+        ? info.infoGroups.map((g) => g.group)
+        : [],
+      mediaUrls: info.infoMedias
+        ? info.infoMedias.map((media) => media.media.url)
+        : [],
+    };
+  
+    toast.loading('Reannouncing, please wait...', { id: TOAST_ID });
+    reannounceInfo.mutate({ requestBody });
+  };
+
+  const reannounceInfo = useMutation({
+    mutationFn: api.info.broadcastInfo.bind(api.info),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [INFO_LIST_QUERY_KEY] });
+      toast.success('Successfully reannounced', { id: TOAST_ID });
+    },
+    onError: () => toast.error('Failed to reannounce info', { id: TOAST_ID }),
+  });
+
   return (
     <div
       className={clsx(
@@ -109,6 +140,8 @@ function UserInfo({ info }: { info: Info }) {
             onDelete={
               info.creatorId === user?.id ? handleDeleteInfo : undefined
             }
+            showreannounce={info.creatorId === user?.id}
+            onReannounce={() => handleReannounceInfo(info)}
           />
         </div>
         <TextSection
