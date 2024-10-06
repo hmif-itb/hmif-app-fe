@@ -5,7 +5,6 @@ import MegaphoneSmall from '~/assets/icons/timeline/megaphone-small.svg';
 import useSession from '~/hooks/auth/useSession';
 import TrashIcon from '~/assets/icons/timeline/trash.svg';
 import { Button } from '~/components/ui/button';
-import { Info } from '~/api/generated';
 import {
   Popover,
   PopoverContent,
@@ -25,7 +24,6 @@ type ComponentProps = {
 export default function CardPopover(props: Readonly<ComponentProps>) {
   const { showRead, onRead, showDelete, onDelete, showreannounce, onReannounce } = props;
   const [open, setOpen] = useState(false);
-  const user = useSession();
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
