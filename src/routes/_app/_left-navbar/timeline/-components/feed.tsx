@@ -82,19 +82,9 @@ function UserInfo({ info }: { info: Info }) {
   const handleReannounceInfo = (info: Info) => {
     const requestBody = {
       title: info.title,
-      content: info.content,
-      forCategories: info.infoCategories
-        ? info.infoCategories.map((c) => c.categoryId)
-        : [],
-      forAngkatan: info.infoAngkatan
-        ? info.infoAngkatan.map((a) => a.angkatanId)
-        : [],
-      forGroups: info.infoGroups
-        ? info.infoGroups.map((g) => g.group)
-        : [],
-      mediaUrls: info.infoMedias
-        ? info.infoMedias.map((media) => media.media.url)
-        : [],
+      options: {
+        body: info.content,  
+      },
     };
   
     toast.loading('Reannouncing, please wait...', { id: TOAST_ID });
@@ -102,7 +92,7 @@ function UserInfo({ info }: { info: Info }) {
   };
 
   const reannounceInfo = useMutation({
-    mutationFn: api.info.broadcastInfo.bind(api.info),
+    mutationFn: api.push.broadcast.bind(api.info),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [INFO_LIST_QUERY_KEY] });
       toast.success('Successfully reannounced', { id: TOAST_ID });

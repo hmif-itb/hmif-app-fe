@@ -193,35 +193,4 @@ export class InfoService {
       },
     });
   }
-
-  /**
-   * @returns any Push broadcasted
-   * @throws ApiError
-   */
-  public broadcastInfo({
-    requestBody,
-  }: {
-    requestBody: {
-      title: string;
-      content: string;
-      mediaUrls?: Array<string>;
-      forCategories: Array<string>;
-      forAngkatan?: Array<string>;
-      forCourses?: Array<{
-        courseId: string;
-        class?: number;
-      }>;
-      forGroups?: Array<string>;
-    },
-  }): CancelablePromise<any> {
-    return this.httpRequest.request({
-      method: 'POST',
-      url: '/api/push/broadcast',
-      body: requestBody,
-      mediaType: 'application/json',
-      errors: {
-        400: `Bad request`,
-      },
-    });
-  }
 }
