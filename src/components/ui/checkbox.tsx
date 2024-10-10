@@ -34,7 +34,7 @@ const CheckboxGroup = React.forwardRef<HTMLDivElement, CheckboxGroupProps>(
         })}
       </div>
     );
-  }
+  },
 );
 
 CheckboxGroup.displayName = 'CheckboxGroup';
@@ -47,15 +47,15 @@ const CheckboxItem = React.forwardRef<
     <label
       className={cn(
         'relative cursor-pointer space-y-0 rounded-[265.71px] border border-green-950',
-        className
+        className,
       )}
     >
       <div className="absolute left-2 top-1/2 -translate-y-1/2">
         <CheckboxPrimitive.Root
           ref={ref}
           className={cn(
-            'h-4 w-4 rounded-full border border-primary text-primary ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 shrink-0 flex items-center justify-center',
-            className
+            'h-4·w-4·rounded-full·border·border-primary·text-primary·ring-offset-background·focus:outline-none·focus-visible:ring-2·focus-visible:ring-ring·focus-visible:ring-offset-2·disabled:cursor-not-allowed·disabled:opacity-50·shrink-0·flex·items-center·justify-center` with `flex·h-4·w-4·shrink-0·items-center·justify-center·rounded-full·border·border-primary·text-primary·ring-offset-background·focus:outline-none·focus-visible:ring-2·focus-visible:ring-ring·focus-visible:ring-offset-2·disabled:cursor-not-allowed·disabled:opacity-50',
+            className,
           )}
           {...props}
         >

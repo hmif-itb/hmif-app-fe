@@ -37,27 +37,29 @@ export default function Options({
       render={({ field }) => (
         <FormItem>
           <div className="my-4">
-          <h2 className="text-base font-semibold capitalize">
-              {isCategory ? 'category' : header} 
+            <h2 className="text-base font-semibold capitalize">
+              {isCategory ? 'category' : header}
             </h2>
             <Separator className="mb-3 mt-1 bg-gray-500" />
 
             <FormControl>
               {isCategory ? (
                 <CheckboxGroup
-                  selectedValues={choices.filter((choice) => !field.value?.includes(choice))} 
+                  selectedValues={choices.filter(
+                    (choice) => !field.value?.includes(choice),
+                  )}
                   choices={choices}
                   onChange={(checkedChoices) => {
                     const excludedCategories = choices.filter(
-                      (choice) => !checkedChoices.includes(choice)
+                      (choice) => !checkedChoices.includes(choice),
                     );
                     field.onChange(excludedCategories);
-                    onChange(); 
+                    onChange();
                   }}
                   className="flex flex-wrap gap-2"
                 />
               ) : (
-                // Handle RadioGroup for other headers 
+                // Handle RadioGroup for other headers
                 <RadioGroup
                   value={field.value as string}
                   onValueChange={(value) => {

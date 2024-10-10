@@ -26,7 +26,7 @@ export default function Filter({
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      excludeCategories: filter.excludeCategories || [], 
+      excludeCategories: filter.excludeCategories || [],
       unread: filter.unread ? 'Unread' : 'All',
       sort: filter.sort
         ? filter.sort[0].toUpperCase() + filter.sort.slice(1)
@@ -37,7 +37,7 @@ export default function Filter({
   const handleSubmit = (data: FormSchemaType) => {
     setFilter({
       unread: data.unread === 'Unread',
-      excludeCategories: data.excludeCategories, 
+      excludeCategories: data.excludeCategories,
       sort: data.sort?.toLowerCase(),
     });
   };
