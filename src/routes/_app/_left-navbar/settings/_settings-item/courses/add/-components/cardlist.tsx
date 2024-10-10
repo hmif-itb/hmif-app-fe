@@ -27,8 +27,8 @@ export default function CardList({ search }: { search: string }) {
   const filteredCourses = data.courses.filter(
     (course) =>
       !currentCourses.some(
-        (currentCourse) => currentCourse.courseId === course.id // Adjust property as per your structure
-      )
+        (currentCourse) => currentCourse.courseId === course.id, // Adjust property as per your structure
+      ),
   );
 
   return (
@@ -37,7 +37,9 @@ export default function CardList({ search }: { search: string }) {
       className="no-scrollbar flex flex-col gap-4 overflow-y-auto rounded-lg"
     >
       {filteredCourses.length > 0 ? (
-        filteredCourses.map((course, index) => <CourseCard key={index} course={course} />)
+        filteredCourses.map((course, index) => (
+          <CourseCard key={index} course={course} />
+        ))
       ) : (
         <div>No courses available.</div>
       )}
