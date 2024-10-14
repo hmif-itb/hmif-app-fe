@@ -21,11 +21,7 @@ export default function SessionProvider({
 }) {
   const { data } = useQuery({
     queryKey: ['me'],
-    queryFn: () =>
-      api.auth
-        .getMe()
-        .catch(() => tryToLoadUserLocalStorage())
-        .catch(() => null),
+    queryFn: () => api.auth.getMe().catch(() => null),
   });
 
   const { data: subs, isPending } = useQuery({
