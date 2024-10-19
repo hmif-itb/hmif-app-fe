@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Button } from '../ui/button';
 import CloseIcon from '~/assets/icons/calendar/close.svg';
 import { Form } from '../ui/form';
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { FormProps } from './-types';
 
 export default function DesktopForm<T extends FieldValues>(
@@ -13,7 +13,23 @@ export default function DesktopForm<T extends FieldValues>(
 
   // for handling scroll popover inside the dialog
   // https://github.com/radix-ui/primitives/issues/1159
-  const containerRef = useRef<HTMLFormElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(event.target as Node)
+      ) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    };
+  }, [setOpen]);
 
   return (
     <motion.div
@@ -26,6 +42,7 @@ export default function DesktopForm<T extends FieldValues>(
       exit={{ scale: 0.9, opacity: 0 }}
       transition={{ duration: 0.1 }}
       className="absolute left-1/4 top-3 z-50 max-h-[88vh] w-[564px] overflow-auto rounded-2xl bg-white shadow-[0_4px_4px_3px_rgba(0,0,0,0.25)]"
+      ref={containerRef}
     >
       <div className="flex flex-row justify-end rounded-t-2xl bg-[#D9D9D9] px-4 py-3">
         <Button className="p-0" variant="link" onClick={() => setOpen(false)}>
@@ -37,7 +54,6 @@ export default function DesktopForm<T extends FieldValues>(
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="p-4"
-          ref={containerRef}
           autoComplete="off"
         >
           {children}
