@@ -73,6 +73,7 @@ export class UnsubscribeService {
       body: requestBody,
       mediaType: 'application/json',
       errors: {
+        400: `Bad request`,
         500: `Internal server error`,
       },
     });
@@ -126,6 +127,7 @@ export class UnsubscribeService {
       body: requestBody,
       mediaType: 'application/json',
       errors: {
+        400: `Bad request`,
         500: `Internal server error`,
       },
     });

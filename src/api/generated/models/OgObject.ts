@@ -104,10 +104,10 @@ export type OgObject = {
   ogDeterminer?: string;
   ogEpisode?: string;
   ogImage?: Array<{
-    height?: number;
+    height?: (string | number);
     type?: string;
     url: string;
-    width?: number;
+    width?: (string | number);
     alt?: string;
   }>;
   ogImageAlt?: (string | Array<string>);

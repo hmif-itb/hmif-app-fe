@@ -52,6 +52,7 @@ export class ReactionService {
       mediaType: 'application/json',
       errors: {
         400: `Bad request`,
+        404: `Error`,
       },
     });
   }

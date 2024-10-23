@@ -42,6 +42,7 @@ export class AuthService {
       errors: {
         400: `Bad request: validation error`,
         401: `Bad request: authorization (not logged in) error`,
+        500: `Error`,
       },
     });
   }
@@ -63,7 +64,7 @@ export class AuthService {
       errors: {
         400: `Bad request: validation error`,
         401: `Bad request: authorization (not logged in) error`,
-        500: `Bad request`,
+        500: `Error`,
       },
     });
   }
@@ -73,17 +74,21 @@ export class AuthService {
    */
   public loginBypass({
     token,
+    nim,
   }: {
     token: string,
+    nim: string,
   }): CancelablePromise<User> {
     return this.httpRequest.request({
       method: 'GET',
-      url: '/api/auth/login/bypass/{token}',
-      path: {
+      url: '/api/auth/login/bypass',
+      query: {
         'token': token,
+        'nim': nim,
       },
       errors: {
-        400: `Bad request`,
+        400: `Error`,
+        401: `Error`,
       },
     });
   }
@@ -97,7 +102,7 @@ export class AuthService {
       url: '/api/logout',
       errors: {
         401: `Bad request: authorization (not logged in) error`,
-        500: `Bad request`,
+        500: `Error`,
       },
     });
   }
@@ -111,7 +116,7 @@ export class AuthService {
       url: '/api/me',
       errors: {
         401: `Bad request: authorization (not logged in) error`,
-        500: `Bad request`,
+        500: `Error`,
       },
     });
   }

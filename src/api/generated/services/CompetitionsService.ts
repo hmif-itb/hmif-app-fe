@@ -190,6 +190,7 @@ export class CompetitionsService {
       },
       errors: {
         400: `Bad request`,
+        404: `Error`,
         500: `Internal server error`,
       },
     });
