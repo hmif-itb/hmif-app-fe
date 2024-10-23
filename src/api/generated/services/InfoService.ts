@@ -51,6 +51,7 @@ export class InfoService {
     requestBody: {
       title: string;
       content: string;
+      lastNotifiedAt?: string;
       mediaUrls?: Array<string>;
       forCategories: Array<string>;
       forAngkatan?: Array<string>;
@@ -66,6 +67,7 @@ export class InfoService {
     title: string;
     content: string;
     createdAt: string;
+    lastNotifiedAt: string;
     infoMedias?: Array<{
       infoId: string;
       mediaId: string;
@@ -97,6 +99,9 @@ export class InfoService {
     }>;
     infoGroups?: Array<UserGroup>;
     isRead?: boolean;
+    canNotify?: boolean;
+    isForAngkatan?: boolean;
+    isForGroups?: boolean;
   }> {
     return this.httpRequest.request({
       method: 'POST',
@@ -190,6 +195,29 @@ export class InfoService {
       errors: {
         400: `Bad request`,
         404: `Id not found`,
+      },
+    });
+  }
+  /**
+   * @returns any Info renotified
+   * @throws ApiError
+   */
+  public renotifyInfo({
+    infoId,
+  }: {
+    /**
+     * Id of info
+     */
+    infoId: string,
+  }): CancelablePromise<any> {
+    return this.httpRequest.request({
+      method: 'POST',
+      url: '/api/info/{infoId}/renotify',
+      path: {
+        'infoId': infoId,
+      },
+      errors: {
+        400: `Bad request`,
       },
     });
   }

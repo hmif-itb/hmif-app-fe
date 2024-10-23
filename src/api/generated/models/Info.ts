@@ -14,6 +14,7 @@ export type Info = {
   title: string;
   content: string;
   createdAt: string;
+  lastNotifiedAt: string;
   infoMedias?: Array<{
     infoId: string;
     mediaId: string;
@@ -48,5 +49,8 @@ export type Info = {
   reactions: ReactionAggregate;
   creator: User;
   isRead?: boolean;
+  canNotify?: boolean;
+  isForAngkatan?: boolean;
+  isForGroups?: boolean;
 };
 

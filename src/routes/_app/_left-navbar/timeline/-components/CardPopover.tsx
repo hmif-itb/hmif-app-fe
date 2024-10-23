@@ -22,7 +22,14 @@ type ComponentProps = {
 };
 
 export default function CardPopover(props: Readonly<ComponentProps>) {
-  const { showRead, onRead, showDelete, onDelete, showreannounce, onReannounce } = props;
+  const {
+    showRead,
+    onRead,
+    showDelete,
+    onDelete,
+    showreannounce,
+    onReannounce,
+  } = props;
   const [open, setOpen] = useState(false);
 
   return (
@@ -55,7 +62,11 @@ export default function CardPopover(props: Readonly<ComponentProps>) {
                   variant="link"
                   className="p-0 text-xs font-normal md:text-sm"
                 >
-                  <img src={MegaphoneSmall} className="size-4 md:size-5" alt="" />
+                  <img
+                    src={MegaphoneSmall}
+                    className="size-4 p-0.5 md:size-5"
+                    alt=""
+                  />
                   Reannounce
                 </Button>
               )}

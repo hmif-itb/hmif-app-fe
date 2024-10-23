@@ -16,7 +16,7 @@ export class MarkdownService {
       method: 'GET',
       url: '/api/markdown/credits',
       errors: {
-        404: `Not found`,
+        404: `Error`,
       },
     });
   }

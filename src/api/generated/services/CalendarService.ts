@@ -31,6 +31,8 @@ export class CalendarService {
       mediaType: 'application/json',
       errors: {
         400: `Bad request`,
+        403: `Error`,
+        404: `Error`,
       },
     });
   }
@@ -113,6 +115,8 @@ export class CalendarService {
       mediaType: 'application/json',
       errors: {
         400: `Bad request`,
+        403: `Error`,
+        404: `Error`,
       },
     });
   }
@@ -160,7 +164,7 @@ export class CalendarService {
    * @throws ApiError
    */
   public getPersonalCalendar({
-    month = 9,
+    month = 10,
     year = 2024,
   }: {
     month?: number,
