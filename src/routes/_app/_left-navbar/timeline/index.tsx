@@ -107,7 +107,7 @@ function Timeline() {
           onInView={fetchWhenInView}
           filter={{
             unread: unread ?? false,
-            category: category ?? '',
+            excludeCategories: category ? [category] : [],
             sort: sort === 'oldest' ? 'oldest' : 'newest',
           }}
           setFilter={setFilter}

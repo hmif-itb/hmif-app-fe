@@ -21,7 +21,7 @@ const CheckboxGroup = React.forwardRef<HTMLDivElement, CheckboxGroupProps>(
             <CheckboxItem
               key={idx}
               checked={isChecked}
-              onCheckedChange={(checked) => {
+              onCheckedChange={(checked: boolean) => {
                 const newCheckedChoices = checked
                   ? [...selectedValues, choice]
                   : selectedValues.filter((item) => item !== choice);
