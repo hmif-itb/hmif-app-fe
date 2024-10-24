@@ -26,7 +26,7 @@ export default function Filter({
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      category: filter.category || '',
+      excludeCategories: filter.excludeCategories || [],
       unread: filter.unread ? 'Unread' : 'All',
       sort: filter.sort
         ? filter.sort[0].toUpperCase() + filter.sort.slice(1)
@@ -37,7 +37,7 @@ export default function Filter({
   const handleSubmit = (data: FormSchemaType) => {
     setFilter({
       unread: data.unread === 'Unread',
-      category: data.category,
+      excludeCategories: data.excludeCategories,
       sort: data.sort?.toLowerCase(),
     });
   };
@@ -60,7 +60,7 @@ export default function Filter({
               type="button"
               onClick={() => {
                 form.setValue('unread', 'All');
-                form.setValue('category', '');
+                form.setValue('excludeCategories', []);
                 form.setValue('sort', 'Newest');
                 handleSubmit(form.getValues()); // Auto-refresh after reset
               }}
@@ -73,7 +73,7 @@ export default function Filter({
 
           <Options
             form={form}
-            header="category"
+            header="excludeCategories"
             choices={catData?.categories.map((c) => c.name) ?? []}
             onChange={handleOptionChange} // Auto-submit on change
           />

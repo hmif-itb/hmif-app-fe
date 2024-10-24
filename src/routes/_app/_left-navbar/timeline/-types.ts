@@ -1,13 +1,14 @@
 export type FilterProps = {
   filter: {
     unread: boolean;
-    category: string;
+    excludeCategories: string[];
     sort: string;
   };
   setFilter: (data: {
     unread?: boolean;
-    category?: string;
+    excludeCategories?: string[];
     sort?: string;
+    category?: string;
   }) => void;
   handleCloseDrawer?: () => void;
   isMobile?: boolean;
