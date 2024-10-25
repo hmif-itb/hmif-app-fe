@@ -15,6 +15,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Route as rootRoute } from './routes/__root'
 import { Route as AppImport } from './routes/_app'
 import { Route as IndexImport } from './routes/index'
+import { Route as SocketIndexImport } from './routes/socket/index'
 import { Route as AppCalendarImport } from './routes/_app/calendar'
 import { Route as AppLeftNavbarImport } from './routes/_app/_left-navbar'
 import { Route as AppCalendarIndexImport } from './routes/_app/calendar/index'
@@ -58,6 +59,11 @@ const LoginIndexLazyRoute = LoginIndexLazyImport.update({
   path: '/login/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/login/index.lazy').then((d) => d.Route))
+
+const SocketIndexRoute = SocketIndexImport.update({
+  path: '/socket/',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const AppCalendarRoute = AppCalendarImport.update({
   path: '/calendar',
@@ -220,6 +226,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/calendar'
       preLoaderRoute: typeof AppCalendarImport
       parentRoute: typeof AppImport
+    }
+    '/socket/': {
+      id: '/socket/'
+      path: '/socket'
+      fullPath: '/socket'
+      preLoaderRoute: typeof SocketIndexImport
+      parentRoute: typeof rootRoute
     }
     '/login/': {
       id: '/login/'
@@ -404,6 +417,7 @@ export const routeTree = rootRoute.addChildren({
     }),
     AppCalendarRoute: AppCalendarRoute.addChildren({ AppCalendarIndexRoute }),
   }),
+  SocketIndexRoute,
   LoginIndexLazyRoute,
 })
 
@@ -417,6 +431,7 @@ export const routeTree = rootRoute.addChildren({
       "children": [
         "/",
         "/_app",
+        "/socket/",
         "/login/"
       ]
     },
@@ -452,6 +467,9 @@ export const routeTree = rootRoute.addChildren({
       "children": [
         "/_app/calendar/"
       ]
+    },
+    "/socket/": {
+      "filePath": "socket/index.tsx"
     },
     "/login/": {
       "filePath": "login/index.lazy.tsx"
