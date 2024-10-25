@@ -8,7 +8,7 @@ export const Route = createFileRoute('/socket/')({
   component: SocketPage,
 });
 
-const socket = io('http://localhost:5001', {
+const socket = io('https://api.app-staging.hmif.dev', {
   autoConnect: false,
 });
 
