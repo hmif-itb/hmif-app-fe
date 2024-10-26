@@ -114,18 +114,18 @@ export class InfoService {
    */
   public getListInfo({
     search,
-    category,
     unread = 'false',
     userId,
     offset,
     sort = 'newest',
+    excludeCategories, 
   }: {
     search?: string,
-    category?: string,
     unread?: 'true' | 'false',
     userId?: string,
     offset?: number | null,
     sort?: 'oldest' | 'newest',
+    excludeCategories?: string[], 
   }): CancelablePromise<{
     infos: Array<Info>;
   }> {
@@ -134,17 +134,18 @@ export class InfoService {
       url: '/api/info',
       query: {
         'search': search,
-        'category': category,
         'unread': unread,
         'userId': userId,
         'offset': offset,
         'sort': sort,
+        'excludeCategories': excludeCategories ? JSON.stringify(excludeCategories) : undefined, 
       },
       errors: {
         400: `Bad request`,
       },
     });
   }
+  
   /**
    * @returns any Info deleted
    * @throws ApiError

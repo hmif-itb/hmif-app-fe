@@ -8,7 +8,6 @@ export type FilterProps = {
     unread?: boolean;
     excludeCategories?: string[];
     sort?: string;
-    category?: string;
   }) => void;
   handleCloseDrawer?: () => void;
   isMobile?: boolean;
