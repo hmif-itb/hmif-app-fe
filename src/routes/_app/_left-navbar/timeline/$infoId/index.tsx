@@ -10,6 +10,7 @@ import DetailPost from './-components/detail-post';
 import Header from './-components/header';
 import PostInteraction from './-components/post-interaction';
 import { emojiImages } from './-constants/emoji';
+import { InfoShare } from '../-components/feed';
 
 export const Route = createFileRoute('/_app/_left-navbar/timeline/$infoId/')({
   component: InfoDetail,
@@ -63,14 +64,17 @@ function InfoDetail() {
       <Header />
       <div className="flex-col space-y-4 p-4">
         <DetailPost info={info} />
-        <PostInteraction
-          reactions={info.reactions}
-          commentsCount={info.comments}
-          isActive={activeReaction === 'post'}
-          toggleReaction={() => toggleReaction('post')}
-          infoId={info.id}
-          isDetail
-        />
+        <div className="flex items-center justify-between border-t border-[#EBEEEB] ">
+          <PostInteraction
+            reactions={info.reactions}
+            commentsCount={info.comments}
+            isActive={activeReaction === 'post'}
+            toggleReaction={() => toggleReaction('post')}
+            infoId={info.id}
+            isDetail
+          />
+          <InfoShare info={info} />
+        </div>
         <CommentForm repliedInfoId={info.id} />
         {/* P.S. idk how i should generate the repliedInfoId, sorry. */}
         {comments && (
