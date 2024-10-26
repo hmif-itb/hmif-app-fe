@@ -51,19 +51,19 @@ const CheckboxItem = React.forwardRef<
       )}
     >
       <div className="absolute left-2 top-1/2 -translate-y-1/2">
-          <CheckboxPrimitive.Root
-            ref={ref}
-            className={cn(
-              'h-4 w-4 rounded-full border border-primary text-primary ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 flex items-center justify-center',
-              className,
-            )}
-            {...props}
-          >
-            <CheckboxPrimitive.Indicator className="flex items-center justify-center">
-              <Circle className="h-3 w-3 fill-green-950 text-current" />
-            </CheckboxPrimitive.Indicator>
-          </CheckboxPrimitive.Root>
-        </div>
+        <CheckboxPrimitive.Root
+          ref={ref}
+          className={cn(
+            'flex h-4 w-4 items-center justify-center rounded-full border border-primary text-primary ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
+            className,
+          )}
+          {...props}
+        >
+          <CheckboxPrimitive.Indicator className="flex items-center justify-center">
+            <Circle className="h-3 w-3 fill-green-950 text-current" />
+          </CheckboxPrimitive.Indicator>
+        </CheckboxPrimitive.Root>
+      </div>
       <span className="block w-full cursor-pointer py-1 pl-8 pr-3 text-sm font-medium">
         {children}
       </span>

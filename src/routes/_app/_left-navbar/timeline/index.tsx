@@ -14,7 +14,7 @@ import { FilterProps } from './-types';
 const timelineSearchSchema = z.object({
   search: z.string().optional(),
   unread: z.boolean().optional(),
-  excludeCategories: z.array(z.string()).optional(), 
+  excludeCategories: z.array(z.string()).optional(),
   sort: z.string().optional(),
 });
 
@@ -68,13 +68,13 @@ function Timeline() {
     isFetchingNextPage,
     isLoading,
   } = useInfiniteQuery({
-    queryKey: [INFO_LIST_QUERY_KEY, search, unread, excludeCategories, sort], 
+    queryKey: [INFO_LIST_QUERY_KEY, search, unread, excludeCategories, sort],
     queryFn: ({ pageParam }) =>
       api.info
         .getListInfo({
           search,
           unread: unread ? 'true' : 'false',
-          excludeCategories, 
+          excludeCategories,
           offset: pageParam,
           sort: sort === 'oldest' ? 'oldest' : 'newest',
         })
@@ -106,7 +106,7 @@ function Timeline() {
           onInView={fetchWhenInView}
           filter={{
             unread: unread ?? false,
-            excludeCategories: excludeCategories || [], 
+            excludeCategories: excludeCategories || [],
             sort: sort === 'oldest' ? 'oldest' : 'newest',
           }}
           setFilter={setFilter}
@@ -120,7 +120,7 @@ function Timeline() {
           onInView={fetchWhenInView}
           filter={{
             unread: unread ?? false,
-            excludeCategories: excludeCategories || [], 
+            excludeCategories: excludeCategories || [],
             sort: sort === 'oldest' ? 'oldest' : 'newest',
           }}
           setFilter={setFilter}
