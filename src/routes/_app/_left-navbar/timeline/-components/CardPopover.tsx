@@ -2,7 +2,6 @@ import { useState } from 'react';
 import HamburgerIcon from '~/assets/icons/timeline/hamburger.svg';
 import MarkAsReadIcon from '~/assets/icons/timeline/mark-as-read.svg';
 import MegaphoneSmall from '~/assets/icons/timeline/megaphone-small.svg';
-import useSession from '~/hooks/auth/useSession';
 import TrashIcon from '~/assets/icons/timeline/trash.svg';
 import { Button } from '~/components/ui/button';
 import {

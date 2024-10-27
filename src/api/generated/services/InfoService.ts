@@ -119,14 +119,14 @@ export class InfoService {
    */
   public getListInfo({
     search,
-    category,
+    excludeCategory,
     unread = 'false',
     userId,
     offset,
     sort = 'newest',
   }: {
     search?: string,
-    category?: string,
+    excludeCategory?: Array<string>,
     unread?: 'true' | 'false',
     userId?: string,
     offset?: number | null,
@@ -139,7 +139,7 @@ export class InfoService {
       url: '/api/info',
       query: {
         'search': search,
-        'category': category,
+        'excludeCategory': excludeCategory,
         'unread': unread,
         'userId': userId,
         'offset': offset,

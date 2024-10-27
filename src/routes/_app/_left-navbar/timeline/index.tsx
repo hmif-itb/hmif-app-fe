@@ -75,7 +75,7 @@ function Timeline() {
         .getListInfo({
           search,
           unread: unread ? 'true' : 'false',
-          category,
+          excludeCategory: [''],
           offset: pageParam,
           sort: sort === 'oldest' ? 'oldest' : 'newest',
         })

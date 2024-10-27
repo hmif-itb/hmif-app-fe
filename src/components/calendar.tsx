@@ -21,7 +21,7 @@ export default function Calendar() {
 
   return (
     <div className="flex w-full flex-col items-center justify-center sm:flex-row">
-      <div className="relative flex flex-col gap-4 rounded-xl p-8">
+      <div className="relative flex flex-col gap-4 rounded-xl px-8 py-4">
         <img
           src="/img/home/calendar-bg.png"
           className="absolute left-0 top-0 size-full select-none rounded-xl object-cover"
@@ -58,7 +58,7 @@ export default function Calendar() {
             return (
               <div
                 key={index}
-                className="grid select-none place-content-center text-center text-sm font-semibold text-neutral-light"
+                className="grid select-none place-content-center text-center text-xs font-semibold text-neutral-light"
               >
                 {day}
               </div>
@@ -72,7 +72,7 @@ export default function Calendar() {
               return (
                 <div
                   key={index}
-                  className="grid place-content-center p-1 text-center text-sm text-neutral-light"
+                  className="grid place-content-center text-center text-xs text-neutral-light"
                 >
                   <span
                     className={cn(
