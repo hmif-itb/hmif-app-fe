@@ -11,6 +11,7 @@ import { CategoryService } from './services/CategoryService';
 import { CommentService } from './services/CommentService';
 import { CompetitionsService } from './services/CompetitionsService';
 import { CourseService } from './services/CourseService';
+import { CurhatService } from './services/CurhatService';
 import { InfoService } from './services/InfoService';
 import { MarkdownService } from './services/MarkdownService';
 import { MediaService } from './services/MediaService';
@@ -29,6 +30,7 @@ export class ApiClient {
   public readonly comment: CommentService;
   public readonly competitions: CompetitionsService;
   public readonly course: CourseService;
+  public readonly curhat: CurhatService;
   public readonly info: InfoService;
   public readonly markdown: MarkdownService;
   public readonly media: MediaService;
@@ -58,6 +60,7 @@ export class ApiClient {
     this.comment = new CommentService(this.request);
     this.competitions = new CompetitionsService(this.request);
     this.course = new CourseService(this.request);
+    this.curhat = new CurhatService(this.request);
     this.info = new InfoService(this.request);
     this.markdown = new MarkdownService(this.request);
     this.media = new MediaService(this.request);

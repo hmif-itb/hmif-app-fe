@@ -15,6 +15,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Route as rootRoute } from './routes/__root'
 import { Route as AppImport } from './routes/_app'
 import { Route as IndexImport } from './routes/index'
+import { Route as SocketIndexImport } from './routes/socket/index'
 import { Route as AppCalendarImport } from './routes/_app/calendar'
 import { Route as AppLeftNavbarImport } from './routes/_app/_left-navbar'
 import { Route as AppCalendarIndexImport } from './routes/_app/calendar/index'
@@ -29,6 +30,7 @@ import { Route as AppLeftNavbarTimelineInfoIdIndexImport } from './routes/_app/_
 import { Route as AppLeftNavbarHomeTestimoniIndexImport } from './routes/_app/_left-navbar/home/testimoni/index'
 import { Route as AppLeftNavbarHomeNimFinderIndexImport } from './routes/_app/_left-navbar/home/nim-finder/index'
 import { Route as AppLeftNavbarHomeDingdongIndexImport } from './routes/_app/_left-navbar/home/dingdong/index'
+import { Route as AppLeftNavbarHomeCurhatIndexImport } from './routes/_app/_left-navbar/home/curhat/index'
 import { Route as AppLeftNavbarHomeCompetitionIndexImport } from './routes/_app/_left-navbar/home/competition/index'
 import { Route as AppLeftNavbarSettingsSettingsItemSubscriptionsIndexImport } from './routes/_app/_left-navbar/settings/_settings-item/subscriptions/index'
 import { Route as AppLeftNavbarSettingsSettingsItemCreditsIndexImport } from './routes/_app/_left-navbar/settings/_settings-item/credits/index'
@@ -58,6 +60,11 @@ const LoginIndexLazyRoute = LoginIndexLazyImport.update({
   path: '/login/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/login/index.lazy').then((d) => d.Route))
+
+const SocketIndexRoute = SocketIndexImport.update({
+  path: '/socket/',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const AppCalendarRoute = AppCalendarImport.update({
   path: '/calendar',
@@ -141,6 +148,12 @@ const AppLeftNavbarHomeDingdongIndexRoute =
     getParentRoute: () => AppLeftNavbarRoute,
   } as any)
 
+const AppLeftNavbarHomeCurhatIndexRoute =
+  AppLeftNavbarHomeCurhatIndexImport.update({
+    path: '/home/curhat/',
+    getParentRoute: () => AppLeftNavbarRoute,
+  } as any)
+
 const AppLeftNavbarHomeCompetitionIndexRoute =
   AppLeftNavbarHomeCompetitionIndexImport.update({
     path: '/home/competition/',
@@ -221,6 +234,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppCalendarImport
       parentRoute: typeof AppImport
     }
+    '/socket/': {
+      id: '/socket/'
+      path: '/socket'
+      fullPath: '/socket'
+      preLoaderRoute: typeof SocketIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/login/': {
       id: '/login/'
       path: '/login'
@@ -289,6 +309,13 @@ declare module '@tanstack/react-router' {
       path: '/home/competition'
       fullPath: '/home/competition'
       preLoaderRoute: typeof AppLeftNavbarHomeCompetitionIndexImport
+      parentRoute: typeof AppLeftNavbarImport
+    }
+    '/_app/_left-navbar/home/curhat/': {
+      id: '/_app/_left-navbar/home/curhat/'
+      path: '/home/curhat'
+      fullPath: '/home/curhat'
+      preLoaderRoute: typeof AppLeftNavbarHomeCurhatIndexImport
       parentRoute: typeof AppLeftNavbarImport
     }
     '/_app/_left-navbar/home/dingdong/': {
@@ -397,6 +424,7 @@ export const routeTree = rootRoute.addChildren({
       AppLeftNavbarHomeIndexRoute,
       AppLeftNavbarTimelineIndexRoute,
       AppLeftNavbarHomeCompetitionIndexRoute,
+      AppLeftNavbarHomeCurhatIndexRoute,
       AppLeftNavbarHomeDingdongIndexRoute,
       AppLeftNavbarHomeNimFinderIndexRoute,
       AppLeftNavbarTimelineInfoIdIndexRoute,
@@ -404,6 +432,7 @@ export const routeTree = rootRoute.addChildren({
     }),
     AppCalendarRoute: AppCalendarRoute.addChildren({ AppCalendarIndexRoute }),
   }),
+  SocketIndexRoute,
   LoginIndexLazyRoute,
 })
 
@@ -417,6 +446,7 @@ export const routeTree = rootRoute.addChildren({
       "children": [
         "/",
         "/_app",
+        "/socket/",
         "/login/"
       ]
     },
@@ -440,6 +470,7 @@ export const routeTree = rootRoute.addChildren({
         "/_app/_left-navbar/home/",
         "/_app/_left-navbar/timeline/",
         "/_app/_left-navbar/home/competition/",
+        "/_app/_left-navbar/home/curhat/",
         "/_app/_left-navbar/home/dingdong/",
         "/_app/_left-navbar/home/nim-finder/",
         "/_app/_left-navbar/timeline/$infoId/",
@@ -452,6 +483,9 @@ export const routeTree = rootRoute.addChildren({
       "children": [
         "/_app/calendar/"
       ]
+    },
+    "/socket/": {
+      "filePath": "socket/index.tsx"
     },
     "/login/": {
       "filePath": "login/index.lazy.tsx"
@@ -505,6 +539,10 @@ export const routeTree = rootRoute.addChildren({
     },
     "/_app/_left-navbar/home/competition/": {
       "filePath": "_app/_left-navbar/home/competition/index.tsx",
+      "parent": "/_app/_left-navbar"
+    },
+    "/_app/_left-navbar/home/curhat/": {
+      "filePath": "_app/_left-navbar/home/curhat/index.tsx",
       "parent": "/_app/_left-navbar"
     },
     "/_app/_left-navbar/home/dingdong/": {

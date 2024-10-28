@@ -33,8 +33,6 @@ function DesktopView({
   onMonthChange: (newMonth: number) => void;
 }) {
   const today = dayjs().month(currentMonth).year(currentYear);
-  const lastMonth = today.subtract(1, 'month');
-  const nextMonth = today.add(1, 'month');
   const user = useSession();
 
   const { selectedDate, selectedMonth, selectedYear } = routeApi.useSearch();

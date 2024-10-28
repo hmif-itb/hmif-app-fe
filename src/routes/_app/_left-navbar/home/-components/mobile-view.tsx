@@ -4,6 +4,7 @@ import Calendar from '~/components/calendar';
 import Profile from '~/components/navbar/profile';
 import NavigationItem from './navigation-item';
 import Timeline from '~/components/schedule/timeline';
+import MessageIcon from '~/assets/icons/curhat/message.svg';
 
 function MobileView() {
   const navigate = useNavigate();
@@ -13,12 +14,12 @@ function MobileView() {
   // };
 
   return (
-    <div className="flex flex-col items-center gap-8 font-inter lg:hidden">
+    <div className="flex flex-col items-center gap-4 font-inter lg:hidden">
       {/* Profile Section */}
       <Profile />
 
       {/* Top Navigation Section */}
-      <section className="flex w-full max-w-screen-md justify-between gap-4 px-4">
+      <section className="mt-4 flex w-full max-w-screen-md flex-wrap justify-center gap-x-6 gap-y-4 px-8">
         <NavigationItem
           src="/img/home/folder.svg"
           alt="Ding Dong"
@@ -52,6 +53,13 @@ function MobileView() {
           alt="Info Lomba"
           title="Info Lomba"
           onClick={() => navigate({ to: '/home/competition' })}
+        />
+
+        <NavigationItem
+          src={MessageIcon}
+          alt="Curhat Yuk"
+          title="Curhat Yuk!"
+          onClick={() => navigate({ to: '/home/curhat' })}
         />
       </section>
 

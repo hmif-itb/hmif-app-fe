@@ -1,14 +1,9 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { Navigate } from '@tanstack/react-router';
 import { createContext, useEffect } from 'react';
-import toast from 'react-hot-toast';
 import { api } from '~/api/client';
 import { UserWithRoles } from '~/api/generated';
-import { isMobile } from '~/lib/device';
-import { setupNotification } from '~/lib/push';
-import { saveUserCache, tryToLoadUserLocalStorage } from '~/lib/session';
-import { Button } from './ui/button';
-import { Dialog, DialogContent, DialogDescription } from './ui/dialog';
+import { saveUserCache } from '~/lib/session';
 
 export const SessionContext = createContext<UserWithRoles>(
   null as unknown as UserWithRoles,
@@ -24,18 +19,18 @@ export default function SessionProvider({
     queryFn: () => api.auth.getMe().catch(() => null),
   });
 
-  const { data: subs, isPending } = useQuery({
-    queryKey: ['pushsubs'],
-    queryFn: () => setupNotification(),
-    enabled: !!data,
-    staleTime: Infinity,
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
-  });
+  // const { data: subs, isPending } = useQuery({
+  //   queryKey: ['pushsubs'],
+  //   queryFn: () => setupNotification(),
+  //   enabled: !!data,
+  //   staleTime: Infinity,
+  //   refetchOnWindowFocus: false,
+  //   refetchOnMount: false,
+  // });
 
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
 
-  const askForNotif = Boolean(isMobile() && data && !subs && !isPending);
+  // const askForNotif = Boolean(isMobile() && data && !subs && !isPending);
 
   useEffect(() => {
     if (data !== undefined) {
