@@ -3,6 +3,7 @@ import Calendar from '~/components/calendar';
 import HeaderTitle from '~/components/header-title';
 import NavigationItem from './navigation-item';
 import Timeline from '~/components/schedule/timeline';
+import MessageIcon from '~/assets/icons/curhat/message.svg';
 
 function DesktopView() {
   const navigate = useNavigate();
@@ -11,9 +12,9 @@ function DesktopView() {
     <div className="hidden size-full max-h-full flex-col overflow-hidden lg:flex">
       <HeaderTitle />
       <div className="flex h-0 flex-1 overflow-hidden">
-        <div className="flex min-h-full flex-1 flex-col items-center gap-12 border-r border-gray-300 py-8">
+        <div className="flex min-h-full flex-1 flex-col items-center gap-8 border-r border-gray-300 py-8">
           {/* Top Navigation Section */}
-          <section className="flex w-full max-w-screen-md justify-center gap-12 px-4">
+          <section className="flex w-full max-w-screen-md flex-wrap justify-center gap-x-12 gap-y-4 px-8">
             <NavigationItem
               src="/img/home/folder.svg"
               alt="Ding Dong"
@@ -47,6 +48,13 @@ function DesktopView() {
               alt="Info Lomba"
               title="Info Lomba"
               onClick={() => navigate({ to: '/home/competition' })}
+            />
+
+            <NavigationItem
+              src={MessageIcon}
+              alt="Curhat Yuk"
+              title="Curhat Yuk!"
+              onClick={() => navigate({ to: '/home/curhat' })}
             />
           </section>
 

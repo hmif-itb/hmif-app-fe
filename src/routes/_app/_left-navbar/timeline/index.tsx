@@ -1,5 +1,4 @@
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
-
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { useRef, useState } from 'react';
 import { z } from 'zod';
@@ -15,7 +14,7 @@ import { FilterProps } from './-types';
 const timelineSearchSchema = z.object({
   search: z.string().optional(),
   unread: z.boolean().optional(),
-  category: z.string().optional(),
+  excludeCategories: z.array(z.string()).optional(),
   sort: z.string().optional(),
 });
 
@@ -30,7 +29,7 @@ function Timeline() {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const navigate = useNavigate({ from: Route.fullPath });
-  const { search, unread, category, sort } = Route.useSearch();
+  const { search, unread, excludeCategories, sort } = Route.useSearch();
   const [searchInput, setSearchInput] = useState(search ?? '');
 
   const setSearch = (value: string) => {
@@ -69,13 +68,13 @@ function Timeline() {
     isFetchingNextPage,
     isLoading,
   } = useInfiniteQuery({
-    queryKey: [INFO_LIST_QUERY_KEY, search, unread, category, sort],
+    queryKey: [INFO_LIST_QUERY_KEY, search, unread, excludeCategories, sort],
     queryFn: ({ pageParam }) =>
       api.info
         .getListInfo({
           search,
           unread: unread ? 'true' : 'false',
-          excludeCategory: [''],
+          excludeCategory: excludeCategories,
           offset: pageParam,
           sort: sort === 'oldest' ? 'oldest' : 'newest',
         })
@@ -107,7 +106,7 @@ function Timeline() {
           onInView={fetchWhenInView}
           filter={{
             unread: unread ?? false,
-            category: category ?? '',
+            excludeCategories: excludeCategories || [],
             sort: sort === 'oldest' ? 'oldest' : 'newest',
           }}
           setFilter={setFilter}
@@ -121,7 +120,7 @@ function Timeline() {
           onInView={fetchWhenInView}
           filter={{
             unread: unread ?? false,
-            category: category ?? '',
+            excludeCategories: excludeCategories || [],
             sort: sort === 'oldest' ? 'oldest' : 'newest',
           }}
           setFilter={setFilter}

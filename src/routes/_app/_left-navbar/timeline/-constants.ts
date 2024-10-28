@@ -16,7 +16,7 @@ export const FILTER_DATA = [
 export const FormSchema = z.object({
   unread: z.string().optional(),
   sort: z.string().optional(),
-  category: z.string().optional(),
+  excludeCategories: z.array(z.string()).optional(),
 });
 
 export type FormSchemaType = z.infer<typeof FormSchema>;
