@@ -40,27 +40,36 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chat, onBack }) => {
   const [currMessage, setCurrMessage] = React.useState('');
   const user = useSession();
 
-  useEffect(() => {
-    if (!chat) {
-      return;
-    }
-    if (!socket.connected) {
-      socket.auth = { chatroomId: chat.id };
-      socket.connect();
-    }
+useEffect(() => {
+  // Reset messages when the chat changes
+  setMessages(chat.messages || []);
 
-    function handleReply(reply: ChatroomMessage) {
-      setMessages((prev) => [reply, ...prev]);
-    }
+  if (!socket.connected) {
+    socket.auth = { chatroomId: chat.id };
+    socket.connect();
+  } else {
+    // Disconnect and reconnect for the new chatroom
+    socket.disconnect();
+    socket.auth = { chatroomId: chat.id };
+    socket.connect();
+  }
 
-    socket.on('reply', handleReply);
+  function handleReply(reply: ChatroomMessage) {
+    setMessages((prev) => [reply, ...prev]);
+  }
 
-    return () => {
-      socket.off('reply', handleReply);
-    };
-  }, [chat]);
+  socket.on('reply', handleReply);
+
+  return () => {
+    socket.off('reply', handleReply);
+    socket.disconnect(); // Cleanup on component unmount or chat change
+  };
+}, [chat]);
+
 
   const sendMessage = (message: string) => {
+    if (message.trim() === '') return; // Prevent sending empty messages
+
     setMessages((prev) => [
       {
         id: (prev.length + 1).toString(),
@@ -80,7 +89,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chat, onBack }) => {
   };
 
   return (
-    <div className="relative flex size-full flex-col pb-20 md:w-full">
+    <div className="relative flex size-full flex-col md:w-full">
       {/* Chat header */}
       <div className="flex w-full items-center bg-[#30764B] p-2">
         <Button
@@ -89,7 +98,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chat, onBack }) => {
             socket.disconnect();
             onBack();
           }}
-          className="px-2"
+          className="px-2 lg:hidden"
         >
           <img src={ArrowBack} alt="Back" className="size-6" />
         </Button>
@@ -112,7 +121,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chat, onBack }) => {
       </div>
 
       {/* Chat input */}
-      <div className="flex w-full justify-center rounded-t-xl bg-[#30764B] px-2 py-4 lg:bottom-4">
+      <div className="flex w-full justify-center rounded-t-xl bg-[#30764B] px-2 py-4 lg:bottom-0">
         <TextField
           type="text"
           placeholder="Type your message here..."
@@ -128,6 +137,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chat, onBack }) => {
             sendMessage(currMessage);
             setCurrMessage('');
           }}
+          disabled={currMessage.trim() === ''} // Disable button when message is empty or only spaces
         >
           <img src={SendIcon} alt="Send" className="size-10" />
         </Button>
