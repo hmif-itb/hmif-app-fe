@@ -40,32 +40,31 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chat, onBack }) => {
   const [currMessage, setCurrMessage] = React.useState('');
   const user = useSession();
 
-useEffect(() => {
-  // Reset messages when the chat changes
-  setMessages(chat.messages || []);
+  useEffect(() => {
+    // Reset messages when the chat changes
+    setMessages(chat.messages || []);
 
-  if (!socket.connected) {
-    socket.auth = { chatroomId: chat.id };
-    socket.connect();
-  } else {
-    // Disconnect and reconnect for the new chatroom
-    socket.disconnect();
-    socket.auth = { chatroomId: chat.id };
-    socket.connect();
-  }
+    if (!socket.connected) {
+      socket.auth = { chatroomId: chat.id };
+      socket.connect();
+    } else {
+      // Disconnect and reconnect for the new chatroom
+      socket.disconnect();
+      socket.auth = { chatroomId: chat.id };
+      socket.connect();
+    }
 
-  function handleReply(reply: ChatroomMessage) {
-    setMessages((prev) => [reply, ...prev]);
-  }
+    function handleReply(reply: ChatroomMessage) {
+      setMessages((prev) => [reply, ...prev]);
+    }
 
-  socket.on('reply', handleReply);
+    socket.on('reply', handleReply);
 
-  return () => {
-    socket.off('reply', handleReply);
-    socket.disconnect(); // Cleanup on component unmount or chat change
-  };
-}, [chat]);
-
+    return () => {
+      socket.off('reply', handleReply);
+      socket.disconnect(); // Cleanup on component unmount or chat change
+    };
+  }, [chat]);
 
   const sendMessage = (message: string) => {
     if (message.trim() === '') return; // Prevent sending empty messages

@@ -13,7 +13,7 @@ export default function MessageBubble(props: Readonly<ComponentProps>) {
   return (
     <div
       className={clsx(
-        'relative max-w-[75%] rounded-lg px-3 py-2 text-[#2D3648] shadow-md break-words',
+        'relative max-w-[75%] break-words rounded-lg px-3 py-2 text-[#2D3648] shadow-md',
         isSender
           ? 'mr-3.5 self-end bg-[#FFFC83]'
           : 'ml-3.5 self-start bg-[#C0EACA]',
@@ -27,7 +27,7 @@ export default function MessageBubble(props: Readonly<ComponentProps>) {
             : 'left-0 -translate-x-1/2 bg-[#C0EACA]',
         )}
       ></div>
-      <p className="text-sm break-words">{message}</p>
+      <p className="break-words text-sm">{message}</p>
       <p className="w-full text-right text-xs text-gray-400">
         {formatCurhatTime(timestamp)}
       </p>
