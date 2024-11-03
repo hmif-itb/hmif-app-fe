@@ -31,7 +31,7 @@ const Curhat: React.FC = () => {
           </div>
 
           {/* On medium and large screens, the chat room will appear alongside the chat list */}
-          <div className="hidden md:block md:w-full">
+          <div className="hidden md:block md:w-3/5">
             <ChatRoom
               chat={selectedChat}
               onBack={() => setSelectedChat(null)}

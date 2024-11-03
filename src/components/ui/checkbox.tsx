@@ -60,7 +60,7 @@ const CheckboxItem = React.forwardRef<
           {...props}
         >
           <CheckboxPrimitive.Indicator className="flex items-center justify-center">
-            <Circle className="h-3 w-3 fill-green-950 text-current" />
+            <Circle className="size-3 fill-green-950 text-current" />
           </CheckboxPrimitive.Indicator>
         </CheckboxPrimitive.Root>
       </div>
