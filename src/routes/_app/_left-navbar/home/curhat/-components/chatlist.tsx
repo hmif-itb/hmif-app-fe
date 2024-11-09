@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Chatroom, ListChatroom } from '~/api/generated';
 import ProfileIcon from '~/assets/icons/curhat/profile.svg';
 import {
@@ -26,6 +26,7 @@ const TOAST_ID_DELETE = 'delete-chatroom-toast';
 const TOAST_ID_CREATE = 'create-chatroom-toast';
 
 const ChatList: React.FC<ChatListProps> = ({ chats, setSelectedChat }) => {
+  const [selectedChat, setChat] = useState<Chatroom | null>(null);
   const user = useSession();
 
   const navigate = useNavigate();
@@ -62,6 +63,11 @@ const ChatList: React.FC<ChatListProps> = ({ chats, setSelectedChat }) => {
     createChatroom.mutate();
   };
 
+  const handleSelectChat = (chat: Chatroom) => {
+    setChat(chat);
+    setSelectedChat(chat);
+  };
+
   return (
     <div className="relative size-full border-r md:w-full lg:w-2/5">
       <Button
@@ -91,8 +97,10 @@ const ChatList: React.FC<ChatListProps> = ({ chats, setSelectedChat }) => {
         {chats.map((chat) => (
           <div
             key={chat.id}
-            className="flex w-full cursor-pointer items-center justify-between border-y px-5 py-4 transition hover:bg-blue-100"
-            onClick={() => setSelectedChat(chat)}
+            className={`flex w-full cursor-pointer items-center justify-between border-y px-5 py-4 transition ${
+              selectedChat?.id === chat.id ? 'bg-blue-100' : 'hover:bg-blue-100'
+            }`}
+            onClick={() => handleSelectChat(chat)}
           >
             <div className="flex items-center gap-4">
               <div className="flex size-14 items-center justify-center rounded-full bg-[#30764B]">
