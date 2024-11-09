@@ -16,7 +16,11 @@ const Curhat: React.FC = () => {
 
   return (
     <div className="relative flex h-screen flex-col md:flex-row">
-      <ChatList chats={chatRooms ?? []} setSelectedChat={setSelectedChat} />
+      <ChatList
+        chats={chatRooms ?? []}
+        setSelectedChat={setSelectedChat}
+        selectedId={selectedChat?.id || ''}
+      />
 
       {/* Overlay ChatRoom when selected on small screens */}
       {selectedChat && (
