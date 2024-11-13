@@ -8,6 +8,8 @@ import ProfileIcon from '~/assets/icons/curhat/profile.svg';
 import SendIcon from '~/assets/icons/curhat/send-icon.svg';
 import { Button } from '~/components/ui/button';
 import { TextField } from '~/components/ui/textfield';
+import { queryClient } from '~/api/client';
+import { on } from 'stream';
 
 // Define the message and chat room types
 interface Message {
@@ -85,6 +87,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chat, onBack }) => {
       chatroomId: chat.id,
       userId: user.id,
     });
+    queryClient.invalidateQueries({ queryKey: ['chatrooms'] });
   };
 
   return (
@@ -95,6 +98,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chat, onBack }) => {
           variant="link"
           onClick={() => {
             socket.disconnect();
+            queryClient.invalidateQueries({ queryKey: ['chatrooms'] });
             onBack();
           }}
           className="px-2 lg:hidden"
@@ -120,7 +124,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chat, onBack }) => {
       </div>
 
       {/* Chat input */}
-      <div className="flex w-full justify-center rounded-t-xl bg-[#30764B] px-2 py-4 lg:bottom-0">
+      <div className="flex w-full justify-center rounded-t-xl bg-[#30764B] px-2 py-4 lg:bottom-0 mb-[75px] lg:mb-[0px]">
         <TextField
           type="text"
           placeholder="Type your message here..."
