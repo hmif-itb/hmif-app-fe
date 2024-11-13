@@ -124,7 +124,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chat, onBack }) => {
       </div>
 
       {/* Chat input */}
-      <div className="flex w-full justify-center rounded-t-xl bg-[#30764B] px-2 py-4 lg:bottom-0 mb-[75px] lg:mb-[0px]">
+      <div className="mb-[75px] flex w-full justify-center rounded-t-xl bg-[#30764B] px-2 py-4 lg:bottom-0 lg:mb-0">
         <TextField
           type="text"
           placeholder="Type your message here..."
