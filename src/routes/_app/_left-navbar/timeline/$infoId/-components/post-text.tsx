@@ -1,8 +1,10 @@
 import { useQueries } from '@tanstack/react-query';
 import { api } from '~/api/client';
 import { extractUrls } from '~/lib/url-parser';
-import { renderInfoContent } from '../-helper';
+import { isGoogleForm, renderInfoContent } from '../-helper';
 import { IPost } from '../-interface/IPost';
+import { useMemo } from 'react';
+import EmbeddedGform from './EmbeddedGform';
 
 const PostText = ({
   infoId,
@@ -31,6 +33,12 @@ const PostText = ({
     },
   });
 
+  const googleForms = useMemo(() => data?.filter(isGoogleForm), [data]);
+  const nonGoogleForms = useMemo(
+    () => data?.filter((d) => !isGoogleForm(d)),
+    [data],
+  );
+
   return (
     <div className="flex-col space-y-2">
       {title && (
@@ -40,8 +48,17 @@ const PostText = ({
         {/* Render text as normal, but if link make it into anchor tag, split it on space and newline */}
         {renderInfoContent(infoId, content, urls)}
       </div>
+
+      <div className="flex w-full flex-col gap-4 md:flex-row md:flex-wrap">
+        {googleForms.map((d, idx) => {
+          if (d && d.requestUrl) {
+            return <EmbeddedGform key={idx} url={d.requestUrl} />;
+          }
+        })}
+      </div>
+
       <div className="flex flex-col gap-2">
-        {data.map((d, idx) => {
+        {nonGoogleForms.map((d, idx) => {
           // Check if opengraph data is available
           if (!d) return null;
 
