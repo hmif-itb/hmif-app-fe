@@ -69,7 +69,7 @@ const ChatList: React.FC<ChatListProps> = ({
   };
 
   return (
-    <div className="relative size-full border-r md:w-full lg:w-2/5">
+    <div className="relative h-screen w-full overflow-y-auto border-r md:w-full lg:w-2/5">
       <Button
         variant="link"
         onClick={() => navigate({ to: '/home' })}
