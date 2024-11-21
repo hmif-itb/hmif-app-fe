@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router';
 import { Fragment } from 'react';
+import { OgObject } from '~/api/generated';
 import { removePunctuation } from '~/lib/url-parser';
 
 const MAX_MINIMUM_LENGTH = 300;
@@ -53,4 +54,17 @@ export function renderInfoContent(
   }
 
   return result;
+}
+
+/**
+ * Checks if the given open graph object is a google form
+ */
+export function isGoogleForm(og: OgObject | undefined) {
+  if (!og) return false;
+
+  return (
+    og.ogTitle?.toLowerCase().includes('google forms') ||
+    og.ogDescription?.toLowerCase().includes('google forms') ||
+    og.requestUrl?.toLowerCase().includes('docs.google.com/forms')
+  );
 }
