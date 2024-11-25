@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { io } from 'socket.io-client';
+import clsx from 'clsx';
 import { Chatroom, ChatroomMessage } from '~/api/generated';
 import useSession from '~/hooks/auth/useSession';
 import MessageBubble from './MessageBubble';
@@ -113,7 +114,10 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chat, onBack }) => {
 
       {/* Chat messages */}
       <div
-        className={`flex grow flex-col ${messages.length === 0 ? 'items-center justify-center' : 'flex-col-reverse'} gap-5 overflow-y-auto py-9`}
+        className={clsx('flex grow flex-col gap-5 overflow-y-auto py-9', {
+          'items-center justify-center': messages.length === 0,
+          'flex-col-reverse': messages.length !== 0,
+        })}
       >
         {messages.length === 0 ? (
           // Show text when there are no message bubbles
