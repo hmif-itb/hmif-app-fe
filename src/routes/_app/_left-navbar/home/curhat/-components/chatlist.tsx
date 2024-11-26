@@ -17,6 +17,7 @@ import { api, queryClient } from '~/api/client';
 import toast from 'react-hot-toast';
 import useSession from '~/hooks/auth/useSession';
 import { useNavigate } from '@tanstack/react-router';
+import LabelDropdown from '../-components/LabelDropdown';
 
 interface ChatListProps {
   chats: ListChatroom;
@@ -148,6 +149,11 @@ const ChatList: React.FC<ChatListProps> = ({
                           />
                           Delete
                         </Button>
+                      </li>
+                    )}
+                    {true && (
+                      <li className="leading-none">
+                        <LabelDropdown chatroom={chat} />
                       </li>
                     )}
                   </ul>
