@@ -60,4 +60,34 @@ export class CurhatService {
       },
     });
   }
+  /**
+   * Pin/unpin chatroom
+   * @returns any Pin/unpin success
+   * @throws ApiError
+   */
+  public pinChatroom({
+    chatroomId,
+    requestBody,
+  }: {
+    /**
+     * Id of chatroom
+     */
+    chatroomId: string,
+    requestBody: {
+      isPinned: boolean;
+    },
+  }): CancelablePromise<any> {
+    return this.httpRequest.request({
+      method: 'PUT',
+      url: '/api/curhat/chatroom/{chatroomId}/pin',
+      path: {
+        'chatroomId': chatroomId,
+      },
+      body: requestBody,
+      mediaType: 'application/json',
+      errors: {
+        400: `Bad request`,
+      },
+    });
+  }
 }
