@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ChatList from './-components/chatlist'; // Ensure the correct path to your ChatList component
 import ChatRoom from './-components/chatroom'; // Ensure the correct path to your ChatRoom component
 import { useQuery } from '@tanstack/react-query';
@@ -14,6 +14,13 @@ const Curhat: React.FC = () => {
     queryFn: () => api.curhat.getUserChatrooms(),
   });
 
+  // Check if there chatRooms is empty (no selected chats)
+  useEffect(() => {
+    if (!chatRooms || chatRooms.length === 0) {
+      setSelectedChat(null);
+    }
+  }, [chatRooms]);
+
   return (
     <div className="relative flex h-screen flex-col md:flex-row">
       <ChatList
@@ -21,6 +28,16 @@ const Curhat: React.FC = () => {
         setSelectedChat={setSelectedChat}
         selectedId={selectedChat?.id || ''}
       />
+
+      {/* When no chats are selected, show background */}
+      {!selectedChat && (
+        <div className="hidden flex-col items-center justify-center gap-3 bg-[url(/img/curhatyuk/Background.png)] bg-cover bg-center bg-no-repeat md:flex md:w-3/5">
+          <p className="text-5xl font-bold text-black">CurhatYuk!!</p>
+          <h2 className="text-lg font-medium text-black">
+            Start Anonymous chat with Welfare!!
+          </h2>
+        </div>
+      )}
 
       {/* Overlay ChatRoom when selected on small screens */}
       {selectedChat && (

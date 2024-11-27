@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { io } from 'socket.io-client';
+import clsx from 'clsx';
 import { Chatroom, ChatroomMessage } from '~/api/generated';
 import useSession from '~/hooks/auth/useSession';
 import MessageBubble from './MessageBubble';
@@ -91,7 +92,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chat, onBack }) => {
   };
 
   return (
-    <div className="relative flex size-full flex-col md:w-full">
+    <div className="relative flex size-full flex-col bg-[url(/img/curhatyuk/Background.png)] bg-cover bg-center bg-no-repeat md:w-full">
       {/* Chat header */}
       <div className="flex w-full items-center bg-[#30764B] p-2">
         <Button
@@ -112,15 +113,30 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chat, onBack }) => {
       </div>
 
       {/* Chat messages */}
-      <div className="flex grow flex-col-reverse gap-5 overflow-y-auto py-9">
-        {messages.map((message, idx) => (
-          <MessageBubble
-            key={idx}
-            message={message.content}
-            isSender={message.isSender ?? false}
-            timestamp={message.createdAt}
-          />
-        ))}
+      <div
+        className={clsx('flex grow flex-col gap-5 overflow-y-auto py-9', {
+          'items-center justify-center': messages.length === 0,
+          'flex-col-reverse': messages.length !== 0,
+        })}
+      >
+        {messages.length === 0 ? (
+          // Show text when there are no message bubbles
+          <div className="flex flex-col items-center justify-center gap-3 ">
+            <p className="text-5xl font-bold text-black">Chat Now!</p>
+            <h2 className="text-lg font-medium text-black">
+              Start Anonymous chat with Welfare!!
+            </h2>
+          </div>
+        ) : (
+          messages.map((message, idx) => (
+            <MessageBubble
+              key={idx}
+              message={message.content}
+              isSender={message.isSender ?? false}
+              timestamp={message.createdAt}
+            />
+          ))
+        )}
       </div>
 
       {/* Chat input */}
