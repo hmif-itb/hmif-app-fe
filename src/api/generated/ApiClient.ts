@@ -10,6 +10,7 @@ import { CalendarService } from './services/CalendarService';
 import { CategoryService } from './services/CategoryService';
 import { CommentService } from './services/CommentService';
 import { CompetitionsService } from './services/CompetitionsService';
+import { RecommendationService } from './services/RecommendationService';
 import { CourseService } from './services/CourseService';
 import { CurhatService } from './services/CurhatService';
 import { InfoService } from './services/InfoService';
@@ -22,6 +23,7 @@ import { TestimoniService } from './services/TestimoniService';
 import { UnsubscribeService } from './services/UnsubscribeService';
 import { UserFinderService } from './services/UserFinderService';
 import { UserProfileService } from './services/UserProfileService';
+
 type HttpRequestConstructor = new (config: OpenAPIConfig) => BaseHttpRequest;
 export class ApiClient {
   public readonly auth: AuthService;
@@ -29,6 +31,7 @@ export class ApiClient {
   public readonly category: CategoryService;
   public readonly comment: CommentService;
   public readonly competitions: CompetitionsService;
+  public readonly recommendation: RecommendationService;
   public readonly course: CourseService;
   public readonly curhat: CurhatService;
   public readonly info: InfoService;
@@ -57,6 +60,7 @@ export class ApiClient {
     this.auth = new AuthService(this.request);
     this.calendar = new CalendarService(this.request);
     this.category = new CategoryService(this.request);
+    this.recommendation = new RecommendationService(this.request);
     this.comment = new CommentService(this.request);
     this.competitions = new CompetitionsService(this.request);
     this.course = new CourseService(this.request);
