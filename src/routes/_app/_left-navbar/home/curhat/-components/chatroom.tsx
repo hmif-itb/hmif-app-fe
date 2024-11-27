@@ -157,9 +157,8 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chat, onBack }) => {
       {replyMessage && (
         <div className="relative flex items-center gap-2 rounded-t-xl bg-[#30764B] px-2 pt-4">
           <div className="flex-auto rounded-lg border-l-4 border-l-[#F3E8C4] bg-[#363538] p-3 text-sm text-[#FFFFFF66]">
-            {/* Membatasi panjang teks hingga 100 karakter dan menambahkan "..." */}
-            {replyMessage.content.length > 90
-              ? `${replyMessage.content.slice(0, 90)}...`
+            {replyMessage.content.length > 95
+              ? `${replyMessage.content.slice(0, 95)} ...`
               : replyMessage.content}
           </div>
           <Button
@@ -167,7 +166,6 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chat, onBack }) => {
             className="flex items-center justify-center p-0"
             onClick={() => setReplyMessage(null)}
           >
-            {/* Ukuran tetap untuk ikon Close */}
             <img src={CloseReply} alt="Close" className="size-10" />
           </Button>
         </div>

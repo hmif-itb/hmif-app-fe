@@ -12,8 +12,8 @@ type ComponentProps = {
   message: string;
   isSender: boolean;
   timestamp: string;
-  repliedMessage?: string; // Pesan yang direply (opsional)
-  onReply?: () => void; // Callback untuk aksi reply
+  repliedMessage?: string;
+  onReply?: () => void;
 };
 
 export default function MessageBubble(props: Readonly<ComponentProps>) {
@@ -28,7 +28,6 @@ export default function MessageBubble(props: Readonly<ComponentProps>) {
           : 'ml-3.5 self-start bg-[#C0EACA]',
       )}
     >
-      {/* Bubble arrow */}
       <div
         className={clsx(
           'absolute top-2 size-2.5 rotate-45',
@@ -53,7 +52,7 @@ export default function MessageBubble(props: Readonly<ComponentProps>) {
                   className="p-0 text-xs text-[#2D3648]"
                   onClick={(e) => {
                     e.stopPropagation();
-                    if (onReply) onReply(); // Panggil callback jika tersedia
+                    if (onReply) onReply();
                   }}
                 >
                   Reply
@@ -66,8 +65,10 @@ export default function MessageBubble(props: Readonly<ComponentProps>) {
 
       {/* Reply preview */}
       {repliedMessage && (
-        <div className="my-2 rounded-md bg-[#363538] px-3 py-1 text-sm text-[#FFFFFF66]">
-          {repliedMessage}
+        <div className="my-2 rounded-md bg-[#363538] p-3 text-sm text-[#FFFFFF66]">
+          {repliedMessage.length > 95
+            ? `${repliedMessage.slice(0, 95)} ...`
+            : repliedMessage}
         </div>
       )}
 
