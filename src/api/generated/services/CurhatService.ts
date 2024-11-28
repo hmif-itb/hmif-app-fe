@@ -46,13 +46,13 @@ export class CurhatService {
     /**
      * Id of chatroom
      */
-    chatroomId: string,
+    chatroomId: string;
   }): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'DELETE',
       url: '/api/curhat/chatroom/{chatroomId}',
       path: {
-        'chatroomId': chatroomId,
+        chatroomId: chatroomId,
       },
       errors: {
         400: `Bad request`,
@@ -72,16 +72,16 @@ export class CurhatService {
     /**
      * Id of chatroom
      */
-    chatroomId: string,
+    chatroomId: string;
     requestBody: {
       isPinned: boolean;
-    },
+    };
   }): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'PUT',
       url: '/api/curhat/chatroom/{chatroomId}/pin',
       path: {
-        'chatroomId': chatroomId,
+        chatroomId: chatroomId,
       },
       body: requestBody,
       mediaType: 'application/json',

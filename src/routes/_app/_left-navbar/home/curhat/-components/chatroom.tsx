@@ -109,10 +109,10 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chat, onBack }) => {
         <div className="relative flex size-[46px] items-center justify-center rounded-full bg-[#E8C55F]">
           <img src={ProfileIcon} alt="Profile" className="size-[26px]" />
           {chat.isPinned && (
-            <img 
+            <img
               src={PinIcon}
               alt="Pin"
-              className='absolute bottom-0 right-0 size-[15px]'
+              className="absolute bottom-0 right-0 size-[15px]"
             />
           )}
         </div>

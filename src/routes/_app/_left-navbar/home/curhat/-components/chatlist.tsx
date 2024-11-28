@@ -135,7 +135,7 @@ const ChatList: React.FC<ChatListProps> = ({
                   <img
                     src={PinIconYellow}
                     alt="Pin"
-                    className='absolute bottom-0 right-0 size-[15px]'
+                    className="absolute bottom-0 right-0 size-[15px]"
                   />
                 )}
                 <img src={ProfileIcon} alt="Profile" className="size-9" />
