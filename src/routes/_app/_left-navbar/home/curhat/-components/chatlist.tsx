@@ -86,9 +86,9 @@ const ChatList: React.FC<ChatListProps> = ({
   const handlePin = (id: string, isPinned: boolean) => {
     pinChatroom.mutate({
       chatroomId: id,
-      requestBody : {
+      requestBody: {
         isPinned: !isPinned,
-      }
+      },
     });
   };
 
@@ -135,10 +135,10 @@ const ChatList: React.FC<ChatListProps> = ({
                   <img
                     src={PinIconYellow}
                     alt="Pin"
-                    className='absolute right-0 bottom-0 size-[15px]'
+                    className='absolute bottom-0 right-0 size-[15px]'
                   />
                 )}
-                <img src={ProfileIcon} alt="Profile" className="size-9"/>
+                <img src={ProfileIcon} alt="Profile" className="size-9" />
               </div>
               <div>
                 <h3 className="capitalize">{chat.title}</h3>
