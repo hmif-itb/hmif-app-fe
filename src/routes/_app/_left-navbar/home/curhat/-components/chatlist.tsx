@@ -69,7 +69,7 @@ const ChatList: React.FC<ChatListProps> = ({
     onError: () => {
       toast.error('Failed to update chatroom');
     },
-  });  
+  });
 
   const handleDelete = (id: string) => {
     toast.loading('Please wait...', { id: TOAST_ID_DELETE });
@@ -87,10 +87,10 @@ const ChatList: React.FC<ChatListProps> = ({
     pinChatroom.mutate({
       chatroomId: id,
       requestBody : {
-        isPinned: !isPinned, // Toggle the pin status
+        isPinned: !isPinned,
       }
     });
-  };  
+  };
 
   return (
     <div className="relative h-screen w-full overflow-y-auto border-r md:w-full lg:w-2/5">
@@ -130,11 +130,15 @@ const ChatList: React.FC<ChatListProps> = ({
             onClick={() => setSelectedChat(chat)}
           >
             <div className="flex items-center gap-4">
-              <div className="flex size-14 items-center justify-center rounded-full bg-[#30764B] relative">
-                { chat.isPinned && (
-                  <img src={PinIconYellow} alt="Pin" className='absolute right-0 bottom-0 size-[15px]'/>
+              <div className="relative flex size-14 items-center justify-center rounded-full bg-[#30764B]">
+                {chat.isPinned && (
+                  <img
+                    src={PinIconYellow}
+                    alt="Pin"
+                    className='absolute right-0 bottom-0 size-[15px]'
+                  />
                 )}
-                <img src={ProfileIcon} alt="Profile" className="size-9" />
+                <img src={ProfileIcon} alt="Profile" className="size-9"/>
               </div>
               <div>
                 <h3 className="capitalize">{chat.title}</h3>
@@ -159,7 +163,7 @@ const ChatList: React.FC<ChatListProps> = ({
                 <PopoverContent className="w-fit py-2 pl-2 pr-3" align="end">
                   <ul className="flex flex-col gap-2">
                     {true && (
-                      <li className="leading-none flex flex-col gap-3">
+                      <li className="flex flex-col gap-3 leading-none">
                         <Button
                           variant="link"
                           className="items-center p-0 text-sm font-normal md:text-sm"
