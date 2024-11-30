@@ -18,7 +18,7 @@ import toast from 'react-hot-toast';
 import useSession from '~/hooks/auth/useSession';
 import { useNavigate } from '@tanstack/react-router';
 import LabelDropdown from '../-components/LabelDropdown';
-import SearchAndFilter from './searchAndFilter';
+import SearchAndFilter from './searchandfilter';
 
 interface ChatListProps {
   chats: ListChatroom;
@@ -112,8 +112,8 @@ const ChatList: React.FC<ChatListProps> = ({
                 <h3 className="capitalize">{chat.title}</h3>
                 <p className="truncate text-sm text-gray-500">
                   {chat.messages &&
-                  chat.messages.length > 0 &&
-                  chat.messages[0].content
+                    chat.messages.length > 0 &&
+                    chat.messages[0].content
                     ? chat.messages[0].content.length > 10
                       ? `${chat.messages[0].content.slice(0, 10)}...`
                       : chat.messages[0].content
