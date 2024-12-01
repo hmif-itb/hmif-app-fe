@@ -5,10 +5,10 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useRef } from 'react';
 import { DEBOUNCE_TIME } from '~/lib/constants';
-import SingleSelect from '~/components/custom-form/fields/SingleSelect';
 import CoWorkingCard from './-components/CoWorkingCard';
 import Vouchercard from './-components/VoucherCard';
 import MenuPage from './-components/MenuPage';
+import backgroundImage from '~/assets/icons/rekomendasi/background.png';
 
 export const Route = createFileRoute('/_app/_left-navbar/home/rekomendasi/')({
   component: RekomendasiPage,
@@ -25,7 +25,10 @@ function RekomendasiPage() {
     });
 
     return (
-        <div className="flex size-full h-screen flex-col px-3">
+        <div className="flex size-full h-screen flex-col px-3"
+        style={{
+            backgroundImage: `url(${backgroundImage})`,
+        }}>
             <main>
                 <h1 className="mb-3 mt-[50px] text-4xl font-bold text-black">
                     Recommendations
