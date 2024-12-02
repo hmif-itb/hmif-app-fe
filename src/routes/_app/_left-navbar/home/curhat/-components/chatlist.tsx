@@ -112,8 +112,8 @@ const ChatList: React.FC<ChatListProps> = ({
                 <h3 className="capitalize">{chat.title}</h3>
                 <p className="truncate text-sm text-gray-500">
                   {chat.messages &&
-                      chat.messages.length > 0 &&
-                      chat.messages[0].content
+                  chat.messages.length > 0 &&
+                  chat.messages[0].content
                     ? chat.messages[0].content.length > 10
                       ? `${chat.messages[0].content.slice(0, 10)}...`
                       : chat.messages[0].content
