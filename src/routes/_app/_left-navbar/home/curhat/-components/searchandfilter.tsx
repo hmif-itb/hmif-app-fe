@@ -1,10 +1,10 @@
-import { useState } from "react";
-import SearchIcon from "~/assets/icons/curhat/search-icon.svg";
-import FilterIcon from "~/assets/icons/curhat/filter.svg";
-import { Input } from "~/components/ui/input";
-import { Button } from "~/components/ui/button";
-import { CheckboxGroup, CheckboxItem } from "~/components/ui/checkbox";
-import { Separator } from "~/components/ui/separator";
+import { useState } from 'react';
+import SearchIcon from '~/assets/icons/curhat/search-icon.svg';
+import FilterIcon from '~/assets/icons/curhat/filter.svg';
+import { Input } from '~/components/ui/input';
+import { Button } from '~/components/ui/button';
+import { CheckboxGroup, CheckboxItem } from '~/components/ui/checkbox';
+import { Separator } from '~/components/ui/separator';
 
 function SearchAndFilter() {
   const [isFilterVisible, setIsFilterVisible] = useState(false);

@@ -86,7 +86,7 @@ const ChatList: React.FC<ChatListProps> = ({
         <p className="text-sm">You can create up to three chatrooms</p>
       </div>
 
-      {/* Insert the SearchAndFilter component below the "You can create up to three chatrooms" text */}
+      {/* Search bar and Filter */}
       <div className="mt-3">
         <SearchAndFilter />
       </div>
@@ -112,8 +112,8 @@ const ChatList: React.FC<ChatListProps> = ({
                 <h3 className="capitalize">{chat.title}</h3>
                 <p className="truncate text-sm text-gray-500">
                   {chat.messages &&
-                    chat.messages.length > 0 &&
-                    chat.messages[0].content
+                      chat.messages.length > 0 &&
+                      chat.messages[0].content
                     ? chat.messages[0].content.length > 10
                       ? `${chat.messages[0].content.slice(0, 10)}...`
                       : chat.messages[0].content
