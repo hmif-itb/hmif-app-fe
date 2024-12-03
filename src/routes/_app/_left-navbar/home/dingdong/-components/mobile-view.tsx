@@ -22,7 +22,7 @@ function MobileView() {
         imageURL={user.picture}
         className="flex w-full items-center gap-4 px-3 py-1 lg:hidden lg:gap-9"
       />
-      <div className="flex-1 overflow-y-auto rounded-t-2xl bg-[url('/images/courses/gradient.png')] bg-cover bg-no-repeat px-4 py-10 lg:rounded-none">
+      <div className="flex-1 overflow-y-auto rounded-t-2xl bg-[url('/img/login/login-bg.jpg')] bg-cover bg-no-repeat px-4 py-10 lg:rounded-none">
         <div className="mb-6 flex items-center justify-between">
           <h1 className="text-[30px] font-bold text-white antialiased">
             Dingdong
