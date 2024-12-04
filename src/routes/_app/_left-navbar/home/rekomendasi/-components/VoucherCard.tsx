@@ -12,7 +12,7 @@ interface VoucherCardProps {
 
 const Vouchercard: React.FC<VoucherCardProps> = ({ imageUrl, title, rating, calendar, link }) => {
   return (
-    <div className="w-md max-w-80% mx-auto rounded-xl shadow-lg overflow-hidden bg-white relative">
+    <div className="w-md max-w-80% mx-auto rounded-2xl overflow-hidden bg-white relative">
       {/* Image Section */}
       <div className="relative">
         <img
@@ -27,9 +27,9 @@ const Vouchercard: React.FC<VoucherCardProps> = ({ imageUrl, title, rating, cale
         <div className="rounded-2xl">
           {/* bagian atas */}
           <div className='px-4 pt-4 pb-2 rounded-2xl '>
-              <div className="flex gap-3 items-center">
+              <div className="flex gap-3 items-center justify-between">
                   <h2 className="text-xl font-semibold text-gray-800">{title}</h2>
-                  <div className="p-1 flex items-center rounded-xl bg-yellow-75 text-yellow-500">
+                  <div className="p-1 px-3 flex right-div items-center rounded-xl bg-yellow-75 text-yellow-500">
                       <span className="ml-1 text-sm material-icons">
                           <img src={starIcon}></img>
                       </span>

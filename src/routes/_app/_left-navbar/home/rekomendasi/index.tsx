@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import SearchIcon from '~/assets/icons/textfield/search.svg';
 import { TextField } from '~/components/ui/textfield';
 import { useState } from 'react';
@@ -8,31 +8,68 @@ import { DEBOUNCE_TIME } from '~/lib/constants';
 import CoWorkingCard from './-components/CoWorkingCard';
 import Vouchercard from './-components/VoucherCard';
 import MenuPage from './-components/MenuPage';
+import FilterRekomendasi from './-components/FilterRekomendasi';
 import backgroundImage from '~/assets/icons/rekomendasi/background.png';
+import { z } from 'zod';
+
+const timelineSearchSchema = z.object({
+    search: z.string().optional(),
+    category: z.array(z.string()).optional(),
+  });
+
 
 export const Route = createFileRoute('/_app/_left-navbar/home/rekomendasi/')({
   component: RekomendasiPage,
+  validateSearch: (search) => timelineSearchSchema.parse(search),
 });
 
 function RekomendasiPage() {
-    const timeoutRef = useRef<number | null>(null);
 
-    const [search, setSearch] = useState<string>('');
+    // Search
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const navigate = useNavigate({ from: Route.fullPath });
+    const { search } = Route.useSearch();
+    const [searchInput, setSearchInput] = useState(search ?? '');
+    const setSearch = (value: string) => {
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+        }
+        setSearchInput(value);
+        timeoutRef.current = setTimeout(() => {
+          navigate({
+            search: (prev) => ({
+              ...prev,
+              search: value || undefined,
+            }),
+          });
+        }, DEBOUNCE_TIME);
+      };
+
+    // Menu
     const [activeOption, setActiveOption] = useState<'CoWorking' | 'Voucher'>('Voucher');
+
+    // FIlter
+    const [activeFilter, setActiveFilter] = useState<'None' | 'Ganesha' | 'Jatinangor'>('None');
 
     const { data: searchResult } = useQuery({
         queryKey: [],
     });
 
     return (
-        <div className="flex size-full h-screen flex-col px-3"
+        <div className="flex size-full h-screen flex-col"
         style={{
             backgroundImage: `url(${backgroundImage})`,
+            backgroundSize: 'cover', 
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'center',
+            backgroundAttachment: 'fixed',
         }}>
-            <main>
-                <h1 className="mb-3 mt-[50px] text-4xl font-bold text-black">
+            
+            <main className='px-3'>
+                <h1 className="mb-3 mt-[50px] text-3xl font-bold text-white">
                     Recommendations
                 </h1>
+                <FilterRekomendasi/>
 
                 <TextField
                     type="text"
@@ -43,7 +80,7 @@ function RekomendasiPage() {
                         }
                         setTimeout(() => setSearch(e.target.value), DEBOUNCE_TIME);
                       }}
-                      className="h-12 w-full rounded-full font-semibold"
+                      className="h-10 w-full rounded-full font-semibold"
                       name="search"
                 >
                     <img src={SearchIcon} className="size-4" />
@@ -63,14 +100,14 @@ function RekomendasiPage() {
                                 imageUrl="https://placehold.co/600x400"
                                 title="UPNORMAL"
                                 rating={4.5}
-                                calendar="tanggal anu"
+                                calendar="XX XX XXXX"
                                 link="https://link.com"
                             />
                             <Vouchercard
                                 imageUrl="https://placehold.co/600x400"
                                 title="UPNORMAL"
                                 rating={4.5}
-                                calendar="tanggal anu"
+                                calendar="XX XX XXXX"
                                 link="https://link.com"
                             />
                         </>

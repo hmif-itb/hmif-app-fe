@@ -14,7 +14,7 @@ interface CoWorkingCardProps {
 
 const CoWorkingCard: React.FC<CoWorkingCardProps> = ({ imageUrl, title, rating, location, kampus, mapsLink }) => {
   return (
-    <div className="w-md max-w-80% mx-auto rounded-xl shadow-lg overflow-hidden bg-white relative">
+    <div className="w-md max-w-80% mx-auto rounded-2xl overflow-hidden bg-white relative">
       <div className="relative">
         <img
           src={imageUrl}
@@ -26,17 +26,20 @@ const CoWorkingCard: React.FC<CoWorkingCardProps> = ({ imageUrl, title, rating, 
       <div className='absolute bottom-0 left-0 right-0 mx-auto bg-white rounded-xl'>
         <div className="rounded-2xl">
           <div className='px-4 pt-4 pb-2 rounded-2xl '>
-              <div className="flex gap-3 items-center">
+              <div className="flex justify-between items-center">
                   <h2 className="text-xl font-semibold text-gray-800">{title}</h2>
-                  <div className="p-1 flex items-center roundedxl bg-yellow-75 text-yellow-500">
-                      <div className="ml-1 text-sm">{kampus}</div>
+                  <div className='flex gap-3 right-div'>
+                    <div className="p-1 px-3 flex items-center rounded-xl bg-yellow-75 text-yellow-500">
+                        <div className="ml-1 text-sm">{kampus}</div>
+                    </div>
+                    <div className="p-1 px-3 flex items-center rounded-xl bg-yellow-75 text-yellow-500">
+                        <span className="ml-1 text-sm material-icons">
+                            <img src={starIcon}></img>
+                        </span>
+                        <span className="ml-1 text-sm">{rating}</span>
+                    </div>
                   </div>
-                  <div className="p-1 flex items-center rounded-xl bg-yellow-75 text-yellow-500">
-                      <span className="ml-1 text-sm material-icons">
-                          <img src={starIcon}></img>
-                      </span>
-                      <span className="ml-1 text-sm">{rating}</span>
-                  </div>
+                  
               </div>
           </div>
           <div className='flex flex-col p-4 border-t gap-3 border-[#E2DEE9]'>
