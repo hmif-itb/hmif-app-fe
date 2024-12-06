@@ -18,6 +18,7 @@ import toast from 'react-hot-toast';
 import useSession from '~/hooks/auth/useSession';
 import { useNavigate } from '@tanstack/react-router';
 import LabelDropdown from '../-components/LabelDropdown';
+import SearchAndFilter from './searchandfilter';
 
 interface ChatListProps {
   chats: ListChatroom;
@@ -85,13 +86,10 @@ const ChatList: React.FC<ChatListProps> = ({
         <p className="text-sm">You can create up to three chatrooms</p>
       </div>
 
-      {/* <div className="my-4">
-        <input
-          type="text"
-          placeholder="Search"
-          className="w-full rounded-md border px-4 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </div> */}
+      {/* Search bar and Filter */}
+      <div className="mt-3">
+        <SearchAndFilter />
+      </div>
 
       {/* Chatrooms */}
       <div className="mt-7 w-full">
@@ -160,11 +158,6 @@ const ChatList: React.FC<ChatListProps> = ({
                 </PopoverContent>
               </Popover>
             )}
-
-            {/* <span className="rounded-full bg-red-500 px-2 py-1 text-xs text-white"> */}
-            {/* {chat.messages.length}{' '} */}
-            {/* Replace this with your unread messages count */}
-            {/* </span> */}
           </div>
         ))}
       </div>
