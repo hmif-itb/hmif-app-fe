@@ -19,6 +19,7 @@ import { MediaService } from './services/MediaService';
 import { OpenGraphService } from './services/OpenGraphService';
 import { PushService } from './services/PushService';
 import { ReactionService } from './services/ReactionService';
+import { RecommendationService } from './services/RecommendationService';
 import { TestimoniService } from './services/TestimoniService';
 import { UnsubscribeService } from './services/UnsubscribeService';
 import { UserFinderService } from './services/UserFinderService';
@@ -40,6 +41,7 @@ export class ApiClient {
   public readonly openGraph: OpenGraphService;
   public readonly push: PushService;
   public readonly reaction: ReactionService;
+  public readonly recommendation: RecommendationService;
   public readonly testimoni: TestimoniService;
   public readonly unsubscribe: UnsubscribeService;
   public readonly userFinder: UserFinderService;
@@ -71,6 +73,7 @@ export class ApiClient {
     this.openGraph = new OpenGraphService(this.request);
     this.push = new PushService(this.request);
     this.reaction = new ReactionService(this.request);
+    this.recommendation = new RecommendationService(this.request);
     this.testimoni = new TestimoniService(this.request);
     this.unsubscribe = new UnsubscribeService(this.request);
     this.userFinder = new UserFinderService(this.request);

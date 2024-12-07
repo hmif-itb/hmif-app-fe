@@ -56,6 +56,7 @@ export { MediaService } from './services/MediaService';
 export { OpenGraphService } from './services/OpenGraphService';
 export { PushService } from './services/PushService';
 export { ReactionService } from './services/ReactionService';
+export { RecommendationService } from './services/RecommendationService';
 export { TestimoniService } from './services/TestimoniService';
 export { UnsubscribeService } from './services/UnsubscribeService';
 export { UserFinderService } from './services/UserFinderService';

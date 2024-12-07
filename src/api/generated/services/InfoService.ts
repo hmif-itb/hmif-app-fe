@@ -126,7 +126,7 @@ export class InfoService {
     sort = 'newest',
   }: {
     search?: string,
-    excludeCategory?: Array<string>,
+    excludeCategory?: (Array<string> | string),
     unread?: 'true' | 'false',
     userId?: string,
     offset?: number | null,
