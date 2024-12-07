@@ -40,7 +40,6 @@ export class ApiClient {
   public readonly openGraph: OpenGraphService;
   public readonly push: PushService;
   public readonly reaction: ReactionService;
-  public readonly recommendation: RecommendationService;
   public readonly testimoni: TestimoniService;
   public readonly unsubscribe: UnsubscribeService;
   public readonly userFinder: UserFinderService;
