@@ -2,11 +2,10 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { LocationCategories } from './LocationCategories';
 export type CoWorking = {
   title: string;
   imageUrl: string;
-  location: LocationCategories;
+  location: string;
   address: string;
   mapUrl: string;
   description: string | null;

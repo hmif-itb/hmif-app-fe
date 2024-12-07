@@ -1,12 +1,11 @@
 import { useState } from 'react';
-import { useLocationCategories } from './-useLocationCategories';
 import { useForm } from 'react-hook-form';
-import { CoWorkingSpaceSchema, CoWorkingSpaceSchemaType} from './-constants';
+import { CoWorkingSpaceSchema, CoWorkingSpaceSchemaType } from './-constants';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { api, queryClient } from '~/api/client';
 import toast from 'react-hot-toast';
-import { LocationCategories, PresignedURL } from '~/api/generated';
+import { PresignedURL } from '~/api/generated';
 import { FileUpload } from '../../add-announcement';
 
 const TOAST_ID = 'add-coworkingspace-toast';
@@ -20,14 +19,13 @@ export default function useAddCoWorkingSpace(props: Readonly<ComponentProps>) {
 
   const [image, setImage] = useState<FileUpload | null>(null);
   const [pendingUpload, setPendingUpload] = useState<string | null>(null);
-  const categoryOptions = useLocationCategories();
 
   const form = useForm<CoWorkingSpaceSchemaType>({
     resolver: zodResolver(CoWorkingSpaceSchema),
     defaultValues: {
       title: '',
       imageURL: '',
-      location: [],
+      location: '',
       address: '',
       mapsURL: '',
       description: '',
@@ -35,14 +33,17 @@ export default function useAddCoWorkingSpace(props: Readonly<ComponentProps>) {
   });
 
   const postCoWorkingSpace = useMutation({
-    mutationFn: api.recommendation.createCoWorkingSpace.bind(api.recommendation),
+    mutationFn: api.recommendation.createCoWorkingSpace.bind(
+      api.recommendation,
+    ),
     onSuccess: () => {
       toast.success('CoWorkingSpace Posted!', { id: TOAST_ID });
       queryClient.invalidateQueries({ queryKey: ['coworkingspace'] });
       setPendingUpload('');
       onSubmitSuccess?.();
     },
-    onError: () => toast.error('Failed to post CoWorkingSpace', { id: TOAST_ID }),
+    onError: () =>
+      toast.error('Failed to post CoWorkingSpace', { id: TOAST_ID }),
   });
 
   const postMediaUpload = useMutation({
@@ -70,10 +71,9 @@ export default function useAddCoWorkingSpace(props: Readonly<ComponentProps>) {
                 title: values.title,
                 address: values.address,
                 mapsURL: values.mapsURL,
-                location: values.location.map(
-                  (c) => c.title,
-                ) as LocationCategories,
-                imageURL: [presignedUrl.mediaUrl],
+                description: values.description,
+                location: values.location,
+                imageURL: presignedUrl.mediaUrl,
               },
             });
             return presignedUrl.mediaUrl;
@@ -86,10 +86,8 @@ export default function useAddCoWorkingSpace(props: Readonly<ComponentProps>) {
             address: values.address,
             mapsURL: values.mapsURL,
             description: values.description,
-            location: values.location.map(
-              (c) => c.title,
-            ) as LocationCategories,
-            imageURL: pendingUpload ? [pendingUpload] : [],
+            location: values.location,
+            imageURL: pendingUpload ? pendingUpload : '',
           },
         });
       }
@@ -99,6 +97,5 @@ export default function useAddCoWorkingSpace(props: Readonly<ComponentProps>) {
     }
   };
 
-  return { categoryOptions, form, onSubmit, image, setImage };
+  return { form, onSubmit, image, setImage };
 }
-

@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import { useLocationCategories } from './-useLocationCategories';
 import { useForm } from 'react-hook-form';
-import { VoucherSchema, VoucherSchemaType} from './-constants';
+import { VoucherSchema, VoucherSchemaType } from './-constants';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { api, queryClient } from '~/api/client';
@@ -20,7 +19,6 @@ export default function useVoucher(props: Readonly<ComponentProps>) {
 
   const [image, setImage] = useState<FileUpload | null>(null);
   const [pendingUpload, setPendingUpload] = useState<string | null>(null);
-  const categoryOptions = useLocationCategories();
 
   const form = useForm<VoucherSchemaType>({
     resolver: zodResolver(VoucherSchema),
@@ -69,9 +67,10 @@ export default function useVoucher(props: Readonly<ComponentProps>) {
               requestBody: {
                 title: values.title,
                 link: values.link,
-                periodeAkhir: values.periodeAkhir,
-                periodeAwal: values.periodeAwal,
-                imageURL: [presignedUrl.mediaUrl],
+                endPeriod: values.periodeAkhir,
+                startPeriod: values.periodeAwal,
+                description: values.description,
+                imageURL: presignedUrl.mediaUrl,
               },
             });
             return presignedUrl.mediaUrl;
@@ -82,10 +81,10 @@ export default function useVoucher(props: Readonly<ComponentProps>) {
           requestBody: {
             title: values.title,
             link: values.link,
-            periodeAwal: values.periodeAwal,
-            periodeAkhir: values.periodeAkhir,
+            startPeriod: values.periodeAwal,
+            endPeriod: values.periodeAkhir,
             description: values.description,
-            imageURL: pendingUpload ? [pendingUpload] : [],
+            imageURL: pendingUpload ? pendingUpload : '',
           },
         });
       }
@@ -97,4 +96,3 @@ export default function useVoucher(props: Readonly<ComponentProps>) {
 
   return { form, onSubmit, image, setImage };
 }
-

@@ -18,10 +18,9 @@ type ComponentProps = {
 export default function AddVoucherDialog(props: Readonly<ComponentProps>) {
   const { isOpen, setOpen, constraintRef } = props;
 
-  const { form, onSubmit, image, setImage } =
-    useAddVoucher({
-      onSubmitSuccess: () => setOpen(false),
-    });
+  const { form, onSubmit, image, setImage } = useAddVoucher({
+    onSubmitSuccess: () => setOpen(false),
+  });
 
   useEffect(() => {
     if (!isOpen) {

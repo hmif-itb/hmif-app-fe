@@ -16,10 +16,9 @@ type ComponentProps = {
 export function AddVoucherDrawer(props: Readonly<ComponentProps>) {
   const { isOpen, setOpen } = props;
 
-  const {form, onSubmit, image, setImage } =
-    useAddVoucher({
-      onSubmitSuccess: () => setOpen(false),
-    });
+  const { form, onSubmit, image, setImage } = useAddVoucher({
+    onSubmitSuccess: () => setOpen(false),
+  });
 
   useEffect(() => {
     if (!isOpen) {

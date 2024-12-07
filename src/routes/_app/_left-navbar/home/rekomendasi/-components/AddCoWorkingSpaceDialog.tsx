@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import CategoryIcon from '~/assets/icons/competition/category.svg';
+import HouseIcon from '~/assets/icons/rekomendasi/home.svg';
 import ClockIcon from '~/assets/icons/clock.svg';
 import DocsIcon from '~/assets/icons/rekomendasi/docs.svg';
 import LinkIcon from '~/assets/icons/competition/link.svg';
@@ -17,15 +17,19 @@ type ComponentProps = {
   constraintRef: React.MutableRefObject<HTMLElement | null>;
 };
 
-export default function AddCoWorkingSpaceDialog(props: Readonly<ComponentProps>) {
+export default function AddCoWorkingSpaceDialog(
+  props: Readonly<ComponentProps>,
+) {
   const { isOpen, setOpen, constraintRef } = props;
 
-  
-  const { categoryOptions, form, onSubmit, image, setImage } =
-    useAddCoWorkingSpace({
-      onSubmitSuccess: () => setOpen(false),
-    });
-    
+  const options = [
+    { id: 'Ganesha', title: 'Ganesha' },
+    { id: 'Jatinangor', title: 'Jatinangor' },
+  ];
+
+  const { form, onSubmit, image, setImage } = useAddCoWorkingSpace({
+    onSubmitSuccess: () => setOpen(false),
+  });
 
   useEffect(() => {
     if (!isOpen) {
@@ -52,16 +56,15 @@ export default function AddCoWorkingSpaceDialog(props: Readonly<ComponentProps>)
         placeholder="Add Coworking Space Name"
         iconClassName="size-6 opacity-0"
       />
-      
 
       <SingleSelect
-        icon={CategoryIcon}
         form={form}
         name="location"
-        options={categoryOptions}
-        placeholder="Choose Location"
+        options={options}
+        placeholder="Select Location"
+        icon={HouseIcon}
         iconClassName="size-6"
-        className="py-3 text-base"
+        className="py-4 lg:py-2"
       />
 
       <FormTextField
@@ -73,20 +76,12 @@ export default function AddCoWorkingSpaceDialog(props: Readonly<ComponentProps>)
         iconClassName="size-6"
       />
 
-    <FormTextField
+      <FormTextField
         icon={LinkIcon}
         form={form}
         name="mapsURL"
         placeholder="Add Maps Link"
         inputClassName="py-3 text-base"
-        iconClassName="size-5"
-      />
-
-      <Attachment
-        icon={LinkIcon}
-        image={image}
-        setImage={setImage}
-        placeholder="Add Attachment"
         iconClassName="size-5"
       />
 
@@ -101,6 +96,13 @@ export default function AddCoWorkingSpaceDialog(props: Readonly<ComponentProps>)
         iconClassName="size-6"
       />
 
+      <Attachment
+        icon={LinkIcon}
+        image={image}
+        setImage={setImage}
+        placeholder="Add Attachment"
+        iconClassName="size-5"
+      />
     </DesktopForm>
   );
 }

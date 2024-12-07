@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
-import DocsIcon from '~/assets/icons/rekomendasi/docs.svg'
 import BookIcon from '~/assets/icons/calendar/book.svg';
 import LinkIcon from '~/assets/icons/competition/link.svg';
 import MarkerIcon from '~/assets/icons/rekomendasi/marker.svg';
+import HouseIcon from '~/assets/icons/rekomendasi/home.svg';
 import Attachment from '~/components/custom-form/fields/Attachment';
 import FormTextField from '~/components/custom-form/fields/FormTextField';
 import MobileForm from '~/components/custom-form/MobileForm';
@@ -15,12 +15,16 @@ type ComponentProps = {
 };
 
 export function AddCoWorkingSpaceDrawer(props: Readonly<ComponentProps>) {
+  const options = [
+    { id: 'Ganesha', title: 'Ganesha' },
+    { id: 'Jatinangor', title: 'Jatinangor' },
+  ];
+
   const { isOpen, setOpen } = props;
 
-  const { categoryOptions, form, onSubmit, image, setImage } =
-    useAddCoWorkingSpace({
-      onSubmitSuccess: () => setOpen(false),
-    });
+  const { form, onSubmit, image, setImage } = useAddCoWorkingSpace({
+    onSubmitSuccess: () => setOpen(false),
+  });
 
   useEffect(() => {
     if (!isOpen) {
@@ -40,14 +44,14 @@ export function AddCoWorkingSpaceDrawer(props: Readonly<ComponentProps>) {
       <FormTextField form={form} name="title" placeholder="Add Title" />
 
       <SingleSelect
-          form={form}
-          name="location"
-          icon={BookIcon}
-          iconClassName="size-6"
-          placeholder="Add Subject"
-          className="py-4 lg:py-2"
-          options={categoryOptions}
-        />
+        form={form}
+        name="location"
+        options={options}
+        placeholder="Select Location"
+        icon={HouseIcon}
+        iconClassName="size-6"
+        className="py-4 lg:py-2"
+      />
 
       <FormTextField
         icon={MarkerIcon}
@@ -75,7 +79,6 @@ export function AddCoWorkingSpaceDrawer(props: Readonly<ComponentProps>) {
         inputClassName="py-3 text-base"
         iconClassName="size-5"
       />
-      
 
       <Attachment
         icon={LinkIcon}
@@ -84,7 +87,6 @@ export function AddCoWorkingSpaceDrawer(props: Readonly<ComponentProps>) {
         placeholder="Add Attachment"
         iconClassName="size-5 opacity-0"
       />
-      
     </MobileForm>
   );
 }

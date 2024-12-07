@@ -121,7 +121,7 @@ export default function MultiSelect<T extends FieldValues>(
                             ...form.getValues(name),
                             opt,
                             // eslint-disable-next-line
-                      ] as any);
+                          ] as any);
                       }}
                       className="gap-2"
                       key={idx}

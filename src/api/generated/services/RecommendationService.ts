@@ -4,7 +4,6 @@
 /* eslint-disable */
 import type { Voucher } from '../models/Voucher';
 import type { CoWorking } from '../models/CoWorking';
-import type { LocationCategories } from '../models/LocationCategories';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import type { BaseHttpRequest } from '../core/BaseHttpRequest';
 export class RecommendationService {
@@ -18,8 +17,8 @@ export class RecommendationService {
   }: {
     requestBody?: {
       title: string;
-      imageURL: Array<string>;
-      location: LocationCategories;
+      imageURL: string;
+      location: string;
       address: string;
       mapsURL: string;
       description?: string | null;
@@ -47,7 +46,7 @@ export class RecommendationService {
   }> {
     return this.httpRequest.request({
       method: 'POST',
-      url: '/api/rekomendasi/co-working-space',
+      url: '/api/recommendation/co-working-space',
       body: requestBody,
       mediaType: 'application/json',
       errors: {
@@ -74,7 +73,7 @@ export class RecommendationService {
   }> {
     return this.httpRequest.request({
       method: 'GET',
-      url: '/api/rekomendasi/co-working-space',
+      url: '/api/recommendation/co-working-space',
       query: {
         'filter': filter,
         'offset': offset,
@@ -96,7 +95,7 @@ export class RecommendationService {
     requestBody?: {
         title?: string;
         imageURL?: Array<string>;
-        location?: LocationCategories;
+        location?: string;
         address?: string;
         mapsURL?: string;
         description?: string | null;
@@ -124,7 +123,7 @@ export class RecommendationService {
   }> {
     return this.httpRequest.request({
       method: 'PUT',
-      url: '/api/rekomendasi/co-working-space/{id}',
+      url: '/api/recommendation/co-working-space/{id}',
       path: {
         'id': id,
       },
@@ -150,7 +149,7 @@ export class RecommendationService {
   }): CancelablePromise<CoWorking> {
     return this.httpRequest.request({
       method: 'DELETE',
-      url: '/api/rekomendasi/co-working-space/{coWorkingSpaceId}',
+      url: '/api/recommendation/co-working-space/{coWorkingSpaceId}',
       path: {
         'coWorkingSpaceId': coWorkingSpaceId,
       },
@@ -171,18 +170,18 @@ export class RecommendationService {
   }: {
     requestBody?: {
       title: string;
-      imageURL: Array<string>;
+      imageURL: string;
       link: string;
-      periodeAwal?: string | null;
-      periodeAkhir?: string | null;
+      startPeriod?: string | null;
+      endPeriod?: string | null;
       description?: string | null;
     },
   }): CancelablePromise<{
     voucherId: string;
     title: string;
     link: string;
-    periodeAwal: string | null;
-    periodeAkhir: string | null;
+    startPeriod: string | null;
+    endPeriod: string | null;
     description: string | null
     imageURL: Array<{
       voucherId: string;
@@ -200,7 +199,7 @@ export class RecommendationService {
   }> {
     return this.httpRequest.request({
       method: 'POST',
-      url: '/api/rekomendasi/voucher',
+      url: '/api/recommendation/voucher',
       body: requestBody,
       mediaType: 'application/json',
       errors: {
@@ -227,7 +226,7 @@ export class RecommendationService {
   }> {
     return this.httpRequest.request({
       method: 'GET',
-      url: '/api/rekomendasi/voucher',
+      url: '/api/recommendation/voucher',
       query: {
         'filter': filter,
         'offset': offset,
@@ -277,7 +276,7 @@ export class RecommendationService {
   }> {
     return this.httpRequest.request({
       method: 'PUT',
-      url: '/api/rekomendasi/voucher/{id}',
+      url: '/api/recommendation/voucher/{id}',
       path: {
         'id': id,
       },
@@ -303,7 +302,7 @@ export class RecommendationService {
   }): CancelablePromise<Voucher> {
     return this.httpRequest.request({
       method: 'DELETE',
-      url: '/api/rekomendasi/voucher/{voucherId}',
+      url: '/api/recommendation/voucher/{voucherId}',
       path: {
         'voucherId': voucherId,
       },

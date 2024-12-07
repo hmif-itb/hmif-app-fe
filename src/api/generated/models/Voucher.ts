@@ -4,10 +4,10 @@
 /* eslint-disable */
 export type Voucher = {
   title: string;
-  imageUrl: string;
+  imageURL: string;
   link: string| null;
-  periodeAwal: string| null;
-  periodeAkhir: string| null;
+  startPeriod: string| null;
+  endPeriod: string| null;
   description: string | null;
 };
 
