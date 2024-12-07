@@ -158,7 +158,7 @@ export function AddAnnouncementPage({
       ? setImages((prev:any) => {
           return prev.filter((image, index) => index !== idx);
         })
-      : setFiles((prev:any => {
+      : setFiles((prev:any) => {
           return prev.filter((file, index) => index !== idx);
         });
   };
