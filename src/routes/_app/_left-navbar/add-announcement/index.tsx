@@ -84,7 +84,7 @@ export function AddAnnouncementPage({
 
   const mobileHandleSuccess = () => navigate({ to: '/timeline' });
   const desktopHandleSuccess = () =>
-    navigate({ search: (prev:any) => ({ ...prev, showAnnounce: undefined }) });
+    navigate({ search: (prev) => ({ ...prev, showAnnounce: undefined }) });
 
   const postInfo = useMutation({
     mutationFn: api.info.createInfo.bind(api.info),
@@ -155,10 +155,10 @@ export function AddAnnouncementPage({
 
   const deleteById = (images: boolean, idx: number) => {
     images
-      ? setImages((prev:any) => {
+      ? setImages((prev) => {
           return prev.filter((image, index) => index !== idx);
         })
-      : setFiles((prev:any) => {
+      : setFiles((prev) => {
           return prev.filter((file, index) => index !== idx);
         });
   };
