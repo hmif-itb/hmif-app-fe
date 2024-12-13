@@ -8,6 +8,7 @@ import ArrowBack from '~/assets/icons/curhat/arrow-back.svg';
 import CloseReply from '~/assets/icons/curhat/close.svg';
 import ProfileIcon from '~/assets/icons/curhat/profile.svg';
 import SendIcon from '~/assets/icons/curhat/send-icon.svg';
+import PinIcon from '~/assets/icons/curhat/pin-icon-green.svg';
 import { Button } from '~/components/ui/button';
 import { TextField } from '~/components/ui/textfield';
 import { queryClient } from '~/api/client';
@@ -114,8 +115,15 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chat, onBack }) => {
         >
           <img src={ArrowBack} alt="Back" className="size-6" />
         </Button>
-        <div className="flex size-[46px] items-center justify-center rounded-full bg-[#E8C55F]">
+        <div className="relative flex size-[46px] items-center justify-center rounded-full bg-[#E8C55F]">
           <img src={ProfileIcon} alt="Profile" className="size-[26px]" />
+          {chat.isPinned && (
+            <img
+              src={PinIcon}
+              alt="Pin"
+              className="absolute bottom-0 right-0 size-[15px]"
+            />
+          )}
         </div>
         <h2 className="ml-3 capitalize text-white">{chat.title}</h2>
       </div>
