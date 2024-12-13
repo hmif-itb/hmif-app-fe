@@ -6,8 +6,10 @@ import type { Chatroom } from '../models/Chatroom';
 import type { ListChatroom } from '../models/ListChatroom';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import type { BaseHttpRequest } from '../core/BaseHttpRequest';
+
 export class CurhatService {
   constructor(public readonly httpRequest: BaseHttpRequest) {}
+
   /**
    * Create new chatroom
    * @returns Chatroom Chatroom created
@@ -22,6 +24,7 @@ export class CurhatService {
       },
     });
   }
+
   /**
    * Get user chatrooms
    * @returns ListChatroom Get user chatrooms
@@ -36,6 +39,7 @@ export class CurhatService {
       },
     });
   }
+
   /**
    * @returns any Chatroom deleted
    * @throws ApiError
@@ -60,6 +64,7 @@ export class CurhatService {
       },
     });
   }
+
   /**
    * Pin/unpin chatroom
    * @returns any Pin/unpin success
