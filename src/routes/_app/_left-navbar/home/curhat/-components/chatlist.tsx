@@ -93,7 +93,7 @@ const ChatList: React.FC<ChatListProps> = ({
 
       {/* Chatrooms */}
       <div className="mt-7 w-full">
-        {chats.map((chat) => (
+        {Object.values(chats).map((chat) => (
           <div
             key={chat.id}
             className={clsx(
@@ -162,15 +162,16 @@ const ChatList: React.FC<ChatListProps> = ({
         ))}
       </div>
 
-      {!user?.roles.includes('curhatadmin') && chats.length < 3 && (
-        <Button
-          size="icon-md"
-          className="absolute bottom-24 right-4 size-[74px] rounded-full border border-green-300 bg-yellow-75"
-          onClick={handleCreate}
-        >
-          <img src={MessageIcon} alt="create chatroom" className="size-10" />
-        </Button>
-      )}
+      {!user?.roles.includes('curhatadmin') &&
+        Object.keys(chats).length < 3 && (
+          <Button
+            size="icon-md"
+            className="absolute bottom-24 right-4 size-[74px] rounded-full border border-green-300 bg-yellow-75"
+            onClick={handleCreate}
+          >
+            <img src={MessageIcon} alt="create chatroom" className="size-10" />
+          </Button>
+        )}
     </div>
   );
 };

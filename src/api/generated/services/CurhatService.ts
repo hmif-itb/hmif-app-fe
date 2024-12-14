@@ -61,6 +61,34 @@ export class CurhatService {
     });
   }
   /**
+   * Get unread chatroom messages count
+   * @returns any Get unread chatroom messages count success
+   * @throws ApiError
+   */
+  public unreadCountChatroomMessages({
+    chatroomId,
+  }: {
+    /**
+     * Id of chatroom
+     */
+    chatroomId: string,
+  }): CancelablePromise<Array<{
+    chatroomId: string;
+    unreadCount: number;
+  }>> {
+    return this.httpRequest.request({
+      method: 'GET',
+      url: '/api/curhat/chatrooms/unread',
+      path: {
+        'chatroomId': chatroomId,
+      },
+      errors: {
+        401: `Unauthorized`,
+        500: `Internal Server Error`,
+      },
+    });
+  }
+  /**
    * Pin/unpin chatroom
    * @returns any Pin/unpin success
    * @throws ApiError

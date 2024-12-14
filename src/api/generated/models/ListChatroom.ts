@@ -3,4 +3,4 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { Chatroom } from './Chatroom';
-export type ListChatroom = Array<Chatroom>;
+export type ListChatroom = Record<string, Chatroom>;

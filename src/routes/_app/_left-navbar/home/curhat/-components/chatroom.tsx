@@ -8,9 +8,8 @@ import ArrowBack from '~/assets/icons/curhat/arrow-back.svg';
 import ProfileIcon from '~/assets/icons/curhat/profile.svg';
 import SendIcon from '~/assets/icons/curhat/send-icon.svg';
 import { Button } from '~/components/ui/button';
-import { TextField } from '~/components/ui/textfield';
 import { queryClient } from '~/api/client';
-import { on } from 'stream';
+import { Textarea } from '~/components/ui/textarea';
 
 // Define the message and chat room types
 interface Message {
@@ -91,6 +90,18 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chat, onBack }) => {
     queryClient.invalidateQueries({ queryKey: ['chatrooms'] });
   };
 
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      handleSubmit();
+      e.preventDefault();
+    }
+  };
+
+  const handleSubmit = () => {
+    sendMessage(currMessage);
+    setCurrMessage('');
+  };
+
   return (
     <div className="relative flex size-full flex-col bg-[url(/img/curhatyuk/Background.png)] bg-cover bg-center bg-no-repeat md:w-full">
       {/* Chat header */}
@@ -141,21 +152,18 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chat, onBack }) => {
 
       {/* Chat input */}
       <div className="mb-[75px] flex w-full justify-center rounded-t-xl bg-[#30764B] px-2 py-4 lg:bottom-0 lg:mb-0">
-        <TextField
-          type="text"
+        <Textarea
           placeholder="Type your message here..."
           className="flex-auto text-sm"
-          inputClassName="p-2"
+          inputClassName="p-2 min-h-3"
           value={currMessage}
           onChange={(e) => setCurrMessage(e.target.value)}
+          onKeyDown={handleKeyPress}
         />
         <Button
           variant="link"
           className="p-0"
-          onClick={() => {
-            sendMessage(currMessage);
-            setCurrMessage('');
-          }}
+          onClick={handleSubmit}
           disabled={currMessage.trim() === ''} // Disable button when message is empty or only spaces
         >
           <img src={SendIcon} alt="Send" className="size-10" />

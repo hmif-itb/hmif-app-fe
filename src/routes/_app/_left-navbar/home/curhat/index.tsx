@@ -5,9 +5,11 @@ import ChatRoom from './-components/chatroom'; // Ensure the correct path to you
 import { useQuery } from '@tanstack/react-query';
 import { api } from '~/api/client';
 import { Chatroom } from '~/api/generated';
+import { io, Socket } from 'socket.io-client';
 
 const Curhat: React.FC = () => {
   const [selectedChat, setSelectedChat] = useState<Chatroom | null>(null);
+  const [sockets, setSockets] = useState<Map<string, Socket>>(new Map());
 
   const { data: chatRooms } = useQuery({
     queryKey: ['chatrooms'],
@@ -16,15 +18,36 @@ const Curhat: React.FC = () => {
 
   // Check if there chatRooms is empty (no selected chats)
   useEffect(() => {
-    if (!chatRooms || chatRooms.length === 0) {
+    if (!chatRooms || Object.keys(chatRooms).length === 0) {
       setSelectedChat(null);
+      setSockets(new Map());
+    } else {
+      const tempSockets = new Map();
+
+      Object.keys(chatRooms).forEach((key) =>
+        tempSockets.set(
+          key,
+          io(import.meta.env.VITE_API_URL, {
+            // autoConnect: false,
+            auth: { chatroomId: key },
+          }),
+        ),
+      );
+
+      setSockets(tempSockets);
     }
   }, [chatRooms]);
+
+  useEffect(() => {
+    return () => {
+      sockets.forEach((socket) => socket.disconnect());
+    };
+  }, [sockets]);
 
   return (
     <div className="relative flex h-screen flex-col md:flex-row">
       <ChatList
-        chats={chatRooms ?? []}
+        chats={chatRooms ?? {}}
         setSelectedChat={setSelectedChat}
         selectedId={selectedChat?.id || ''}
       />
