@@ -5,8 +5,10 @@ import { Chatroom, ChatroomMessage } from '~/api/generated';
 import useSession from '~/hooks/auth/useSession';
 import MessageBubble from './MessageBubble';
 import ArrowBack from '~/assets/icons/curhat/arrow-back.svg';
+import CloseReply from '~/assets/icons/curhat/close.svg';
 import ProfileIcon from '~/assets/icons/curhat/profile.svg';
 import SendIcon from '~/assets/icons/curhat/send-icon.svg';
+import PinIcon from '~/assets/icons/curhat/pin-icon-green.svg';
 import { Button } from '~/components/ui/button';
 import { queryClient } from '~/api/client';
 import { Textarea } from '~/components/ui/textarea';
@@ -40,6 +42,8 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chat, onBack }) => {
     chat.messages || [],
   );
   const [currMessage, setCurrMessage] = React.useState('');
+  const [replyMessage, setReplyMessage] =
+    React.useState<ChatroomMessage | null>(null);
   const user = useSession();
 
   useEffect(() => {
@@ -77,7 +81,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chat, onBack }) => {
         content: message,
         createdAt: new Date().toISOString(),
         chatroomId: chat.id,
-        replyId: null,
+        replyId: replyMessage?.id || null,
         isSender: true,
       },
       ...prev,
@@ -86,7 +90,9 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chat, onBack }) => {
       message,
       chatroomId: chat.id,
       userId: user.id,
+      replyId: replyMessage?.id || null,
     });
+    setReplyMessage(null);
     queryClient.invalidateQueries({ queryKey: ['chatrooms'] });
   };
 
@@ -100,6 +106,10 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chat, onBack }) => {
   const handleSubmit = () => {
     sendMessage(currMessage);
     setCurrMessage('');
+  };
+
+  const handleReplyClick = (message: ChatroomMessage) => {
+    setReplyMessage(message);
   };
 
   return (
@@ -117,8 +127,15 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chat, onBack }) => {
         >
           <img src={ArrowBack} alt="Back" className="size-6" />
         </Button>
-        <div className="flex size-[46px] items-center justify-center rounded-full bg-[#E8C55F]">
+        <div className="relative flex size-[46px] items-center justify-center rounded-full bg-[#E8C55F]">
           <img src={ProfileIcon} alt="Profile" className="size-[26px]" />
+          {chat.isPinned && (
+            <img
+              src={PinIcon}
+              alt="Pin"
+              className="absolute bottom-0 right-0 size-[15px]"
+            />
+          )}
         </div>
         <h2 className="ml-3 capitalize text-white">{chat.title}</h2>
       </div>
@@ -131,7 +148,6 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chat, onBack }) => {
         })}
       >
         {messages.length === 0 ? (
-          // Show text when there are no message bubbles
           <div className="flex flex-col items-center justify-center gap-3 ">
             <p className="text-5xl font-bold text-black">Chat Now!</p>
             <h2 className="text-lg font-medium text-black">
@@ -139,19 +155,51 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chat, onBack }) => {
             </h2>
           </div>
         ) : (
-          messages.map((message, idx) => (
-            <MessageBubble
-              key={idx}
-              message={message.content}
-              isSender={message.isSender ?? false}
-              timestamp={message.createdAt}
-            />
-          ))
+          messages.map((message, idx) => {
+            const repliedMessage = messages.find(
+              (msg) => msg.id === message.replyId,
+            );
+            return (
+              <MessageBubble
+                key={idx}
+                message={message.content}
+                isSender={message.isSender ?? false}
+                timestamp={message.createdAt}
+                repliedMessage={repliedMessage?.content}
+                onReply={() => handleReplyClick(message)}
+              />
+            );
+          })
         )}
       </div>
 
+      {/* Reply preview */}
+      {replyMessage && (
+        <div className="relative flex items-center gap-2 rounded-t-xl bg-[#30764B] px-2 pt-4">
+          <div className="flex-auto rounded-lg border-l-4 border-l-[#F3E8C4] bg-[#363538] p-3 text-sm text-[#FFFFFF66]">
+            {replyMessage.content.length > 95
+              ? `${replyMessage.content.slice(0, 95)} ...`
+              : replyMessage.content}
+          </div>
+          <Button
+            variant="link"
+            className="flex items-center justify-center p-0"
+            onClick={() => setReplyMessage(null)}
+          >
+            <img src={CloseReply} alt="Close" className="size-10" />
+          </Button>
+        </div>
+      )}
+
       {/* Chat input */}
-      <div className="mb-[75px] flex w-full justify-center rounded-t-xl bg-[#30764B] px-2 py-4 lg:bottom-0 lg:mb-0">
+      <div
+        className={clsx(
+          'mb-[75px] flex w-full justify-center bg-[#30764B] px-2 py-4 lg:bottom-0 lg:mb-0',
+          {
+            'rounded-t-xl': !replyMessage,
+          },
+        )}
+      >
         <Textarea
           placeholder="Type your message here..."
           className="flex-auto text-sm"

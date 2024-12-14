@@ -11,6 +11,8 @@ import HamburgerIcon from '~/assets/icons/timeline/hamburger.svg';
 import TrashIcon from '~/assets/icons/timeline/trash.svg';
 import MessageIcon from '~/assets/icons/curhat/message.svg';
 import ArrowBack from '~/assets/icons/curhat/arrow-back-black.svg';
+import PinIconYellow from '~/assets/icons/curhat/pin-icon-yellow.svg';
+import PinIcon from '~/assets/icons/curhat/pin-icon.svg';
 import { Button } from '~/components/ui/button';
 import { useMutation } from '@tanstack/react-query';
 import { api, queryClient } from '~/api/client';
@@ -58,6 +60,19 @@ const ChatList: React.FC<ChatListProps> = ({
     },
   });
 
+  const pinChatroom = useMutation({
+    mutationFn: api.curhat.pinChatroom.bind(api.curhat),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['chatrooms'],
+      });
+      toast.success('Chatroom updated successfully');
+    },
+    onError: () => {
+      toast.error('Failed to update chatroom');
+    },
+  });
+
   const handleDelete = (id: string) => {
     toast.loading('Please wait...', { id: TOAST_ID_DELETE });
     deleteChatroom.mutate({
@@ -68,6 +83,15 @@ const ChatList: React.FC<ChatListProps> = ({
   const handleCreate = () => {
     toast.loading('Please wait...', { id: TOAST_ID_CREATE });
     createChatroom.mutate();
+  };
+
+  const handlePin = (id: string, isPinned: boolean) => {
+    pinChatroom.mutate({
+      chatroomId: id,
+      requestBody: {
+        isPinned: !isPinned,
+      },
+    });
   };
 
   return (
@@ -105,7 +129,14 @@ const ChatList: React.FC<ChatListProps> = ({
             onClick={() => setSelectedChat(chat)}
           >
             <div className="flex items-center gap-4">
-              <div className="flex size-14 items-center justify-center rounded-full bg-[#30764B]">
+              <div className="relative flex size-14 items-center justify-center rounded-full bg-[#30764B]">
+                {chat.isPinned && (
+                  <img
+                    src={PinIconYellow}
+                    alt="Pin"
+                    className="absolute bottom-0 right-0 size-[15px]"
+                  />
+                )}
                 <img src={ProfileIcon} alt="Profile" className="size-9" />
               </div>
               <div>
@@ -131,7 +162,22 @@ const ChatList: React.FC<ChatListProps> = ({
                 <PopoverContent className="w-fit py-2 pl-2 pr-3" align="end">
                   <ul className="flex flex-col gap-2">
                     {true && (
-                      <li className="leading-none">
+                      <li className="flex flex-col gap-3 leading-none">
+                        <Button
+                          variant="link"
+                          className="items-center p-0 text-sm font-normal md:text-sm"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handlePin(chat.id, chat.isPinned || false);
+                          }}
+                        >
+                          <img
+                            src={PinIcon}
+                            className="size-4 md:size-5"
+                            alt=""
+                          />
+                          {chat.isPinned ? 'Unpin' : 'Pin'}
+                        </Button>
                         <Button
                           variant="link"
                           className="items-center p-0 text-sm font-normal text-[#FF3B30] md:text-sm"
