@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { io } from 'socket.io-client';
+import { Socket } from 'socket.io-client';
 import clsx from 'clsx';
 import { Chatroom, ChatroomMessage } from '~/api/generated';
 import useSession from '~/hooks/auth/useSession';
@@ -31,13 +31,14 @@ interface ChatRoom {
 interface ChatRoomProps {
   chat: Chatroom;
   onBack: () => void;
+  socket?: Socket;
 }
 
-const socket = io(import.meta.env.VITE_API_URL, {
-  autoConnect: false,
-});
+const ChatRoom: React.FC<ChatRoomProps> = ({ chat, onBack, socket }) => {
+  if (!socket) {
+    throw new Error('Socket is required for ChatRoom component');
+  }
 
-const ChatRoom: React.FC<ChatRoomProps> = ({ chat, onBack }) => {
   const [messages, setMessages] = React.useState<ChatroomMessage[]>(
     chat.messages || [],
   );
@@ -50,16 +51,6 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chat, onBack }) => {
     // Reset messages when the chat changes
     setMessages(chat.messages || []);
 
-    if (!socket.connected) {
-      socket.auth = { chatroomId: chat.id };
-      socket.connect();
-    } else {
-      // Disconnect and reconnect for the new chatroom
-      socket.disconnect();
-      socket.auth = { chatroomId: chat.id };
-      socket.connect();
-    }
-
     function handleReply(reply: ChatroomMessage) {
       setMessages((prev) => [reply, ...prev]);
     }
@@ -68,8 +59,8 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chat, onBack }) => {
 
     return () => {
       socket.off('reply', handleReply);
-      socket.disconnect(); // Cleanup on component unmount or chat change
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chat]);
 
   const sendMessage = (message: string) => {

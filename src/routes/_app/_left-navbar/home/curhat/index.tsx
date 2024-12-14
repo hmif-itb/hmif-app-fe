@@ -21,14 +21,13 @@ const Curhat: React.FC = () => {
     if (!chatRooms || Object.keys(chatRooms).length === 0) {
       setSelectedChat(null);
       setSockets(new Map());
-    } else {
+    } else if (sockets.size === 0) {
       const tempSockets = new Map();
 
       Object.keys(chatRooms).forEach((key) =>
         tempSockets.set(
           key,
           io(import.meta.env.VITE_API_URL, {
-            // autoConnect: false,
             auth: { chatroomId: key },
           }),
         ),
@@ -36,6 +35,7 @@ const Curhat: React.FC = () => {
 
       setSockets(tempSockets);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chatRooms]);
 
   useEffect(() => {
@@ -69,6 +69,7 @@ const Curhat: React.FC = () => {
           <div className="absolute inset-0 z-10 flex flex-col bg-white md:hidden">
             {/* ChatRoom component */}
             <ChatRoom
+              socket={sockets.get(selectedChat.id)}
               chat={selectedChat}
               onBack={() => setSelectedChat(null)}
             />
@@ -77,6 +78,7 @@ const Curhat: React.FC = () => {
           {/* On medium and large screens, the chat room will appear alongside the chat list */}
           <div className="hidden md:block md:w-3/5">
             <ChatRoom
+              socket={sockets.get(selectedChat.id)}
               chat={selectedChat}
               onBack={() => setSelectedChat(null)}
             />
