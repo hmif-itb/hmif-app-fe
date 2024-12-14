@@ -6,10 +6,8 @@ import type { Chatroom } from '../models/Chatroom';
 import type { ListChatroom } from '../models/ListChatroom';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import type { BaseHttpRequest } from '../core/BaseHttpRequest';
-
 export class CurhatService {
   constructor(public readonly httpRequest: BaseHttpRequest) {}
-
   /**
    * Create new chatroom
    * @returns Chatroom Chatroom created
@@ -24,7 +22,6 @@ export class CurhatService {
       },
     });
   }
-
   /**
    * Get user chatrooms
    * @returns ListChatroom Get user chatrooms
@@ -39,7 +36,6 @@ export class CurhatService {
       },
     });
   }
-
   /**
    * @returns any Chatroom deleted
    * @throws ApiError
@@ -50,13 +46,13 @@ export class CurhatService {
     /**
      * Id of chatroom
      */
-    chatroomId: string;
+    chatroomId: string,
   }): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'DELETE',
       url: '/api/curhat/chatroom/{chatroomId}',
       path: {
-        chatroomId: chatroomId,
+        'chatroomId': chatroomId,
       },
       errors: {
         400: `Bad request`,
@@ -64,7 +60,6 @@ export class CurhatService {
       },
     });
   }
-
   /**
    * Get unread chatroom messages count
    * @returns any Get unread chatroom messages count success
@@ -105,16 +100,16 @@ export class CurhatService {
     /**
      * Id of chatroom
      */
-    chatroomId: string;
+    chatroomId: string,
     requestBody: {
       isPinned: boolean;
-    };
+    },
   }): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'PUT',
       url: '/api/curhat/chatroom/{chatroomId}/pin',
       path: {
-        chatroomId: chatroomId,
+        'chatroomId': chatroomId,
       },
       body: requestBody,
       mediaType: 'application/json',

@@ -12,7 +12,6 @@ import TrashIcon from '~/assets/icons/timeline/trash.svg';
 import MessageIcon from '~/assets/icons/curhat/message.svg';
 import ArrowBack from '~/assets/icons/curhat/arrow-back-black.svg';
 import PinIconYellow from '~/assets/icons/curhat/pin-icon-yellow.svg';
-import PinIcon from '~/assets/icons/curhat/pin-icon.svg';
 import { Button } from '~/components/ui/button';
 import { useMutation } from '@tanstack/react-query';
 import { api, queryClient } from '~/api/client';
@@ -20,7 +19,6 @@ import toast from 'react-hot-toast';
 import useSession from '~/hooks/auth/useSession';
 import { useNavigate } from '@tanstack/react-router';
 import LabelDropdown from '../-components/LabelDropdown';
-import SearchAndFilter from './searchandfilter';
 
 interface ChatListProps {
   chats: ListChatroom;
@@ -30,6 +28,7 @@ interface ChatListProps {
 
 const TOAST_ID_DELETE = 'delete-chatroom-toast';
 const TOAST_ID_CREATE = 'create-chatroom-toast';
+const TOAST_ID_PIN = 'pin-chatroom-toast';
 
 const ChatList: React.FC<ChatListProps> = ({
   chats,
@@ -66,10 +65,10 @@ const ChatList: React.FC<ChatListProps> = ({
       queryClient.invalidateQueries({
         queryKey: ['chatrooms'],
       });
-      toast.success('Chatroom updated successfully');
+      toast.success('Chatroom updated successfully', { id: TOAST_ID_PIN });
     },
     onError: () => {
-      toast.error('Failed to update chatroom');
+      toast.error('Failed to update chatroom'), { id: TOAST_ID_PIN };
     },
   });
 
@@ -86,6 +85,7 @@ const ChatList: React.FC<ChatListProps> = ({
   };
 
   const handlePin = (id: string, isPinned: boolean) => {
+    toast.loading('Please wait...', { id: TOAST_ID_PIN });
     pinChatroom.mutate({
       chatroomId: id,
       requestBody: {
@@ -111,13 +111,16 @@ const ChatList: React.FC<ChatListProps> = ({
       </div>
 
       {/* Search bar and Filter */}
-      <div className="mt-3">
+      {/* <div className="mt-3">
         <SearchAndFilter />
-      </div>
+      </div> */}
 
       {/* Chatrooms */}
       <div className="mt-7 w-full">
-        {Object.values(chats).map((chat) => (
+        {[
+          ...Object.values(chats).filter((chat) => chat.isPinned === true),
+          ...Object.values(chats).filter((chat) => chat.isPinned === false),
+        ].map((chat) => (
           <div
             key={chat.id}
             className={clsx(
@@ -153,7 +156,7 @@ const ChatList: React.FC<ChatListProps> = ({
               </div>
             </div>
 
-            {chat.canDelete && (
+            {(chat.canDelete || user?.roles.includes('curhatadmin')) && (
               <Popover>
                 <PopoverTrigger onClick={(e) => e.stopPropagation()}>
                   <img src={HamburgerIcon} className="size-5" alt="" />
@@ -163,36 +166,36 @@ const ChatList: React.FC<ChatListProps> = ({
                   <ul className="flex flex-col gap-2">
                     {true && (
                       <li className="flex flex-col gap-3 leading-none">
-                        <Button
-                          variant="link"
-                          className="items-center p-0 text-sm font-normal md:text-sm"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handlePin(chat.id, chat.isPinned || false);
-                          }}
-                        >
-                          <img
-                            src={PinIcon}
-                            className="size-4 md:size-5"
-                            alt=""
-                          />
-                          {chat.isPinned ? 'Unpin' : 'Pin'}
-                        </Button>
-                        <Button
-                          variant="link"
-                          className="items-center p-0 text-sm font-normal text-[#FF3B30] md:text-sm"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleDelete(chat.id);
-                          }}
-                        >
-                          <img
-                            src={TrashIcon}
-                            className="size-5 md:size-6"
-                            alt=""
-                          />
-                          Delete
-                        </Button>
+                        {user?.roles.includes('curhatadmin') && (
+                          <Button
+                            variant="link"
+                            className="w-full items-center justify-start p-0 text-sm font-normal md:text-sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handlePin(chat.id, chat.isPinned || false);
+                            }}
+                          >
+                            {chat.isPinned ? 'Unpin' : 'Pin'}
+                          </Button>
+                        )}
+
+                        {chat.canDelete && (
+                          <Button
+                            variant="link"
+                            className="w-full items-center justify-start p-0 text-sm font-normal text-[#FF3B30] md:text-sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDelete(chat.id);
+                            }}
+                          >
+                            <img
+                              src={TrashIcon}
+                              className="size-5 md:size-6"
+                              alt=""
+                            />
+                            Delete
+                          </Button>
+                        )}
                       </li>
                     )}
                     {true && (
