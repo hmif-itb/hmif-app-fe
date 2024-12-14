@@ -164,45 +164,42 @@ const ChatList: React.FC<ChatListProps> = ({
 
                 <PopoverContent className="w-fit py-2 pl-2 pr-3" align="end">
                   <ul className="flex flex-col gap-2">
-                    {true && (
-                      <li className="flex flex-col gap-3 leading-none">
-                        {user?.roles.includes('curhatadmin') && (
-                          <Button
-                            variant="link"
-                            className="w-full items-center justify-start p-0 text-sm font-normal md:text-sm"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handlePin(chat.id, chat.isPinned || false);
-                            }}
-                          >
-                            {chat.isPinned ? 'Unpin' : 'Pin'}
-                          </Button>
-                        )}
+                    <li className="flex flex-col gap-3 leading-none">
+                      {user?.roles.includes('curhatadmin') && (
+                        <Button
+                          variant="link"
+                          className="w-full items-center justify-start p-0 text-sm font-normal md:text-sm"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handlePin(chat.id, chat.isPinned || false);
+                          }}
+                        >
+                          {chat.isPinned ? 'Unpin' : 'Pin'}
+                        </Button>
+                      )}
 
-                        {chat.canDelete && (
-                          <Button
-                            variant="link"
-                            className="w-full items-center justify-start p-0 text-sm font-normal text-[#FF3B30] md:text-sm"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleDelete(chat.id);
-                            }}
-                          >
-                            <img
-                              src={TrashIcon}
-                              className="size-5 md:size-6"
-                              alt=""
-                            />
-                            Delete
-                          </Button>
-                        )}
-                      </li>
-                    )}
-                    {true && (
-                      <li className="leading-none">
-                        <LabelDropdown chatroom={chat} />
-                      </li>
-                    )}
+                      {chat.canDelete && (
+                        <Button
+                          variant="link"
+                          className="w-full items-center justify-start p-0 text-sm font-normal text-[#FF3B30] md:text-sm"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDelete(chat.id);
+                          }}
+                        >
+                          <img
+                            src={TrashIcon}
+                            className="size-5 md:size-6"
+                            alt=""
+                          />
+                          Delete
+                        </Button>
+                      )}
+                    </li>
+
+                    <li className="leading-none">
+                      <LabelDropdown chatroom={chat} />
+                    </li>
                   </ul>
                 </PopoverContent>
               </Popover>
