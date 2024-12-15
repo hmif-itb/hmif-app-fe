@@ -32,10 +32,14 @@ const TOAST_ID_PIN = 'pin-chatroom-toast';
 
 function sortChats(a: Chatroom, b: Chatroom) {
   if (a.messages && b.messages) {
-    return (
-      new Date(b.messages[0].createdAt).getTime() -
-      new Date(a.messages[0].createdAt).getTime()
-    );
+    if (a.messages.length === 0 && b.messages.length === 0) {
+      return 0;
+    } else {
+      return (
+        new Date(b.messages[0].createdAt).getTime() -
+        new Date(a.messages[0].createdAt).getTime()
+      );
+    }
   }
   return 0;
 }
