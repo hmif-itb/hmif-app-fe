@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import clsx from 'clsx';
 import { Chatroom, ListChatroom } from '~/api/generated';
 import ProfileIcon from '~/assets/icons/curhat/profile.svg';
@@ -30,6 +30,16 @@ const TOAST_ID_DELETE = 'delete-chatroom-toast';
 const TOAST_ID_CREATE = 'create-chatroom-toast';
 const TOAST_ID_PIN = 'pin-chatroom-toast';
 
+function sortChats(a: Chatroom, b: Chatroom) {
+  if (a.messages && b.messages) {
+    return (
+      new Date(b.messages[0].createdAt).getTime() -
+      new Date(a.messages[0].createdAt).getTime()
+    );
+  }
+  return 0;
+}
+
 const ChatList: React.FC<ChatListProps> = ({
   chats,
   setSelectedChat,
@@ -38,6 +48,17 @@ const ChatList: React.FC<ChatListProps> = ({
   const user = useSession();
 
   const navigate = useNavigate();
+
+  const sortedChats = useMemo(() => {
+    return [
+      ...Object.values(chats)
+        .filter((chat) => chat.isPinned === true)
+        .sort(sortChats),
+      ...Object.values(chats)
+        .filter((chat) => chat.isPinned === false)
+        .sort(sortChats),
+    ];
+  }, [chats]);
 
   const deleteChatroom = useMutation({
     mutationFn: api.curhat.deleteChatroom.bind(api.curhat),
@@ -117,10 +138,7 @@ const ChatList: React.FC<ChatListProps> = ({
 
       {/* Chatrooms */}
       <div className="mt-7 w-full">
-        {[
-          ...Object.values(chats).filter((chat) => chat.isPinned === true),
-          ...Object.values(chats).filter((chat) => chat.isPinned === false),
-        ].map((chat) => (
+        {sortedChats.map((chat) => (
           <div
             key={chat.id}
             className={clsx(
