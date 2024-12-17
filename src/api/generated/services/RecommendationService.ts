@@ -236,4 +236,4 @@ export class RecommendationService {
       },
     });
   }
-  /**
+}
