@@ -12,7 +12,6 @@ export type ChatroomMessage = {
   reply?: {
     id: string;
     chatroomId: string;
-    userId: string;
     replyId: string | null;
     content: string;
     createdAt: string;

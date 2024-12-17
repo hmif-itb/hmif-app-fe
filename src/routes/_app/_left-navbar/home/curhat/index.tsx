@@ -5,9 +5,11 @@ import ChatRoom from './-components/chatroom'; // Ensure the correct path to you
 import { useQuery } from '@tanstack/react-query';
 import { api } from '~/api/client';
 import { Chatroom } from '~/api/generated';
+import { io, Socket } from 'socket.io-client';
 
 const Curhat: React.FC = () => {
   const [selectedChat, setSelectedChat] = useState<Chatroom | null>(null);
+  const [sockets, setSockets] = useState<Map<string, Socket>>(new Map());
 
   const { data: chatRooms } = useQuery({
     queryKey: ['chatrooms'],
@@ -16,15 +18,36 @@ const Curhat: React.FC = () => {
 
   // Check if there chatRooms is empty (no selected chats)
   useEffect(() => {
-    if (!chatRooms || chatRooms.length === 0) {
+    if (!chatRooms || Object.keys(chatRooms).length === 0) {
       setSelectedChat(null);
+      setSockets(new Map());
+    } else if (sockets.size === 0) {
+      const tempSockets = new Map();
+
+      Object.keys(chatRooms).forEach((key) =>
+        tempSockets.set(
+          key,
+          io(import.meta.env.VITE_API_URL, {
+            auth: { chatroomId: key },
+          }),
+        ),
+      );
+
+      setSockets(tempSockets);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chatRooms]);
+
+  useEffect(() => {
+    return () => {
+      sockets.forEach((socket) => socket.disconnect());
+    };
+  }, [sockets]);
 
   return (
     <div className="relative flex h-screen flex-col md:flex-row">
       <ChatList
-        chats={chatRooms ?? []}
+        chats={chatRooms ?? {}}
         setSelectedChat={setSelectedChat}
         selectedId={selectedChat?.id || ''}
       />
@@ -46,6 +69,7 @@ const Curhat: React.FC = () => {
           <div className="absolute inset-0 z-10 flex flex-col bg-white md:hidden">
             {/* ChatRoom component */}
             <ChatRoom
+              socket={sockets.get(selectedChat.id)}
               chat={selectedChat}
               onBack={() => setSelectedChat(null)}
             />
@@ -54,6 +78,7 @@ const Curhat: React.FC = () => {
           {/* On medium and large screens, the chat room will appear alongside the chat list */}
           <div className="hidden md:block md:w-3/5">
             <ChatRoom
+              socket={sockets.get(selectedChat.id)}
               chat={selectedChat}
               onBack={() => setSelectedChat(null)}
             />

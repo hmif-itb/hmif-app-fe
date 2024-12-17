@@ -1,16 +1,17 @@
 import React, { useEffect } from 'react';
-import { io } from 'socket.io-client';
+import { Socket } from 'socket.io-client';
 import clsx from 'clsx';
 import { Chatroom, ChatroomMessage } from '~/api/generated';
 import useSession from '~/hooks/auth/useSession';
 import MessageBubble from './MessageBubble';
 import ArrowBack from '~/assets/icons/curhat/arrow-back.svg';
+import CloseReply from '~/assets/icons/curhat/close.svg';
 import ProfileIcon from '~/assets/icons/curhat/profile.svg';
 import SendIcon from '~/assets/icons/curhat/send-icon.svg';
+import PinIcon from '~/assets/icons/curhat/pin-icon-green.svg';
 import { Button } from '~/components/ui/button';
-import { TextField } from '~/components/ui/textfield';
 import { queryClient } from '~/api/client';
-import { on } from 'stream';
+import { Textarea } from '~/components/ui/textarea';
 
 // Define the message and chat room types
 interface Message {
@@ -30,32 +31,25 @@ interface ChatRoom {
 interface ChatRoomProps {
   chat: Chatroom;
   onBack: () => void;
+  socket?: Socket;
 }
 
-const socket = io(import.meta.env.VITE_API_URL, {
-  autoConnect: false,
-});
+const ChatRoom: React.FC<ChatRoomProps> = ({ chat, onBack, socket }) => {
+  if (!socket) {
+    throw new Error('Socket is required for ChatRoom component');
+  }
 
-const ChatRoom: React.FC<ChatRoomProps> = ({ chat, onBack }) => {
   const [messages, setMessages] = React.useState<ChatroomMessage[]>(
     chat.messages || [],
   );
   const [currMessage, setCurrMessage] = React.useState('');
+  const [replyMessage, setReplyMessage] =
+    React.useState<ChatroomMessage | null>(null);
   const user = useSession();
 
   useEffect(() => {
     // Reset messages when the chat changes
     setMessages(chat.messages || []);
-
-    if (!socket.connected) {
-      socket.auth = { chatroomId: chat.id };
-      socket.connect();
-    } else {
-      // Disconnect and reconnect for the new chatroom
-      socket.disconnect();
-      socket.auth = { chatroomId: chat.id };
-      socket.connect();
-    }
 
     function handleReply(reply: ChatroomMessage) {
       setMessages((prev) => [reply, ...prev]);
@@ -65,8 +59,8 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chat, onBack }) => {
 
     return () => {
       socket.off('reply', handleReply);
-      socket.disconnect(); // Cleanup on component unmount or chat change
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chat]);
 
   const sendMessage = (message: string) => {
@@ -78,7 +72,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chat, onBack }) => {
         content: message,
         createdAt: new Date().toISOString(),
         chatroomId: chat.id,
-        replyId: null,
+        replyId: replyMessage?.id || null,
         isSender: true,
       },
       ...prev,
@@ -87,8 +81,26 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chat, onBack }) => {
       message,
       chatroomId: chat.id,
       userId: user.id,
+      replyId: replyMessage?.id || null,
     });
+    setReplyMessage(null);
     queryClient.invalidateQueries({ queryKey: ['chatrooms'] });
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      handleSubmit();
+      e.preventDefault();
+    }
+  };
+
+  const handleSubmit = () => {
+    sendMessage(currMessage);
+    setCurrMessage('');
+  };
+
+  const handleReplyClick = (message: ChatroomMessage) => {
+    setReplyMessage(message);
   };
 
   return (
@@ -106,8 +118,15 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chat, onBack }) => {
         >
           <img src={ArrowBack} alt="Back" className="size-6" />
         </Button>
-        <div className="flex size-[46px] items-center justify-center rounded-full bg-[#E8C55F]">
+        <div className="relative flex size-[46px] items-center justify-center rounded-full bg-[#E8C55F]">
           <img src={ProfileIcon} alt="Profile" className="size-[26px]" />
+          {chat.isPinned && (
+            <img
+              src={PinIcon}
+              alt="Pin"
+              className="absolute bottom-0 right-0 size-[15px]"
+            />
+          )}
         </div>
         <h2 className="ml-3 capitalize text-white">{chat.title}</h2>
       </div>
@@ -120,7 +139,6 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chat, onBack }) => {
         })}
       >
         {messages.length === 0 ? (
-          // Show text when there are no message bubbles
           <div className="flex flex-col items-center justify-center gap-3 ">
             <p className="text-5xl font-bold text-black">Chat Now!</p>
             <h2 className="text-lg font-medium text-black">
@@ -128,34 +146,63 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chat, onBack }) => {
             </h2>
           </div>
         ) : (
-          messages.map((message, idx) => (
-            <MessageBubble
-              key={idx}
-              message={message.content}
-              isSender={message.isSender ?? false}
-              timestamp={message.createdAt}
-            />
-          ))
+          messages.map((message, idx) => {
+            const repliedMessage = messages.find(
+              (msg) => msg.id === message.replyId,
+            );
+            return (
+              <MessageBubble
+                key={idx}
+                message={message.content}
+                isSender={message.isSender ?? false}
+                timestamp={message.createdAt}
+                repliedMessage={repliedMessage?.content}
+                onReply={() => handleReplyClick(message)}
+              />
+            );
+          })
         )}
       </div>
 
+      {/* Reply preview */}
+      {replyMessage && (
+        <div className="relative flex items-center gap-2 rounded-t-xl bg-[#30764B] px-2 pt-4">
+          <div className="flex-auto rounded-lg border-l-4 border-l-[#F3E8C4] bg-[#363538] p-3 text-sm text-[#FFFFFF66]">
+            {replyMessage.content.length > 95
+              ? `${replyMessage.content.slice(0, 95)} ...`
+              : replyMessage.content}
+          </div>
+          <Button
+            variant="link"
+            className="flex items-center justify-center p-0"
+            onClick={() => setReplyMessage(null)}
+          >
+            <img src={CloseReply} alt="Close" className="size-10" />
+          </Button>
+        </div>
+      )}
+
       {/* Chat input */}
-      <div className="mb-[75px] flex w-full justify-center rounded-t-xl bg-[#30764B] px-2 py-4 lg:bottom-0 lg:mb-0">
-        <TextField
-          type="text"
+      <div
+        className={clsx(
+          'mb-[75px] flex w-full justify-center bg-[#30764B] px-2 py-4 lg:bottom-0 lg:mb-0',
+          {
+            'rounded-t-xl': !replyMessage,
+          },
+        )}
+      >
+        <Textarea
           placeholder="Type your message here..."
           className="flex-auto text-sm"
-          inputClassName="p-2"
+          inputClassName="p-2 min-h-3"
           value={currMessage}
           onChange={(e) => setCurrMessage(e.target.value)}
+          onKeyDown={handleKeyPress}
         />
         <Button
           variant="link"
           className="p-0"
-          onClick={() => {
-            sendMessage(currMessage);
-            setCurrMessage('');
-          }}
+          onClick={handleSubmit}
           disabled={currMessage.trim() === ''} // Disable button when message is empty or only spaces
         >
           <img src={SendIcon} alt="Send" className="size-10" />
