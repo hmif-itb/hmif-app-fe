@@ -26,27 +26,25 @@ export default function useAddReview(props: Readonly<ComponentProps>) {
     },
   });
 
-  const postReview = useMutation({
-    // mutationFn: api.reviews.createReview.bind(api.reviews),
-    // onSuccess: () => {
-    //   toast.success('Review Posted!', { id: TOAST_ID });
-    //   queryClient.invalidateQueries({ queryKey: ['reviews'] });
-    //   setPendingUpload('');
-    //   onSubmitSuccess?.();
-    // },
-    // onError: () => toast.error('Failed to post review', { id: TOAST_ID }),
-  });
+  // const postReview = useMutation({
+  //   mutationFn: api.reviews.createReview.bind(api.reviews),
+  //   onSuccess: () => {
+  //     toast.success('Review Posted!', { id: TOAST_ID });
+  //     queryClient.invalidateQueries({ queryKey: ['reviews'] });
+  //     setPendingUpload('');
+  //     onSubmitSuccess?.();
+  //   },
+  //   onError: () => toast.error('Failed to post review', { id: TOAST_ID }),
+  // });
 
   const onSubmit = async (values: ReviewSchemaType) => {
     toast.loading('Please wait...', { id: TOAST_ID });
 
     try {
-      //   postReview.mutate({
-      //     requestBody: {
-      //       review: values.review,
-      //         rating: values.rating,
-      //       },
-      //     });
+      // POST
+      console.log(onSubmitSuccess);
+      console.log(values.rating);
+      console.log(values.review);
     } catch (err) {
       console.log(err);
       toast.error('Failed to post review', { id: TOAST_ID });
