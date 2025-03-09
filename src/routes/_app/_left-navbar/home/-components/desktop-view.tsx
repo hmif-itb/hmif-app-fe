@@ -14,7 +14,7 @@ function DesktopView() {
       <div className="flex h-0 flex-1 overflow-hidden">
         <div className="flex min-h-full flex-1 flex-col items-center gap-8 border-r border-gray-300 py-8">
           {/* Top Navigation Section */}
-          <section className="flex w-full max-w-screen-md flex-wrap justify-center h-[220px] gap-x-12 gap-y-4 px-8 overflow-y-scroll">
+          <section className="flex h-[220px] w-full max-w-screen-md flex-wrap justify-center gap-x-12 gap-y-4 overflow-y-scroll px-8">
             <NavigationItem
               src="/img/home/folder.svg"
               alt="Ding Dong"
@@ -56,28 +56,34 @@ function DesktopView() {
               title="Curhat Yuk!"
               onClick={() => navigate({ to: '/home/curhat' })}
             />
-            
+
             <NavigationItem
               src="/img/home/scholarship.svg"
               alt="Mading Beasiswa"
               title="Beasiswa"
-              onClick={() => window.location.href = 'http://s.hmif.dev/MadingBeasiswa'}
+              onClick={() =>
+                (window.location.href = 'http://s.hmif.dev/MadingBeasiswa')
+              }
             />
 
             <NavigationItem
               src="/img/home/cash-flow.svg"
               alt="Bayar Kas"
               title="Bayar Kas!"
-              onClick={() => window.location.href = 'http://s.hmif.dev/BayarKasHMIF'}
+              onClick={() =>
+                (window.location.href = 'http://s.hmif.dev/BayarKasHMIF')
+              }
             />
 
             <NavigationItem
               src="/img/home/proposal.svg"
               alt="Pengajuan Surat dan Proposal"
               title="Surat & Proposal"
-              onClick={() => window.location.href = 'http://bit.ly/PengajuanSuratDanProposalHMIF'}
+              onClick={() =>
+                (window.location.href =
+                  'http://bit.ly/PengajuanSuratDanProposalHMIF')
+              }
             />
-
           </section>
 
           {/* Calendar */}

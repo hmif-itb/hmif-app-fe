@@ -66,23 +66,29 @@ function MobileView() {
           src="/img/home/scholarship.svg"
           alt="Mading Beasiswa"
           title="Beasiswa"
-          onClick={() => window.location.href = 'http://s.hmif.dev/MadingBeasiswa'}
+          onClick={() =>
+            (window.location.href = 'http://s.hmif.dev/MadingBeasiswa')
+          }
         />
 
         <NavigationItem
           src="/img/home/cash-flow.svg"
           alt="Bayar Kas"
           title="Bayar Kas!"
-          onClick={() => window.location.href = 'http://s.hmif.dev/BayarKasHMIF'}
+          onClick={() =>
+            (window.location.href = 'http://s.hmif.dev/BayarKasHMIF')
+          }
         />
 
         <NavigationItem
           src="/img/home/proposal.svg"
           alt="Pengajuan Surat dan Proposal"
           title="Surat & Proposal"
-          onClick={() => window.location.href = 'http://bit.ly/PengajuanSuratDanProposalHMIF'}
+          onClick={() =>
+            (window.location.href =
+              'http://bit.ly/PengajuanSuratDanProposalHMIF')
+          }
         />
-
       </section>
 
       {/* Calendar Section */}
