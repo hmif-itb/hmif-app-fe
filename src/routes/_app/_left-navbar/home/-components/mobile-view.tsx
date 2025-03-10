@@ -61,6 +61,34 @@ function MobileView() {
           title="Curhat Yuk!"
           onClick={() => navigate({ to: '/home/curhat' })}
         />
+
+        <NavigationItem
+          src="/img/home/scholarship.svg"
+          alt="Mading Beasiswa"
+          title="Beasiswa"
+          onClick={() =>
+            (window.location.href = 'http://s.hmif.dev/MadingBeasiswa')
+          }
+        />
+
+        <NavigationItem
+          src="/img/home/cash-flow.svg"
+          alt="Bayar Kas"
+          title="Bayar Kas!"
+          onClick={() =>
+            (window.location.href = 'http://s.hmif.dev/BayarKasHMIF')
+          }
+        />
+
+        <NavigationItem
+          src="/img/home/proposal.svg"
+          alt="Pengajuan Surat dan Proposal"
+          title="Surat & Proposal"
+          onClick={() =>
+            (window.location.href =
+              'http://bit.ly/PengajuanSuratDanProposalHMIF')
+          }
+        />
       </section>
 
       {/* Calendar Section */}
