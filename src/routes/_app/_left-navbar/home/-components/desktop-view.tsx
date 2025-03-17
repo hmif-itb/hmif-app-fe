@@ -58,10 +58,20 @@ function DesktopView() {
             />
           </section>
 
+          <a href="https://pemilu.hmif.dev" className="mx-8 my-4">
+            <img
+              src="/img/pemilu-banner.png"
+              alt="Calendar"
+              className="rounded-xl"
+              width={2902}
+              height={1980}
+            />
+          </a>
+
           {/* Calendar */}
-          <div className="">
+          {/* <div className="">
             <Calendar />
-          </div>
+          </div> */}
         </div>
 
         {/* Schedule Section */}

@@ -63,10 +63,20 @@ function MobileView() {
         />
       </section>
 
+      <a href="https://pemilu.hmif.dev" className="m-4">
+        <img
+          src="/img/pemilu-banner.png"
+          alt="Calendar"
+          className="rounded-xl"
+          width={2902}
+          height={1980}
+        />
+      </a>
+
       {/* Calendar Section */}
-      <section className="flex size-full justify-center px-4">
+      {/* <section className="flex size-full justify-center px-4">
         <Calendar />
-      </section>
+      </section> */}
 
       <Separator />
 
