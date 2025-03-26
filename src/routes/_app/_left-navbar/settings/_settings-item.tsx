@@ -19,7 +19,7 @@ function SettingsItemLayout(): JSX.Element {
         imageURL={user.picture}
         className="flex w-full items-center gap-4 px-3 py-1 lg:hidden lg:gap-9"
       />
-      <div className="relative flex w-full flex-1 flex-col overflow-y-auto overflow-x-hidden rounded-t-2xl bg-[url('/images/courses/gradient.png')] bg-cover bg-no-repeat px-4 pb-28 pt-4 lg:rounded-none lg:py-6">
+      <div className="relative flex w-full flex-1 flex-col overflow-y-auto overflow-x-hidden rounded-t-2xl bg-[url('/img/login/login-bg.jpg')] bg-cover bg-no-repeat px-4 pb-28 pt-4 lg:rounded-none lg:py-6">
         <Outlet />
       </div>
     </div>
