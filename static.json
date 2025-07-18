@@ -1,0 +1,23 @@
+{
+  "rewrites": [
+    {
+      "source": "/sparta/:path*",
+      "destination": "https://sparta.hmif.dev/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Document-Policy",
+          "value": "js-profiling"
+        }
+      ]
+    }
+  ]
+}
