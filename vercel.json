@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/sparta/:path*",
-      "destination": "https://sparta.hmif.dev/:path*"
+      "destination": "https://sparta.hmif.dev/sparta/:path*"
     },
     {
       "source": "/(.*)",
