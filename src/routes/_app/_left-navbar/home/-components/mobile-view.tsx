@@ -89,6 +89,15 @@ function MobileView() {
               'http://bit.ly/PengajuanSuratDanProposalHMIF')
           }
         />
+
+        <NavigationItem
+          src="/img/home/jobs.svg"
+          alt="LowonginAja!"
+          title="LowonginAja!"
+          onClick={() =>
+            (window.location.href = 'https://s.hmif.dev/LowonginAja!')
+          }
+        />
       </section>
 
       <a href="https://pemilu.hmif.dev" className="m-4">
