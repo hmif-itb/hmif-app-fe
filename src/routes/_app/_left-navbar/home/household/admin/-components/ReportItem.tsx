@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
+import Avatar from '~/components/user/avatar';
 
 interface ReportData {
   id: number;
   name: string;
+  profilePicture?: string;
   startDate: string;
   endDate: string;
   status: string;
@@ -26,25 +28,24 @@ export function ReportItem({ request }: ReportItemProps) {
       .toUpperCase();
   };
 
-  const handleApprove = () => {
-    console.log('Approved request:', request.id);
-  };
-
-  const handleReject = () => {
-    console.log('Rejected request:', request.id);
-  };
-
   return (
     <div className="w-full rounded-xl border border-gray-200 bg-white shadow-sm transition-all duration-200 hover:shadow-md">
       <div className="p-4">
-        {/* Header Section */}
+        {/* Collapsed Content */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="flex size-9 items-center justify-center rounded-full bg-amber-600 transition-transform duration-200 ">
-              <span className="text-base font-semibold text-white">
-                {getInitials(request.name)}
-              </span>
-            </div>
+            {/* Profile Picture */}
+            {/* TODO: change to correct profile picture */}
+            {request.profilePicture ? (
+              <Avatar src={request.profilePicture} alt="" className="size-11" />
+            ) : (
+              <div className="flex size-9 items-center justify-center rounded-full bg-amber-600 transition-transform duration-200 ">
+                <span className="text-base font-semibold text-white">
+                  {getInitials(request.name)}
+                </span>
+              </div>
+            )}
+
             <div>
               <h3 className="font-semibold text-black">{request.name}</h3>
               <p className="text-sm text-[#525352]">{request.startDate}</p>
@@ -67,7 +68,7 @@ export function ReportItem({ request }: ReportItemProps) {
           </div>
         </div>
 
-        {/* Expanded Content with Smooth Transition */}
+        {/* Expanded Content */}
         <div
           className={`overflow-hidden transition-all duration-500 ease-in-out ${
             isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
@@ -108,28 +109,6 @@ export function ReportItem({ request }: ReportItemProps) {
             </div>
           )}
         </div>
-      </div>
-    </div>
-  );
-}
-
-// Example usage with sample data
-export default function ReportExample() {
-  const sampleReport: ReportData = {
-    id: 1,
-    name: 'Adinda Putri',
-    startDate: '03/01/2022',
-    endDate: '03/01/2022',
-    status: 'Pending',
-    reportContent: 'Proyektor tidak bisa menampilkan gambar',
-    photo:
-      'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=400&h=300&fit=crop',
-  };
-
-  return (
-    <div className="min-h-screen bg-gray-50 p-4">
-      <div className="mx-auto max-w-2xl">
-        <ReportItem request={sampleReport} />
       </div>
     </div>
   );
