@@ -97,11 +97,11 @@ export function ReportItem({ request }: ReportItemProps) {
               {request.photo && (
                 <div className="transition-all duration-300">
                   <p className="mb-2 text-sm font-medium text-black">Foto:</p>
-                  <div className="overflow-hidden rounded-lg border border-gray-200">
+                  <div className="w-fit overflow-hidden rounded-lg border border-gray-200">
                     <img
                       src={request.photo}
                       alt="Report photo"
-                      className="h-auto max-h-64 w-full object-cover transition-transform duration-200 "
+                      className="max-h-64 transition-transform duration-200 "
                     />
                   </div>
                 </div>
