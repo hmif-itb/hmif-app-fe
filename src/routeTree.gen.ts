@@ -36,7 +36,7 @@ import { Route as AppLeftNavbarSettingsSettingsItemCreditsIndexRouteImport } fro
 import { Route as AppLeftNavbarSettingsSettingsItemCoursesIndexRouteImport } from './routes/_app/_left-navbar/settings/_settings-item/courses/index'
 import { Route as AppLeftNavbarHomeTestimoniTypeIndexRouteImport } from './routes/_app/_left-navbar/home/testimoni/$type/index'
 import { Route as AppLeftNavbarHomeRekomendasiRekomendasiIdIndexRouteImport } from './routes/_app/_left-navbar/home/rekomendasi/$rekomendasiId/index'
-import { Route as AppLeftNavbarHomeHouseholdAdminIndexRouteImport } from './routes/_app/_left-navbar/home/household/admin/index'
+import { Route as AppLeftNavbarHomeHouseholdManajemenRequestLaporanIndexRouteImport } from './routes/_app/_left-navbar/home/household/manajemen-request-laporan/index'
 import { Route as AppLeftNavbarSettingsSettingsItemCoursesAddIndexRouteImport } from './routes/_app/_left-navbar/settings/_settings-item/courses/add/index'
 import { Route as AppLeftNavbarHomeTestimoniTypeSemesterIndexRouteImport } from './routes/_app/_left-navbar/home/testimoni/$type/$semester/index'
 import { Route as AppLeftNavbarHomeTestimoniTypeSemesterCourseIdIndexRouteImport } from './routes/_app/_left-navbar/home/testimoni_/$type/$semester/$courseId/index'
@@ -187,10 +187,10 @@ const AppLeftNavbarHomeRekomendasiRekomendasiIdIndexRoute =
     path: '/home/rekomendasi/$rekomendasiId/',
     getParentRoute: () => AppLeftNavbarRoute,
   } as any)
-const AppLeftNavbarHomeHouseholdAdminIndexRoute =
-  AppLeftNavbarHomeHouseholdAdminIndexRouteImport.update({
-    id: '/home/household/admin/',
-    path: '/home/household/admin/',
+const AppLeftNavbarHomeHouseholdManajemenRequestLaporanIndexRoute =
+  AppLeftNavbarHomeHouseholdManajemenRequestLaporanIndexRouteImport.update({
+    id: '/home/household/manajemen-request-laporan/',
+    path: '/home/household/manajemen-request-laporan/',
     getParentRoute: () => AppLeftNavbarRoute,
   } as any)
 const AppLeftNavbarSettingsSettingsItemCoursesAddIndexRoute =
@@ -231,7 +231,7 @@ export interface FileRoutesByFullPath {
   '/home/nim-finder': typeof AppLeftNavbarHomeNimFinderIndexRoute
   '/home/testimoni/': typeof AppLeftNavbarHomeTestimoniIndexRoute
   '/timeline/$infoId': typeof AppLeftNavbarTimelineInfoIdIndexRoute
-  '/home/household/admin': typeof AppLeftNavbarHomeHouseholdAdminIndexRoute
+  '/home/household/manajemen-request-laporan': typeof AppLeftNavbarHomeHouseholdManajemenRequestLaporanIndexRoute
   '/home/rekomendasi/$rekomendasiId': typeof AppLeftNavbarHomeRekomendasiRekomendasiIdIndexRoute
   '/home/testimoni/$type': typeof AppLeftNavbarHomeTestimoniTypeIndexRoute
   '/settings/courses': typeof AppLeftNavbarSettingsSettingsItemCoursesIndexRoute
@@ -257,7 +257,7 @@ export interface FileRoutesByTo {
   '/home/nim-finder': typeof AppLeftNavbarHomeNimFinderIndexRoute
   '/home/testimoni': typeof AppLeftNavbarHomeTestimoniIndexRoute
   '/timeline/$infoId': typeof AppLeftNavbarTimelineInfoIdIndexRoute
-  '/home/household/admin': typeof AppLeftNavbarHomeHouseholdAdminIndexRoute
+  '/home/household/manajemen-request-laporan': typeof AppLeftNavbarHomeHouseholdManajemenRequestLaporanIndexRoute
   '/home/rekomendasi/$rekomendasiId': typeof AppLeftNavbarHomeRekomendasiRekomendasiIdIndexRoute
   '/home/testimoni/$type': typeof AppLeftNavbarHomeTestimoniTypeIndexRoute
   '/settings/courses': typeof AppLeftNavbarSettingsSettingsItemCoursesIndexRoute
@@ -290,7 +290,7 @@ export interface FileRoutesById {
   '/_app/_left-navbar/home/nim-finder/': typeof AppLeftNavbarHomeNimFinderIndexRoute
   '/_app/_left-navbar/home/testimoni/': typeof AppLeftNavbarHomeTestimoniIndexRoute
   '/_app/_left-navbar/timeline/$infoId/': typeof AppLeftNavbarTimelineInfoIdIndexRoute
-  '/_app/_left-navbar/home/household/admin/': typeof AppLeftNavbarHomeHouseholdAdminIndexRoute
+  '/_app/_left-navbar/home/household/manajemen-request-laporan/': typeof AppLeftNavbarHomeHouseholdManajemenRequestLaporanIndexRoute
   '/_app/_left-navbar/home/rekomendasi/$rekomendasiId/': typeof AppLeftNavbarHomeRekomendasiRekomendasiIdIndexRoute
   '/_app/_left-navbar/home/testimoni/$type/': typeof AppLeftNavbarHomeTestimoniTypeIndexRoute
   '/_app/_left-navbar/settings/_settings-item/courses/': typeof AppLeftNavbarSettingsSettingsItemCoursesIndexRoute
@@ -321,7 +321,7 @@ export interface FileRouteTypes {
     | '/home/nim-finder'
     | '/home/testimoni/'
     | '/timeline/$infoId'
-    | '/home/household/admin'
+    | '/home/household/manajemen-request-laporan'
     | '/home/rekomendasi/$rekomendasiId'
     | '/home/testimoni/$type'
     | '/settings/courses'
@@ -347,7 +347,7 @@ export interface FileRouteTypes {
     | '/home/nim-finder'
     | '/home/testimoni'
     | '/timeline/$infoId'
-    | '/home/household/admin'
+    | '/home/household/manajemen-request-laporan'
     | '/home/rekomendasi/$rekomendasiId'
     | '/home/testimoni/$type'
     | '/settings/courses'
@@ -379,7 +379,7 @@ export interface FileRouteTypes {
     | '/_app/_left-navbar/home/nim-finder/'
     | '/_app/_left-navbar/home/testimoni/'
     | '/_app/_left-navbar/timeline/$infoId/'
-    | '/_app/_left-navbar/home/household/admin/'
+    | '/_app/_left-navbar/home/household/manajemen-request-laporan/'
     | '/_app/_left-navbar/home/rekomendasi/$rekomendasiId/'
     | '/_app/_left-navbar/home/testimoni/$type/'
     | '/_app/_left-navbar/settings/_settings-item/courses/'
@@ -581,11 +581,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppLeftNavbarHomeRekomendasiRekomendasiIdIndexRouteImport
       parentRoute: typeof AppLeftNavbarRoute
     }
-    '/_app/_left-navbar/home/household/admin/': {
-      id: '/_app/_left-navbar/home/household/admin/'
-      path: '/home/household/admin'
-      fullPath: '/home/household/admin'
-      preLoaderRoute: typeof AppLeftNavbarHomeHouseholdAdminIndexRouteImport
+    '/_app/_left-navbar/home/household/manajemen-request-laporan/': {
+      id: '/_app/_left-navbar/home/household/manajemen-request-laporan/'
+      path: '/home/household/manajemen-request-laporan'
+      fullPath: '/home/household/manajemen-request-laporan'
+      preLoaderRoute: typeof AppLeftNavbarHomeHouseholdManajemenRequestLaporanIndexRouteImport
       parentRoute: typeof AppLeftNavbarRoute
     }
     '/_app/_left-navbar/settings/_settings-item/courses/add/': {
@@ -684,7 +684,7 @@ interface AppLeftNavbarRouteChildren {
   AppLeftNavbarHomeHouseholdIndexRoute: typeof AppLeftNavbarHomeHouseholdIndexRoute
   AppLeftNavbarHomeNimFinderIndexRoute: typeof AppLeftNavbarHomeNimFinderIndexRoute
   AppLeftNavbarTimelineInfoIdIndexRoute: typeof AppLeftNavbarTimelineInfoIdIndexRoute
-  AppLeftNavbarHomeHouseholdAdminIndexRoute: typeof AppLeftNavbarHomeHouseholdAdminIndexRoute
+  AppLeftNavbarHomeHouseholdManajemenRequestLaporanIndexRoute: typeof AppLeftNavbarHomeHouseholdManajemenRequestLaporanIndexRoute
   AppLeftNavbarHomeRekomendasiRekomendasiIdIndexRoute: typeof AppLeftNavbarHomeRekomendasiRekomendasiIdIndexRoute
   AppLeftNavbarHomeTestimoniTypeSemesterCourseIdIndexRoute: typeof AppLeftNavbarHomeTestimoniTypeSemesterCourseIdIndexRoute
 }
@@ -703,8 +703,8 @@ const AppLeftNavbarRouteChildren: AppLeftNavbarRouteChildren = {
   AppLeftNavbarHomeHouseholdIndexRoute: AppLeftNavbarHomeHouseholdIndexRoute,
   AppLeftNavbarHomeNimFinderIndexRoute: AppLeftNavbarHomeNimFinderIndexRoute,
   AppLeftNavbarTimelineInfoIdIndexRoute: AppLeftNavbarTimelineInfoIdIndexRoute,
-  AppLeftNavbarHomeHouseholdAdminIndexRoute:
-    AppLeftNavbarHomeHouseholdAdminIndexRoute,
+  AppLeftNavbarHomeHouseholdManajemenRequestLaporanIndexRoute:
+    AppLeftNavbarHomeHouseholdManajemenRequestLaporanIndexRoute,
   AppLeftNavbarHomeRekomendasiRekomendasiIdIndexRoute:
     AppLeftNavbarHomeRekomendasiRekomendasiIdIndexRoute,
   AppLeftNavbarHomeTestimoniTypeSemesterCourseIdIndexRoute:

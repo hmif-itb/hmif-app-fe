@@ -1,17 +1,31 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, redirect } from '@tanstack/react-router';
 import { useState, useEffect } from 'react';
 import { Button } from '~/components/ui/button';
-import { ChevronLeft, List } from 'lucide-react';
+import { ChevronLeft } from 'lucide-react';
 import { useRouter } from '@tanstack/react-router';
 import SearchBar from './-components/SearchBar';
 import RequestList from './-components/RequestList';
 import ReportList from './-components/ReportList';
 import { SwitchToggle } from './-components/Switch';
+import { isInRoles } from '~/lib/roles';
+import { loadUserCache } from '~/lib/session';
 
 export const Route = createFileRoute(
-  '/_app/_left-navbar/home/household/admin/',
+  '/_app/_left-navbar/home/household/manajemen-request-laporan/',
 )({
   component: HouseholdAdminPage,
+  loader: () => {
+    if (!loadUserCache!()) {
+      throw redirect({ to: '/home/household' });
+    }
+    if (loadUserCache()) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      if (!isInRoles(loadUserCache(), ['household'])) {
+        throw redirect({ to: '/home/household' });
+      }
+    }
+  },
 });
 
 function HouseholdAdminPage() {
