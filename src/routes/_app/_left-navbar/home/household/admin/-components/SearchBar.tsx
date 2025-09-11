@@ -4,7 +4,7 @@ import { Input } from '~/components/ui/input';
 
 function SearchBar() {
   return (
-    <div className="flex w-full justify-between gap-6 ">
+    <div className="flex w-full justify-between gap-2 lg:gap-6 ">
       {/* Search Bar */}
       <div className="relative flex w-full">
         <Input
@@ -18,7 +18,7 @@ function SearchBar() {
         </span>
       </div>
       {/* Filter */}
-      <div className="flex min-h-8 min-w-8 items-center justify-center  rounded-md bg-white lg:size-[60px] lg:rounded-lg">
+      <div className="flex size-8 min-h-8 min-w-8 items-center justify-center rounded-xl bg-white text-[#363538]  lg:size-[60px] lg:min-h-[60px] lg:min-w-[60px] lg:rounded-[20px]">
         <ListFilter className="hidden lg:block" size={32} />
         <ListFilter className="lg:hidden" size={24} />
       </div>
