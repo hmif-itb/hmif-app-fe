@@ -38,7 +38,7 @@ const sampleReports = [
 
 function ReportList() {
   return (
-    <div className="flex w-full flex-col gap-5">
+    <div className="mb-20 flex w-full flex-col gap-3 lg:mb-5 lg:gap-5">
       {sampleReports.map((request) => (
         <ReportItem key={request.id} request={request} />
       ))}

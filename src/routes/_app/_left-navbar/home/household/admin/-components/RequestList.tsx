@@ -43,7 +43,7 @@ const sampleRequests = [
 ];
 function RequestList() {
   return (
-    <div className="flex w-full flex-col gap-5">
+    <div className="mb-20 flex w-full flex-col gap-3 lg:mb-5 lg:gap-5">
       {sampleRequests.map((request) => (
         <RequestItem key={request.id} request={request} />
       ))}
