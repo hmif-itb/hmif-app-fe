@@ -42,7 +42,7 @@ export default function FormTextField<T extends FieldValues>(
         <FormItem
           className={clsx(
             'flex gap-3 space-y-0 px-4',
-            growable ? 'items-start' : 'items-center',
+            growable ? 'items-start mb-4' : 'items-center',
             className,
           )}
         >

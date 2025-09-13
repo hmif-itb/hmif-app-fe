@@ -2,70 +2,47 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { Voucher } from '../models/Voucher';
+import type { CoWorking } from '../models/CoWorking';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import type { BaseHttpRequest } from '../core/BaseHttpRequest';
 export class RecommendationService {
   constructor(public readonly httpRequest: BaseHttpRequest) {}
   /**
-   * Create a new voucher recommendation
-   * @returns any Voucher recommendation created
+   * @returns any Created coworking
    * @throws ApiError
    */
-  public postRecommendationVoucher({
-    requestBody,
-  }: {
-    requestBody: {
-      title: string;
-      imageURL: string;
-      link: string | null;
-      startPeriod: string | null;
-      endPeriod: string | null;
-      description: string | null;
-    },
-  }): CancelablePromise<{
-    title: string;
-    imageURL: string;
-    link: string | null;
-    startPeriod: string | null;
-    endPeriod: string | null;
-    description: string | null;
-    id: string;
-  }> {
-    return this.httpRequest.request({
-      method: 'POST',
-      url: '/api/recommendation/voucher',
-      body: requestBody,
-      mediaType: 'application/json',
-      errors: {
-        400: `Bad request: validation error`,
-        500: `Something went wrong!`,
-      },
-    });
-  }
-  /**
-   * Create a new co-working space recommendation
-   * @returns any Co-working space recommendation created
-   * @throws ApiError
-   */
-  public postRecommendationCoWorkingSpace({
+  public createCoWorkingSpace({
     requestBody,
   }: {
     requestBody?: {
       title: string;
       imageURL: string;
-      location: 'Ganesha' | 'Jatinangor';
+      location: string;
       address: string;
       mapsURL: string;
-      description: string | null;
+      description?: string | null;
     },
   }): CancelablePromise<{
+    coWorkingSpaceId: string;
     title: string;
-    imageURL: string;
-    location: 'Ganesha' | 'Jatinangor';
+    location: Array<'Ganesha' | 'Jatinangor'>;
     address: string;
     mapsURL: string;
     description: string | null;
-    id: string;
+    imageURL: Array<{
+      coWorkinSpaceId: string;
+      mediaId: string;
+      order: number;
+      media: {
+        id: string;
+        creatorId: string;
+        name: string;
+        type: string;
+        url: string;
+        createdAt: string;
+      };
+    }>;
   }> {
     return this.httpRequest.request({
       method: 'POST',
@@ -73,149 +50,189 @@ export class RecommendationService {
       body: requestBody,
       mediaType: 'application/json',
       errors: {
-        400: `Bad request: validation error`,
-        500: `Something went wrong!`,
+        400: `Bad request`,
       },
     });
   }
   /**
-   * Create a new review for a voucher recommendation
-   * @returns any Voucher review created
+   * @returns any Fetched list of coworkingspace
    * @throws ApiError
    */
-  public postVoucherReview({
-    voucherId,
-    requestBody,
+  public getCoWorkingSpaceList({
+    filter,
+    offset,
   }: {
-    voucherId: string,
-    requestBody?: {
-      /**
-       * Rating for the voucher (1-5)
-       */
-      rating: number;
-      /**
-       * Detailed review about the voucher
-       */
-      review: string;
-    },
+    /**
+     * is active or not
+     */
+    filter?: string,
+
+    offset?: number | null,
   }): CancelablePromise<{
-    userId: string;
-    voucherId: string;
-    rating: number;
-    review: string;
+    vouchers: Array<CoWorking>;
   }> {
     return this.httpRequest.request({
-      method: 'POST',
-      url: '/api/recommendation/voucher/{voucherId}/review',
-      path: {
-        'voucherId': voucherId,
+      method: 'GET',
+      url: '/api/recommendation/co-working-space',
+      query: {
+        'filter': filter,
+        'offset': offset,
       },
-      body: requestBody,
-      mediaType: 'application/json',
       errors: {
         400: `Bad request: validation error`,
-        500: `Something went wrong!`,
       },
     });
   }
   /**
-   * @returns any Co-working space review created
+   * @returns any Updated coworkingspace
    * @throws ApiError
    */
-  public createCoWorkingSpaceReview({
-    coWorkingSpaceId,
+  public updateCoWorkingSpace({
+    id,
     requestBody,
   }: {
-    coWorkingSpaceId: string,
+    id: string,
     requestBody?: {
-      /**
-       * Rating for the voucher (1-5)
-       */
-      rating: number;
-      /**
-       * Detailed review about the voucher
-       */
-      review: string;
+        title?: string;
+        imageURL?: Array<string>;
+        location?: string;
+        address?: string;
+        mapsURL?: string;
+        description?: string | null;
     },
   }): CancelablePromise<{
     coWorkingSpaceId: string;
-    userId: string;
-    rating: number;
-    review: string;
+    title: string;
+    location: Array<'Ganesha' | 'Jatinangor'>;
+    address: string;
+    mapsURL: string;
+    description: string | null;
+    imageURL?: Array<{
+      coWorkingSpaceId: string;
+      mediaId: string;
+      order: number;
+      media: {
+        id: string;
+        creatorId: string;
+        name: string;
+        type: string;
+        url: string;
+        createdAt: string;
+      };
+    }>;
   }> {
     return this.httpRequest.request({
-      method: 'POST',
-      url: '/api/recommendation/co-working-space/{coWorkingSpaceId}/review',
+      method: 'PUT',
+      url: '/api/recommendation/co-working-space/{id}',
       path: {
-        'coWorkingSpaceId': coWorkingSpaceId,
+        'id': id,
       },
       body: requestBody,
       mediaType: 'application/json',
       errors: {
-        400: `Bad request: validation error`,
-        500: `Something went wrong!`,
+        400: `Bad request`,
+        404: `Competition not found`,
       },
     });
   }
   /**
-   * Delete a review for a voucher recommendation
-   * @returns any Review deleted successfully
+   * @returns coworkingspace Successfully deleted comment
    * @throws ApiError
    */
-  public deleteVoucherReview({
-    voucherId,
-    userId,
-  }: {
-    voucherId: string,
-    userId: string,
-  }): CancelablePromise<{
-    /**
-     * Indicates whether the review was deleted successfully
-     */
-    success: boolean;
-  }> {
-    return this.httpRequest.request({
-      method: 'DELETE',
-      url: '/api/recommendation/voucher/{voucherId}/review/{userId}',
-      path: {
-        'voucherId': voucherId,
-        'userId': userId,
-      },
-      errors: {
-        400: `Bad request: validation error`,
-        404: `Error`,
-        500: `Something went wrong!`,
-      },
-    });
-  }
-  /**
-   * Delete a review for a co-working space recommendation
-   * @returns any Review deleted successfully
-   * @throws ApiError
-   */
-  public deleteCoWorkingSpaceReview({
+  public deleteCoWorkingSpace({
     coWorkingSpaceId,
-    userId,
   }: {
-    coWorkingSpaceId: string,
-    userId: string,
-  }): CancelablePromise<{
     /**
-     * Indicates whether the review was deleted successfully
+     * Id of fetched/deleted coworkingspace
      */
-    success: boolean;
-  }> {
+    coWorkingSpaceId: string,
+  }): CancelablePromise<CoWorking> {
     return this.httpRequest.request({
       method: 'DELETE',
-      url: '/api/recommendation/co-working-space/{coWorkingSpaceId}/review/{userId}',
+      url: '/api/recommendation/co-working-space/{coWorkingSpaceId}',
       path: {
         'coWorkingSpaceId': coWorkingSpaceId,
-        'userId': userId,
+      },
+      errors: {
+        400: `Bad request`,
+        404: `Error`,
+        500: `Internal server error`,
+      },
+    });
+  }
+
+   /**
+   * @returns any Created voucher
+   * @throws ApiError
+   */
+   public createVoucher({
+    requestBody,
+  }: {
+    requestBody?: {
+      title: string;
+      imageURL: string;
+      link: string;
+      startPeriod?: string | null;
+      endPeriod?: string | null;
+      description?: string | null;
+    },
+  }): CancelablePromise<{
+    voucherId: string;
+    title: string;
+    link: string;
+    startPeriod: string | null;
+    endPeriod: string | null;
+    description: string | null
+    imageURL: Array<{
+      voucherId: string;
+      mediaId: string;
+      order: number;
+      media: {
+        id: string;
+        creatorId: string;
+        name: string;
+        type: string;
+        url: string;
+        createdAt: string;
+      };
+    }>;
+  }> {
+    return this.httpRequest.request({
+      method: 'POST',
+      url: '/api/recommendation/voucher',
+      body: requestBody,
+      mediaType: 'application/json',
+      errors: {
+        400: `Bad request`,
+      },
+    });
+  }
+  /**
+   * @returns any Fetched list of vouchers
+   * @throws ApiError
+   */
+  public getVoucherList({
+    filter,
+    offset,
+  }: {
+    /**
+     * is active or not
+     */
+    filter?: string,
+
+    offset?: number | null,
+  }): CancelablePromise<{
+    vouchers: Array<Voucher>;
+  }> {
+    return this.httpRequest.request({
+      method: 'GET',
+      url: '/api/recommendation/voucher',
+      query: {
+        'filter': filter,
+        'offset': offset,
       },
       errors: {
         400: `Bad request: validation error`,
-        404: `Error`,
-        500: `Something went wrong!`,
       },
     });
   }

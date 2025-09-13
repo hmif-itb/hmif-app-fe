@@ -22,6 +22,8 @@ export type { Comment } from './models/Comment';
 export type { CommentWithReactions } from './models/CommentWithReactions';
 export type { Competition } from './models/Competition';
 export type { CompetitionCategories } from './models/CompetitionCategories';
+export type { Voucher } from './models/Voucher';
+export type { CoWorking } from './models/CoWorking';
 export type { Course } from './models/Course';
 export type { Error } from './models/Error';
 export type { Info } from './models/Info';
