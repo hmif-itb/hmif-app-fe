@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { MapPin, SquarePen, Trash } from 'lucide-react';
-import { DeleteModal, EditPropertyModal } from './Modal';
+import { DeleteModal } from './DeleteModal';
+import { EditPropertyModal, PropertyFormData } from './EditPropertyModal';
 
 export interface PropertyData {
   name: string;
@@ -14,9 +15,7 @@ interface PropertyItemProps {
 }
 
 async function fetchLocations(): Promise<string[]> {
-  // Placeholder for API call
   console.log('Fetching locations from API...');
-
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(['Sekre 1', 'Sekre 2', 'Sekre 3', 'Gudang', 'Ruang Rapat']);
@@ -26,11 +25,9 @@ async function fetchLocations(): Promise<string[]> {
 
 async function handlePropertyUpdate(
   id: string,
-  data: PropertyData,
+  data: PropertyFormData,
 ): Promise<void> {
-  // Placeholder for API call
   console.log('Updating property:', id, data);
-
   return new Promise((resolve) => {
     setTimeout(() => {
       console.log('Property updated successfully');
@@ -40,9 +37,7 @@ async function handlePropertyUpdate(
 }
 
 async function handlePropertyDelete(id: string): Promise<void> {
-  // Placeholder for API call
   console.log('Deleting property:', id);
-
   return new Promise((resolve) => {
     setTimeout(() => {
       console.log('Property deleted successfully');
@@ -79,7 +74,7 @@ export function PropertyItem({ property }: PropertyItemProps) {
     setModalState({ isOpen: false, type: null });
   };
 
-  const handleEditConfirm = async (data: PropertyData) => {
+  const handleEditConfirm = async (data: PropertyFormData) => {
     setIsLoading(true);
     try {
       await handlePropertyUpdate('property-id-placeholder', data);
@@ -106,7 +101,7 @@ export function PropertyItem({ property }: PropertyItemProps) {
       <div className="flex w-full items-center justify-between rounded-xl bg-white px-4 py-[15px] lg:px-[22px] lg:py-5">
         {/* Left Section */}
         <div className="flex items-center gap-3">
-          <div className="size-9 rounded-lg bg-[#E8C55F]">
+          <div className="size-9 min-h-9 min-w-9 rounded-lg bg-[#E8C55F]">
             <img src="" alt="" />
           </div>
           {/* Information */}

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { MapPin, SquarePen, Trash } from 'lucide-react';
-import { Link } from '@tanstack/react-router';
-import { DeleteModal, EditSekreModal } from './Modal';
+import { DeleteModal } from './DeleteModal';
+import { EditSekreModal, SekreFormData } from './EditSekreModal';
 
 export interface SekreData {
   name: string;
@@ -15,9 +15,7 @@ interface SekreItemProps {
 }
 
 async function fetchLocations(): Promise<string[]> {
-  // Placeholder for API call
   console.log('Fetching locations from API...');
-
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(['Sekre 1', 'Sekre 2', 'Sekre 3', 'Gudang', 'Ruang Rapat']);
@@ -25,11 +23,11 @@ async function fetchLocations(): Promise<string[]> {
   });
 }
 
-/* Placeholder handler functions */
-async function handleSekreUpdate(id: string, data: SekreData): Promise<void> {
-  // Placeholder for API call
+async function handleSekreUpdate(
+  id: string,
+  data: SekreFormData,
+): Promise<void> {
   console.log('Updating sekre:', id, data);
-
   return new Promise((resolve) => {
     setTimeout(() => {
       console.log('Sekre updated successfully');
@@ -39,9 +37,7 @@ async function handleSekreUpdate(id: string, data: SekreData): Promise<void> {
 }
 
 async function handleSekreDelete(id: string): Promise<void> {
-  // Placeholder for API call
   console.log('Deleting sekre:', id);
-
   return new Promise((resolve) => {
     setTimeout(() => {
       console.log('Sekre deleted successfully');
@@ -78,7 +74,7 @@ export function SekreItem({ sekre }: SekreItemProps) {
     setModalState({ isOpen: false, type: null });
   };
 
-  const handleEditConfirm = async (data: SekreData) => {
+  const handleEditConfirm = async (data: SekreFormData) => {
     setIsLoading(true);
     try {
       await handleSekreUpdate('sekre-id-placeholder', data);
@@ -105,7 +101,7 @@ export function SekreItem({ sekre }: SekreItemProps) {
       <div className="flex w-full flex-col rounded-xl bg-white px-4 py-[15px] lg:px-[22px] lg:py-5">
         {/* Top Section */}
         <div className="mb-5 flex items-center gap-3">
-          <div className="size-9 rounded-lg bg-[#E8C55F]">
+          <div className="size-9 min-h-9 min-w-9 rounded-lg bg-[#E8C55F]">
             <img src="" alt="" />
           </div>
           {/* Information */}

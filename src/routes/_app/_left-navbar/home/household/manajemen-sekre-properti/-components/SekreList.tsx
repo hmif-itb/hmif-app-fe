@@ -49,7 +49,7 @@ function SekreList({ filter, searchTerm }: SekreListProps) {
   });
 
   return (
-    <div className="mb-20 grid w-full grid-cols-3 gap-3 lg:mb-5 lg:gap-5">
+    <div className="mb-20 grid w-full grid-cols-1 gap-3 lg:mb-5 lg:grid-cols-2 lg:gap-5 xl:grid-cols-3">
       {filteredSekre.map((sekre, idx) => (
         <SekreItem key={idx} sekre={sekre} />
       ))}
