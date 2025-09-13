@@ -1,5 +1,12 @@
 import React from 'react';
 import { PropertyItem, PropertyData } from './PropertyItem';
+import { FilterOptions } from './FilterModal';
+
+interface PropertyListProps {
+  filter: FilterOptions;
+  searchTerm: string;
+}
+
 const sampleProperty: PropertyData[] = [
   {
     name: 'Proyektor Epson X200',
@@ -20,10 +27,20 @@ const sampleProperty: PropertyData[] = [
     location: 'Gudang Properti',
   },
 ];
-function PropertyList() {
+
+function PropertyList({ filter, searchTerm }: PropertyListProps) {
+  const filteredProperties = sampleProperty.filter((property) => {
+    const matchesCondition =
+      filter.condition === 'all' || property.condition === filter.condition;
+    const matchesSearch = property.name
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+    return matchesCondition && matchesSearch;
+  });
+
   return (
     <div className="mb-20 flex w-full flex-col gap-3 lg:mb-5 lg:gap-5">
-      {sampleProperty.map((property, idx) => (
+      {filteredProperties.map((property, idx) => (
         <PropertyItem key={idx} property={property} />
       ))}
     </div>

@@ -7,6 +7,7 @@ import SearchBar from './-components/SearchBar';
 import PropertyList from './-components/PropertyList';
 import SekreList from './-components/SekreList';
 import { SwitchToggle } from './-components/Switch';
+import { FilterOptions } from './-components/FilterModal';
 import { isInRoles } from '~/lib/roles';
 import { loadUserCache } from '~/lib/session';
 
@@ -32,6 +33,8 @@ function HouseholdAdminPage() {
   const router = useRouter();
   const [activeView, setActiveView] = useState('Properti');
   const [isMobile, setIsMobile] = useState(false);
+  const [filter, setFilter] = useState<FilterOptions>({ condition: 'all' });
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     const checkIfMobile = () => {
@@ -49,14 +52,22 @@ function HouseholdAdminPage() {
     setActiveView(value);
   };
 
+  const handleFilterChange = (newFilter: FilterOptions) => {
+    setFilter(newFilter);
+  };
+
+  const handleSearchChange = (newSearchTerm: string) => {
+    setSearchTerm(newSearchTerm);
+  };
+
   const renderContent = () => {
     switch (activeView) {
       case 'Properti':
-        return <PropertyList />;
+        return <PropertyList filter={filter} searchTerm={searchTerm} />;
       case 'Sekre':
-        return <SekreList />;
+        return <SekreList filter={filter} searchTerm={searchTerm} />;
       default:
-        return <PropertyList />;
+        return <PropertyList filter={filter} searchTerm={searchTerm} />;
     }
   };
 
@@ -100,7 +111,12 @@ function HouseholdAdminPage() {
           />
           Manajemen Properti
         </h1>
-        <SearchBar />
+        <SearchBar
+          onFilterChange={handleFilterChange}
+          onSearchChange={handleSearchChange}
+          currentFilter={filter}
+          searchTerm={searchTerm}
+        />
         <SwitchToggle
           options={['Properti', 'Sekre']}
           defaultValue="Properti"

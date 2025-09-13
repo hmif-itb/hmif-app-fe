@@ -1,5 +1,11 @@
 import React from 'react';
 import { SekreItem, SekreData } from './SekreItem';
+import { FilterOptions } from './FilterModal';
+
+interface SekreListProps {
+  filter: FilterOptions;
+  searchTerm: string;
+}
 
 const sampleSekre: SekreData[] = [
   {
@@ -32,13 +38,23 @@ const sampleSekre: SekreData[] = [
   },
 ];
 
-function SekreList() {
+function SekreList({ filter, searchTerm }: SekreListProps) {
+  const filteredSekre = sampleSekre.filter((sekre) => {
+    const matchesCondition =
+      filter.condition === 'all' || sekre.condition === filter.condition;
+    const matchesSearch = sekre.name
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+    return matchesCondition && matchesSearch;
+  });
+
   return (
     <div className="mb-20 grid w-full grid-cols-3 gap-3 lg:mb-5 lg:gap-5">
-      {sampleSekre.map((sekre, idx) => (
+      {filteredSekre.map((sekre, idx) => (
         <SekreItem key={idx} sekre={sekre} />
       ))}
     </div>
   );
 }
+
 export default SekreList;
