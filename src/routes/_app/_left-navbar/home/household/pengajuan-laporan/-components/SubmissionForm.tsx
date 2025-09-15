@@ -1,16 +1,20 @@
-import { NotebookPen, Upload } from 'lucide-react';
-import { useState, useRef } from 'react';
+import { NotebookPen, Upload, X } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '~/components/ui/button';
 import { Textarea } from '~/components/ui/textarea';
 
 function SubmissionForm() {
   const [selectedFile, setSelectedFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
   const fileInputRef = useRef(null);
 
   const handleFileSelect = (event) => {
     const file = event.target.files[0];
     if (file) {
       setSelectedFile(file);
+      // Create image preview URL
+      const imageUrl = URL.createObjectURL(file);
+      setImagePreview(imageUrl);
     }
   };
 
@@ -27,16 +31,41 @@ function SubmissionForm() {
     const file = event.dataTransfer.files[0];
     if (file && (file.type === 'image/jpeg' || file.type === 'image/png')) {
       setSelectedFile(file);
+      // Create image preview URL
+      const imageUrl = URL.createObjectURL(file);
+      setImagePreview(imageUrl);
     }
   };
 
-  const handleSubmit = () => {
-    // Handle form submission here
+  const handleClearImage = (event) => {
+    event.stopPropagation();
+    setSelectedFile(null);
+    setImagePreview(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    // Handle form submission
     console.log('Form submitted');
   };
 
+  // Cleanup object URL when component unmounts or image changes
+  useEffect(() => {
+    return () => {
+      if (imagePreview) {
+        URL.revokeObjectURL(imagePreview);
+      }
+    };
+  }, [imagePreview]);
+
   return (
-    <div className="flex flex-col gap-[28px] rounded-xl bg-white px-[30px] py-[34px]">
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col gap-[28px] rounded-xl bg-white px-[30px] py-[34px]"
+    >
       {/* Header */}
       <div className="flex items-center gap-3">
         <div className="flex size-9 items-center justify-center rounded-[8px] bg-[#E8C55F]">
@@ -68,7 +97,11 @@ function SubmissionForm() {
           onClick={handleUploadClick}
           onDragOver={handleDragOver}
           onDrop={handleDrop}
-          className="flex h-[184px] cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed border-[#BABABA4D] transition-colors hover:bg-gray-50"
+          className={`cursor-pointer overflow-x-hidden rounded-xl border border-dashed  border-[#BABABA4D] transition-colors hover:bg-gray-50 ${
+            imagePreview
+              ? 'h-[184px] md:h-[440px]'
+              : 'flex h-[184px] flex-col items-center justify-center'
+          }`}
         >
           <input
             ref={fileInputRef}
@@ -80,16 +113,50 @@ function SubmissionForm() {
             className="hidden"
           />
 
-          {selectedFile ? (
-            <div className="flex flex-col items-center gap-2">
-              <Upload size={24} className="text-gray-600" />
-              <span className="truncate text-sm text-gray-600 ">
-                {selectedFile.name}
-              </span>
-              <span className="text-xs text-gray-500">
-                Klik untuk mengganti file
-              </span>
-            </div>
+          {imagePreview ? (
+            <>
+              {/* Desktop View */}
+              <div className="relative hidden h-full w-full md:block">
+                <img
+                  src={imagePreview}
+                  alt="Preview"
+                  className="h-full w-full rounded-xl object-cover"
+                />
+                {/* Filename - Bottom Left */}
+                <div className="absolute bottom-2 left-2 rounded bg-blue-500 px-2 py-1 text-xs text-white">
+                  {selectedFile && selectedFile.name}
+                </div>
+                {/* Clear Button - Bottom Right */}
+                <button
+                  onClick={handleClearImage}
+                  className="absolute bottom-2 right-2 flex size-6 items-center justify-center rounded-full bg-red-500 text-white transition-colors hover:bg-red-600"
+                  type="button"
+                >
+                  <X size={14} />
+                </button>
+              </div>
+
+              {/* Mobile View */}
+              <div className="flex h-full flex-col items-center justify-center md:hidden">
+                <div className="relative">
+                  <img
+                    src={imagePreview}
+                    alt="Preview"
+                    className="size-20 rounded-xl object-cover"
+                  />
+                  <button
+                    onClick={handleClearImage}
+                    className="absolute -right-2 -top-2 flex size-5 items-center justify-center rounded-full bg-red-500 text-white transition-colors hover:bg-red-600"
+                    type="button"
+                  >
+                    <X size={12} />
+                  </button>
+                </div>
+                <span className="mt-2 text-center text-sm text-gray-600">
+                  {selectedFile && selectedFile.name}
+                </span>
+              </div>
+            </>
           ) : (
             <div className="flex flex-col items-center gap-5">
               <div className="flex size-[48px] items-center justify-center rounded-[8px] bg-[#F0F0F0]">
@@ -110,12 +177,12 @@ function SubmissionForm() {
 
       {/* Button */}
       <Button
-        onClick={handleSubmit}
-        className="w-full bg-[#E2C66F] text-[#333333] transition-colors hover:opacity-50"
+        type="submit"
+        className="w-full bg-[#E2C66F] text-[#333333] hover:opacity-50"
       >
         Ajukan Laporan
       </Button>
-    </div>
+    </form>
   );
 }
 
