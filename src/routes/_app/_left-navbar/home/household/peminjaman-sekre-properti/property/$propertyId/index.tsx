@@ -9,7 +9,7 @@ import { loadUserCache } from '~/lib/session';
 import { PropertyLoanForm } from './~components/PropertyForm';
 
 export const Route = createFileRoute(
-  '/_app/_left-navbar/home/household/peminjaman-sekre-properti/property/',
+  '/_app/_left-navbar/home/household/peminjaman-sekre-properti/property/$propertyId/',
 )({
   component: HouseholdAdminPage,
   //   loader: () => {

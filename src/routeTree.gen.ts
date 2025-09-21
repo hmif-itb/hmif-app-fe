@@ -39,7 +39,6 @@ import { Route as AppLeftNavbarHomeRekomendasiRekomendasiIdIndexRouteImport } fr
 import { Route as AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiIndexRouteImport } from './routes/_app/_left-navbar/home/household/peminjaman-sekre-properti/index'
 import { Route as AppLeftNavbarSettingsSettingsItemCoursesAddIndexRouteImport } from './routes/_app/_left-navbar/settings/_settings-item/courses/add/index'
 import { Route as AppLeftNavbarHomeTestimoniTypeSemesterIndexRouteImport } from './routes/_app/_left-navbar/home/testimoni/$type/$semester/index'
-import { Route as AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiPropertyIndexRouteImport } from './routes/_app/_left-navbar/home/household/peminjaman-sekre-properti/property/index'
 import { Route as AppLeftNavbarHomeTestimoniTypeSemesterCourseIdIndexRouteImport } from './routes/_app/_left-navbar/home/testimoni_/$type/$semester/$courseId/index'
 import { Route as AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiPropertyPropertyIdIndexRouteImport } from './routes/_app/_left-navbar/home/household/peminjaman-sekre-properti/property/$propertyId/index'
 
@@ -207,14 +206,6 @@ const AppLeftNavbarHomeTestimoniTypeSemesterIndexRoute =
     path: '/$type/$semester/',
     getParentRoute: () => AppLeftNavbarHomeTestimoniRoute,
   } as any)
-const AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiPropertyIndexRoute =
-  AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiPropertyIndexRouteImport.update(
-    {
-      id: '/home/household/peminjaman-sekre-properti/property/',
-      path: '/home/household/peminjaman-sekre-properti/property/',
-      getParentRoute: () => AppLeftNavbarRoute,
-    } as any,
-  )
 const AppLeftNavbarHomeTestimoniTypeSemesterCourseIdIndexRoute =
   AppLeftNavbarHomeTestimoniTypeSemesterCourseIdIndexRouteImport.update({
     id: '/home/testimoni_/$type/$semester/$courseId/',
@@ -255,7 +246,6 @@ export interface FileRoutesByFullPath {
   '/settings/courses': typeof AppLeftNavbarSettingsSettingsItemCoursesIndexRoute
   '/settings/credits': typeof AppLeftNavbarSettingsSettingsItemCreditsIndexRoute
   '/settings/subscriptions': typeof AppLeftNavbarSettingsSettingsItemSubscriptionsIndexRoute
-  '/home/household/peminjaman-sekre-properti/property': typeof AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiPropertyIndexRoute
   '/home/testimoni/$type/$semester': typeof AppLeftNavbarHomeTestimoniTypeSemesterIndexRoute
   '/settings/courses/add': typeof AppLeftNavbarSettingsSettingsItemCoursesAddIndexRoute
   '/home/household/peminjaman-sekre-properti/property/$propertyId': typeof AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiPropertyPropertyIdIndexRoute
@@ -283,7 +273,6 @@ export interface FileRoutesByTo {
   '/settings/courses': typeof AppLeftNavbarSettingsSettingsItemCoursesIndexRoute
   '/settings/credits': typeof AppLeftNavbarSettingsSettingsItemCreditsIndexRoute
   '/settings/subscriptions': typeof AppLeftNavbarSettingsSettingsItemSubscriptionsIndexRoute
-  '/home/household/peminjaman-sekre-properti/property': typeof AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiPropertyIndexRoute
   '/home/testimoni/$type/$semester': typeof AppLeftNavbarHomeTestimoniTypeSemesterIndexRoute
   '/settings/courses/add': typeof AppLeftNavbarSettingsSettingsItemCoursesAddIndexRoute
   '/home/household/peminjaman-sekre-properti/property/$propertyId': typeof AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiPropertyPropertyIdIndexRoute
@@ -318,7 +307,6 @@ export interface FileRoutesById {
   '/_app/_left-navbar/settings/_settings-item/courses/': typeof AppLeftNavbarSettingsSettingsItemCoursesIndexRoute
   '/_app/_left-navbar/settings/_settings-item/credits/': typeof AppLeftNavbarSettingsSettingsItemCreditsIndexRoute
   '/_app/_left-navbar/settings/_settings-item/subscriptions/': typeof AppLeftNavbarSettingsSettingsItemSubscriptionsIndexRoute
-  '/_app/_left-navbar/home/household/peminjaman-sekre-properti/property/': typeof AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiPropertyIndexRoute
   '/_app/_left-navbar/home/testimoni/$type/$semester/': typeof AppLeftNavbarHomeTestimoniTypeSemesterIndexRoute
   '/_app/_left-navbar/settings/_settings-item/courses/add/': typeof AppLeftNavbarSettingsSettingsItemCoursesAddIndexRoute
   '/_app/_left-navbar/home/household/peminjaman-sekre-properti/property/$propertyId/': typeof AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiPropertyPropertyIdIndexRoute
@@ -351,7 +339,6 @@ export interface FileRouteTypes {
     | '/settings/courses'
     | '/settings/credits'
     | '/settings/subscriptions'
-    | '/home/household/peminjaman-sekre-properti/property'
     | '/home/testimoni/$type/$semester'
     | '/settings/courses/add'
     | '/home/household/peminjaman-sekre-properti/property/$propertyId'
@@ -379,7 +366,6 @@ export interface FileRouteTypes {
     | '/settings/courses'
     | '/settings/credits'
     | '/settings/subscriptions'
-    | '/home/household/peminjaman-sekre-properti/property'
     | '/home/testimoni/$type/$semester'
     | '/settings/courses/add'
     | '/home/household/peminjaman-sekre-properti/property/$propertyId'
@@ -413,7 +399,6 @@ export interface FileRouteTypes {
     | '/_app/_left-navbar/settings/_settings-item/courses/'
     | '/_app/_left-navbar/settings/_settings-item/credits/'
     | '/_app/_left-navbar/settings/_settings-item/subscriptions/'
-    | '/_app/_left-navbar/home/household/peminjaman-sekre-properti/property/'
     | '/_app/_left-navbar/home/testimoni/$type/$semester/'
     | '/_app/_left-navbar/settings/_settings-item/courses/add/'
     | '/_app/_left-navbar/home/household/peminjaman-sekre-properti/property/$propertyId/'
@@ -632,13 +617,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppLeftNavbarHomeTestimoniTypeSemesterIndexRouteImport
       parentRoute: typeof AppLeftNavbarHomeTestimoniRoute
     }
-    '/_app/_left-navbar/home/household/peminjaman-sekre-properti/property/': {
-      id: '/_app/_left-navbar/home/household/peminjaman-sekre-properti/property/'
-      path: '/home/household/peminjaman-sekre-properti/property'
-      fullPath: '/home/household/peminjaman-sekre-properti/property'
-      preLoaderRoute: typeof AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiPropertyIndexRouteImport
-      parentRoute: typeof AppLeftNavbarRoute
-    }
     '/_app/_left-navbar/home/testimoni_/$type/$semester/$courseId/': {
       id: '/_app/_left-navbar/home/testimoni_/$type/$semester/$courseId/'
       path: '/home/testimoni/$type/$semester/$courseId'
@@ -730,7 +708,6 @@ interface AppLeftNavbarRouteChildren {
   AppLeftNavbarTimelineInfoIdIndexRoute: typeof AppLeftNavbarTimelineInfoIdIndexRoute
   AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiIndexRoute: typeof AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiIndexRoute
   AppLeftNavbarHomeRekomendasiRekomendasiIdIndexRoute: typeof AppLeftNavbarHomeRekomendasiRekomendasiIdIndexRoute
-  AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiPropertyIndexRoute: typeof AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiPropertyIndexRoute
   AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiPropertyPropertyIdIndexRoute: typeof AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiPropertyPropertyIdIndexRoute
   AppLeftNavbarHomeTestimoniTypeSemesterCourseIdIndexRoute: typeof AppLeftNavbarHomeTestimoniTypeSemesterCourseIdIndexRoute
 }
@@ -753,8 +730,6 @@ const AppLeftNavbarRouteChildren: AppLeftNavbarRouteChildren = {
     AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiIndexRoute,
   AppLeftNavbarHomeRekomendasiRekomendasiIdIndexRoute:
     AppLeftNavbarHomeRekomendasiRekomendasiIdIndexRoute,
-  AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiPropertyIndexRoute:
-    AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiPropertyIndexRoute,
   AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiPropertyPropertyIdIndexRoute:
     AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiPropertyPropertyIdIndexRoute,
   AppLeftNavbarHomeTestimoniTypeSemesterCourseIdIndexRoute:

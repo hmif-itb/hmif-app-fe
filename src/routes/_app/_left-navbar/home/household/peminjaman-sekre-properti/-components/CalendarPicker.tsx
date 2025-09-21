@@ -203,23 +203,28 @@ export function CalendarPicker({
         <div className="p-3">
           {/* Header */}
           <div className="mb-4 flex items-center justify-between">
-            <Button
-              size="sm"
-              onClick={() => navigateMonth('prev')}
-              className="size-7 p-0"
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </Button>
-            <div className="font-semibold">
-              {months[currentMonth.getMonth()]} {currentMonth.getFullYear()}
+            {/* Month and Year */}
+            <div className="text-sm font-medium text-black">
+              <strong>{months[currentMonth.getMonth()]} </strong>
+              <span>{currentMonth.getFullYear()}</span>
             </div>
-            <Button
-              size="sm"
-              onClick={() => navigateMonth('next')}
-              className="size-7 p-0"
-            >
-              <ChevronRight className="h-4 w-4" />
-            </Button>
+            {/* Buttons */}
+            <div className="flex gap-3">
+              <Button
+                size="sm"
+                onClick={() => navigateMonth('prev')}
+                className="size-7 rounded-lg border border-[#CED3DE] bg-transparent p-0"
+              >
+                <ChevronLeft className="size-4 text-[#222B45]" />
+              </Button>
+              <Button
+                size="sm"
+                onClick={() => navigateMonth('next')}
+                className="size-7 rounded-lg  border border-[#CED3DE] bg-transparent p-0"
+              >
+                <ChevronRight className="size-4 text-[#222B45]" />
+              </Button>
+            </div>
           </div>
 
           {/* Days of week */}
@@ -256,19 +261,18 @@ export function CalendarPicker({
                   onMouseLeave={() => isEndDatePicker && setHoveredDate(null)}
                   disabled={isDisabled}
                   className={cn(
-                    'relative h-8 w-8 p-0 font-normal',
-                    !dayObj.isCurrentMonth &&
-                      'text-muted-foreground opacity-50',
+                    'relative h-8 w-8 rounded-xl bg-transparent p-0 font-normal text-[#2E2E2E]',
+                    !dayObj.isCurrentMonth && 'text-[#8E8E93] opacity-50',
                     isDisabled && 'cursor-not-allowed opacity-30',
                     dayObj.isCurrentMonth &&
                       !isDisabled &&
-                      'hover:bg-[#E8C55F] hover:text-[#8B6914]',
-                    isSelected && 'bg-[#E8C55F] font-medium text-[#8B6914]',
+                      'hover:bg-[#E8C55F] hover:text-[#222B45]',
+                    isSelected && 'bg-[#E8C55F] font-medium text-[#222B45]',
                     isInRange &&
                       !isSelected &&
-                      'bg-[#E8C55F] bg-opacity-50 text-[#8B6914]',
+                      'bg-[#E8C55F] bg-opacity-50 text-[#222B45]',
                     (isRangeStart || isRangeEnd) &&
-                      'bg-[#E8C55F] font-medium text-[#8B6914]',
+                      'bg-[#E8C55F] font-medium text-[#222B45]',
                   )}
                 >
                   {dayObj.day}
