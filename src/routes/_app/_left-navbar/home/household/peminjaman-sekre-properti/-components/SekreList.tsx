@@ -12,6 +12,7 @@ const sampleSekre: SekreData[] = [
     name: 'Sekre 1',
     condition: 'used',
     location: 'Ganesha',
+    type: 'eksklusif',
     photo:
       'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=400&h=300&fit=crop',
     status: 'unavailable',
@@ -20,6 +21,7 @@ const sampleSekre: SekreData[] = [
     name: 'Speaker JBL',
     condition: 'new',
     location: 'Jatinangor',
+    type: 'eksklusif',
     photo:
       'https://images.unsplash.com/photo-1606983340126-99ab4feaa64a?w=400&h=300&fit=crop',
     status: 'available',
@@ -28,6 +30,7 @@ const sampleSekre: SekreData[] = [
     name: 'Meja Kayu',
     condition: 'used',
     location: 'Ruang Utama Sekre',
+    type: 'eksklusif',
     photo:
       'https://images.unsplash.com/photo-1587440871875-191322ee64b0?w=400&h=300&fit=crop',
     status: 'unavailable',
@@ -36,6 +39,7 @@ const sampleSekre: SekreData[] = [
     name: 'Kursi Lipat',
     condition: 'new',
     location: 'Ganesha',
+    type: 'non-eksklusif',
     photo:
       'https://images.unsplash.com/photo-1587440871875-191322ee64b0?w=400&h=300&fit=crop',
     status: 'available',

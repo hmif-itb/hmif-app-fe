@@ -12,18 +12,21 @@ const sampleProperty: PropertyData[] = [
     name: 'Proyektor Epson X200',
     condition: 'used',
     amount: 2,
+    type: 'eksklusif',
     location: 'Ruang Multimedia',
   },
   {
     name: 'Speaker JBL',
     condition: 'new',
     amount: 1,
+    type: 'eksklusif',
     location: 'Ruang Sekretariat',
   },
   {
     name: 'Kabel HDMI',
     condition: 'used',
     amount: 5,
+    type: 'non-eksklusif',
     location: 'Gudang Properti',
   },
 ];

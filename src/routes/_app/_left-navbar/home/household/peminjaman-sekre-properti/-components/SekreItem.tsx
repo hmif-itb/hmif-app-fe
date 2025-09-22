@@ -2,6 +2,7 @@ import { MapPin, Plus } from 'lucide-react';
 
 export interface SekreData {
   name: string;
+  type: 'eksklusif' | 'non-eksklusif';
   condition: 'new' | 'used';
   location: string;
   photo?: string;
@@ -15,7 +16,11 @@ interface SekreItemProps {
 
 export function SekreItem({ sekre, onPinjam }: SekreItemProps) {
   return (
-    <div className="flex w-full flex-col rounded-xl bg-white px-4 py-[15px] lg:px-[22px] lg:py-5">
+    <div
+      className={`flex w-full flex-col rounded-xl bg-white px-4 py-[15px] lg:px-[22px] lg:py-5 ${
+        !sekre.status || sekre.status === 'unavailable' ? 'opacity-60' : ''
+      }`}
+    >
       {/* Top Section */}
       <div className="flex justify-between">
         <div className="mb-5 flex items-center gap-3">
@@ -61,7 +66,7 @@ export function SekreItem({ sekre, onPinjam }: SekreItemProps) {
         {true && (
           // Change the conditional rendering as needed
           <span className="absolute bottom-2 left-2 flex w-fit items-center rounded-full bg-[#30764B] px-3 py-[2px] text-xs text-white">
-            Eksklusif
+            {sekre.type === 'eksklusif' ? 'Eksklusif' : 'Non-Eksklusif'}
           </span>
         )}
       </div>
@@ -72,7 +77,7 @@ export function SekreItem({ sekre, onPinjam }: SekreItemProps) {
           className="flex items-center rounded-xl bg-[#E8C55F] px-6 py-1 font-medium text-[#1D3122] transition-opacity hover:opacity-70 lg:py-2"
         >
           <Plus size={15} />
-          <span>Pinjam</span>
+          <span className="text-xs lg:text-base"> Pinjam</span>
         </button>
       </div>
     </div>

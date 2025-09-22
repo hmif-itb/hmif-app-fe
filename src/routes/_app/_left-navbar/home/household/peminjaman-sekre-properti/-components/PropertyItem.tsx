@@ -1,15 +1,16 @@
 import { useState } from 'react';
 import { MapPin, Plus, ChevronDown } from 'lucide-react';
 
-export interface PropertyItemData {
+export interface PropertyData {
   name: string;
+  type: 'eksklusif' | 'non-eksklusif';
   condition: 'new' | 'used';
   amount: number;
   location: string;
 }
 
 interface PropertyItemProps {
-  item: PropertyItemData;
+  item: PropertyData;
 }
 
 export function PropertyItem({ item }: PropertyItemProps) {
@@ -53,7 +54,7 @@ export function PropertyItem({ item }: PropertyItemProps) {
         <div className="flex items-center gap-6">
           {/* Tag */}
           <div className="flex h-fit items-center rounded-full bg-[#30764B] px-5 py-1 text-sm text-white">
-            Eksklusif
+            {item.type === 'eksklusif' ? 'Eksklusif' : 'Non-Eksklusif'}
           </div>
           {/* Borrow Button */}
           <button
@@ -82,7 +83,7 @@ export function PropertyItem({ item }: PropertyItemProps) {
                 {item.name}
               </h3>
               <span className="flex  w-fit items-center rounded-full bg-[#30764B] px-3  text-xs text-white">
-                Eksklusif
+                {item.type === 'eksklusif' ? 'Eksklusif' : 'Non-Eksklusif'}
               </span>
             </div>
           </div>
