@@ -81,7 +81,7 @@ function DesktopView() {
               title="Surat & Proposal"
               onClick={() =>
                 (window.location.href =
-                  'http://bit.ly/PengajuanSuratDanProposalHMIF')
+                  'https://s.hmif.dev/LayananAdministrasiHMIF2526')
               }
             />
 
