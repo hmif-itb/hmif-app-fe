@@ -37,11 +37,14 @@ import { Route as AppLeftNavbarSettingsSettingsItemCoursesIndexRouteImport } fro
 import { Route as AppLeftNavbarHomeTestimoniTypeIndexRouteImport } from './routes/_app/_left-navbar/home/testimoni/$type/index'
 import { Route as AppLeftNavbarHomeRekomendasiRekomendasiIdIndexRouteImport } from './routes/_app/_left-navbar/home/rekomendasi/$rekomendasiId/index'
 import { Route as AppLeftNavbarHomeHouseholdPengajuanLaporanIndexRouteImport } from './routes/_app/_left-navbar/home/household/pengajuan-laporan/index'
+import { Route as AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiIndexRouteImport } from './routes/_app/_left-navbar/home/household/peminjaman-sekre-properti/index'
 import { Route as AppLeftNavbarHomeHouseholdManajemenSekrePropertiIndexRouteImport } from './routes/_app/_left-navbar/home/household/manajemen-sekre-properti/index'
 import { Route as AppLeftNavbarHomeHouseholdManajemenRequestLaporanIndexRouteImport } from './routes/_app/_left-navbar/home/household/manajemen-request-laporan/index'
 import { Route as AppLeftNavbarSettingsSettingsItemCoursesAddIndexRouteImport } from './routes/_app/_left-navbar/settings/_settings-item/courses/add/index'
 import { Route as AppLeftNavbarHomeTestimoniTypeSemesterIndexRouteImport } from './routes/_app/_left-navbar/home/testimoni/$type/$semester/index'
 import { Route as AppLeftNavbarHomeTestimoniTypeSemesterCourseIdIndexRouteImport } from './routes/_app/_left-navbar/home/testimoni_/$type/$semester/$courseId/index'
+import { Route as AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiSekreSekreIdIndexRouteImport } from './routes/_app/_left-navbar/home/household/peminjaman-sekre-properti/sekre/$sekreId/index'
+import { Route as AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiPropertyPropertyIdIndexRouteImport } from './routes/_app/_left-navbar/home/household/peminjaman-sekre-properti/property/$propertyId/index'
 
 const LoginIndexLazyRouteImport = createFileRoute('/login/')()
 
@@ -195,6 +198,12 @@ const AppLeftNavbarHomeHouseholdPengajuanLaporanIndexRoute =
     path: '/home/household/pengajuan-laporan/',
     getParentRoute: () => AppLeftNavbarRoute,
   } as any)
+const AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiIndexRoute =
+  AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiIndexRouteImport.update({
+    id: '/home/household/peminjaman-sekre-properti/',
+    path: '/home/household/peminjaman-sekre-properti/',
+    getParentRoute: () => AppLeftNavbarRoute,
+  } as any)
 const AppLeftNavbarHomeHouseholdManajemenSekrePropertiIndexRoute =
   AppLeftNavbarHomeHouseholdManajemenSekrePropertiIndexRouteImport.update({
     id: '/home/household/manajemen-sekre-properti/',
@@ -225,6 +234,22 @@ const AppLeftNavbarHomeTestimoniTypeSemesterCourseIdIndexRoute =
     path: '/home/testimoni/$type/$semester/$courseId/',
     getParentRoute: () => AppLeftNavbarRoute,
   } as any)
+const AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiSekreSekreIdIndexRoute =
+  AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiSekreSekreIdIndexRouteImport.update(
+    {
+      id: '/home/household/peminjaman-sekre-properti/sekre/$sekreId/',
+      path: '/home/household/peminjaman-sekre-properti/sekre/$sekreId/',
+      getParentRoute: () => AppLeftNavbarRoute,
+    } as any,
+  )
+const AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiPropertyPropertyIdIndexRoute =
+  AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiPropertyPropertyIdIndexRouteImport.update(
+    {
+      id: '/home/household/peminjaman-sekre-properti/property/$propertyId/',
+      path: '/home/household/peminjaman-sekre-properti/property/$propertyId/',
+      getParentRoute: () => AppLeftNavbarRoute,
+    } as any,
+  )
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -247,6 +272,7 @@ export interface FileRoutesByFullPath {
   '/timeline/$infoId': typeof AppLeftNavbarTimelineInfoIdIndexRoute
   '/home/household/manajemen-request-laporan': typeof AppLeftNavbarHomeHouseholdManajemenRequestLaporanIndexRoute
   '/home/household/manajemen-sekre-properti': typeof AppLeftNavbarHomeHouseholdManajemenSekrePropertiIndexRoute
+  '/home/household/peminjaman-sekre-properti': typeof AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiIndexRoute
   '/home/household/pengajuan-laporan': typeof AppLeftNavbarHomeHouseholdPengajuanLaporanIndexRoute
   '/home/rekomendasi/$rekomendasiId': typeof AppLeftNavbarHomeRekomendasiRekomendasiIdIndexRoute
   '/home/testimoni/$type': typeof AppLeftNavbarHomeTestimoniTypeIndexRoute
@@ -255,6 +281,8 @@ export interface FileRoutesByFullPath {
   '/settings/subscriptions': typeof AppLeftNavbarSettingsSettingsItemSubscriptionsIndexRoute
   '/home/testimoni/$type/$semester': typeof AppLeftNavbarHomeTestimoniTypeSemesterIndexRoute
   '/settings/courses/add': typeof AppLeftNavbarSettingsSettingsItemCoursesAddIndexRoute
+  '/home/household/peminjaman-sekre-properti/property/$propertyId': typeof AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiPropertyPropertyIdIndexRoute
+  '/home/household/peminjaman-sekre-properti/sekre/$sekreId': typeof AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiSekreSekreIdIndexRoute
   '/home/testimoni/$type/$semester/$courseId': typeof AppLeftNavbarHomeTestimoniTypeSemesterCourseIdIndexRoute
 }
 export interface FileRoutesByTo {
@@ -275,6 +303,7 @@ export interface FileRoutesByTo {
   '/timeline/$infoId': typeof AppLeftNavbarTimelineInfoIdIndexRoute
   '/home/household/manajemen-request-laporan': typeof AppLeftNavbarHomeHouseholdManajemenRequestLaporanIndexRoute
   '/home/household/manajemen-sekre-properti': typeof AppLeftNavbarHomeHouseholdManajemenSekrePropertiIndexRoute
+  '/home/household/peminjaman-sekre-properti': typeof AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiIndexRoute
   '/home/household/pengajuan-laporan': typeof AppLeftNavbarHomeHouseholdPengajuanLaporanIndexRoute
   '/home/rekomendasi/$rekomendasiId': typeof AppLeftNavbarHomeRekomendasiRekomendasiIdIndexRoute
   '/home/testimoni/$type': typeof AppLeftNavbarHomeTestimoniTypeIndexRoute
@@ -283,6 +312,8 @@ export interface FileRoutesByTo {
   '/settings/subscriptions': typeof AppLeftNavbarSettingsSettingsItemSubscriptionsIndexRoute
   '/home/testimoni/$type/$semester': typeof AppLeftNavbarHomeTestimoniTypeSemesterIndexRoute
   '/settings/courses/add': typeof AppLeftNavbarSettingsSettingsItemCoursesAddIndexRoute
+  '/home/household/peminjaman-sekre-properti/property/$propertyId': typeof AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiPropertyPropertyIdIndexRoute
+  '/home/household/peminjaman-sekre-properti/sekre/$sekreId': typeof AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiSekreSekreIdIndexRoute
   '/home/testimoni/$type/$semester/$courseId': typeof AppLeftNavbarHomeTestimoniTypeSemesterCourseIdIndexRoute
 }
 export interface FileRoutesById {
@@ -310,6 +341,7 @@ export interface FileRoutesById {
   '/_app/_left-navbar/timeline/$infoId/': typeof AppLeftNavbarTimelineInfoIdIndexRoute
   '/_app/_left-navbar/home/household/manajemen-request-laporan/': typeof AppLeftNavbarHomeHouseholdManajemenRequestLaporanIndexRoute
   '/_app/_left-navbar/home/household/manajemen-sekre-properti/': typeof AppLeftNavbarHomeHouseholdManajemenSekrePropertiIndexRoute
+  '/_app/_left-navbar/home/household/peminjaman-sekre-properti/': typeof AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiIndexRoute
   '/_app/_left-navbar/home/household/pengajuan-laporan/': typeof AppLeftNavbarHomeHouseholdPengajuanLaporanIndexRoute
   '/_app/_left-navbar/home/rekomendasi/$rekomendasiId/': typeof AppLeftNavbarHomeRekomendasiRekomendasiIdIndexRoute
   '/_app/_left-navbar/home/testimoni/$type/': typeof AppLeftNavbarHomeTestimoniTypeIndexRoute
@@ -318,6 +350,8 @@ export interface FileRoutesById {
   '/_app/_left-navbar/settings/_settings-item/subscriptions/': typeof AppLeftNavbarSettingsSettingsItemSubscriptionsIndexRoute
   '/_app/_left-navbar/home/testimoni/$type/$semester/': typeof AppLeftNavbarHomeTestimoniTypeSemesterIndexRoute
   '/_app/_left-navbar/settings/_settings-item/courses/add/': typeof AppLeftNavbarSettingsSettingsItemCoursesAddIndexRoute
+  '/_app/_left-navbar/home/household/peminjaman-sekre-properti/property/$propertyId/': typeof AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiPropertyPropertyIdIndexRoute
+  '/_app/_left-navbar/home/household/peminjaman-sekre-properti/sekre/$sekreId/': typeof AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiSekreSekreIdIndexRoute
   '/_app/_left-navbar/home/testimoni_/$type/$semester/$courseId/': typeof AppLeftNavbarHomeTestimoniTypeSemesterCourseIdIndexRoute
 }
 export interface FileRouteTypes {
@@ -343,6 +377,7 @@ export interface FileRouteTypes {
     | '/timeline/$infoId'
     | '/home/household/manajemen-request-laporan'
     | '/home/household/manajemen-sekre-properti'
+    | '/home/household/peminjaman-sekre-properti'
     | '/home/household/pengajuan-laporan'
     | '/home/rekomendasi/$rekomendasiId'
     | '/home/testimoni/$type'
@@ -351,6 +386,8 @@ export interface FileRouteTypes {
     | '/settings/subscriptions'
     | '/home/testimoni/$type/$semester'
     | '/settings/courses/add'
+    | '/home/household/peminjaman-sekre-properti/property/$propertyId'
+    | '/home/household/peminjaman-sekre-properti/sekre/$sekreId'
     | '/home/testimoni/$type/$semester/$courseId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -371,6 +408,7 @@ export interface FileRouteTypes {
     | '/timeline/$infoId'
     | '/home/household/manajemen-request-laporan'
     | '/home/household/manajemen-sekre-properti'
+    | '/home/household/peminjaman-sekre-properti'
     | '/home/household/pengajuan-laporan'
     | '/home/rekomendasi/$rekomendasiId'
     | '/home/testimoni/$type'
@@ -379,6 +417,8 @@ export interface FileRouteTypes {
     | '/settings/subscriptions'
     | '/home/testimoni/$type/$semester'
     | '/settings/courses/add'
+    | '/home/household/peminjaman-sekre-properti/property/$propertyId'
+    | '/home/household/peminjaman-sekre-properti/sekre/$sekreId'
     | '/home/testimoni/$type/$semester/$courseId'
   id:
     | '__root__'
@@ -405,6 +445,7 @@ export interface FileRouteTypes {
     | '/_app/_left-navbar/timeline/$infoId/'
     | '/_app/_left-navbar/home/household/manajemen-request-laporan/'
     | '/_app/_left-navbar/home/household/manajemen-sekre-properti/'
+    | '/_app/_left-navbar/home/household/peminjaman-sekre-properti/'
     | '/_app/_left-navbar/home/household/pengajuan-laporan/'
     | '/_app/_left-navbar/home/rekomendasi/$rekomendasiId/'
     | '/_app/_left-navbar/home/testimoni/$type/'
@@ -413,6 +454,8 @@ export interface FileRouteTypes {
     | '/_app/_left-navbar/settings/_settings-item/subscriptions/'
     | '/_app/_left-navbar/home/testimoni/$type/$semester/'
     | '/_app/_left-navbar/settings/_settings-item/courses/add/'
+    | '/_app/_left-navbar/home/household/peminjaman-sekre-properti/property/$propertyId/'
+    | '/_app/_left-navbar/home/household/peminjaman-sekre-properti/sekre/$sekreId/'
     | '/_app/_left-navbar/home/testimoni_/$type/$semester/$courseId/'
   fileRoutesById: FileRoutesById
 }
@@ -614,6 +657,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppLeftNavbarHomeHouseholdPengajuanLaporanIndexRouteImport
       parentRoute: typeof AppLeftNavbarRoute
     }
+    '/_app/_left-navbar/home/household/peminjaman-sekre-properti/': {
+      id: '/_app/_left-navbar/home/household/peminjaman-sekre-properti/'
+      path: '/home/household/peminjaman-sekre-properti'
+      fullPath: '/home/household/peminjaman-sekre-properti'
+      preLoaderRoute: typeof AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiIndexRouteImport
+      parentRoute: typeof AppLeftNavbarRoute
+    }
     '/_app/_left-navbar/home/household/manajemen-sekre-properti/': {
       id: '/_app/_left-navbar/home/household/manajemen-sekre-properti/'
       path: '/home/household/manajemen-sekre-properti'
@@ -647,6 +697,20 @@ declare module '@tanstack/react-router' {
       path: '/home/testimoni/$type/$semester/$courseId'
       fullPath: '/home/testimoni/$type/$semester/$courseId'
       preLoaderRoute: typeof AppLeftNavbarHomeTestimoniTypeSemesterCourseIdIndexRouteImport
+      parentRoute: typeof AppLeftNavbarRoute
+    }
+    '/_app/_left-navbar/home/household/peminjaman-sekre-properti/sekre/$sekreId/': {
+      id: '/_app/_left-navbar/home/household/peminjaman-sekre-properti/sekre/$sekreId/'
+      path: '/home/household/peminjaman-sekre-properti/sekre/$sekreId'
+      fullPath: '/home/household/peminjaman-sekre-properti/sekre/$sekreId'
+      preLoaderRoute: typeof AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiSekreSekreIdIndexRouteImport
+      parentRoute: typeof AppLeftNavbarRoute
+    }
+    '/_app/_left-navbar/home/household/peminjaman-sekre-properti/property/$propertyId/': {
+      id: '/_app/_left-navbar/home/household/peminjaman-sekre-properti/property/$propertyId/'
+      path: '/home/household/peminjaman-sekre-properti/property/$propertyId'
+      fullPath: '/home/household/peminjaman-sekre-properti/property/$propertyId'
+      preLoaderRoute: typeof AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiPropertyPropertyIdIndexRouteImport
       parentRoute: typeof AppLeftNavbarRoute
     }
   }
@@ -726,8 +790,11 @@ interface AppLeftNavbarRouteChildren {
   AppLeftNavbarTimelineInfoIdIndexRoute: typeof AppLeftNavbarTimelineInfoIdIndexRoute
   AppLeftNavbarHomeHouseholdManajemenRequestLaporanIndexRoute: typeof AppLeftNavbarHomeHouseholdManajemenRequestLaporanIndexRoute
   AppLeftNavbarHomeHouseholdManajemenSekrePropertiIndexRoute: typeof AppLeftNavbarHomeHouseholdManajemenSekrePropertiIndexRoute
+  AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiIndexRoute: typeof AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiIndexRoute
   AppLeftNavbarHomeHouseholdPengajuanLaporanIndexRoute: typeof AppLeftNavbarHomeHouseholdPengajuanLaporanIndexRoute
   AppLeftNavbarHomeRekomendasiRekomendasiIdIndexRoute: typeof AppLeftNavbarHomeRekomendasiRekomendasiIdIndexRoute
+  AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiPropertyPropertyIdIndexRoute: typeof AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiPropertyPropertyIdIndexRoute
+  AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiSekreSekreIdIndexRoute: typeof AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiSekreSekreIdIndexRoute
   AppLeftNavbarHomeTestimoniTypeSemesterCourseIdIndexRoute: typeof AppLeftNavbarHomeTestimoniTypeSemesterCourseIdIndexRoute
 }
 
@@ -749,10 +816,16 @@ const AppLeftNavbarRouteChildren: AppLeftNavbarRouteChildren = {
     AppLeftNavbarHomeHouseholdManajemenRequestLaporanIndexRoute,
   AppLeftNavbarHomeHouseholdManajemenSekrePropertiIndexRoute:
     AppLeftNavbarHomeHouseholdManajemenSekrePropertiIndexRoute,
+  AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiIndexRoute:
+    AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiIndexRoute,
   AppLeftNavbarHomeHouseholdPengajuanLaporanIndexRoute:
     AppLeftNavbarHomeHouseholdPengajuanLaporanIndexRoute,
   AppLeftNavbarHomeRekomendasiRekomendasiIdIndexRoute:
     AppLeftNavbarHomeRekomendasiRekomendasiIdIndexRoute,
+  AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiPropertyPropertyIdIndexRoute:
+    AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiPropertyPropertyIdIndexRoute,
+  AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiSekreSekreIdIndexRoute:
+    AppLeftNavbarHomeHouseholdPeminjamanSekrePropertiSekreSekreIdIndexRoute,
   AppLeftNavbarHomeTestimoniTypeSemesterCourseIdIndexRoute:
     AppLeftNavbarHomeTestimoniTypeSemesterCourseIdIndexRoute,
 }
