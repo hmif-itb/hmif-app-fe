@@ -4,9 +4,7 @@ import { Button } from '~/components/ui/button';
 import { ChevronLeft } from 'lucide-react';
 import { useRouter } from '@tanstack/react-router';
 import SearchBar from './-components/SearchBar';
-import PropertyList from './-components/PropertyList';
-import SekreList from './-components/SekreList';
-import { SwitchToggle } from './-components/Switch';
+import PeminjamanList from './-components/PeminjamanList';
 import { FilterOptions } from './-components/FilterModal';
 import { isInRoles } from '~/lib/roles';
 import { loadUserCache } from '~/lib/session';
@@ -106,7 +104,7 @@ function HouseholdAdminPage() {
           currentFilter={filter}
           searchTerm={searchTerm}
         />
-        <PropertyList filter={filter} searchTerm={searchTerm} />
+        <PeminjamanList filter={filter} searchTerm={searchTerm} />
       </main>
     </div>
   );
