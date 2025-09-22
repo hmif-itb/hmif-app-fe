@@ -7,6 +7,12 @@ import SearchBar from './-components/SearchBar';
 import RequestList from './-components/RequestList';
 import ReportList from './-components/ReportList';
 import { SwitchToggle } from './-components/Switch';
+import { FilterOptions } from './-components/FilterModal';
+import {
+  fetchRequestsAndReports,
+  RequestData,
+  ReportData,
+} from './ApiSimulation';
 import { isInRoles } from '~/lib/roles';
 import { loadUserCache } from '~/lib/session';
 
@@ -14,24 +20,31 @@ export const Route = createFileRoute(
   '/_app/_left-navbar/home/household/manajemen-request-laporan/',
 )({
   component: HouseholdAdminPage,
-  loader: () => {
-    if (!loadUserCache!()) {
-      throw redirect({ to: '/home/household' });
-    }
-    if (loadUserCache()) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
-      if (!isInRoles(loadUserCache(), ['household'])) {
-        throw redirect({ to: '/home/household' });
-      }
-    }
-  },
+  //   loader: () => {
+  //     if (!loadUserCache!()) {
+  //       throw redirect({ to: '/home/household' });
+  //     }
+  //     if (loadUserCache()) {
+  //       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  //       // @ts-expect-error
+  //       if (!isInRoles(loadUserCache(), ['household'])) {
+  //         throw redirect({ to: '/home/household' });
+  //       }
+  //     }
+  //   },
 });
 
 function HouseholdAdminPage() {
   const router = useRouter();
   const [activeView, setActiveView] = useState('Laporan');
   const [isMobile, setIsMobile] = useState(false);
+  const [filter, setFilter] = useState<FilterOptions>({ category: 'all' });
+  const [searchTerm, setSearchTerm] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Data states
+  const [requestData, setRequestData] = useState<RequestData[]>([]);
+  const [reportData, setReportData] = useState<ReportData[]>([]);
 
   useEffect(() => {
     const checkIfMobile = () => {
@@ -44,19 +57,66 @@ function HouseholdAdminPage() {
     return () => window.removeEventListener('resize', checkIfMobile);
   }, []);
 
+  // Fetch data on component mount
+  useEffect(() => {
+    const loadData = async () => {
+      setIsLoading(true);
+      try {
+        const { requests, reports } = await fetchRequestsAndReports();
+        setRequestData(requests);
+        setReportData(reports);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadData();
+  }, []);
+
   const handleSwitchChange = (value: string) => {
     console.log('Selected:', value);
     setActiveView(value);
   };
 
+  const handleFilterChange = (newFilter: FilterOptions) => {
+    setFilter(newFilter);
+  };
+
+  const handleSearchChange = (newSearchTerm: string) => {
+    setSearchTerm(newSearchTerm);
+  };
+
   const renderContent = () => {
     switch (activeView) {
       case 'Request':
-        return <RequestList />;
+        return (
+          <RequestList
+            filter={filter}
+            searchTerm={searchTerm}
+            data={requestData}
+            isLoading={isLoading}
+          />
+        );
       case 'Laporan':
-        return <ReportList />;
+        return (
+          <ReportList
+            filter={filter}
+            searchTerm={searchTerm}
+            data={reportData}
+            isLoading={isLoading}
+          />
+        );
       default:
-        return <ReportList />;
+        return (
+          <ReportList
+            filter={filter}
+            searchTerm={searchTerm}
+            data={reportData}
+            isLoading={isLoading}
+          />
+        );
     }
   };
 
@@ -100,7 +160,12 @@ function HouseholdAdminPage() {
           />
           Manajemen Request dan Laporan
         </h1>
-        <SearchBar />
+        <SearchBar
+          onFilterChange={handleFilterChange}
+          onSearchChange={handleSearchChange}
+          currentFilter={filter}
+          searchTerm={searchTerm}
+        />
         <SwitchToggle
           options={['Request', 'Laporan']}
           defaultValue="Laporan"
