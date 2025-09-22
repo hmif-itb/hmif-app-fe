@@ -2,13 +2,14 @@ import { Button } from '~/components/ui/button';
 import PeminjamanItem from './peminjaman-item';
 import { CirclePlus, NotebookPen, Package, RotateCw } from 'lucide-react';
 import useSession from '~/hooks/auth/useSession';
+import { isInRoles } from '~/lib/roles';
 
 function RightSection() {
   const user = useSession();
   return (
     <div className="flex h-full min-w-[335px] flex-col gap-5">
       {/* Button */}
-      {user?.roles.includes('household') ? (
+      {isInRoles(user, ['household']) ? (
         <div className="flex flex-col gap-4">
           <Button className="w-full bg-[#E2C66F] text-[#333333]">
             <Package />

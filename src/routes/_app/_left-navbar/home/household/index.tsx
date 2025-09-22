@@ -13,7 +13,7 @@ function HouseholdPage() {
   const router = useRouter();
 
   return (
-    <div className="flex h-full flex-col px-10 pb-[60px]">
+    <div className="flex h-full flex-col md:px-10 md:pb-[60px]">
       {/* Back Button */}
       <Button
         variant="link"
