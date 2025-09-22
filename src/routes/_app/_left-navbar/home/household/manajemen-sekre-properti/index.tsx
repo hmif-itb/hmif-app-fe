@@ -8,6 +8,16 @@ import PropertyList from './-components/PropertyList';
 import SekreList from './-components/SekreList';
 import { SwitchToggle } from './-components/Switch';
 import { FilterOptions } from './-components/FilterModal';
+import {
+  CreatePropertyModal,
+  PropertyFormData,
+} from './-components/CreatePropertyModal';
+import {
+  CreateSekreModal,
+  SekreFormData,
+} from './-components/CreateSekreModal';
+import { PropertyData } from './-components/PropertyItem';
+import { SekreData } from './-components/SekreItem';
 import { isInRoles } from '~/lib/roles';
 import { loadUserCache } from '~/lib/session';
 
@@ -29,13 +39,107 @@ export const Route = createFileRoute(
   //   },
 });
 
+// DummyData
+const propertyDummyData: PropertyData[] = [
+  {
+    name: 'Proyektor Epson X200',
+    condition: 'used',
+    amount: 2,
+    location: 'Ruang Multimedia',
+  },
+  {
+    name: 'Speaker JBL',
+    condition: 'new',
+    amount: 1,
+    location: 'Ruang Sekretariat',
+  },
+  {
+    name: 'Kabel HDMI',
+    condition: 'used',
+    amount: 5,
+    location: 'Gudang Properti',
+  },
+];
+const sekreDummyData: SekreData[] = [
+  {
+    name: 'Sekre 1',
+    condition: 'used',
+    location: 'Ruang Rapat Sekre',
+    photo:
+      'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=400&h=300&fit=crop',
+  },
+  {
+    name: 'Speaker JBL',
+    condition: 'new',
+    location: 'Gudang Sekre',
+    photo:
+      'https://images.unsplash.com/photo-1606983340126-99ab4feaa64a?w=400&h=300&fit=crop',
+  },
+  {
+    name: 'Meja Kayu',
+    condition: 'used',
+    location: 'Ruang Utama Sekre',
+    photo:
+      'https://images.unsplash.com/photo-1587440871875-191322ee64b0?w=400&h=300&fit=crop',
+  },
+  {
+    name: 'Kursi Lipat',
+    condition: 'new',
+    location: 'Ruang Rapat Sekre',
+    photo:
+      'https://images.unsplash.com/photo-1587440871875-191322ee64b0?w=400&h=300&fit=crop',
+  },
+];
+
+// Fetch locations untuk dropdown lokasi Item
+async function fetchLocations(): Promise<string[]> {
+  console.log('Fetching locations from API...');
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(['Sekre 1', 'Sekre 2', 'Sekre 3', 'Gudang', 'Ruang Rapat']);
+    }, 500);
+  });
+}
+
+async function handlePropertyCreate(data: PropertyFormData): Promise<void> {
+  console.log('Creating property:', data);
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      console.log('Property created successfully');
+      resolve();
+    }, 1000);
+  });
+}
+
+async function handleSekreCreate(data: SekreFormData): Promise<void> {
+  console.log('Creating sekre:', data);
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      console.log('Sekre created successfully');
+      resolve();
+    }, 1000);
+  });
+}
+
 function HouseholdAdminPage() {
   const router = useRouter();
   const [activeView, setActiveView] = useState('Properti');
   const [isMobile, setIsMobile] = useState(false);
   const [filter, setFilter] = useState<FilterOptions>({ condition: 'all' });
   const [searchTerm, setSearchTerm] = useState('');
+  const [locations, setLocations] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
+  // Data States
+  const [propertyData, setPropertyData] =
+    useState<PropertyData[]>(propertyDummyData);
+  const [sekreData, setSekreData] = useState<SekreData[]>(sekreDummyData);
+
+  // Create Modal States
+  const [createPropertyModalOpen, setCreatePropertyModalOpen] = useState(false);
+  const [createSekreModalOpen, setCreateSekreModalOpen] = useState(false);
+
+  // Handle Responsive
   useEffect(() => {
     const checkIfMobile = () => {
       setIsMobile(window.innerWidth < 1024);
@@ -45,6 +149,15 @@ function HouseholdAdminPage() {
     window.addEventListener('resize', checkIfMobile);
 
     return () => window.removeEventListener('resize', checkIfMobile);
+  }, []);
+
+  // Dummy to fetch locations
+  useEffect(() => {
+    const loadLocations = async () => {
+      const data = await fetchLocations();
+      setLocations(data);
+    };
+    loadLocations();
   }, []);
 
   const handleSwitchChange = (value: string) => {
@@ -60,14 +173,99 @@ function HouseholdAdminPage() {
     setSearchTerm(newSearchTerm);
   };
 
+  //   Click tombol create property
+  const handleCreateProperty = () => {
+    setCreatePropertyModalOpen(true);
+  };
+
+  //   Click tombol create sekre
+  const handleCreateSekre = () => {
+    setCreateSekreModalOpen(true);
+  };
+
+  //   Submit create property
+  const handlePropertyCreateConfirm = async (data: PropertyFormData) => {
+    setIsLoading(true);
+    try {
+      await handlePropertyCreate(data);
+      // Add new property to state
+      setPropertyData((prev) => [...prev, data]);
+    } catch (error) {
+      console.error('Error creating property:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  //   Submit create sekre
+  const handleSekreCreateConfirm = async (data: SekreFormData) => {
+    setIsLoading(true);
+    try {
+      await handleSekreCreate(data);
+      // Add new sekre to state
+      setSekreData((prev) => [...prev, data]);
+    } catch (error) {
+      console.error('Error creating sekre:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handlePropertyUpdate = (index: number, updatedData: PropertyData) => {
+    setPropertyData((prev) =>
+      prev.map((item, i) => (i === index ? updatedData : item)),
+    );
+  };
+
+  const handlePropertyDelete = (index: number) => {
+    setPropertyData((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleSekreUpdate = (index: number, updatedData: SekreData) => {
+    setSekreData((prev) =>
+      prev.map((item, i) => (i === index ? updatedData : item)),
+    );
+  };
+
+  const handleSekreDelete = (index: number) => {
+    setSekreData((prev) => prev.filter((_, i) => i !== index));
+  };
+
   const renderContent = () => {
     switch (activeView) {
       case 'Properti':
-        return <PropertyList filter={filter} searchTerm={searchTerm} />;
+        return (
+          <PropertyList
+            filter={filter}
+            searchTerm={searchTerm}
+            data={propertyData}
+            onUpdate={handlePropertyUpdate}
+            onDelete={handlePropertyDelete}
+            locations={locations}
+          />
+        );
       case 'Sekre':
-        return <SekreList filter={filter} searchTerm={searchTerm} />;
+        return (
+          <SekreList
+            filter={filter}
+            searchTerm={searchTerm}
+            data={sekreData}
+            onUpdate={handleSekreUpdate}
+            onDelete={handleSekreDelete}
+            locations={locations}
+          />
+        );
       default:
-        return <PropertyList filter={filter} searchTerm={searchTerm} />;
+        return (
+          <PropertyList
+            filter={filter}
+            searchTerm={searchTerm}
+            data={propertyData}
+            onUpdate={handlePropertyUpdate}
+            onDelete={handlePropertyDelete}
+            locations={locations}
+          />
+        );
     }
   };
 
@@ -114,8 +312,11 @@ function HouseholdAdminPage() {
         <SearchBar
           onFilterChange={handleFilterChange}
           onSearchChange={handleSearchChange}
+          onCreateProperty={handleCreateProperty}
+          onCreateSekre={handleCreateSekre}
           currentFilter={filter}
           searchTerm={searchTerm}
+          activeView={activeView}
         />
         <SwitchToggle
           options={['Properti', 'Sekre']}
@@ -124,6 +325,22 @@ function HouseholdAdminPage() {
         />
         {renderContent()}
       </main>
+
+      {/* Create Property Modal */}
+      <CreatePropertyModal
+        isOpen={createPropertyModalOpen}
+        onClose={() => setCreatePropertyModalOpen(false)}
+        onConfirm={handlePropertyCreateConfirm}
+        locations={locations}
+      />
+
+      {/* Create Sekre Modal */}
+      <CreateSekreModal
+        isOpen={createSekreModalOpen}
+        onClose={() => setCreateSekreModalOpen(false)}
+        onConfirm={handleSekreCreateConfirm}
+        locations={locations}
+      />
     </div>
   );
 }

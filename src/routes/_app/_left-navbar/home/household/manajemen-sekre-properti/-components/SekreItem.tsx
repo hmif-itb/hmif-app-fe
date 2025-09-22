@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { MapPin, SquarePen, Trash } from 'lucide-react';
 import { DeleteModal } from './DeleteModal';
 import { EditSekreModal, SekreFormData } from './EditSekreModal';
@@ -12,41 +12,17 @@ export interface SekreData {
 
 interface SekreItemProps {
   sekre: SekreData;
+  onUpdate: (updatedData: SekreData) => void;
+  onDelete: () => void;
+  locations: string[];
 }
 
-async function fetchLocations(): Promise<string[]> {
-  console.log('Fetching locations from API...');
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(['Sekre 1', 'Sekre 2', 'Sekre 3', 'Gudang', 'Ruang Rapat']);
-    }, 500);
-  });
-}
-
-async function handleSekreUpdate(
-  id: string,
-  data: SekreFormData,
-): Promise<void> {
-  console.log('Updating sekre:', id, data);
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      console.log('Sekre updated successfully');
-      resolve();
-    }, 1000);
-  });
-}
-
-async function handleSekreDelete(id: string): Promise<void> {
-  console.log('Deleting sekre:', id);
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      console.log('Sekre deleted successfully');
-      resolve();
-    }, 1000);
-  });
-}
-
-export function SekreItem({ sekre }: SekreItemProps) {
+export function SekreItem({
+  sekre,
+  onUpdate,
+  onDelete,
+  locations,
+}: SekreItemProps) {
   const [modalState, setModalState] = useState<{
     isOpen: boolean;
     type: 'edit' | 'delete' | null;
@@ -55,16 +31,7 @@ export function SekreItem({ sekre }: SekreItemProps) {
     type: null,
   });
 
-  const [locations, setLocations] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    const loadLocations = async () => {
-      const data = await fetchLocations();
-      setLocations(data);
-    };
-    loadLocations();
-  }, []);
 
   const handleOpenModal = (type: 'edit' | 'delete') => {
     setModalState({ isOpen: true, type });
@@ -77,7 +44,12 @@ export function SekreItem({ sekre }: SekreItemProps) {
   const handleEditConfirm = async (data: SekreFormData) => {
     setIsLoading(true);
     try {
-      await handleSekreUpdate('sekre-id-placeholder', data);
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      console.log('Sekre updated successfully');
+
+      // Update the data in parent component
+      onUpdate(data);
     } catch (error) {
       console.error('Error updating sekre:', error);
     } finally {
@@ -88,7 +60,12 @@ export function SekreItem({ sekre }: SekreItemProps) {
   const handleDeleteConfirm = async () => {
     setIsLoading(true);
     try {
-      await handleSekreDelete('sekre-id-placeholder');
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      console.log('Sekre deleted successfully');
+
+      // Delete the item in parent component
+      onDelete();
     } catch (error) {
       console.error('Error deleting sekre:', error);
     } finally {

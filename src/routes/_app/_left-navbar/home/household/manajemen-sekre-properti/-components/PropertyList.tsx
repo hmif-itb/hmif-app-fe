@@ -5,31 +5,21 @@ import { FilterOptions } from './FilterModal';
 interface PropertyListProps {
   filter: FilterOptions;
   searchTerm: string;
+  data: PropertyData[];
+  onUpdate: (index: number, updatedData: PropertyData) => void;
+  onDelete: (index: number) => void;
+  locations: string[];
 }
 
-const sampleProperty: PropertyData[] = [
-  {
-    name: 'Proyektor Epson X200',
-    condition: 'used',
-    amount: 2,
-    location: 'Ruang Multimedia',
-  },
-  {
-    name: 'Speaker JBL',
-    condition: 'new',
-    amount: 1,
-    location: 'Ruang Sekretariat',
-  },
-  {
-    name: 'Kabel HDMI',
-    condition: 'used',
-    amount: 5,
-    location: 'Gudang Properti',
-  },
-];
-
-function PropertyList({ filter, searchTerm }: PropertyListProps) {
-  const filteredProperties = sampleProperty.filter((property) => {
+function PropertyList({
+  filter,
+  searchTerm,
+  data,
+  onUpdate,
+  onDelete,
+  locations,
+}: PropertyListProps) {
+  const filteredProperties = data.filter((property) => {
     const matchesCondition =
       filter.condition === 'all' || property.condition === filter.condition;
     const matchesSearch = property.name
@@ -40,9 +30,25 @@ function PropertyList({ filter, searchTerm }: PropertyListProps) {
 
   return (
     <div className="mb-20 flex w-full flex-col gap-3 lg:mb-5 lg:gap-5">
-      {filteredProperties.map((property, idx) => (
-        <PropertyItem key={idx} property={property} />
-      ))}
+      {filteredProperties.map((property, idx) => {
+        // Find the original index in the full data array
+        const originalIndex = data.findIndex(
+          (item) =>
+            item.name === property.name &&
+            item.location === property.location &&
+            item.amount === property.amount,
+        );
+
+        return (
+          <PropertyItem
+            key={`${property.name}-${originalIndex}`}
+            property={property}
+            onUpdate={(updatedData) => onUpdate(originalIndex, updatedData)}
+            onDelete={() => onDelete(originalIndex)}
+            locations={locations}
+          />
+        );
+      })}
     </div>
   );
 }

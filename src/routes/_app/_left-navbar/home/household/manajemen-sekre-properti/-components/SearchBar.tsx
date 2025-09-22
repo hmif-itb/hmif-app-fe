@@ -1,4 +1,4 @@
-import { ListFilter, Search } from 'lucide-react';
+import { ListFilter, Search, Plus } from 'lucide-react';
 import React, { useState } from 'react';
 import { Input } from '~/components/ui/input';
 import { FilterModal, FilterOptions } from './FilterModal';
@@ -6,15 +6,21 @@ import { FilterModal, FilterOptions } from './FilterModal';
 interface SearchBarProps {
   onFilterChange: (filter: FilterOptions) => void;
   onSearchChange: (searchTerm: string) => void;
+  onCreateProperty?: () => void;
+  onCreateSekre?: () => void;
   currentFilter: FilterOptions;
   searchTerm: string;
+  activeView: string;
 }
 
 function SearchBar({
   onFilterChange,
   onSearchChange,
+  onCreateProperty,
+  onCreateSekre,
   currentFilter,
   searchTerm,
+  activeView,
 }: SearchBarProps) {
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
 
@@ -28,6 +34,14 @@ function SearchBar({
 
   const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     onSearchChange(e.target.value);
+  };
+
+  const handleCreateClick = () => {
+    if (activeView === 'Properti' && onCreateProperty) {
+      onCreateProperty();
+    } else if (activeView === 'Sekre' && onCreateSekre) {
+      onCreateSekre();
+    }
   };
 
   const hasActiveFilter = currentFilter.condition !== 'all';
@@ -49,18 +63,32 @@ function SearchBar({
             <Search className="lg:hidden" size={20} />
           </span>
         </div>
-        {/* Filter */}
-        <button
-          onClick={handleFilterClick}
-          className={`flex size-8 min-h-8 min-w-8 items-center justify-center rounded-xl text-[#363538] transition-colors lg:size-[60px] lg:min-h-[60px] lg:min-w-[60px] lg:rounded-[20px] ${
-            hasActiveFilter
-              ? 'bg-[#305138] text-white'
-              : 'bg-white hover:bg-gray-50'
-          }`}
-        >
-          <ListFilter className="hidden lg:block" size={32} />
-          <ListFilter className="lg:hidden" size={24} />
-        </button>
+
+        {/* Action Buttons */}
+        <div className="flex gap-2 lg:gap-4">
+          {/* Create Button */}
+          <button
+            onClick={handleCreateClick}
+            className="flex size-8 min-h-8 min-w-8 items-center justify-center rounded-xl bg-[#E8C55F] text-[#1D3122] transition-colors hover:bg-[#E8C55F]/80 lg:size-[60px] lg:min-h-[60px] lg:min-w-[60px] lg:rounded-[20px]"
+            title={`Tambah ${activeView}`}
+          >
+            <Plus className="hidden lg:block" size={32} />
+            <Plus className="lg:hidden" size={24} />
+          </button>
+
+          {/* Filter Button */}
+          <button
+            onClick={handleFilterClick}
+            className={`flex size-8 min-h-8 min-w-8 items-center justify-center rounded-xl text-[#363538] transition-colors lg:size-[60px] lg:min-h-[60px] lg:min-w-[60px] lg:rounded-[20px] ${
+              hasActiveFilter
+                ? 'bg-[#305138] text-white'
+                : 'bg-white hover:bg-gray-50'
+            }`}
+          >
+            <ListFilter className="hidden lg:block" size={32} />
+            <ListFilter className="lg:hidden" size={24} />
+          </button>
+        </div>
       </div>
 
       <FilterModal

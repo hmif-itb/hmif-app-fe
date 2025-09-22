@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { MapPin, SquarePen, Trash } from 'lucide-react';
 import { DeleteModal } from './DeleteModal';
 import { EditPropertyModal, PropertyFormData } from './EditPropertyModal';
@@ -12,41 +12,17 @@ export interface PropertyData {
 
 interface PropertyItemProps {
   property: PropertyData;
+  onUpdate: (updatedData: PropertyData) => void;
+  onDelete: () => void;
+  locations: string[];
 }
 
-async function fetchLocations(): Promise<string[]> {
-  console.log('Fetching locations from API...');
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(['Sekre 1', 'Sekre 2', 'Sekre 3', 'Gudang', 'Ruang Rapat']);
-    }, 500);
-  });
-}
-
-async function handlePropertyUpdate(
-  id: string,
-  data: PropertyFormData,
-): Promise<void> {
-  console.log('Updating property:', id, data);
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      console.log('Property updated successfully');
-      resolve();
-    }, 1000);
-  });
-}
-
-async function handlePropertyDelete(id: string): Promise<void> {
-  console.log('Deleting property:', id);
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      console.log('Property deleted successfully');
-      resolve();
-    }, 1000);
-  });
-}
-
-export function PropertyItem({ property }: PropertyItemProps) {
+export function PropertyItem({
+  property,
+  onUpdate,
+  onDelete,
+  locations,
+}: PropertyItemProps) {
   const [modalState, setModalState] = useState<{
     isOpen: boolean;
     type: 'edit' | 'delete' | null;
@@ -55,16 +31,7 @@ export function PropertyItem({ property }: PropertyItemProps) {
     type: null,
   });
 
-  const [locations, setLocations] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    const loadLocations = async () => {
-      const data = await fetchLocations();
-      setLocations(data);
-    };
-    loadLocations();
-  }, []);
 
   const handleOpenModal = (type: 'edit' | 'delete') => {
     setModalState({ isOpen: true, type });
@@ -77,7 +44,12 @@ export function PropertyItem({ property }: PropertyItemProps) {
   const handleEditConfirm = async (data: PropertyFormData) => {
     setIsLoading(true);
     try {
-      await handlePropertyUpdate('property-id-placeholder', data);
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      console.log('Property updated successfully');
+
+      // Update the data in parent component
+      onUpdate(data);
     } catch (error) {
       console.error('Error updating property:', error);
     } finally {
@@ -88,7 +60,12 @@ export function PropertyItem({ property }: PropertyItemProps) {
   const handleDeleteConfirm = async () => {
     setIsLoading(true);
     try {
-      await handlePropertyDelete('property-id-placeholder');
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      console.log('Property deleted successfully');
+
+      // Delete the item in parent component
+      onDelete();
     } catch (error) {
       console.error('Error deleting property:', error);
     } finally {
