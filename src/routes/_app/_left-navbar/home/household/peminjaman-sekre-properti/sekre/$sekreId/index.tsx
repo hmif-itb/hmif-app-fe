@@ -6,11 +6,11 @@ import { useRouter } from '@tanstack/react-router';
 
 import { isInRoles } from '~/lib/roles';
 import { loadUserCache } from '~/lib/session';
-import { PropertyLoanForm } from './~components/PropertyForm';
+import { SekreLoanForm } from './~components/SekreForm';
 import { FilterOptions } from '../../-components/FilterModal';
 
 export const Route = createFileRoute(
-  '/_app/_left-navbar/home/household/peminjaman-sekre-properti/property/$propertyId/',
+  '/_app/_left-navbar/home/household/peminjaman-sekre-properti/sekre/$sekreId/',
 )({
   component: HouseholdAdminPage,
   //   loader: () => {
@@ -98,7 +98,7 @@ function HouseholdAdminPage() {
           />
           Peminjaman
         </h1>
-        <PropertyLoanForm />
+        <SekreLoanForm />
       </main>
     </div>
   );

@@ -19,7 +19,7 @@ import { CalendarPicker } from '../../../-components/CalendarPicker';
 import { ConfirmationModal } from '../../../-components/ConfirmationModal';
 import { SuccessModal } from '../../../-components/SuccessModal';
 
-export function PropertyLoanForm() {
+export function SekreLoanForm() {
   const [formData, setFormData] = useState({
     startDate: '',
     endDate: '',
@@ -109,15 +109,7 @@ export function PropertyLoanForm() {
     });
   };
 
-  type FieldName =
-    | 'startDate'
-    | 'endDate'
-    | 'startTime'
-    | 'endTime'
-    | 'type'
-    | 'reason';
-
-  const handleInputChange = (field: FieldName, value: string) => {
+  const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => {
       const newData = { ...prev };
 
@@ -171,7 +163,7 @@ export function PropertyLoanForm() {
 
         {/* Type */}
         <span className="font-semibold">
-          Properti -{' '}
+          Sekre -{' '}
           {formData.type
             ? formData.type.charAt(0).toUpperCase() + formData.type.slice(1)
             : ''}
