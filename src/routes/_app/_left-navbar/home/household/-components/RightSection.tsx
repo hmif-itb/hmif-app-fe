@@ -4,6 +4,7 @@ import { CirclePlus, NotebookPen, Package, RotateCw } from 'lucide-react';
 import useSession from '~/hooks/auth/useSession';
 import { isInRoles } from '~/lib/roles';
 import { PeminjamanItemData } from '../index';
+import { useNavigate } from '@tanstack/react-router';
 
 interface RightSectionProps {
   peminjamanItems: PeminjamanItemData[];
@@ -12,6 +13,27 @@ interface RightSectionProps {
 
 function RightSection({ peminjamanItems, isLoading }: RightSectionProps) {
   const user = useSession();
+  const navigate = useNavigate();
+
+  const handleLihatProperti = () => {
+    navigate({ to: '/home/household/manajemen-properti' });
+  };
+
+  const handleLihatLaporanRequest = () => {
+    navigate({ to: '/home/household/manajemen-request-laporan' });
+  };
+
+  const handlePengajuanPinjaman = () => {
+    navigate({ to: '/home/household/pengajuan-peminjaman' });
+  };
+
+  const handlePengajuanLaporan = () => {
+    navigate({ to: '/home/household/pengajuan-laporan' });
+  };
+
+  const handlePengembalianPinjaman = () => {
+    navigate({ to: '/home/household/pengajuan-pengembalian' });
+  };
 
   return (
     <div className="flex h-full min-w-[335px] flex-col gap-5">
@@ -19,26 +41,41 @@ function RightSection({ peminjamanItems, isLoading }: RightSectionProps) {
       {/* TODO: Tipe Role mungkin berbeda */}
       {isInRoles(user, ['household']) ? (
         <div className="flex flex-col gap-4">
-          <Button className="w-full bg-[#E2C66F] text-[#333333]">
+          <Button
+            className="w-full bg-[#E2C66F] text-[#333333]"
+            onClick={handleLihatProperti}
+          >
             <Package />
             Lihat Properti
           </Button>
-          <Button className="w-full bg-[#E2C66F] text-[#333333]">
+          <Button
+            className="w-full bg-[#E2C66F] text-[#333333]"
+            onClick={handleLihatLaporanRequest}
+          >
             <NotebookPen />
             Lihat Laporan dan Request
           </Button>
         </div>
       ) : (
         <div className="flex flex-col gap-4">
-          <Button className="w-full bg-[#E2C66F] text-[#333333]">
+          <Button
+            className="w-full bg-[#E2C66F] text-[#333333]"
+            onClick={handlePengajuanPinjaman}
+          >
             <CirclePlus />
             Pengajuan Pinjaman
           </Button>
-          <Button className="w-full bg-[#E2C66F] text-[#333333]">
+          <Button
+            className="w-full bg-[#E2C66F] text-[#333333]"
+            onClick={handlePengajuanLaporan}
+          >
             <NotebookPen />
             Pengajuan Laporan
           </Button>
-          <Button className="w-full bg-[#E2C66F] text-[#333333]">
+          <Button
+            className="w-full bg-[#E2C66F] text-[#333333]"
+            onClick={handlePengembalianPinjaman}
+          >
             <RotateCw />
             Pengembalian Pinjaman
           </Button>

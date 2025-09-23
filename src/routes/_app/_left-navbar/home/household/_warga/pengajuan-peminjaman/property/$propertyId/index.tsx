@@ -5,7 +5,7 @@ import { ChevronLeft } from 'lucide-react';
 import { useRouter } from '@tanstack/react-router';
 import { isInRoles } from '~/lib/roles';
 import { loadUserCache } from '~/lib/session';
-import { PropertyLoanForm } from './~components/PropertyForm';
+import { PropertyLoanForm } from './-components/PropertyForm';
 import { PropertyData, fetchPropertyById } from '../../api';
 
 export const Route = createFileRoute(
