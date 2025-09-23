@@ -13,7 +13,7 @@ export function PropertyItem({ item }: PropertyItemProps) {
 
   const handleBorrowClick = () => {
     navigate({
-      to: '/home/household/peminjaman-sekre-properti/property/$propertyId',
+      to: '/home/household/pengajuan-peminjaman/property/$propertyId',
       params: { propertyId: item.id },
     });
   };

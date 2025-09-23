@@ -11,7 +11,7 @@ export function SekreItem({ sekre }: SekreItemProps) {
 
   const handlePinjamClick = () => {
     navigate({
-      to: '/home/household/peminjaman-sekre-properti/sekre/$sekreId',
+      to: '/home/household/pengajuan-peminjaman/sekre/$sekreId',
       params: { sekreId: sekre.id },
     });
   };
