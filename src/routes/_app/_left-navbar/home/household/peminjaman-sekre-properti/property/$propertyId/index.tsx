@@ -3,16 +3,15 @@ import { useState, useEffect } from 'react';
 import { Button } from '~/components/ui/button';
 import { ChevronLeft } from 'lucide-react';
 import { useRouter } from '@tanstack/react-router';
-
 import { isInRoles } from '~/lib/roles';
 import { loadUserCache } from '~/lib/session';
 import { PropertyLoanForm } from './~components/PropertyForm';
-import { FilterOptions } from '../../-components/FilterModal';
+import { PropertyData, fetchPropertyById } from '../../api';
 
 export const Route = createFileRoute(
   '/_app/_left-navbar/home/household/peminjaman-sekre-properti/property/$propertyId/',
 )({
-  component: HouseholdAdminPage,
+  component: PropertyDetailPage,
   //   loader: () => {
   //     if (!loadUserCache!()) {
   //       throw redirect({ to: '/home/household' });
@@ -27,12 +26,13 @@ export const Route = createFileRoute(
   //   },
 });
 
-function HouseholdAdminPage() {
+function PropertyDetailPage() {
   const router = useRouter();
-  const [activeView, setActiveView] = useState('Properti');
+  const { propertyId } = Route.useParams();
   const [isMobile, setIsMobile] = useState(false);
-  const [filter, setFilter] = useState<FilterOptions>({ condition: 'all' });
-  const [searchTerm, setSearchTerm] = useState('');
+  const [propertyData, setPropertyData] = useState<PropertyData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const checkIfMobile = () => {
@@ -45,18 +45,30 @@ function HouseholdAdminPage() {
     return () => window.removeEventListener('resize', checkIfMobile);
   }, []);
 
-  const handleSwitchChange = (value: string) => {
-    console.log('Selected:', value);
-    setActiveView(value);
-  };
+  // Fetch property data
+  useEffect(() => {
+    const loadPropertyData = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const property = await fetchPropertyById(propertyId);
+        if (property) {
+          setPropertyData(property);
+        } else {
+          setError('Properti tidak ditemukan');
+        }
+      } catch (error) {
+        console.error('Error fetching property:', error);
+        setError('Gagal memuat data properti');
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  const handleFilterChange = (newFilter: FilterOptions) => {
-    setFilter(newFilter);
-  };
-
-  const handleSearchChange = (newSearchTerm: string) => {
-    setSearchTerm(newSearchTerm);
-  };
+    if (propertyId) {
+      loadPropertyData();
+    }
+  }, [propertyId]);
 
   const mobileStyles = {
     backgroundImage: `url('/img/household/mask-mobile.svg')`,
@@ -70,6 +82,54 @@ function HouseholdAdminPage() {
     backgroundPosition: 'left top, right bottom',
     backgroundRepeat: 'no-repeat, no-repeat',
     backgroundSize: 'auto 1000px, auto 730px',
+  };
+
+  const renderContent = () => {
+    if (isLoading) {
+      return (
+        <div className="flex w-full flex-col gap-3 rounded-lg bg-white px-[30px] py-[34px] lg:gap-7">
+          <div className="flex items-center gap-3">
+            <div className="size-10 animate-pulse rounded-lg bg-gray-200" />
+            <div className="h-6 w-48 animate-pulse rounded bg-gray-200" />
+          </div>
+          <div className="h-4 w-32 animate-pulse rounded bg-gray-200" />
+          <div className="space-y-4">
+            <div className="flex flex-col gap-3 lg:flex-row lg:gap-[60px]">
+              <div className="h-16 w-full animate-pulse rounded bg-gray-200 lg:max-w-[242px]" />
+              <div className="h-16 w-full animate-pulse rounded bg-gray-200 lg:max-w-[242px]" />
+            </div>
+            <div className="grid grid-cols-1 gap-3 lg:grid-cols-3 lg:gap-[60px]">
+              <div className="h-16 w-full animate-pulse rounded bg-gray-200" />
+              <div className="h-16 w-full animate-pulse rounded bg-gray-200" />
+              <div className="h-16 w-full animate-pulse rounded bg-gray-200" />
+            </div>
+            <div className="h-48 w-full animate-pulse rounded bg-gray-200" />
+            <div className="h-12 w-full animate-pulse rounded bg-gray-200" />
+          </div>
+        </div>
+      );
+    }
+
+    if (error || !propertyData) {
+      return (
+        <div className="flex w-full flex-col items-center justify-center gap-4 rounded-lg bg-white px-[30px] py-[34px]">
+          <div className="text-center">
+            <h2 className="text-xl font-semibold text-red-600">{error}</h2>
+            <p className="mt-2 text-gray-600">
+              Properti yang Anda cari tidak tersedia atau telah dihapus.
+            </p>
+          </div>
+          <Button
+            onClick={() => router.history.back()}
+            className="bg-[#E8C55F] text-[#333333] hover:opacity-85"
+          >
+            Kembali
+          </Button>
+        </div>
+      );
+    }
+
+    return <PropertyLoanForm propertyData={propertyData} />;
   };
 
   return (
@@ -86,19 +146,19 @@ function HouseholdAdminPage() {
         <span>Back</span>
       </Button>
       <main
-        className="flex size-full flex-col  gap-3 overflow-y-scroll bg-[#30764B] p-[34px] lg:gap-6 lg:rounded-xl lg:px-[26px]"
+        className="flex size-full flex-col gap-3 overflow-y-scroll bg-[#30764B] p-[34px] lg:gap-6 lg:rounded-xl lg:px-[26px]"
         style={isMobile ? mobileStyles : desktopStyles}
       >
-        <h1 className="flex items-center gap-6 text-[32px] font-bold text-white lg:text-5xl ">
+        <h1 className="flex items-center gap-6 text-[32px] font-bold text-white lg:text-5xl">
           <ChevronLeft
             className="size-16 lg:hidden"
             onClick={() => {
               router.history.back();
             }}
           />
-          Peminjaman
+          Pengajuan Peminjaman
         </h1>
-        <PropertyLoanForm />
+        {renderContent()}
       </main>
     </div>
   );

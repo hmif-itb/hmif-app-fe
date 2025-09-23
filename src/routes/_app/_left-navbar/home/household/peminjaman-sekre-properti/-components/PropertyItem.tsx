@@ -1,13 +1,7 @@
 import { useState } from 'react';
 import { MapPin, Plus, ChevronDown } from 'lucide-react';
-
-export interface PropertyData {
-  name: string;
-  type: 'eksklusif' | 'non-eksklusif';
-  condition: 'new' | 'used';
-  amount: number;
-  location: string;
-}
+import { useNavigate } from '@tanstack/react-router';
+import { PropertyData } from '../api';
 
 interface PropertyItemProps {
   item: PropertyData;
@@ -15,10 +9,13 @@ interface PropertyItemProps {
 
 export function PropertyItem({ item }: PropertyItemProps) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const navigate = useNavigate();
 
   const handleBorrowClick = () => {
-    // Redirect to borrow page
-    window.location.href = '#';
+    navigate({
+      to: '/home/household/peminjaman-sekre-properti/property/$propertyId',
+      params: { propertyId: item.id },
+    });
   };
 
   const toggleExpanded = () => {
@@ -32,7 +29,7 @@ export function PropertyItem({ item }: PropertyItemProps) {
         {/* Left Section */}
         <div className="flex items-center gap-3">
           <div className="size-9 min-h-9 min-w-9 rounded-lg bg-[#E8C55F]">
-            <img src="" alt="" />
+            <img src={item.image || ''} alt="" />
           </div>
           {/* Information */}
           <div className="flex flex-col gap-3">
@@ -76,7 +73,7 @@ export function PropertyItem({ item }: PropertyItemProps) {
         >
           <div className="flex items-center gap-3">
             <div className="size-9 min-h-9 min-w-9 rounded-lg bg-[#E8C55F]">
-              <img src="" alt="" />
+              <img src={item.image || ''} alt="" />
             </div>
             <div className="flex flex-col justify-center gap-1 ">
               <h3 className="max-w-[120px] truncate text-sm font-semibold text-black md:max-w-[200px]">

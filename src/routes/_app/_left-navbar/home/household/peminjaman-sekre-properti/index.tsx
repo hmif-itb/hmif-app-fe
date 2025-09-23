@@ -10,11 +10,12 @@ import { SwitchToggle } from './-components/Switch';
 import { FilterOptions } from './-components/FilterModal';
 import { isInRoles } from '~/lib/roles';
 import { loadUserCache } from '~/lib/session';
+import { fetchAllPeminjamanData, PropertyData, SekreData } from './api';
 
 export const Route = createFileRoute(
   '/_app/_left-navbar/home/household/peminjaman-sekre-properti/',
 )({
-  component: HouseholdAdminPage,
+  component: HouseholdPeminjamanPage,
   //   loader: () => {
   //     if (!loadUserCache!()) {
   //       throw redirect({ to: '/home/household' });
@@ -29,12 +30,17 @@ export const Route = createFileRoute(
   //   },
 });
 
-function HouseholdAdminPage() {
+function HouseholdPeminjamanPage() {
   const router = useRouter();
   const [activeView, setActiveView] = useState('Properti');
   const [isMobile, setIsMobile] = useState(false);
   const [filter, setFilter] = useState<FilterOptions>({ condition: 'all' });
   const [searchTerm, setSearchTerm] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Data States
+  const [propertyData, setPropertyData] = useState<PropertyData[]>([]);
+  const [sekreData, setSekreData] = useState<SekreData[]>([]);
 
   useEffect(() => {
     const checkIfMobile = () => {
@@ -45,6 +51,24 @@ function HouseholdAdminPage() {
     window.addEventListener('resize', checkIfMobile);
 
     return () => window.removeEventListener('resize', checkIfMobile);
+  }, []);
+
+  // Fetch data on component mount
+  useEffect(() => {
+    const loadData = async () => {
+      setIsLoading(true);
+      try {
+        const { properties, sekre } = await fetchAllPeminjamanData();
+        setPropertyData(properties);
+        setSekreData(sekre);
+      } catch (error) {
+        console.error('Error fetching peminjaman data:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadData();
   }, []);
 
   const handleSwitchChange = (value: string) => {
@@ -63,11 +87,32 @@ function HouseholdAdminPage() {
   const renderContent = () => {
     switch (activeView) {
       case 'Properti':
-        return <PropertyList filter={filter} searchTerm={searchTerm} />;
+        return (
+          <PropertyList
+            filter={filter}
+            searchTerm={searchTerm}
+            data={propertyData}
+            isLoading={isLoading}
+          />
+        );
       case 'Sekre':
-        return <SekreList filter={filter} searchTerm={searchTerm} />;
+        return (
+          <SekreList
+            filter={filter}
+            searchTerm={searchTerm}
+            data={sekreData}
+            isLoading={isLoading}
+          />
+        );
       default:
-        return <PropertyList filter={filter} searchTerm={searchTerm} />;
+        return (
+          <PropertyList
+            filter={filter}
+            searchTerm={searchTerm}
+            data={propertyData}
+            isLoading={isLoading}
+          />
+        );
     }
   };
 

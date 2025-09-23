@@ -1,5 +1,4 @@
 import type React from 'react';
-
 import { useState } from 'react';
 import { Button } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';
@@ -12,12 +11,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from '~/components/ui/select';
-import { FileText } from 'lucide-react';
+import { FileText, MapPin, Users } from 'lucide-react';
 import { CalendarPicker } from '../../../-components/CalendarPicker';
 import { ConfirmationModal } from '../../../-components/ConfirmationModal';
 import { SuccessModal } from '../../../-components/SuccessModal';
+import { SekreData } from '../../../api';
 
-export function SekreLoanForm() {
+interface SekreLoanFormProps {
+  sekreData: SekreData;
+}
+
+export function SekreLoanForm({ sekreData }: SekreLoanFormProps) {
   const [formData, setFormData] = useState({
     startDate: '',
     endDate: '',
@@ -33,13 +37,9 @@ export function SekreLoanForm() {
 
   // Format time input to HH:MM with validation
   const formatTimeInput = (value: string): string => {
-    // Remove all non-numeric characters
     const numbersOnly = value.replace(/\D/g, '');
-
-    // Limit to 4 digits
     let limited = numbersOnly.slice(0, 4);
 
-    // Validate hours (00-23)
     if (limited.length >= 2) {
       const hours = parseInt(limited.slice(0, 2));
       if (hours > 23) {
@@ -47,7 +47,6 @@ export function SekreLoanForm() {
       }
     }
 
-    // Validate minutes (00-59)
     if (limited.length >= 4) {
       const minutes = parseInt(limited.slice(2, 4));
       if (minutes > 59) {
@@ -55,7 +54,6 @@ export function SekreLoanForm() {
       }
     }
 
-    // Format as HH:MM
     if (limited.length >= 3) {
       return `${limited.slice(0, 2)}:${limited.slice(2)}`;
     } else if (limited.length >= 1) {
@@ -65,12 +63,11 @@ export function SekreLoanForm() {
     return '';
   };
 
-  // Dummy function to simulate API call
   const submitLoanRequest = async () => {
-    console.log('Submitting loan request...', formData);
+    console.log('Submitting loan request for sekre:', sekreData.id, formData);
     return new Promise((resolve) => {
       setTimeout(() => {
-        console.log('Loan request submitted successfully!');
+        console.log('Sekre loan request submitted successfully!');
         resolve(true);
       }, 1500);
     });
@@ -96,7 +93,6 @@ export function SekreLoanForm() {
 
   const handleSuccessClose = () => {
     setShowSuccessModal(false);
-    // Reset form after successful submission
     setFormData({
       startDate: '',
       endDate: '',
@@ -107,18 +103,24 @@ export function SekreLoanForm() {
     });
   };
 
-  const handleInputChange = (field: string, value: string) => {
+  type FieldName =
+    | 'startDate'
+    | 'endDate'
+    | 'startTime'
+    | 'endTime'
+    | 'type'
+    | 'reason';
+
+  const handleInputChange = (field: FieldName, value: string) => {
     setFormData((prev) => {
       const newData = { ...prev };
 
-      // Handle time fields with formatting
       if (field === 'startTime' || field === 'endTime') {
         newData[field] = formatTimeInput(value);
       } else {
         newData[field] = value;
       }
 
-      // If changing start date and it's after end date, reset end date
       if (field === 'startDate' && prev.endDate) {
         const startDate = parseDate(value);
         const endDate = parseDate(prev.endDate);
@@ -145,29 +147,26 @@ export function SekreLoanForm() {
     <>
       <div className="flex w-full flex-col gap-3 rounded-lg bg-white px-[30px] pb-[74px] pt-[34px] lg:gap-7">
         {/* Header */}
-        <div className=" ">
-          <div className="flex items-center gap-3">
-            <div
-              className="flex size-10 items-center justify-center rounded-lg"
-              style={{ backgroundColor: '#E8C55F' }}
-            >
-              <FileText className="size-5" style={{ color: '#8B6914' }} />
-            </div>
-            <h1 className="text-xl font-semibold text-gray-900">
-              Formulir Peminjaman
-            </h1>
+        <div className="flex items-center gap-3">
+          <div
+            className="flex size-10 items-center justify-center rounded-lg"
+            style={{ backgroundColor: '#E8C55F' }}
+          >
+            <FileText className="size-5" style={{ color: '#8B6914' }} />
           </div>
+          <h1 className="text-xl font-semibold text-gray-900">
+            Formulir Peminjaman
+          </h1>
         </div>
 
         {/* Type */}
         <span className="font-semibold">
-          Sekre -{' '}
-          {formData.type
-            ? formData.type.charAt(0).toUpperCase() + formData.type.slice(1)
-            : ''}
+          Sekre - {sekreData.name}
+          {formData.type &&
+            ` (${formData.type.charAt(0).toUpperCase() + formData.type.slice(1)})`}
         </span>
 
-        {/* Content */}
+        {/* Form Content */}
         <form onSubmit={handleSubmit} className="space-y-3 lg:space-y-7">
           {/* Date Fields */}
           <div className="flex flex-col gap-3 lg:flex-row lg:gap-[60px]">
@@ -256,7 +255,7 @@ export function SekreLoanForm() {
                 <SelectTrigger>
                   <SelectValue
                     className="text-[14px] text-[#666666] placeholder:text-[#666666]"
-                    placeholder="Eksklusif"
+                    placeholder="Pilih Tipe"
                   />
                 </SelectTrigger>
                 <SelectContent className="text-[14px] text-[#666666]">
