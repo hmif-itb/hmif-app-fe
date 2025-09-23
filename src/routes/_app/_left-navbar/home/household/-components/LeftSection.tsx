@@ -1,7 +1,7 @@
 import React from 'react';
 import HouseholdCalendar from './Calendar';
 import useSession from '~/hooks/auth/useSession';
-import { EventType } from '../index';
+import { EventType } from '../-api';
 
 interface LeftSectionProps {
   selectedMonth: number;

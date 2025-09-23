@@ -1,6 +1,6 @@
 import { MapPin, Plus } from 'lucide-react';
 import { useNavigate } from '@tanstack/react-router';
-import { SekreData } from '../api';
+import { SekreData } from '../-api';
 
 interface SekreItemProps {
   sekre: SekreData;

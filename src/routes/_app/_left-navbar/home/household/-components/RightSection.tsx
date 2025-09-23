@@ -3,8 +3,8 @@ import PeminjamanItem from './PeminjamanItem';
 import { CirclePlus, NotebookPen, Package, RotateCw } from 'lucide-react';
 import useSession from '~/hooks/auth/useSession';
 import { isInRoles } from '~/lib/roles';
-import { PeminjamanItemData } from '../index';
 import { useNavigate } from '@tanstack/react-router';
+import { PeminjamanItemData } from '../-api';
 
 interface RightSectionProps {
   peminjamanItems: PeminjamanItemData[];

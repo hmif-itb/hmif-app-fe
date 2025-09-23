@@ -1,7 +1,7 @@
 import React from 'react';
 import { SekreItem } from './SekreItem';
 import { FilterOptions } from './FilterModal';
-import { SekreData } from '../api';
+import { SekreData } from '../-api';
 
 interface SekreListProps {
   filter: FilterOptions;

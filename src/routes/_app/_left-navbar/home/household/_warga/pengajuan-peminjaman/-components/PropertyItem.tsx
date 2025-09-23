@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { MapPin, Plus, ChevronDown } from 'lucide-react';
 import { useNavigate } from '@tanstack/react-router';
-import { PropertyData } from '../api';
+import { PropertyData } from '../-api';
 
 interface PropertyItemProps {
   item: PropertyData;

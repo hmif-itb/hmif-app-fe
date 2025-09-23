@@ -1,7 +1,7 @@
 import React from 'react';
 import { PeminjamanItem } from './PeminjamanItem';
 import { FilterOptions } from './FilterModal';
-import { PeminjamanData } from '../api';
+import { PeminjamanData } from '../-api';
 
 interface PeminjamanListProps {
   filter: FilterOptions;

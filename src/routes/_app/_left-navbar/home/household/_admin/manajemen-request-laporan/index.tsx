@@ -8,11 +8,7 @@ import RequestList from './-components/RequestList';
 import ReportList from './-components/ReportList';
 import { SwitchToggle } from './-components/Switch';
 import { FilterOptions } from './-components/FilterModal';
-import {
-  fetchRequestsAndReports,
-  RequestData,
-  ReportData,
-} from './ApiSimulation';
+import { fetchRequestsAndReports, RequestData, ReportData } from './-api';
 import { isInRoles } from '~/lib/roles';
 import { loadUserCache } from '~/lib/session';
 

@@ -5,11 +5,11 @@ import { ChevronLeft } from 'lucide-react';
 import { useRouter } from '@tanstack/react-router';
 import { isInRoles } from '~/lib/roles';
 import { loadUserCache } from '~/lib/session';
-import { SekreLoanForm } from './~components/SekreForm';
-import { SekreData, fetchSekreById } from '../../api';
+import { SekreLoanForm } from '../-components/SekreForm';
+import { SekreData, fetchSekreById } from '../-api';
 
 export const Route = createFileRoute(
-  '/_app/_left-navbar/home/household/_warga/pengajuan-peminjaman/sekre/$sekreId/',
+  '/_app/_left-navbar/home/household/_warga/pengajuan-peminjaman/sekre/$sekreId',
 )({
   component: SekreDetailPage,
   //   loader: () => {

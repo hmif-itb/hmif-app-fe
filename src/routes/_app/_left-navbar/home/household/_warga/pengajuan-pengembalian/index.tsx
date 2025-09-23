@@ -8,7 +8,7 @@ import PeminjamanList from './-components/PeminjamanList';
 import { FilterOptions } from './-components/FilterModal';
 import { isInRoles } from '~/lib/roles';
 import { loadUserCache } from '~/lib/session';
-import { fetchAllPeminjaman, PeminjamanData } from './api';
+import { fetchAllPeminjaman, PeminjamanData } from './-api';
 
 export const Route = createFileRoute(
   '/_app/_left-navbar/home/household/_warga/pengajuan-pengembalian/',

@@ -1,7 +1,7 @@
 import React from 'react';
 import { PropertyItem } from './PropertyItem';
 import { FilterOptions } from './FilterModal';
-import { PropertyData } from '../api';
+import { PropertyData } from '../-api';
 
 interface PropertyListProps {
   filter: FilterOptions;

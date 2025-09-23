@@ -20,6 +20,13 @@ import { PropertyData } from './-components/PropertyItem';
 import { SekreData } from './-components/SekreItem';
 import { isInRoles } from '~/lib/roles';
 import { loadUserCache } from '~/lib/session';
+import {
+  propertyDummyData,
+  sekreDummyData,
+  fetchLocations,
+  handlePropertyCreate,
+  handleSekreCreate,
+} from './-api';
 
 export const Route = createFileRoute(
   '/_app/_left-navbar/home/household/_admin/manajemen-properti/',
@@ -38,88 +45,6 @@ export const Route = createFileRoute(
   //     }
   //   },
 });
-
-// DummyData
-const propertyDummyData: PropertyData[] = [
-  {
-    name: 'Proyektor Epson X200',
-    condition: 'used',
-    amount: 2,
-    location: 'Ruang Multimedia',
-  },
-  {
-    name: 'Speaker JBL',
-    condition: 'new',
-    amount: 1,
-    location: 'Ruang Sekretariat',
-  },
-  {
-    name: 'Kabel HDMI',
-    condition: 'used',
-    amount: 5,
-    location: 'Gudang Properti',
-  },
-];
-const sekreDummyData: SekreData[] = [
-  {
-    name: 'Sekre 1',
-    condition: 'used',
-    location: 'Ruang Rapat Sekre',
-    photo:
-      'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=400&h=300&fit=crop',
-  },
-  {
-    name: 'Speaker JBL',
-    condition: 'new',
-    location: 'Gudang Sekre',
-    photo:
-      'https://images.unsplash.com/photo-1606983340126-99ab4feaa64a?w=400&h=300&fit=crop',
-  },
-  {
-    name: 'Meja Kayu',
-    condition: 'used',
-    location: 'Ruang Utama Sekre',
-    photo:
-      'https://images.unsplash.com/photo-1587440871875-191322ee64b0?w=400&h=300&fit=crop',
-  },
-  {
-    name: 'Kursi Lipat',
-    condition: 'new',
-    location: 'Ruang Rapat Sekre',
-    photo:
-      'https://images.unsplash.com/photo-1587440871875-191322ee64b0?w=400&h=300&fit=crop',
-  },
-];
-
-// Fetch locations untuk dropdown lokasi Item
-async function fetchLocations(): Promise<string[]> {
-  console.log('Fetching locations from API...');
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(['Sekre 1', 'Sekre 2', 'Sekre 3', 'Gudang', 'Ruang Rapat']);
-    }, 500);
-  });
-}
-
-async function handlePropertyCreate(data: PropertyFormData): Promise<void> {
-  console.log('Creating property:', data);
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      console.log('Property created successfully');
-      resolve();
-    }, 1000);
-  });
-}
-
-async function handleSekreCreate(data: SekreFormData): Promise<void> {
-  console.log('Creating sekre:', data);
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      console.log('Sekre created successfully');
-      resolve();
-    }, 1000);
-  });
-}
 
 function HouseholdAdminPage() {
   const router = useRouter();
@@ -151,7 +76,7 @@ function HouseholdAdminPage() {
     return () => window.removeEventListener('resize', checkIfMobile);
   }, []);
 
-  // Dummy to fetch locations
+  // Fetch locations
   useEffect(() => {
     const loadLocations = async () => {
       const data = await fetchLocations();
@@ -173,17 +98,14 @@ function HouseholdAdminPage() {
     setSearchTerm(newSearchTerm);
   };
 
-  //   Click tombol create property
   const handleCreateProperty = () => {
     setCreatePropertyModalOpen(true);
   };
 
-  //   Click tombol create sekre
   const handleCreateSekre = () => {
     setCreateSekreModalOpen(true);
   };
 
-  //   Submit create property
   const handlePropertyCreateConfirm = async (data: PropertyFormData) => {
     setIsLoading(true);
     try {
@@ -197,7 +119,6 @@ function HouseholdAdminPage() {
     }
   };
 
-  //   Submit create sekre
   const handleSekreCreateConfirm = async (data: SekreFormData) => {
     setIsLoading(true);
     try {

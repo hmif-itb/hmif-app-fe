@@ -10,7 +10,7 @@ import { SwitchToggle } from './-components/Switch';
 import { FilterOptions } from './-components/FilterModal';
 import { isInRoles } from '~/lib/roles';
 import { loadUserCache } from '~/lib/session';
-import { fetchAllPeminjamanData, PropertyData, SekreData } from './api';
+import { fetchAllPeminjamanData, PropertyData, SekreData } from './-api';
 
 export const Route = createFileRoute(
   '/_app/_left-navbar/home/household/_warga/pengajuan-peminjaman/',

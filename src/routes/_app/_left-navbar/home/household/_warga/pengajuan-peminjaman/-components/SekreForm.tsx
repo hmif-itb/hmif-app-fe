@@ -11,17 +11,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from '~/components/ui/select';
-import { FileText, MapPin } from 'lucide-react';
-import { CalendarPicker } from '../../../-components/CalendarPicker';
-import { ConfirmationModal } from '../../../-components/ConfirmationModal';
-import { SuccessModal } from '../../../-components/SuccessModal';
-import { PropertyData } from '../../../api';
+import { FileText, MapPin, Users } from 'lucide-react';
+import { CalendarPicker } from './CalendarPicker';
+import { ConfirmationModal } from './ConfirmationModal';
+import { SuccessModal } from './SuccessModal';
+import { SekreData } from '../-api';
 
-interface PropertyLoanFormProps {
-  propertyData: PropertyData;
+interface SekreLoanFormProps {
+  sekreData: SekreData;
 }
 
-export function PropertyLoanForm({ propertyData }: PropertyLoanFormProps) {
+export function SekreLoanForm({ sekreData }: SekreLoanFormProps) {
   const [formData, setFormData] = useState({
     startDate: '',
     endDate: '',
@@ -63,16 +63,11 @@ export function PropertyLoanForm({ propertyData }: PropertyLoanFormProps) {
     return '';
   };
 
-  // TODO: Replace with actual API call
   const submitLoanRequest = async () => {
-    console.log(
-      'Submitting loan request for property:',
-      propertyData.id,
-      formData,
-    );
+    console.log('Submitting loan request for sekre:', sekreData.id, formData);
     return new Promise((resolve) => {
       setTimeout(() => {
-        console.log('Property loan request submitted successfully!');
+        console.log('Sekre loan request submitted successfully!');
         resolve(true);
       }, 1500);
     });
@@ -166,7 +161,7 @@ export function PropertyLoanForm({ propertyData }: PropertyLoanFormProps) {
 
         {/* Type */}
         <span className="font-semibold">
-          Properti - {propertyData.name}
+          Sekre - {sekreData.name}
           {formData.type &&
             ` (${formData.type.charAt(0).toUpperCase() + formData.type.slice(1)})`}
         </span>

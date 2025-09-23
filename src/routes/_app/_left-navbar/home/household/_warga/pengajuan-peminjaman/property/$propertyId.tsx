@@ -5,11 +5,11 @@ import { ChevronLeft } from 'lucide-react';
 import { useRouter } from '@tanstack/react-router';
 import { isInRoles } from '~/lib/roles';
 import { loadUserCache } from '~/lib/session';
-import { PropertyLoanForm } from './-components/PropertyForm';
-import { PropertyData, fetchPropertyById } from '../../api';
+import { PropertyLoanForm } from '../-components/PropertyForm';
+import { PropertyData, fetchPropertyById } from '../-api';
 
 export const Route = createFileRoute(
-  '/_app/_left-navbar/home/household/_warga/pengajuan-peminjaman/property/$propertyId/',
+  '/_app/_left-navbar/home/household/_warga/pengajuan-peminjaman/property/$propertyId',
 )({
   component: PropertyDetailPage,
   //   loader: () => {

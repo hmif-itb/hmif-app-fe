@@ -1,6 +1,6 @@
 import React from 'react';
 import { RequestItem } from './RequestItem';
-import { RequestData } from '../ApiSimulation';
+import { RequestData } from '../-api';
 import { FilterOptions } from './FilterModal';
 
 interface RequestListProps {

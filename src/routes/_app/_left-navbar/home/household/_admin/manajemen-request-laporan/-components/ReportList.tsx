@@ -1,6 +1,6 @@
 import React from 'react';
 import { ReportItem } from './ReportItem';
-import { ReportData } from '../ApiSimulation';
+import { ReportData } from '../-api';
 import { FilterOptions } from './FilterModal';
 
 interface ReportListProps {
