@@ -11,26 +11,23 @@ export const Route = createFileRoute(
   '/_app/_left-navbar/home/household/pengajuan-laporan/',
 )({
   component: HouseholdAdminPage,
-  loader: () => {
-    if (!loadUserCache!()) {
-      throw redirect({ to: '/home/household' });
-    }
-    if (loadUserCache()) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
-      if (!isInRoles(loadUserCache(), ['household'])) {
-        throw redirect({ to: '/home/household' });
-      }
-    }
-  },
+  //   loader: () => {
+  //     if (!loadUserCache!()) {
+  //       throw redirect({ to: '/home/household' });
+  //     }
+  //     if (loadUserCache()) {
+  //       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  //       // @ts-expect-error
+  //       if (!isInRoles(loadUserCache(), ['household'])) {
+  //         throw redirect({ to: '/home/household' });
+  //       }
+  //     }
+  //   },
 });
 
 function HouseholdAdminPage() {
   const router = useRouter();
-  const [activeView, setActiveView] = useState('Properti');
   const [isMobile, setIsMobile] = useState(false);
-  const [filter, setFilter] = useState<FilterOptions>({ condition: 'all' });
-  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     const checkIfMobile = () => {
