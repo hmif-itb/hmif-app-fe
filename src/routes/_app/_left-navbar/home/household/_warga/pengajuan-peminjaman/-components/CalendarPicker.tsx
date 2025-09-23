@@ -126,7 +126,11 @@ export function CalendarPicker({
     return false;
   };
 
-  const getDateStyle = (dayObj: any) => {
+  const getDateStyle = (dayObj: {
+    day: number;
+    isCurrentMonth: boolean;
+    date: Date;
+  }) => {
     const date = dayObj.date;
     const startDateObj = startDate ? parseDate(startDate) : null;
     const endDateObj = endDate ? parseDate(endDate) : null;
