@@ -9,7 +9,7 @@ import { SekreLoanForm } from './~components/SekreForm';
 import { SekreData, fetchSekreById } from '../../api';
 
 export const Route = createFileRoute(
-  '/_app/_left-navbar/home/household/peminjaman-sekre-properti/sekre/$sekreId/',
+  '/_app/_left-navbar/home/household/_warga/pengajuan-peminjaman/sekre/$sekreId/',
 )({
   component: SekreDetailPage,
   //   loader: () => {

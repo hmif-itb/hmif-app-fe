@@ -6,9 +6,10 @@ import { useRouter } from '@tanstack/react-router';
 import { isInRoles } from '~/lib/roles';
 import { loadUserCache } from '~/lib/session';
 import SubmissionForm from './-components/SubmissionForm';
+import { FilterOptions } from './-components/FilterModal';
 
 export const Route = createFileRoute(
-  '/_app/_left-navbar/home/household/pengajuan-laporan/',
+  '/_app/_left-navbar/home/household/_warga/pengajuan-pengembalian/$pengembalianId/',
 )({
   component: HouseholdAdminPage,
   //   loader: () => {
@@ -27,7 +28,10 @@ export const Route = createFileRoute(
 
 function HouseholdAdminPage() {
   const router = useRouter();
+  const [activeView, setActiveView] = useState('Properti');
   const [isMobile, setIsMobile] = useState(false);
+  const [filter, setFilter] = useState<FilterOptions>({ condition: 'all' });
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     const checkIfMobile = () => {
@@ -78,7 +82,7 @@ function HouseholdAdminPage() {
               router.history.back();
             }}
           />
-          Pengajuan Laporan
+          Pengajuan Pengembalian
         </h1>
         <SubmissionForm />
       </main>

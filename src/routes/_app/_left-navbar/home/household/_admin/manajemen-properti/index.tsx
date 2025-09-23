@@ -22,7 +22,7 @@ import { isInRoles } from '~/lib/roles';
 import { loadUserCache } from '~/lib/session';
 
 export const Route = createFileRoute(
-  '/_app/_left-navbar/home/household/manajemen-sekre-properti/',
+  '/_app/_left-navbar/home/household/_admin/manajemen-properti/',
 )({
   component: HouseholdAdminPage,
   //   loader: () => {

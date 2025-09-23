@@ -4,18 +4,22 @@ import { Button } from '~/components/ui/button';
 import { ChevronLeft } from 'lucide-react';
 import { useRouter } from '@tanstack/react-router';
 import SearchBar from './-components/SearchBar';
-import PropertyList from './-components/PropertyList';
-import SekreList from './-components/SekreList';
+import RequestList from './-components/RequestList';
+import ReportList from './-components/ReportList';
 import { SwitchToggle } from './-components/Switch';
 import { FilterOptions } from './-components/FilterModal';
+import {
+  fetchRequestsAndReports,
+  RequestData,
+  ReportData,
+} from './ApiSimulation';
 import { isInRoles } from '~/lib/roles';
 import { loadUserCache } from '~/lib/session';
-import { fetchAllPeminjamanData, PropertyData, SekreData } from './api';
 
 export const Route = createFileRoute(
-  '/_app/_left-navbar/home/household/peminjaman-sekre-properti/',
+  '/_app/_left-navbar/home/household/_admin/manajemen-request-laporan/',
 )({
-  component: HouseholdPeminjamanPage,
+  component: HouseholdAdminPage,
   //   loader: () => {
   //     if (!loadUserCache!()) {
   //       throw redirect({ to: '/home/household' });
@@ -30,17 +34,17 @@ export const Route = createFileRoute(
   //   },
 });
 
-function HouseholdPeminjamanPage() {
+function HouseholdAdminPage() {
   const router = useRouter();
-  const [activeView, setActiveView] = useState('Properti');
+  const [activeView, setActiveView] = useState('Laporan');
   const [isMobile, setIsMobile] = useState(false);
-  const [filter, setFilter] = useState<FilterOptions>({ condition: 'all' });
+  const [filter, setFilter] = useState<FilterOptions>({ category: 'all' });
   const [searchTerm, setSearchTerm] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  // Data States
-  const [propertyData, setPropertyData] = useState<PropertyData[]>([]);
-  const [sekreData, setSekreData] = useState<SekreData[]>([]);
+  // Data states
+  const [requestData, setRequestData] = useState<RequestData[]>([]);
+  const [reportData, setReportData] = useState<ReportData[]>([]);
 
   useEffect(() => {
     const checkIfMobile = () => {
@@ -58,11 +62,11 @@ function HouseholdPeminjamanPage() {
     const loadData = async () => {
       setIsLoading(true);
       try {
-        const { properties, sekre } = await fetchAllPeminjamanData();
-        setPropertyData(properties);
-        setSekreData(sekre);
+        const { requests, reports } = await fetchRequestsAndReports();
+        setRequestData(requests);
+        setReportData(reports);
       } catch (error) {
-        console.error('Error fetching peminjaman data:', error);
+        console.error('Error fetching data:', error);
       } finally {
         setIsLoading(false);
       }
@@ -86,30 +90,30 @@ function HouseholdPeminjamanPage() {
 
   const renderContent = () => {
     switch (activeView) {
-      case 'Properti':
+      case 'Request':
         return (
-          <PropertyList
+          <RequestList
             filter={filter}
             searchTerm={searchTerm}
-            data={propertyData}
+            data={requestData}
             isLoading={isLoading}
           />
         );
-      case 'Sekre':
+      case 'Laporan':
         return (
-          <SekreList
+          <ReportList
             filter={filter}
             searchTerm={searchTerm}
-            data={sekreData}
+            data={reportData}
             isLoading={isLoading}
           />
         );
       default:
         return (
-          <PropertyList
+          <ReportList
             filter={filter}
             searchTerm={searchTerm}
-            data={propertyData}
+            data={reportData}
             isLoading={isLoading}
           />
         );
@@ -154,7 +158,7 @@ function HouseholdPeminjamanPage() {
               router.history.back();
             }}
           />
-          Peminjaman
+          Manajemen Request dan Laporan
         </h1>
         <SearchBar
           onFilterChange={handleFilterChange}
@@ -163,8 +167,8 @@ function HouseholdPeminjamanPage() {
           searchTerm={searchTerm}
         />
         <SwitchToggle
-          options={['Properti', 'Sekre']}
-          defaultValue="Properti"
+          options={['Request', 'Laporan']}
+          defaultValue="Laporan"
           onValueChange={handleSwitchChange}
         />
         {renderContent()}

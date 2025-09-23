@@ -14,7 +14,7 @@ export function PeminjamanItem({ item }: PeminjamanItemProps) {
   const handleReturnClick = () => {
     // Navigate to peminjaman form with peminjaman ID
     navigate({
-      to: '/home/household/pengembalian-peminjaman/$pengembalianId',
+      to: '/home/household/pengajuan-pengembalian/$pengembalianId',
       params: { pengembalianId: item.id },
     });
   };
@@ -31,7 +31,7 @@ export function PeminjamanItem({ item }: PeminjamanItemProps) {
       .toUpperCase();
   };
 
-//   TODO: Status not fixed yey
+  //   TODO: Status not fixed yey
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
       case 'aktif':

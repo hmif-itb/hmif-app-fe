@@ -4,16 +4,18 @@ import { Button } from '~/components/ui/button';
 import { ChevronLeft } from 'lucide-react';
 import { useRouter } from '@tanstack/react-router';
 import SearchBar from './-components/SearchBar';
-import PeminjamanList from './-components/PeminjamanList';
+import PropertyList from './-components/PropertyList';
+import SekreList from './-components/SekreList';
+import { SwitchToggle } from './-components/Switch';
 import { FilterOptions } from './-components/FilterModal';
 import { isInRoles } from '~/lib/roles';
 import { loadUserCache } from '~/lib/session';
-import { fetchAllPeminjaman, PeminjamanData } from './api';
+import { fetchAllPeminjamanData, PropertyData, SekreData } from './api';
 
 export const Route = createFileRoute(
-  '/_app/_left-navbar/home/household/pengembalian-peminjaman/',
+  '/_app/_left-navbar/home/household/_warga/pengajuan-peminjaman/',
 )({
-  component: PengembalianPeminjamanPage,
+  component: HouseholdPeminjamanPage,
   //   loader: () => {
   //     if (!loadUserCache!()) {
   //       throw redirect({ to: '/home/household' });
@@ -28,13 +30,17 @@ export const Route = createFileRoute(
   //   },
 });
 
-function PengembalianPeminjamanPage() {
+function HouseholdPeminjamanPage() {
   const router = useRouter();
+  const [activeView, setActiveView] = useState('Properti');
   const [isMobile, setIsMobile] = useState(false);
-  const [filter, setFilter] = useState<FilterOptions>({ type: 'all' });
+  const [filter, setFilter] = useState<FilterOptions>({ condition: 'all' });
   const [searchTerm, setSearchTerm] = useState('');
-  const [peminjamanData, setPeminjamanData] = useState<PeminjamanData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  // Data States
+  const [propertyData, setPropertyData] = useState<PropertyData[]>([]);
+  const [sekreData, setSekreData] = useState<SekreData[]>([]);
 
   useEffect(() => {
     const checkIfMobile = () => {
@@ -52,8 +58,9 @@ function PengembalianPeminjamanPage() {
     const loadData = async () => {
       setIsLoading(true);
       try {
-        const data = await fetchAllPeminjaman();
-        setPeminjamanData(data);
+        const { properties, sekre } = await fetchAllPeminjamanData();
+        setPropertyData(properties);
+        setSekreData(sekre);
       } catch (error) {
         console.error('Error fetching peminjaman data:', error);
       } finally {
@@ -64,12 +71,49 @@ function PengembalianPeminjamanPage() {
     loadData();
   }, []);
 
+  const handleSwitchChange = (value: string) => {
+    console.log('Selected:', value);
+    setActiveView(value);
+  };
+
   const handleFilterChange = (newFilter: FilterOptions) => {
     setFilter(newFilter);
   };
 
   const handleSearchChange = (newSearchTerm: string) => {
     setSearchTerm(newSearchTerm);
+  };
+
+  const renderContent = () => {
+    switch (activeView) {
+      case 'Properti':
+        return (
+          <PropertyList
+            filter={filter}
+            searchTerm={searchTerm}
+            data={propertyData}
+            isLoading={isLoading}
+          />
+        );
+      case 'Sekre':
+        return (
+          <SekreList
+            filter={filter}
+            searchTerm={searchTerm}
+            data={sekreData}
+            isLoading={isLoading}
+          />
+        );
+      default:
+        return (
+          <PropertyList
+            filter={filter}
+            searchTerm={searchTerm}
+            data={propertyData}
+            isLoading={isLoading}
+          />
+        );
+    }
   };
 
   const mobileStyles = {
@@ -110,7 +154,7 @@ function PengembalianPeminjamanPage() {
               router.history.back();
             }}
           />
-          Pengembalian Peminjaman
+          Peminjaman
         </h1>
         <SearchBar
           onFilterChange={handleFilterChange}
@@ -118,12 +162,12 @@ function PengembalianPeminjamanPage() {
           currentFilter={filter}
           searchTerm={searchTerm}
         />
-        <PeminjamanList
-          filter={filter}
-          searchTerm={searchTerm}
-          data={peminjamanData}
-          isLoading={isLoading}
+        <SwitchToggle
+          options={['Properti', 'Sekre']}
+          defaultValue="Properti"
+          onValueChange={handleSwitchChange}
         />
+        {renderContent()}
       </main>
     </div>
   );

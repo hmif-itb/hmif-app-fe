@@ -4,22 +4,16 @@ import { Button } from '~/components/ui/button';
 import { ChevronLeft } from 'lucide-react';
 import { useRouter } from '@tanstack/react-router';
 import SearchBar from './-components/SearchBar';
-import RequestList from './-components/RequestList';
-import ReportList from './-components/ReportList';
-import { SwitchToggle } from './-components/Switch';
+import PeminjamanList from './-components/PeminjamanList';
 import { FilterOptions } from './-components/FilterModal';
-import {
-  fetchRequestsAndReports,
-  RequestData,
-  ReportData,
-} from './ApiSimulation';
 import { isInRoles } from '~/lib/roles';
 import { loadUserCache } from '~/lib/session';
+import { fetchAllPeminjaman, PeminjamanData } from './api';
 
 export const Route = createFileRoute(
-  '/_app/_left-navbar/home/household/manajemen-request-laporan/',
+  '/_app/_left-navbar/home/household/_warga/pengajuan-pengembalian/',
 )({
-  component: HouseholdAdminPage,
+  component: PengembalianPeminjamanPage,
   //   loader: () => {
   //     if (!loadUserCache!()) {
   //       throw redirect({ to: '/home/household' });
@@ -34,17 +28,13 @@ export const Route = createFileRoute(
   //   },
 });
 
-function HouseholdAdminPage() {
+function PengembalianPeminjamanPage() {
   const router = useRouter();
-  const [activeView, setActiveView] = useState('Laporan');
   const [isMobile, setIsMobile] = useState(false);
-  const [filter, setFilter] = useState<FilterOptions>({ category: 'all' });
+  const [filter, setFilter] = useState<FilterOptions>({ type: 'all' });
   const [searchTerm, setSearchTerm] = useState('');
+  const [peminjamanData, setPeminjamanData] = useState<PeminjamanData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-
-  // Data states
-  const [requestData, setRequestData] = useState<RequestData[]>([]);
-  const [reportData, setReportData] = useState<ReportData[]>([]);
 
   useEffect(() => {
     const checkIfMobile = () => {
@@ -62,11 +52,10 @@ function HouseholdAdminPage() {
     const loadData = async () => {
       setIsLoading(true);
       try {
-        const { requests, reports } = await fetchRequestsAndReports();
-        setRequestData(requests);
-        setReportData(reports);
+        const data = await fetchAllPeminjaman();
+        setPeminjamanData(data);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Error fetching peminjaman data:', error);
       } finally {
         setIsLoading(false);
       }
@@ -75,49 +64,12 @@ function HouseholdAdminPage() {
     loadData();
   }, []);
 
-  const handleSwitchChange = (value: string) => {
-    console.log('Selected:', value);
-    setActiveView(value);
-  };
-
   const handleFilterChange = (newFilter: FilterOptions) => {
     setFilter(newFilter);
   };
 
   const handleSearchChange = (newSearchTerm: string) => {
     setSearchTerm(newSearchTerm);
-  };
-
-  const renderContent = () => {
-    switch (activeView) {
-      case 'Request':
-        return (
-          <RequestList
-            filter={filter}
-            searchTerm={searchTerm}
-            data={requestData}
-            isLoading={isLoading}
-          />
-        );
-      case 'Laporan':
-        return (
-          <ReportList
-            filter={filter}
-            searchTerm={searchTerm}
-            data={reportData}
-            isLoading={isLoading}
-          />
-        );
-      default:
-        return (
-          <ReportList
-            filter={filter}
-            searchTerm={searchTerm}
-            data={reportData}
-            isLoading={isLoading}
-          />
-        );
-    }
   };
 
   const mobileStyles = {
@@ -158,7 +110,7 @@ function HouseholdAdminPage() {
               router.history.back();
             }}
           />
-          Manajemen Request dan Laporan
+          Pengembalian Peminjaman
         </h1>
         <SearchBar
           onFilterChange={handleFilterChange}
@@ -166,12 +118,12 @@ function HouseholdAdminPage() {
           currentFilter={filter}
           searchTerm={searchTerm}
         />
-        <SwitchToggle
-          options={['Request', 'Laporan']}
-          defaultValue="Laporan"
-          onValueChange={handleSwitchChange}
+        <PeminjamanList
+          filter={filter}
+          searchTerm={searchTerm}
+          data={peminjamanData}
+          isLoading={isLoading}
         />
-        {renderContent()}
       </main>
     </div>
   );

@@ -9,7 +9,7 @@ import { PropertyLoanForm } from './~components/PropertyForm';
 import { PropertyData, fetchPropertyById } from '../../api';
 
 export const Route = createFileRoute(
-  '/_app/_left-navbar/home/household/peminjaman-sekre-properti/property/$propertyId/',
+  '/_app/_left-navbar/home/household/_warga/pengajuan-peminjaman/property/$propertyId/',
 )({
   component: PropertyDetailPage,
   //   loader: () => {
