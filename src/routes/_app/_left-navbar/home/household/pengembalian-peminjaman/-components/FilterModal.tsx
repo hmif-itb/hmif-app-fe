@@ -8,7 +8,7 @@ interface FilterModalProps {
 }
 
 export interface FilterOptions {
-  condition: 'all' | 'new' | 'used';
+  type: 'all' | 'properti' | 'sekre';
 }
 
 export function FilterModal({
@@ -19,8 +19,8 @@ export function FilterModal({
 }: FilterModalProps) {
   if (!isOpen) return null;
 
-  const handleApply = (condition: 'all' | 'new' | 'used') => {
-    onApplyFilter({ condition });
+  const handleApply = (type: 'all' | 'properti' | 'sekre') => {
+    onApplyFilter({ type });
     onClose();
   };
 
@@ -37,7 +37,7 @@ export function FilterModal({
 
         {/* Title */}
         <h2 className="mb-4 text-center text-lg font-semibold text-black">
-          Filter Kondisi
+          Filter Tipe
         </h2>
 
         {/* Filter Options */}
@@ -45,34 +45,34 @@ export function FilterModal({
           <button
             onClick={() => handleApply('all')}
             className={`rounded-lg border px-4 py-3 text-left transition-colors ${
-              currentFilter.condition === 'all'
+              currentFilter.type === 'all'
                 ? 'border-[#305138] bg-[#305138] text-white'
                 : 'border-gray-300 text-black hover:bg-gray-50'
             }`}
           >
-            Semua Kondisi
+            Semua Tipe
           </button>
 
           <button
-            onClick={() => handleApply('new')}
+            onClick={() => handleApply('properti')}
             className={`rounded-lg border px-4 py-3 text-left transition-colors ${
-              currentFilter.condition === 'new'
+              currentFilter.type === 'properti'
                 ? 'border-[#305138] bg-[#305138] text-white'
                 : 'border-gray-300 text-black hover:bg-gray-50'
             }`}
           >
-            Baik
+            Properti
           </button>
 
           <button
-            onClick={() => handleApply('used')}
+            onClick={() => handleApply('sekre')}
             className={`rounded-lg border px-4 py-3 text-left transition-colors ${
-              currentFilter.condition === 'used'
+              currentFilter.type === 'sekre'
                 ? 'border-[#305138] bg-[#305138] text-white'
                 : 'border-gray-300 text-black hover:bg-gray-50'
             }`}
           >
-            Rusak
+            Sekre
           </button>
         </div>
       </div>

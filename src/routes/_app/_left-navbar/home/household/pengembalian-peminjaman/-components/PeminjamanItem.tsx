@@ -1,17 +1,7 @@
 import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
-
-export interface PeminjamanData {
-  userName: string;
-  userAvatar?: string;
-  startDate: string;
-  endDate: string;
-  properti: string;
-  jumlah: number;
-  tanggalMulai: string;
-  tanggalSelesai: string;
-  status: 'aktif' | 'selesai' | 'pending';
-}
+import { useNavigate } from '@tanstack/react-router';
+import { PeminjamanData } from '../api';
 
 interface PeminjamanItemProps {
   item: PeminjamanData;
@@ -19,10 +9,14 @@ interface PeminjamanItemProps {
 
 export function PeminjamanItem({ item }: PeminjamanItemProps) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const navigate = useNavigate();
 
   const handleReturnClick = () => {
-    // Handle return submission
-    console.log('Ajukan pengembalian untuk:', item.properti);
+    // Navigate to peminjaman form with peminjaman ID
+    navigate({
+      to: '/home/household/pengembalian-peminjaman/$pengembalianId',
+      params: { pengembalianId: item.id },
+    });
   };
 
   const toggleExpanded = () => {
@@ -37,6 +31,7 @@ export function PeminjamanItem({ item }: PeminjamanItemProps) {
       .toUpperCase();
   };
 
+//   TODO: Status not fixed yey
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
       case 'aktif':
@@ -112,7 +107,9 @@ export function PeminjamanItem({ item }: PeminjamanItemProps) {
             {/* Details Grid */}
             <div className="mt-4 grid grid-cols-2 gap-4 border-t border-gray-100 pt-4">
               <div className="transition-all delay-75 duration-300">
-                <p className="text-sm font-medium text-black">Properti:</p>
+                <p className="text-sm font-medium text-black">
+                  {item.type === 'properti' ? 'Properti' : 'Sekre'}:
+                </p>
                 <p className="text-xs text-black">{item.properti}</p>
               </div>
               <div className="transition-all delay-100 duration-300">

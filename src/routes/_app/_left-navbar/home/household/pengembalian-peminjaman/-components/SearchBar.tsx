@@ -30,7 +30,7 @@ function SearchBar({
     onSearchChange(e.target.value);
   };
 
-  const hasActiveFilter = currentFilter.condition !== 'all';
+  const hasActiveFilter = currentFilter.type !== 'all';
 
   return (
     <>
@@ -39,7 +39,7 @@ function SearchBar({
         <div className="relative flex w-full">
           <Input
             type="text"
-            placeholder="Cari properti/sekre..."
+            placeholder="Cari peminjaman..."
             value={searchTerm}
             onChange={handleSearchInput}
             className="h-[33px] rounded-full border-none px-8 pr-12 font-semibold text-gray-700 outline-none lg:h-[60px]"

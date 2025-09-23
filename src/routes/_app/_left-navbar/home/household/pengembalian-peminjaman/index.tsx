@@ -8,11 +8,12 @@ import PeminjamanList from './-components/PeminjamanList';
 import { FilterOptions } from './-components/FilterModal';
 import { isInRoles } from '~/lib/roles';
 import { loadUserCache } from '~/lib/session';
+import { fetchAllPeminjaman, PeminjamanData } from './api';
 
 export const Route = createFileRoute(
   '/_app/_left-navbar/home/household/pengembalian-peminjaman/',
 )({
-  component: HouseholdAdminPage,
+  component: PengembalianPeminjamanPage,
   //   loader: () => {
   //     if (!loadUserCache!()) {
   //       throw redirect({ to: '/home/household' });
@@ -27,12 +28,13 @@ export const Route = createFileRoute(
   //   },
 });
 
-function HouseholdAdminPage() {
+function PengembalianPeminjamanPage() {
   const router = useRouter();
-  const [activeView, setActiveView] = useState('Properti');
   const [isMobile, setIsMobile] = useState(false);
-  const [filter, setFilter] = useState<FilterOptions>({ condition: 'all' });
+  const [filter, setFilter] = useState<FilterOptions>({ type: 'all' });
   const [searchTerm, setSearchTerm] = useState('');
+  const [peminjamanData, setPeminjamanData] = useState<PeminjamanData[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const checkIfMobile = () => {
@@ -45,10 +47,22 @@ function HouseholdAdminPage() {
     return () => window.removeEventListener('resize', checkIfMobile);
   }, []);
 
-  const handleSwitchChange = (value: string) => {
-    console.log('Selected:', value);
-    setActiveView(value);
-  };
+  // Fetch data on component mount
+  useEffect(() => {
+    const loadData = async () => {
+      setIsLoading(true);
+      try {
+        const data = await fetchAllPeminjaman();
+        setPeminjamanData(data);
+      } catch (error) {
+        console.error('Error fetching peminjaman data:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadData();
+  }, []);
 
   const handleFilterChange = (newFilter: FilterOptions) => {
     setFilter(newFilter);
@@ -104,7 +118,12 @@ function HouseholdAdminPage() {
           currentFilter={filter}
           searchTerm={searchTerm}
         />
-        <PeminjamanList filter={filter} searchTerm={searchTerm} />
+        <PeminjamanList
+          filter={filter}
+          searchTerm={searchTerm}
+          data={peminjamanData}
+          isLoading={isLoading}
+        />
       </main>
     </div>
   );

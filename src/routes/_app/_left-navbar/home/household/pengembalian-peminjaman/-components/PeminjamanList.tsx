@@ -1,83 +1,61 @@
 import React from 'react';
-import { PeminjamanItem, PeminjamanData } from './PeminjamanItem';
+import { PeminjamanItem } from './PeminjamanItem';
 import { FilterOptions } from './FilterModal';
+import { PeminjamanData } from '../api';
 
 interface PeminjamanListProps {
   filter: FilterOptions;
   searchTerm: string;
+  data: PeminjamanData[];
+  isLoading?: boolean;
 }
 
-const samplePeminjaman: PeminjamanData[] = [
-  {
-    userName: 'Adinda Putri',
-    userAvatar: undefined,
-    startDate: '05/01/2022',
-    endDate: '05/01/2022',
-    properti: 'Projektor',
-    jumlah: 1,
-    tanggalMulai: '15/01/2024',
-    tanggalSelesai: '16/01/2024',
-    status: 'aktif',
-  },
-  {
-    userName: 'Budi Santoso',
-    userAvatar: undefined,
-    startDate: '03/01/2022',
-    endDate: '07/01/2022',
-    properti: 'Speaker JBL',
-    jumlah: 2,
-    tanggalMulai: '10/01/2024',
-    tanggalSelesai: '12/01/2024',
-    status: 'selesai',
-  },
-  {
-    userName: 'Citra Dewi',
-    userAvatar: undefined,
-    startDate: '08/01/2022',
-    endDate: '10/01/2022',
-    properti: 'Kabel HDMI',
-    jumlah: 3,
-    tanggalMulai: '20/01/2024',
-    tanggalSelesai: '22/01/2024',
-    status: 'pending',
-  },
-  {
-    userName: 'Doni Pratama',
-    userAvatar: undefined,
-    startDate: '12/01/2022',
-    endDate: '15/01/2022',
-    properti: 'Laptop Asus',
-    jumlah: 1,
-    tanggalMulai: '25/01/2024',
-    tanggalSelesai: '27/01/2024',
-    status: 'aktif',
-  },
-];
-
-function PeminjamanList({ filter, searchTerm }: PeminjamanListProps) {
-  const filteredPeminjaman = samplePeminjaman.filter((peminjaman) => {
-    // Filter by status if specified
-    const matchesStatus =
-      !filter.status ||
-      filter.status === 'all' ||
-      peminjaman.status === filter.status;
+function PeminjamanList({
+  filter,
+  searchTerm,
+  data,
+  isLoading = false,
+}: PeminjamanListProps) {
+  const filteredPeminjaman = data.filter((peminjaman) => {
+    // Filter by type
+    const matchesType =
+      filter.type === 'all' || peminjaman.type === filter.type;
 
     // Filter by search term (search in user name and property)
     const matchesSearch =
       peminjaman.userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       peminjaman.properti.toLowerCase().includes(searchTerm.toLowerCase());
 
-    return matchesStatus && matchesSearch;
+    return matchesType && matchesSearch;
   });
+
+  if (isLoading) {
+    return (
+      <div className="mb-20 flex w-full flex-col gap-3 lg:mb-5 lg:gap-5">
+        {Array.from({ length: 3 }).map((_, index) => (
+          <div
+            key={index}
+            className="h-fit w-full rounded-xl border border-gray-200 bg-white p-4 shadow-sm"
+          >
+            <div className="flex items-center gap-3">
+              <div className="size-11 animate-pulse rounded-full bg-gray-200" />
+              <div className="flex-1 space-y-2">
+                <div className="h-4 w-32 animate-pulse rounded bg-gray-200" />
+                <div className="h-3 w-48 animate-pulse rounded bg-gray-200" />
+              </div>
+              <div className="h-6 w-16 animate-pulse rounded-full bg-gray-200" />
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
 
   return (
     <div className="mb-20 flex w-full flex-col gap-3 lg:mb-5 lg:gap-5">
       {filteredPeminjaman.length > 0 ? (
-        filteredPeminjaman.map((peminjaman, idx) => (
-          <PeminjamanItem
-            key={`${peminjaman.userName}-${idx}`}
-            item={peminjaman}
-          />
+        filteredPeminjaman.map((peminjaman) => (
+          <PeminjamanItem key={peminjaman.id} item={peminjaman} />
         ))
       ) : (
         <div className="flex h-32 items-center justify-center text-gray-500">
