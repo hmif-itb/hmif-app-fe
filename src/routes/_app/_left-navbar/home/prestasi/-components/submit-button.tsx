@@ -9,6 +9,8 @@ interface SubmitButtonProps {
     className?: string;
 }
 
+// Button submit untuk form submission
+
 export function SubmitButton({
     text = 'Submit',
     onSubmit,

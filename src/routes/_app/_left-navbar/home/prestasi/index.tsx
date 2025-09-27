@@ -4,16 +4,182 @@ import { Input } from '~/components/ui/input';
 import { Textarea } from '~/components/ui/textarea';
 import { ChevronLeft } from 'lucide-react';
 import { SubmitButton } from './-components/submit-button';
+import { DropdownCategory } from './-components/dropdown-category';
+import { DropdownCalendar } from './-components/monthly-calendar';
+import { useState } from 'react';
+import { z } from 'zod';
 
 export const Route = createFileRoute('/_app/_left-navbar/home/prestasi/')({
   component: PrestasiPage,
 });
 
-const handleSubmit = () => {
-  console.log('Form Submitted!');
-};
+// Options buat dropdown prestasi
+const prestasiOptions = [
+  'Organisasi non-HMIF',
+  'Kepanitian non-HMIF',
+  'Kompetisi atau Lomba'
+];
+
+const deskripsiMaxWord = 200;
+
+// Skema validasi input
+const prestasiScheme = z.object({
+  namaPrestasi: z.string().min(1, 'This field is required'),
+  jenisPrestasi: z.string().min(1, 'This field is required'),
+  periodePrestasi: z.string().min(1, 'This field is required'),
+  deskripsiPrestasi: z.string().min(1, 'This field is required').refine((text: string) => {
+    const wordCount = text.trim().split(/\s+/).filter(word => word.length > 0).length;
+    return wordCount <= deskripsiMaxWord;
+  }, `${deskripsiMaxWord} words maximum`),
+  fotoSertifikat: z.instanceof(File, { message: 'This field is required' }),
+  fotoDiri: z.instanceof(File, { message: 'This field is required' }),
+  fotoAwarding: z.instanceof(File, { message: 'This field is required' })
+});
+
+// Type interface dari zod schema
+type PrestasiFormData = z.infer<typeof prestasiScheme>;
+
+// Error state
+interface ErrorForms {
+  namaPrestasi: string;
+  jenisPrestasi: string;
+  periodePrestasi: string;
+  deskripsiPrestasi: string;
+  fotoSertifikat: string;
+  fotoDiri: string;
+  fotoAwarding: string;
+}
+
 
 function PrestasiPage(): JSX.Element {
+
+  const [formData, setFormData] = useState<PrestasiFormData>({
+    namaPrestasi: '',
+    jenisPrestasi: '',
+    periodePrestasi: '',
+    deskripsiPrestasi: '',
+    fotoSertifikat: null as any,
+    fotoDiri: null as any,
+    fotoAwarding: null as any,
+  });
+
+  const [errors, setErrors] = useState<ErrorForms>({
+    namaPrestasi: '',
+    jenisPrestasi: '',
+    periodePrestasi: '',
+    deskripsiPrestasi: '',
+    fotoSertifikat: '',
+    fotoDiri: '',
+    fotoAwarding: '',
+  });
+
+  const validateForms = (): boolean => {
+    const result = prestasiScheme.safeParse(formData);
+
+    // Jika gagal, set error
+    if (!result.success) {
+      // Reset semua error
+      const newErrors: ErrorForms = {
+        namaPrestasi: '',
+        jenisPrestasi: '',
+        periodePrestasi: '',
+        deskripsiPrestasi: '',
+        fotoSertifikat: '',
+        fotoDiri: '',
+        fotoAwarding: '',
+      };
+
+      // Set error message dari zod
+      result.error.issues.forEach((issue) => {
+        const fieldName = issue.path[0] as keyof ErrorForms;
+        newErrors[fieldName] = issue.message;
+      });
+
+      setErrors(newErrors);
+      return false;
+    }
+
+    // Clear error jika validasi berhasil
+    setErrors({
+        namaPrestasi: '',
+        jenisPrestasi: '',
+        periodePrestasi: '',
+        deskripsiPrestasi: '',
+        fotoSertifikat: '',
+        fotoDiri: '',
+        fotoAwarding: '',
+    })
+
+    return true;
+  };
+
+  // const [wordCount, setWordCount] = useState(0);
+
+  // Handle input yang berubah
+  const handleInputChange = (field: keyof PrestasiFormData, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  
+    // Max kata untuk deskripsi
+    if (field === 'deskripsiPrestasi') {
+      const words = value.trim().split(/\s+/).filter(word => word.length > 0);
+      
+      if (words.length > deskripsiMaxWord) {
+        // Set error langsung saat user mengetik
+        setErrors(prev => ({ 
+          ...prev, 
+          deskripsiPrestasi: `${deskripsiMaxWord} words maximum` 
+        }));
+      } else {
+        // Clear error jika sudah valid
+        setErrors(prev => ({ ...prev, deskripsiPrestasi: '' }));
+      }
+    } else {
+      // Clear error untuk field lain jika input tidak kosong
+      if (errors[field]) {
+        setErrors(prev => ({ ...prev, [field]: '' }));
+      }
+    }
+  };
+  
+  const handleCategorySelect = (value: string) => {
+    handleInputChange('jenisPrestasi', value);
+  };
+
+  const handlePeriodSelect = (month: string, year: number) => {
+    handleInputChange('periodePrestasi', `${month} ${year}`);
+  }
+
+  // Handle file upload
+  const handleFileSelect = (field: keyof PrestasiFormData, file: File) => {
+    setFormData(prev => ({ ...prev, [field]: file }));
+    
+    // Clear error untuk file upload
+    if (errors[field]) {
+      setErrors(prev => ({ ...prev, [field]: '' }));
+    }
+  };
+
+  const handleRemoveFile = (field: keyof PrestasiFormData) => {
+    setFormData(prev => ({ ...prev, [field]: null as any}));
+
+    if (errors[field]) {
+      setErrors(prev => ({ ...prev, [field]: '' }));
+    }
+  };
+
+  const handleSubmit = () => {
+    if (validateForms()) {
+      console.log('Form Submitted!', formData);
+      // TODO: Send data to API
+    } else {
+      console.log('Form validation failed');
+    }
+  };
+
+  const isFormValid = prestasiScheme.safeParse(formData).success;
+
+  
+
   return (
     <div className="h-screen w-full overflow-auto bg-[url('/img/login/login-bg-desktop.jpg')] bg-no-repeat bg-cover p-6">
 
@@ -25,42 +191,97 @@ function PrestasiPage(): JSX.Element {
         </span>
       </div>
 
-      <div className='mt-8 flex flex-col gap-12 bg-white rounded-[12px] p-8'>
+      <div className='mt-8 flex flex-col gap-8 bg-white rounded-[12px] p-8'>
         
-        <div className='flex flex-row gap-3 items-center'>
-          <div className='flex p-2 bg-yellow-200 rounded-[4px]'>
-            <img src='/img/icons/entry.svg' alt="Icon Prestasi" className='size-4' />
+        <div className='flex flex-col gap-6'>
+          <div className='flex flex-row gap-3 items-center'>
+            <div className='flex p-2 bg-yellow-200 rounded-[4px]'>
+              <img src='/img/icons/entry.svg' alt="Icon Prestasi" className='size-4' />
+            </div>
+            <h1 className='font-semibold text-[16px]'>Formulir Prestasi</h1>
           </div>
-          <h1 className='font-semibold text-[16px]'>Tambah Entri Prestasi</h1>
+          <h2 className='font-semibold text-2xl'>Prestasi</h2>
         </div>
-
+        
         <div className='flex flex-row gap-12'>
           <div className='flex flex-col gap-6'>
+
+            {/* Nama Prestasi */}
             <div className='flex flex-col gap-2'>
                 <span className='text-sm'>Nama Kompetisi/Organisasi</span>
-                <Input className='bg-[#FCFCFC] rounded-lg' placeholder='Masukkan nama prestasi...'/>
+                <Input 
+                    className={`bg-[#FCFCFC] hover:border-[#CBD5E1] focus-visible:border-[#94A3B8] rounded-lg focus-visible:ring-0 focus-visible:ring-offset-0 ${
+                      errors.namaPrestasi ? 'border-red-400 focus-visible:border-red-400' : ''
+                    }`}
+                    placeholder = 'Masukkan nama kompetisi/organisasi'
+                    value = {formData.namaPrestasi}
+                    onChange = {(e) => handleInputChange('namaPrestasi', e.target.value)}
+                />
+                {errors.namaPrestasi && (
+                  <span className='text-red-400 text-xs font-semibold'>
+                    {errors.namaPrestasi}
+                  </span>
+                )}
             </div>
+
             <div className='flex flex-row gap-4'>
+
+              { /* Jenis Prestasi */ }
               <div className='flex flex-col gap-2'>
                   <span className='text-sm'>Jenis Prestasi</span>
-                  <Input className='bg-[#FCFCFC] rounded-lg' placeholder='Pilih jenis prestasi...'/>
+                  <DropdownCategory
+                    placeholder='Pilih jenis prestasi'
+                    options={prestasiOptions}
+                    onSelect={handleCategorySelect}
+                    className={errors.jenisPrestasi ? 'border-red-400' : ''}
+                  />
+                  {errors.jenisPrestasi && (
+                    <span className='text-red-400 text-xs font-semibold'>
+                      {errors.jenisPrestasi}
+                    </span>
+                  )}
               </div>
+
+              { /* Periode Prestasi */ }
               <div className='flex flex-col gap-2'>
                   <span className='text-sm'>Periode Pencapaian Prestasi</span>
-                  <Input className='bg-[#FCFCFC] rounded-lg' placeholder='Pilih tanggal...'/>
+                  <DropdownCalendar 
+                    placeholder="Bulan/Tahun"
+                    onSelect={handlePeriodSelect}
+                    className={`${errors.periodePrestasi ? 'border-red-400' : ''}`}
+                  />
+                  {errors.periodePrestasi && (
+                    <span className='text-red-400 text-xs font-semibold'>
+                      {errors.periodePrestasi}
+                    </span>
+                  )}
               </div>
             </div>
+
           </div>
 
+          {/* Deskripsi Prestasi */}
           <div className='flex flex-col gap-2 w-[50%] '>
             <span className='text-sm'>Deskripsi Prestasi</span>
-            <Textarea className='bg-[#FCFCFC] rounded-lg resize-none h-[130px]' placeholder='Masukkan deskripsi prestasi...'/>
+            <Textarea className={`bg-[#FCFCFC] rounded-lg resize-none h-[130px] ${
+              errors.deskripsiPrestasi ? 'border-red-400 focus-visible:border-red-400' : ''
+            }`} 
+              placeholder='Masukkan deskripsi prestasi...'
+              value={formData.deskripsiPrestasi}
+              onChange={(e) => handleInputChange('deskripsiPrestasi', e.target.value)}
+            />
+            {errors.deskripsiPrestasi && (
+              <span className='text-red-400 text-xs font-semibold'>
+                {errors.deskripsiPrestasi}
+              </span>
+            )}
           </div>
         
         </div>
         
-        <div className='flex flex-row items-start justify-between gap-14'>
-
+        <div className='mt-8 flex flex-row items-start justify-between gap-14'>
+          
+          {/* Foto Sertifikat */}
           <div className='flex flex-col gap-2'>
             <span className='text-sm'>Foto Sertifikat</span>
             <span className='font-light text-gray-600 text-xs'>
@@ -68,13 +289,21 @@ function PrestasiPage(): JSX.Element {
             </span>
             <UploadButton 
               text='Upload File' 
-              // onFileSelect={handleFileSelect}
-              accept='image/*'
-              className='mt-4'
+              onFileSelect={(file) => handleFileSelect('fotoSertifikat', file)}
+              onFileRemove={() => handleRemoveFile('fotoSertifikat')}
+              accept='image/*,application/pdf'
+              className={`mt-4 ${errors.fotoSertifikat ? 'border-red-400' : ''}`}
               disabled={false}
+              maxWidth="100px"
             />
+            {errors.fotoSertifikat && (
+              <span className='text-red-400 text-xs font-semibold'>
+                {errors.fotoSertifikat}
+              </span>
+            )}
           </div>
 
+          {/* Foto Diri */}
           <div className='flex flex-col gap-2 max-w-[260px]'>
             <span className='text-sm'>Foto Diri</span>
             <span className='font-light text-gray-600 text-xs'>
@@ -82,13 +311,21 @@ function PrestasiPage(): JSX.Element {
             </span>
             <UploadButton 
               text='Upload File' 
-              // onFileSelect={handleFileSelect}
+              onFileSelect={(file) => handleFileSelect('fotoDiri', file)}
+              onFileRemove={() => handleRemoveFile('fotoDiri')}
               accept='image/*'
-              className='mt-4'
+              className={`mt-4 ${errors.fotoDiri ? 'border-red-400' : ''}`}
               disabled={false}
+              maxWidth="100px"
             />
+            {errors.fotoDiri && (
+              <span className='text-red-400 text-xs font-semibold'>
+                {errors.fotoDiri}
+              </span>
+            )}
           </div>
 
+          {/* Foto Awarding */}
           <div className='flex flex-col gap-2'>
             <span className='text-sm'>Foto Awarding</span>
             <span className='font-light text-gray-600 text-xs'>
@@ -96,11 +333,18 @@ function PrestasiPage(): JSX.Element {
             </span>
             <UploadButton 
               text='Upload File' 
-              // onFileSelect={handleFileSelect}
+              onFileSelect={(file) => handleFileSelect('fotoAwarding', file)}
+              onFileRemove={() => handleRemoveFile('fotoAwarding')}
               accept='image/*'
-              className='mt-4'
+              className={`mt-4 ${errors.fotoAwarding ? 'border-red-400' : ''}`}
               disabled={false}
+              maxWidth="100px"
             />
+            {errors.fotoAwarding && (
+              <span className='text-red-400 text-xs font-semibold'>
+                {errors.fotoAwarding}
+              </span>
+            )}
           </div>
 
         </div>
@@ -110,10 +354,9 @@ function PrestasiPage(): JSX.Element {
             text='Submit' 
             onSubmit={handleSubmit} 
             disabled={false} 
+            // isValid={isFormValid}
           />
         </div>
-        
-        
         
       </div>
     </div>
