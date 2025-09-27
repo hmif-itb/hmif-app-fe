@@ -62,7 +62,7 @@ export function DropdownCalendar({
       </button>
 
       {isOpen && (
-        <div className="absolute z-10 w-80 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg">
+        <div className="absolute z-50 w-80 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg">
           {/* Calendar Header */}
           <div className="flex items-center justify-between p-3 border-b">
             <button

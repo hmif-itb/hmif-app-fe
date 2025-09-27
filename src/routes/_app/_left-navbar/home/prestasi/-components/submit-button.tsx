@@ -1,4 +1,5 @@
 import { ArrowRight } from 'lucide-react';
+import { isValid } from 'zod';
 import { Button } from '~/components/ui/button';
 
 interface SubmitButtonProps {
@@ -7,21 +8,22 @@ interface SubmitButtonProps {
     disabled?: boolean;
     loading?: boolean;
     className?: string;
+    isValid?: boolean;
 }
 
 // Button submit untuk form submission
-
 export function SubmitButton({
     text = 'Submit',
     onSubmit,
     disabled = false,
     loading = false,
-    className = ''
+    className = '',
+    isValid = true
 }: SubmitButtonProps) {
     return (
         <Button
             className={`flex items-center gap-2 text-sm font-semibold bg-[#E8C55F] hover:bg-[#f0cf6a] active:bg-[#fadd84] text-black duration-300 px-4 py-2 rounded-lg ${className}`}
-            disabled={disabled || loading}
+            disabled={disabled || loading || !isValid}
             onClick={onSubmit}
         >
            {loading ? (

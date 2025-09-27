@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { UploadButton } from './-components/upload-button';
 import { Input } from '~/components/ui/input';
 import { Textarea } from '~/components/ui/textarea';
@@ -6,12 +6,19 @@ import { ChevronLeft } from 'lucide-react';
 import { SubmitButton } from './-components/submit-button';
 import { DropdownCategory } from './-components/dropdown-category';
 import { DropdownCalendar } from './-components/monthly-calendar';
+import { ConfirmModal } from './-components/confirm-modal';
+import { Alert } from './-components/alert';
 import { useState } from 'react';
 import { z } from 'zod';
+// import { CreateAchievementRequest } from '~/api/generated/models/Achievement';
+// import { AchievementService } from '~/api/generated/services/AchievementService';
+import { api } from '~/api/client';
 
 export const Route = createFileRoute('/_app/_left-navbar/home/prestasi/')({
   component: PrestasiPage,
 });
+
+// const achivementService = new AchievementService(api as any);
 
 // Options buat dropdown prestasi
 const prestasiOptions = [
@@ -20,6 +27,7 @@ const prestasiOptions = [
   'Kompetisi atau Lomba'
 ];
 
+// Deskripsi prestasi max word
 const deskripsiMaxWord = 200;
 
 // Skema validasi input
@@ -52,6 +60,17 @@ interface ErrorForms {
 
 
 function PrestasiPage(): JSX.Element {
+  const navigate = useNavigate();
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const [alert, setAlert] = useState<{
+    type: 'success' | 'error';
+    isVisible: boolean;
+  }>({
+    type: 'success',
+    isVisible: false
+  });
 
   const [formData, setFormData] = useState<PrestasiFormData>({
     namaPrestasi: '',
@@ -113,8 +132,6 @@ function PrestasiPage(): JSX.Element {
     return true;
   };
 
-  // const [wordCount, setWordCount] = useState(0);
-
   // Handle input yang berubah
   const handleInputChange = (field: keyof PrestasiFormData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -159,6 +176,7 @@ function PrestasiPage(): JSX.Element {
     }
   };
 
+  // Handle remove file di upload file button
   const handleRemoveFile = (field: keyof PrestasiFormData) => {
     setFormData(prev => ({ ...prev, [field]: null as any}));
 
@@ -167,24 +185,74 @@ function PrestasiPage(): JSX.Element {
     }
   };
 
-  const handleSubmit = () => {
+  // Submission and modal popper
+  const handleSubmit = async () => {
     if (validateForms()) {
-      console.log('Form Submitted!', formData);
-      // TODO: Send data to API
-    } else {
-      console.log('Form validation failed');
+      setShowConfirmModal(true);
     }
   };
 
-  const isFormValid = prestasiScheme.safeParse(formData).success;
+  const handleConfirmSubmit = async () => {
+    setIsSubmitting(true);
+    
+    try {
 
+      // Simulasi sementara buat form submission
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      // const achievementData: CreateAchievementRequest = {
+      //   user_id: 1, 
+      //   jenis_prestasi: formData.jenisPrestasi,
+      //   nama_prestasi: formData.namaPrestasi,
+      //   penyelenggara: formData.namaPrestasi,
+      //   periode_prestasi: formData.periodePrestasi,
+      //   url_sertifikat: '', 
+      //   url_foto_diri: '', 
+      //   url_foto_awarding: '', 
+      // };
   
+      // const result = await achivementService.createAchievement(achievementData);
+      // console.log('Achievement created:', result);
+
+      // Alert success
+      setAlert({
+        type: 'success',
+        isVisible: true
+      });
+
+      // Tutup modal
+      setShowConfirmModal(false);
+
+      // Ini kalo udah fungsional reset form
+      
+    } catch (error) {
+      console.error('Error creating achievement:', error);
+      
+      // Alert gagal
+      setAlert({
+        type: 'error',
+        isVisible: true
+      });
+
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleAlertClose = () => {
+    setAlert(prev => ({ ...prev, isVisible: false }));
+  };
+
+  const isFormValid = prestasiScheme.safeParse(formData).success;
 
   return (
     <div className="h-screen w-full overflow-auto bg-[url('/img/login/login-bg-desktop.jpg')] bg-no-repeat bg-cover p-6">
 
       <div className='flex flex-row gap-2 items-center'>
-        <ChevronLeft className='size-12 text-white'/>
+        <ChevronLeft 
+          className='size-12 text-white'
+          onClick={() => navigate({ to: '/home' })}
+        />
         <span className='flex flex-row gap-3 font-bold text-4xl text-white'>
           Pendataan
           <span className='italic font-normal'>Prestasi</span>
@@ -359,6 +427,20 @@ function PrestasiPage(): JSX.Element {
         </div>
         
       </div>
+
+      <Alert
+        type={alert.type}
+        isVisible={alert.isVisible}
+        onClose={handleAlertClose}
+        duration={5000}
+      />
+
+      <ConfirmModal
+        isOpen={showConfirmModal}
+        onClose={() => setShowConfirmModal(false)}
+        onConfirm={handleConfirmSubmit}
+        loading={isSubmitting}
+      />
     </div>
   );
 }
