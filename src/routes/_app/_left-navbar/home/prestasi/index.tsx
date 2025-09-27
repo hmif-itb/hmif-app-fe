@@ -395,7 +395,7 @@ function PrestasiPage(): JSX.Element {
 
           {/* Foto Awarding */}
           <div className='flex flex-col gap-2 w-full lg:w-auto'>
-            <span className='text-sm'>Foto Awarding <span className='text-gray-500 text-xs'>(Opsional)</span></span>
+            <span className='text-sm'>Foto Awarding</span>
             <span className='font-light text-gray-600 text-xs'>
               Foto saat awarding, lagi megang sertifikat, atau foto bukti lainnya
             </span>
