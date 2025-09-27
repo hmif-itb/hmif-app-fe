@@ -12,7 +12,7 @@ import { useState } from 'react';
 import { z } from 'zod';
 // import { CreateAchievementRequest } from '~/api/generated/models/Achievement';
 // import { AchievementService } from '~/api/generated/services/AchievementService';
-import { api } from '~/api/client';
+// import { api } from '~/api/client';
 
 export const Route = createFileRoute('/_app/_left-navbar/home/prestasi/')({
   component: PrestasiPage,
@@ -246,20 +246,20 @@ function PrestasiPage(): JSX.Element {
   const isFormValid = prestasiScheme.safeParse(formData).success;
 
   return (
-    <div className="h-screen w-full overflow-auto bg-[url('/img/login/login-bg-desktop.jpg')] bg-no-repeat bg-cover p-6">
+    <div className="min-h-screen w-full overflow-auto bg-[url('/img/login/login-bg-desktop.jpg')] bg-no-repeat bg-cover p-4 sm:p-6 pb-8">
 
       <div className='flex flex-row gap-2 items-center'>
         <ChevronLeft 
-          className='size-12 text-white'
+          className='size-8 sm:size-12 text-white cursor-pointer hover:-translate-x-1 duration-300'
           onClick={() => navigate({ to: '/home' })}
         />
-        <span className='flex flex-row gap-3 font-bold text-4xl text-white'>
+        <span className='flex sm:flex-row gap-1 sm:gap-3 font-bold text-2xl sm:text-4xl text-white'>
           Pendataan
           <span className='italic font-normal'>Prestasi</span>
         </span>
       </div>
 
-      <div className='mt-8 flex flex-col gap-8 bg-white rounded-[12px] p-8'>
+      <div className='mt-6 sm:mt-8 flex flex-col gap-6 sm:gap-8 bg-white rounded-[12px] p-4 sm:p-8 pb-8'>
         
         <div className='flex flex-col gap-6'>
           <div className='flex flex-row gap-3 items-center'>
@@ -271,8 +271,8 @@ function PrestasiPage(): JSX.Element {
           <h2 className='font-semibold text-2xl'>Prestasi</h2>
         </div>
         
-        <div className='flex flex-row gap-12'>
-          <div className='flex flex-col gap-6'>
+        <div className='flex flex-col lg:flex-row gap-6 lg:gap-12'>
+          <div className='flex flex-col gap-6 flex-1'>
 
             {/* Nama Prestasi */}
             <div className='flex flex-col gap-2'>
@@ -292,10 +292,10 @@ function PrestasiPage(): JSX.Element {
                 )}
             </div>
 
-            <div className='flex flex-row gap-4'>
+            <div className='flex flex-col sm:flex-row gap-4'>
 
               { /* Jenis Prestasi */ }
-              <div className='flex flex-col gap-2'>
+              <div className='flex flex-col gap-2 w-full sm:w-1/2'>
                   <span className='text-sm'>Jenis Prestasi</span>
                   <DropdownCategory
                     placeholder='Pilih jenis prestasi'
@@ -311,7 +311,7 @@ function PrestasiPage(): JSX.Element {
               </div>
 
               { /* Periode Prestasi */ }
-              <div className='flex flex-col gap-2'>
+              <div className='flex flex-col gap-2 w-full sm:w-1/2'>
                   <span className='text-sm'>Periode Pencapaian Prestasi</span>
                   <DropdownCalendar 
                     placeholder="Bulan/Tahun"
@@ -329,7 +329,7 @@ function PrestasiPage(): JSX.Element {
           </div>
 
           {/* Deskripsi Prestasi */}
-          <div className='flex flex-col gap-2 w-[50%] '>
+          <div className='flex flex-col gap-2 w-full lg:w-[50%]'>
             <span className='text-sm'>Deskripsi Prestasi</span>
             <Textarea className={`bg-[#FCFCFC] rounded-lg resize-none h-[130px] ${
               errors.deskripsiPrestasi ? 'border-red-400 focus-visible:border-red-400' : ''
@@ -347,10 +347,10 @@ function PrestasiPage(): JSX.Element {
         
         </div>
         
-        <div className='mt-8 flex flex-row items-start justify-between gap-14'>
+        <div className='mt-8 flex flex-col lg:flex-row items-start justify-between gap-6 lg:gap-14'>
           
           {/* Foto Sertifikat */}
-          <div className='flex flex-col gap-2'>
+          <div className='flex flex-col gap-2 w-full lg:w-auto'>
             <span className='text-sm'>Foto Sertifikat</span>
             <span className='font-light text-gray-600 text-xs'>
               Upload 1 supported file: PDF, document, or image. Max 10 MB.
@@ -372,7 +372,7 @@ function PrestasiPage(): JSX.Element {
           </div>
 
           {/* Foto Diri */}
-          <div className='flex flex-col gap-2 max-w-[260px]'>
+          <div className='flex flex-col gap-2 w-full lg:max-w-[260px]'>
             <span className='text-sm'>Foto Diri</span>
             <span className='font-light text-gray-600 text-xs'>
               Ukuran 1:1. Disarankan sekali foto formal mengenakan baju berkerah dengan latar polos
@@ -394,7 +394,7 @@ function PrestasiPage(): JSX.Element {
           </div>
 
           {/* Foto Awarding */}
-          <div className='flex flex-col gap-2'>
+          <div className='flex flex-col gap-2 w-full lg:w-auto'>
             <span className='text-sm'>Foto Awarding</span>
             <span className='font-light text-gray-600 text-xs'>
               Foto saat awarding, lagi megang sertifikat, atau foto bukti lainnya
@@ -417,7 +417,7 @@ function PrestasiPage(): JSX.Element {
 
         </div>
         
-        <div className='mt-4 flex flex-row justify-end'>
+        <div className='mt-4 mb-8 flex flex-row justify-end'>
           <SubmitButton 
             text='Submit' 
             onSubmit={handleSubmit} 

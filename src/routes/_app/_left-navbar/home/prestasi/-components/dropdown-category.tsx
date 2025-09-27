@@ -34,9 +34,9 @@ export function DropdownCategory({
                 type='button'
                 onClick={() => setIsOpen(!isOpen)}
                 disabled={disabled}
-                className={`min-w-[185px] bg-[#FCFCFC] rounded-lg hover:border-[#CBD5E1] focus-visible:outline-none focus-visible:border-[#94A3B8] border border-[#BABABA]/30 px-3 py-2 text-left flex items-center justify-between text-sm ${
-              className.includes('border-red-400') ? 'border-red-400 focus-visible:border-red-400' : ''
-            }`}
+                className={`w-full bg-[#FCFCFC] rounded-lg hover:border-[#CBD5E1] focus-visible:outline-none focus-visible:border-[#94A3B8] border border-[#BABABA]/30 px-3 py-2 text-left flex items-center justify-between text-sm ${
+                  className.includes('border-red-400') ? 'border-red-400 focus-visible:border-red-400' : ''
+                }`}
             >
                 <span className={selectedValue ? 'text-black' : 'text-gray-500'}>
                     { selectedValue || placeholder }

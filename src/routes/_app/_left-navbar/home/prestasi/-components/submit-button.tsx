@@ -22,7 +22,7 @@ export function SubmitButton({
 }: SubmitButtonProps) {
     return (
         <Button
-            className={`flex items-center gap-2 text-sm font-semibold bg-[#E8C55F] hover:bg-[#f0cf6a] active:bg-[#fadd84] text-black duration-300 px-4 py-2 rounded-lg ${className}`}
+            className={`group flex items-center gap-2 text-sm font-semibold bg-[#E8C55F] hover:bg-[#f0cf6a] active:bg-[#fadd84] text-black duration-300 px-4 py-2 rounded-lg ${className}`}
             disabled={disabled || loading || !isValid}
             onClick={onSubmit}
         >
@@ -34,7 +34,7 @@ export function SubmitButton({
             ) : (
                 <>
                 {text}
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 duration-300" />
                 </>
             )}
         </Button>
