@@ -4,9 +4,9 @@ import QuestionMarkIcon from '../icons/question-mark';
 import SettingsIcon from '../icons/settings';
 import Profile from './profile';
 
-function LeftNavbar() {
-  return (
-    <section className="sticky top-0 hidden min-h-full w-[325px] shrink-0 flex-col border-r border-gray-300 lg:flex">
+  function LeftNavbar() {
+    return (
+      <section className="sticky top-0 hidden min-h-full w-[325px] shrink-0 flex-col border-r border-gray-300 lg:flex">
       <Profile />
 
       <section className="mt-5 flex size-full flex-1 flex-col items-center justify-between p-0">

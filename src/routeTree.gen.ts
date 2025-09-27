@@ -23,6 +23,7 @@ import { Route as AppLeftNavbarSettingsImport } from './routes/_app/_left-navbar
 import { Route as AppLeftNavbarTimelineIndexImport } from './routes/_app/_left-navbar/timeline/index'
 import { Route as AppLeftNavbarSettingsIndexImport } from './routes/_app/_left-navbar/settings/index'
 import { Route as AppLeftNavbarHomeIndexImport } from './routes/_app/_left-navbar/home/index'
+import { Route as AppLeftNavbarDashboardIndexImport } from './routes/_app/_left-navbar/dashboard/index'
 import { Route as AppLeftNavbarAddAnnouncementIndexImport } from './routes/_app/_left-navbar/add-announcement/index'
 import { Route as AppLeftNavbarSettingsSettingsItemImport } from './routes/_app/_left-navbar/settings/_settings-item'
 import { Route as AppLeftNavbarHomeTestimoniImport } from './routes/_app/_left-navbar/home/testimoni'
@@ -32,6 +33,7 @@ import { Route as AppLeftNavbarHomeNimFinderIndexImport } from './routes/_app/_l
 import { Route as AppLeftNavbarHomeDingdongIndexImport } from './routes/_app/_left-navbar/home/dingdong/index'
 import { Route as AppLeftNavbarHomeCurhatIndexImport } from './routes/_app/_left-navbar/home/curhat/index'
 import { Route as AppLeftNavbarHomeCompetitionIndexImport } from './routes/_app/_left-navbar/home/competition/index'
+import { Route as AppLeftNavbarDashboardEditIndexImport } from './routes/_app/_left-navbar/dashboard/edit/index'
 import { Route as AppLeftNavbarSettingsSettingsItemSubscriptionsIndexImport } from './routes/_app/_left-navbar/settings/_settings-item/subscriptions/index'
 import { Route as AppLeftNavbarSettingsSettingsItemCreditsIndexImport } from './routes/_app/_left-navbar/settings/_settings-item/credits/index'
 import { Route as AppLeftNavbarSettingsSettingsItemCoursesIndexImport } from './routes/_app/_left-navbar/settings/_settings-item/courses/index'
@@ -106,6 +108,12 @@ const AppLeftNavbarHomeIndexRoute = AppLeftNavbarHomeIndexImport.update({
   getParentRoute: () => AppLeftNavbarRoute,
 } as any)
 
+const AppLeftNavbarDashboardIndexRoute =
+  AppLeftNavbarDashboardIndexImport.update({
+    path: '/dashboard/',
+    getParentRoute: () => AppLeftNavbarRoute,
+  } as any)
+
 const AppLeftNavbarAddAnnouncementIndexRoute =
   AppLeftNavbarAddAnnouncementIndexImport.update({
     path: '/add-announcement/',
@@ -158,6 +166,12 @@ const AppLeftNavbarHomeCurhatIndexRoute =
 const AppLeftNavbarHomeCompetitionIndexRoute =
   AppLeftNavbarHomeCompetitionIndexImport.update({
     path: '/home/competition/',
+    getParentRoute: () => AppLeftNavbarRoute,
+  } as any)
+
+const AppLeftNavbarDashboardEditIndexRoute =
+  AppLeftNavbarDashboardEditIndexImport.update({
+    path: '/dashboard/edit/',
     getParentRoute: () => AppLeftNavbarRoute,
   } as any)
 
@@ -290,6 +304,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppLeftNavbarAddAnnouncementIndexImport
       parentRoute: typeof AppLeftNavbarImport
     }
+    '/_app/_left-navbar/dashboard/': {
+      id: '/_app/_left-navbar/dashboard/'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AppLeftNavbarDashboardIndexImport
+      parentRoute: typeof AppLeftNavbarImport
+    }
     '/_app/_left-navbar/home/': {
       id: '/_app/_left-navbar/home/'
       path: '/home'
@@ -309,6 +330,13 @@ declare module '@tanstack/react-router' {
       path: '/timeline'
       fullPath: '/timeline'
       preLoaderRoute: typeof AppLeftNavbarTimelineIndexImport
+      parentRoute: typeof AppLeftNavbarImport
+    }
+    '/_app/_left-navbar/dashboard/edit/': {
+      id: '/_app/_left-navbar/dashboard/edit/'
+      path: '/dashboard/edit'
+      fullPath: '/dashboard/edit'
+      preLoaderRoute: typeof AppLeftNavbarDashboardEditIndexImport
       parentRoute: typeof AppLeftNavbarImport
     }
     '/_app/_left-navbar/home/competition/': {
@@ -435,8 +463,10 @@ export const routeTree = rootRoute.addChildren({
           AppLeftNavbarHomeTestimoniTypeSemesterIndexRoute,
         }),
       AppLeftNavbarAddAnnouncementIndexRoute,
+      AppLeftNavbarDashboardIndexRoute,
       AppLeftNavbarHomeIndexRoute,
       AppLeftNavbarTimelineIndexRoute,
+      AppLeftNavbarDashboardEditIndexRoute,
       AppLeftNavbarHomeCompetitionIndexRoute,
       AppLeftNavbarHomeCurhatIndexRoute,
       AppLeftNavbarHomeDingdongIndexRoute,
@@ -482,8 +512,10 @@ export const routeTree = rootRoute.addChildren({
         "/_app/_left-navbar/settings",
         "/_app/_left-navbar/home/testimoni",
         "/_app/_left-navbar/add-announcement/",
+        "/_app/_left-navbar/dashboard/",
         "/_app/_left-navbar/home/",
         "/_app/_left-navbar/timeline/",
+        "/_app/_left-navbar/dashboard/edit/",
         "/_app/_left-navbar/home/competition/",
         "/_app/_left-navbar/home/curhat/",
         "/_app/_left-navbar/home/dingdong/",
@@ -541,6 +573,10 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "_app/_left-navbar/add-announcement/index.tsx",
       "parent": "/_app/_left-navbar"
     },
+    "/_app/_left-navbar/dashboard/": {
+      "filePath": "_app/_left-navbar/dashboard/index.tsx",
+      "parent": "/_app/_left-navbar"
+    },
     "/_app/_left-navbar/home/": {
       "filePath": "_app/_left-navbar/home/index.tsx",
       "parent": "/_app/_left-navbar"
@@ -551,6 +587,10 @@ export const routeTree = rootRoute.addChildren({
     },
     "/_app/_left-navbar/timeline/": {
       "filePath": "_app/_left-navbar/timeline/index.tsx",
+      "parent": "/_app/_left-navbar"
+    },
+    "/_app/_left-navbar/dashboard/edit/": {
+      "filePath": "_app/_left-navbar/dashboard/edit/index.tsx",
       "parent": "/_app/_left-navbar"
     },
     "/_app/_left-navbar/home/competition/": {
