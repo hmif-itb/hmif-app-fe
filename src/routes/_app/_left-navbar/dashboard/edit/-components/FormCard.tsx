@@ -128,12 +128,11 @@ export function FormCard() {
                 </label>
                 <textarea
                   rows={6}
-                  className={`w-full resize-none rounded-lg border px-3 py-2.5 outline-none transition-colors focus:border-green-500 focus:ring-2 focus:ring-green-500 lg:h-36 ${
+                  className={`w-full resize-none rounded-lg border bg-[#FCFCFC] px-3 py-2.5 outline-none transition-colors focus:border-green-500 focus:ring-2 focus:ring-green-500 lg:h-36 ${
                     errors.deskripsi
                       ? 'border-red-300 bg-red-50'
                       : 'border-gray-300'
                   }`}
-                  style={{ backgroundColor: '#FCFCFC' }}
                   placeholder="Masukkan deskripsi prestasi ..."
                   {...register('deskripsi')}
                 />
@@ -174,7 +173,7 @@ export function FormCard() {
           <div className="flex flex-col gap-4 pt-4 lg:flex-row lg:items-center lg:justify-between lg:gap-0">
             <button
               type="button"
-              className="hidden items-center gap-2 rounded-lg border border-gray-300 bg-transparent px-6 py-2.5 font-medium text-gray-700 transition-colors hover:bg-gray-50 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 lg:inline-flex"
+              className="hidden items-center gap-2 rounded-full border border-gray-300 bg-transparent px-6 py-2.5 font-medium text-gray-700 transition-colors hover:bg-gray-50 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 lg:inline-flex"
             >
               <ArrowLeft className="size-4" />
               Back
