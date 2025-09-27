@@ -41,7 +41,7 @@ const prestasiScheme = z.object({
   }, `${deskripsiMaxWord} words maximum`),
   fotoSertifikat: z.instanceof(File, { message: 'This field is required' }),
   fotoDiri: z.instanceof(File, { message: 'This field is required' }),
-  fotoAwarding: z.instanceof(File).optional()
+  fotoAwarding: z.union([z.instanceof(File), z.null()]).optional()
 });
 
 // Type interface dari zod schema
