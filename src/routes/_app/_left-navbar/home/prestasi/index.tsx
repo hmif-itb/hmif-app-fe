@@ -41,7 +41,7 @@ const prestasiScheme = z.object({
   }, `${deskripsiMaxWord} words maximum`),
   fotoSertifikat: z.instanceof(File, { message: 'This field is required' }),
   fotoDiri: z.instanceof(File, { message: 'This field is required' }),
-  fotoAwarding: z.instanceof(File, { message: 'This field is required' })
+  fotoAwarding: z.instanceof(File).optional()
 });
 
 // Type interface dari zod schema
@@ -276,7 +276,7 @@ function PrestasiPage(): JSX.Element {
 
             {/* Nama Prestasi */}
             <div className='flex flex-col gap-2'>
-                <span className='text-sm'>Nama Kompetisi/Organisasi</span>
+                <span className='text-sm'>Nama Kompetisi/Organisasi <span className='text-red-400'>*</span></span>
                 <Input 
                     className={`bg-[#FCFCFC] hover:border-[#CBD5E1] focus-visible:border-[#94A3B8] rounded-lg focus-visible:ring-0 focus-visible:ring-offset-0 ${
                       errors.namaPrestasi ? 'border-red-400 focus-visible:border-red-400' : ''
@@ -295,8 +295,8 @@ function PrestasiPage(): JSX.Element {
             <div className='flex flex-col sm:flex-row gap-4'>
 
               { /* Jenis Prestasi */ }
-              <div className='flex flex-col gap-2 w-full sm:w-1/2'>
-                  <span className='text-sm'>Jenis Prestasi</span>
+              <div className='flex flex-col gap-2 w-full sm:w-[48%]'>
+                  <span className='text-sm'>Jenis Prestasi <span className='text-red-400'>*</span></span>
                   <DropdownCategory
                     placeholder='Pilih jenis prestasi'
                     options={prestasiOptions}
@@ -311,8 +311,8 @@ function PrestasiPage(): JSX.Element {
               </div>
 
               { /* Periode Prestasi */ }
-              <div className='flex flex-col gap-2 w-full sm:w-1/2'>
-                  <span className='text-sm'>Periode Pencapaian Prestasi</span>
+              <div className='flex flex-col gap-2 w-full sm:w-[52%]'>
+                  <span className='text-sm'>Periode Pencapaian Prestasi <span className='text-red-400'>*</span></span>
                   <DropdownCalendar 
                     placeholder="Bulan/Tahun"
                     onSelect={handlePeriodSelect}
@@ -330,7 +330,7 @@ function PrestasiPage(): JSX.Element {
 
           {/* Deskripsi Prestasi */}
           <div className='flex flex-col gap-2 w-full lg:w-[50%]'>
-            <span className='text-sm'>Deskripsi Prestasi</span>
+            <span className='text-sm'>Deskripsi Prestasi <span className='text-red-400'>*</span></span>
             <Textarea className={`bg-[#FCFCFC] rounded-lg resize-none h-[130px] ${
               errors.deskripsiPrestasi ? 'border-red-400 focus-visible:border-red-400' : ''
             }`} 
@@ -351,7 +351,7 @@ function PrestasiPage(): JSX.Element {
           
           {/* Foto Sertifikat */}
           <div className='flex flex-col gap-2 w-full lg:w-auto'>
-            <span className='text-sm'>Foto Sertifikat</span>
+            <span className='text-sm'>Foto Sertifikat <span className='text-red-400'>*</span></span>
             <span className='font-light text-gray-600 text-xs'>
               Upload 1 supported file: PDF, document, or image. Max 10 MB.
             </span>
@@ -373,7 +373,7 @@ function PrestasiPage(): JSX.Element {
 
           {/* Foto Diri */}
           <div className='flex flex-col gap-2 w-full lg:max-w-[260px]'>
-            <span className='text-sm'>Foto Diri</span>
+            <span className='text-sm'>Foto Diri <span className='text-red-400'>*</span></span>
             <span className='font-light text-gray-600 text-xs'>
               Ukuran 1:1. Disarankan sekali foto formal mengenakan baju berkerah dengan latar polos
             </span>
@@ -395,7 +395,7 @@ function PrestasiPage(): JSX.Element {
 
           {/* Foto Awarding */}
           <div className='flex flex-col gap-2 w-full lg:w-auto'>
-            <span className='text-sm'>Foto Awarding</span>
+            <span className='text-sm'>Foto Awarding <span className='text-gray-500 text-xs'>(Opsional)</span></span>
             <span className='font-light text-gray-600 text-xs'>
               Foto saat awarding, lagi megang sertifikat, atau foto bukti lainnya
             </span>
