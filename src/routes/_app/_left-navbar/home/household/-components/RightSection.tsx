@@ -9,10 +9,14 @@ import { PeminjamanItemData } from '../-api';
 interface RightSectionProps {
   peminjamanItems: PeminjamanItemData[];
   isLoading: boolean;
+  isAdmin: boolean;
 }
 
-function RightSection({ peminjamanItems, isLoading }: RightSectionProps) {
-  const user = useSession();
+function RightSection({
+  peminjamanItems,
+  isLoading,
+  isAdmin,
+}: RightSectionProps) {
   const navigate = useNavigate();
 
   const handleLihatProperti = () => {
@@ -39,7 +43,7 @@ function RightSection({ peminjamanItems, isLoading }: RightSectionProps) {
     <div className="flex h-full min-w-[335px] flex-col gap-5">
       {/* Button */}
       {/* TODO: Tipe Role mungkin berbeda */}
-      {!isInRoles(user, ['household']) ? (
+      {isAdmin ? (
         <div className="flex flex-col gap-4">
           <Button
             className="w-full bg-[#E2C66F] text-[#333333]"

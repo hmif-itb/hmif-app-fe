@@ -145,6 +145,7 @@ function HouseholdPage() {
             onMonthChange={handleMonthChange}
           />
           <RightSection
+            isAdmin={isAdmin}
             peminjamanItems={data?.peminjamanItems || []}
             isLoading={isLoading}
           />
