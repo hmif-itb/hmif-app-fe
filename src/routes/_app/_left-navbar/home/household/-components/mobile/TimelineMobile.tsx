@@ -18,7 +18,7 @@ function TimelineMobile({ events, isLoading }: TimelineMobileProps) {
           <span>Time</span>
           <span>Agenda</span>
         </div>
-        <div className="mt-4 flex flex-col gap-6">
+        <div className="mt-4 flex flex-col ">
           {isLoading ? (
             Array.from({ length: 2 }).map((_, idx) => (
               <div
@@ -46,14 +46,14 @@ function TimelineMobile({ events, isLoading }: TimelineMobileProps) {
                 </span>
                 <div className="flex items-stretch gap-3">
                   <div className="flex flex-col items-center">
-                    <span className="mt-1 size-[18px] rounded-full border-[5px] border-[#305138] bg-white" />
+                    <span className="size-[18px] min-h-[18px] rounded-full border-[5px] border-[#305138] bg-[#D9D9D9]" />
                     {idx !== events.length - 1 && (
-                      <span className="mt-2 h-14 w-px bg-[#525352]" />
+                      <span className="h-full w-[2.5px] bg-[#525352]" />
                     )}
                   </div>
                   <div
                     className={cn(
-                      'flex-1 rounded-2xl p-4 text-white shadow-sm',
+                      'mb-6 flex-1 rounded-2xl p-4 text-white shadow-sm',
                       event.type === 'properti'
                         ? 'bg-[#2F5C3B]'
                         : 'bg-[#2A4F34]',
