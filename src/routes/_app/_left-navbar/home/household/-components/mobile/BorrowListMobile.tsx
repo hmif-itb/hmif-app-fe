@@ -9,10 +9,9 @@ interface BorrowListMobileProps {
 function BorrowListMobile({ items, isLoading }: BorrowListMobileProps) {
   return (
     <section className="flex flex-col gap-4">
-      <div className="flex items-center gap-3 text-[#1E422C]">
-        <span className="flex size-10 items-center justify-center rounded-full bg-[#F3E4A5]">
-          <Package className="size-5" />
-        </span>
+      <div className="flex items-center gap-3 text-[#333333]">
+        <Package size={24} />
+
         <h2 className="text-xl font-semibold">Daftar Peminjaman</h2>
       </div>
       <div className="flex flex-col gap-3">
@@ -31,7 +30,7 @@ function BorrowListMobile({ items, isLoading }: BorrowListMobileProps) {
           : items.map((item) => (
               <div
                 key={item.id}
-                className="rounded-2xl bg-[#F7E9C3] p-4 shadow-sm"
+                className="rounded-2xl bg-[#E2C66F]/30 p-4 shadow-sm"
               >
                 <div className="flex items-center justify-between">
                   <span className="text-base font-semibold text-[#2A2A2A]">

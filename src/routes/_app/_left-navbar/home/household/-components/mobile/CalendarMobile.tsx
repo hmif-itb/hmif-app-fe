@@ -34,7 +34,7 @@ function CalendarMobile({
   onNextMonth,
 }: CalendarMobileProps) {
   return (
-    <section className="rounded-3xl bg-white p-5 shadow-sm">
+    <section className="rounded-3xl ">
       <div className="mb-4 flex items-center justify-between">
         <div className="flex flex-col">
           <span className="text-xl font-bold text-black">{monthLabel}</span>

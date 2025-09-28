@@ -1,5 +1,5 @@
 import React from 'react';
-import { PeminjamanItemData } from '../index';
+import { PeminjamanItemData } from '../-api';
 
 interface PeminjamanItemProps {
   data: PeminjamanItemData;
@@ -7,7 +7,7 @@ interface PeminjamanItemProps {
 
 function PeminjamanItem({ data }: PeminjamanItemProps) {
   return (
-    <div className="flex flex-col gap-2 rounded-[10px] bg-[#E2C66F4D]/30 px-4 py-[14px]">
+    <div className="flex flex-col gap-2 rounded-[10px] bg-[#E2C66F]/30 px-4 py-[14px]">
       {/* Header */}
       <div className="flex justify-between">
         <span className="font-medium text-black">{data.name}</span>

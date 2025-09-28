@@ -43,7 +43,7 @@ function MobileSection({
   onNextMonth,
 }: MobileSectionProps) {
   return (
-    <div className="flex flex-col gap-6 px-5 py-6 pb-24">
+    <div className="flex flex-col gap-6 bg-[#FBFBFB] px-9 pb-24 pt-[60px]">
       <MobileHeader isAdmin={isAdmin} />
       <CalendarMobile
         monthLabel={monthLabel}
