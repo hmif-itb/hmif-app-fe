@@ -144,12 +144,12 @@ function HouseholdAdminPage() {
         <span>Back</span>
       </Button>
       <main
-        className="flex size-full flex-col items-center gap-3 overflow-y-scroll bg-[#30764B] p-[34px] lg:gap-6 lg:rounded-xl lg:px-[26px]"
+        className="flex size-full flex-col gap-3 overflow-y-scroll bg-[#30764B] p-[34px] lg:items-center lg:gap-6 lg:rounded-xl lg:px-[26px]"
         style={isMobile ? mobileStyles : desktopStyles}
       >
-        <h1 className="flex items-center gap-6 text-[32px] font-bold text-white lg:text-center lg:text-5xl ">
+        <h1 className="flex items-center gap-3 text-[32px] font-bold text-white lg:text-center lg:text-5xl ">
           <ChevronLeft
-            className="size-16 lg:hidden"
+            className="size-9 lg:hidden"
             onClick={() => {
               router.history.back();
             }}

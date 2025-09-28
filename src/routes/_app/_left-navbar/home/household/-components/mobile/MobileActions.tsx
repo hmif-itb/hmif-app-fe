@@ -1,6 +1,12 @@
 import { useNavigate } from '@tanstack/react-router';
 import { Button } from '~/components/ui/button';
-import { CirclePlus, NotebookPen, Package, RotateCw, type LucideIcon } from 'lucide-react';
+import {
+  CirclePlus,
+  NotebookPen,
+  Package,
+  RotateCw,
+  type LucideIcon,
+} from 'lucide-react';
 
 interface MobileActionsProps {
   isAdmin: boolean;
