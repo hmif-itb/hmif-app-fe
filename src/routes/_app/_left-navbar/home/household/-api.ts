@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 
 export interface EventType {
+  user: string;
   title: string;
   type: 'sekre' | 'properti';
   start_time: Date;
@@ -23,41 +24,49 @@ interface HouseholdData {
 const generateDummyData = (month: number, year: number): HouseholdData => {
   const events: EventType[] = [
     {
+      user: 'Adinda Putri',
       title: 'Peminjaman Sakre 1',
       type: 'sekre',
       start_time: new Date(year, month, 5, 8, 0),
     },
     {
+      user: 'Adinda Putri',
       title: 'Peminjaman Proyektor',
       type: 'properti',
       start_time: new Date(year, month, 5, 9, 0),
     },
     {
+      user: 'Adinda Putri',
       title: 'Peminjaman Ruang Rapat',
       type: 'sekre',
       start_time: new Date(year, month, 12, 10, 0),
     },
     {
+      user: 'Adinda Putri',
       title: 'Peminjaman Sound System',
       type: 'properti',
       start_time: new Date(year, month, 12, 14, 0),
     },
     {
+      user: 'Adinda Putri',
       title: 'Peminjaman Sakre 2',
       type: 'sekre',
       start_time: new Date(year, month, 18, 8, 30),
     },
     {
+      user: 'Adinda Putri',
       title: 'Peminjaman Laptop',
       type: 'properti',
       start_time: new Date(year, month, 18, 11, 0),
     },
     {
+      user: 'Adinda Putri',
       title: 'Peminjaman Meja',
       type: 'properti',
       start_time: new Date(year, month, 25, 13, 0),
     },
     {
+      user: 'Adinda Putri',
       title: 'Peminjaman Ruang Aula',
       type: 'sekre',
       start_time: new Date(year, month, 25, 15, 30),
