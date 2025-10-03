@@ -1,7 +1,10 @@
-import { CheckCheck, Download, CalendarSearch } from 'lucide-react';
-import { ChevronRight } from 'lucide-react';
-import * as Select from '@radix-ui/react-select';
+import { CheckCheck, Download, Trash2 } from 'lucide-react';
 import * as ToggleGroup from '@radix-ui/react-toggle-group';
+import { DatePeriodPicker } from '../../-dashboard-component/DatePeriodPicker';
+import {
+  KategoriDropdown,
+  DropdownOption,
+} from '../../-dashboard-component/KategoriDropdown';
 
 type TableActionsBarProps = {
   selectedCount: number;
@@ -9,10 +12,18 @@ type TableActionsBarProps = {
   allSelected: boolean;
   onExport: () => void;
   onBulkChange: (value: string) => void;
+  onDelete: () => void;
   filterJenis: string;
   onFilterChange: (value: string) => void;
-  onPeriodClick: () => void;
+  onPeriodChange?: (from: string, to: string) => void;
 };
+
+const jenisPrestasiOptions: DropdownOption[] = [
+  { value: 'all', label: 'Semua Jenis' },
+  { value: 'kompetisi', label: 'Kompetisi' },
+  { value: 'organisasi', label: 'Organisasi' },
+  { value: 'kepanitiaan', label: 'Kepanitiaan' },
+];
 
 export const TableActionsBar = ({
   selectedCount,
@@ -20,58 +31,46 @@ export const TableActionsBar = ({
   allSelected,
   onExport,
   onBulkChange,
+  onDelete,
   filterJenis,
   onFilterChange,
-  onPeriodClick,
+  onPeriodChange,
 }: TableActionsBarProps) => {
   return (
-    <div className="flex flex-col justify-between gap-4 border-b bg-white p-4 md:flex-row md:items-center">
-      <div className="flex flex-wrap items-center gap-2">
+    <div className="flex flex-col justify-between gap-4 bg-[#FFFFFF] py-4 pl-3 md:flex-row md:items-center lg:pl-4">
+      <div className="order-2 flex flex-wrap items-center gap-2 md:order-1">
+        <button
+          onClick={onDelete}
+          className="flex items-center gap-1.5 rounded-full border border-black px-2 py-1.5 font-inter text-xs font-medium hover:bg-gray-50 md:gap-2 md:px-3 md:py-2 md:text-sm"
+        >
+          <Trash2 size={14} className="md:hidden" />
+          <Trash2 size={16} className="hidden md:block" />
+          Hapus
+        </button>
         <button
           onClick={onSelectAll}
-          className="flex items-center gap-2 rounded-lg border px-3 py-2 font-inter text-sm font-medium hover:bg-gray-50"
+          className="flex items-center gap-1.5 rounded-full border border-black px-2 py-1.5 font-inter text-xs font-medium hover:bg-gray-50 md:gap-2 md:px-3 md:py-2 md:text-sm"
         >
-          <CheckCheck size={16} />
+          <CheckCheck size={14} className="md:hidden" />
+          <CheckCheck size={16} className="hidden md:block" />
           {allSelected ? 'Batalkan Semua' : 'Pilih Semua'}
         </button>
         <button
           onClick={onExport}
-          className="flex items-center gap-2 rounded-lg border px-3 py-2 font-inter text-sm font-medium hover:bg-gray-50"
+          className="flex items-center gap-1.5 rounded-full border border-black px-2 py-1 font-inter text-xs font-medium hover:bg-gray-50 md:gap-2 md:px-3 md:py-2 md:text-sm"
         >
-          <Download size={16} />
+          <Download size={14} className="md:hidden" />
+          <Download size={16} className="hidden md:block" />
           Export
         </button>
 
-        <Select.Root onValueChange={onBulkChange}>
-          <Select.Trigger className="flex min-w-[180px] items-center gap-2 rounded-lg border px-3 py-2 font-inter text-sm font-medium hover:bg-gray-50">
-            <Select.Value placeholder="Ubah jenis menjadi..." />
-            <Select.Icon>
-              <ChevronRight size={16} />
-            </Select.Icon>
-          </Select.Trigger>
-          <Select.Portal>
-            <Select.Content className="z-50 rounded-lg border bg-white p-1 shadow-lg">
-              <Select.Item
-                value="kompetisi"
-                className="cursor-pointer rounded px-3 py-2 font-inter hover:bg-gray-100"
-              >
-                <Select.ItemText>Kompetisi</Select.ItemText>
-              </Select.Item>
-              <Select.Item
-                value="organisasi"
-                className="cursor-pointer rounded px-3 py-2 font-inter hover:bg-gray-100"
-              >
-                <Select.ItemText>Organisasi</Select.ItemText>
-              </Select.Item>
-              <Select.Item
-                value="kepanitiaan"
-                className="cursor-pointer rounded px-3 py-2 font-inter hover:bg-gray-100"
-              >
-                <Select.ItemText>Kepanitiaan</Select.ItemText>
-              </Select.Item>
-            </Select.Content>
-          </Select.Portal>
-        </Select.Root>
+        <KategoriDropdown
+          value={filterJenis}
+          onChange={onFilterChange}
+          options={jenisPrestasiOptions}
+          placeholder="Pilih Jenis Prestasi"
+          placeholderMobile="Pilih Jenis ..."
+        />
 
         {selectedCount > 0 && (
           <span className="font-inter text-sm text-gray-600">
@@ -80,41 +79,43 @@ export const TableActionsBar = ({
         )}
       </div>
 
-      <div className="flex flex-wrap items-center gap-4">
-        <span className="font-inter text-sm font-medium">filter:</span>
+      {/* Filter Section */}
+      <p className="block font-inter text-sm font-medium lg:hidden">filter:</p>
+      <div className="relative order-1 mx-auto flex flex-wrap items-center gap-2 md:order-2 md:gap-4 lg:justify-between">
+        <span className="hidden font-inter text-sm font-medium lg:block">
+          filter:
+        </span>
+
+        <DatePeriodPicker
+          onPeriodChange={onPeriodChange}
+          className="order-1 lg:relative lg:-right-52 lg:order-2"
+        />
+
         <ToggleGroup.Root
           type="single"
-          value={filterJenis}
-          onValueChange={onFilterChange}
-          className="flex gap-1"
+          value={filterJenis === 'all' ? undefined : filterJenis}
+          onValueChange={(value) => onFilterChange(value || 'all')}
+          className="order-2 flex lg:order-1"
         >
           <ToggleGroup.Item
             value="kompetisi"
-            className="rounded-lg border px-3 py-2 font-inter text-sm hover:bg-gray-50 data-[state=on]:bg-blue-100 data-[state=on]:text-blue-700"
+            className="rounded-l-lg border border-r-0 px-2 py-1 font-inter text-xs font-medium hover:bg-gray-50 data-[state=on]:bg-blue-100 data-[state=on]:text-blue-700 md:px-3 md:py-2 md:text-sm"
           >
             Kompetisi
           </ToggleGroup.Item>
           <ToggleGroup.Item
             value="organisasi"
-            className="rounded-lg border px-3 py-2 font-inter text-sm hover:bg-gray-50 data-[state=on]:bg-blue-100 data-[state=on]:text-blue-700"
+            className="border px-2 py-1 font-inter text-xs font-medium hover:bg-gray-50 data-[state=on]:bg-blue-100 data-[state=on]:text-blue-700 md:px-3 md:py-2 md:text-sm"
           >
             Organisasi
           </ToggleGroup.Item>
           <ToggleGroup.Item
             value="kepanitiaan"
-            className="rounded-lg border px-3 py-2 font-inter text-sm hover:bg-gray-50 data-[state=on]:bg-blue-100 data-[state=on]:text-blue-700"
+            className="rounded-r-lg border border-l-0 px-2 py-1 font-inter text-xs font-medium hover:bg-gray-50 data-[state=on]:bg-blue-100 data-[state=on]:text-blue-700 md:px-3 md:py-2 md:text-sm"
           >
             Kepanitiaan
           </ToggleGroup.Item>
         </ToggleGroup.Root>
-
-        <button
-          onClick={onPeriodClick}
-          className="flex items-center gap-2 rounded-lg border px-3 py-2 font-inter text-sm font-medium hover:bg-gray-50"
-        >
-          <CalendarSearch size={16} />
-          Pilih Periode
-        </button>
       </div>
     </div>
   );

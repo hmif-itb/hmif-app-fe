@@ -24,6 +24,7 @@ import { Route as AppLeftNavbarTimelineIndexImport } from './routes/_app/_left-n
 import { Route as AppLeftNavbarSettingsIndexImport } from './routes/_app/_left-navbar/settings/index'
 import { Route as AppLeftNavbarHomeIndexImport } from './routes/_app/_left-navbar/home/index'
 import { Route as AppLeftNavbarDashboardIndexImport } from './routes/_app/_left-navbar/dashboard/index'
+import { Route as AppLeftNavbarDashboardPeopleIndexImport } from './routes/_app/_left-navbar/dashboard-people/index'
 import { Route as AppLeftNavbarAddAnnouncementIndexImport } from './routes/_app/_left-navbar/add-announcement/index'
 import { Route as AppLeftNavbarSettingsSettingsItemImport } from './routes/_app/_left-navbar/settings/_settings-item'
 import { Route as AppLeftNavbarHomeTestimoniImport } from './routes/_app/_left-navbar/home/testimoni'
@@ -33,12 +34,13 @@ import { Route as AppLeftNavbarHomeNimFinderIndexImport } from './routes/_app/_l
 import { Route as AppLeftNavbarHomeDingdongIndexImport } from './routes/_app/_left-navbar/home/dingdong/index'
 import { Route as AppLeftNavbarHomeCurhatIndexImport } from './routes/_app/_left-navbar/home/curhat/index'
 import { Route as AppLeftNavbarHomeCompetitionIndexImport } from './routes/_app/_left-navbar/home/competition/index'
-import { Route as AppLeftNavbarDashboardEditIndexImport } from './routes/_app/_left-navbar/dashboard/edit/index'
 import { Route as AppLeftNavbarSettingsSettingsItemSubscriptionsIndexImport } from './routes/_app/_left-navbar/settings/_settings-item/subscriptions/index'
 import { Route as AppLeftNavbarSettingsSettingsItemCreditsIndexImport } from './routes/_app/_left-navbar/settings/_settings-item/credits/index'
 import { Route as AppLeftNavbarSettingsSettingsItemCoursesIndexImport } from './routes/_app/_left-navbar/settings/_settings-item/courses/index'
 import { Route as AppLeftNavbarHomeTestimoniTypeIndexImport } from './routes/_app/_left-navbar/home/testimoni/$type/index'
 import { Route as AppLeftNavbarHomeRekomendasiRekomendasiIdIndexImport } from './routes/_app/_left-navbar/home/rekomendasi/$rekomendasiId/index'
+import { Route as AppLeftNavbarDashboardEditIdIndexImport } from './routes/_app/_left-navbar/dashboard/edit/$id/index'
+import { Route as AppLeftNavbarDashboardPeopleDetailIdIndexImport } from './routes/_app/_left-navbar/dashboard-people/detail/$id/index'
 import { Route as AppLeftNavbarSettingsSettingsItemCoursesAddIndexImport } from './routes/_app/_left-navbar/settings/_settings-item/courses/add/index'
 import { Route as AppLeftNavbarHomeTestimoniTypeSemesterIndexImport } from './routes/_app/_left-navbar/home/testimoni/$type/$semester/index'
 import { Route as AppLeftNavbarHomeTestimoniTypeSemesterCourseIdIndexImport } from './routes/_app/_left-navbar/home/testimoni_/$type/$semester/$courseId/index'
@@ -114,6 +116,12 @@ const AppLeftNavbarDashboardIndexRoute =
     getParentRoute: () => AppLeftNavbarRoute,
   } as any)
 
+const AppLeftNavbarDashboardPeopleIndexRoute =
+  AppLeftNavbarDashboardPeopleIndexImport.update({
+    path: '/dashboard-people/',
+    getParentRoute: () => AppLeftNavbarRoute,
+  } as any)
+
 const AppLeftNavbarAddAnnouncementIndexRoute =
   AppLeftNavbarAddAnnouncementIndexImport.update({
     path: '/add-announcement/',
@@ -169,12 +177,6 @@ const AppLeftNavbarHomeCompetitionIndexRoute =
     getParentRoute: () => AppLeftNavbarRoute,
   } as any)
 
-const AppLeftNavbarDashboardEditIndexRoute =
-  AppLeftNavbarDashboardEditIndexImport.update({
-    path: '/dashboard/edit/',
-    getParentRoute: () => AppLeftNavbarRoute,
-  } as any)
-
 const AppLeftNavbarSettingsSettingsItemSubscriptionsIndexRoute =
   AppLeftNavbarSettingsSettingsItemSubscriptionsIndexImport.update({
     path: '/subscriptions/',
@@ -202,6 +204,18 @@ const AppLeftNavbarHomeTestimoniTypeIndexRoute =
 const AppLeftNavbarHomeRekomendasiRekomendasiIdIndexRoute =
   AppLeftNavbarHomeRekomendasiRekomendasiIdIndexImport.update({
     path: '/home/rekomendasi/$rekomendasiId/',
+    getParentRoute: () => AppLeftNavbarRoute,
+  } as any)
+
+const AppLeftNavbarDashboardEditIdIndexRoute =
+  AppLeftNavbarDashboardEditIdIndexImport.update({
+    path: '/dashboard/edit/$id/',
+    getParentRoute: () => AppLeftNavbarRoute,
+  } as any)
+
+const AppLeftNavbarDashboardPeopleDetailIdIndexRoute =
+  AppLeftNavbarDashboardPeopleDetailIdIndexImport.update({
+    path: '/dashboard-people/detail/$id/',
     getParentRoute: () => AppLeftNavbarRoute,
   } as any)
 
@@ -304,6 +318,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppLeftNavbarAddAnnouncementIndexImport
       parentRoute: typeof AppLeftNavbarImport
     }
+    '/_app/_left-navbar/dashboard-people/': {
+      id: '/_app/_left-navbar/dashboard-people/'
+      path: '/dashboard-people'
+      fullPath: '/dashboard-people'
+      preLoaderRoute: typeof AppLeftNavbarDashboardPeopleIndexImport
+      parentRoute: typeof AppLeftNavbarImport
+    }
     '/_app/_left-navbar/dashboard/': {
       id: '/_app/_left-navbar/dashboard/'
       path: '/dashboard'
@@ -330,13 +351,6 @@ declare module '@tanstack/react-router' {
       path: '/timeline'
       fullPath: '/timeline'
       preLoaderRoute: typeof AppLeftNavbarTimelineIndexImport
-      parentRoute: typeof AppLeftNavbarImport
-    }
-    '/_app/_left-navbar/dashboard/edit/': {
-      id: '/_app/_left-navbar/dashboard/edit/'
-      path: '/dashboard/edit'
-      fullPath: '/dashboard/edit'
-      preLoaderRoute: typeof AppLeftNavbarDashboardEditIndexImport
       parentRoute: typeof AppLeftNavbarImport
     }
     '/_app/_left-navbar/home/competition/': {
@@ -379,6 +393,20 @@ declare module '@tanstack/react-router' {
       path: '/timeline/$infoId'
       fullPath: '/timeline/$infoId'
       preLoaderRoute: typeof AppLeftNavbarTimelineInfoIdIndexImport
+      parentRoute: typeof AppLeftNavbarImport
+    }
+    '/_app/_left-navbar/dashboard-people/detail/$id/': {
+      id: '/_app/_left-navbar/dashboard-people/detail/$id/'
+      path: '/dashboard-people/detail/$id'
+      fullPath: '/dashboard-people/detail/$id'
+      preLoaderRoute: typeof AppLeftNavbarDashboardPeopleDetailIdIndexImport
+      parentRoute: typeof AppLeftNavbarImport
+    }
+    '/_app/_left-navbar/dashboard/edit/$id/': {
+      id: '/_app/_left-navbar/dashboard/edit/$id/'
+      path: '/dashboard/edit/$id'
+      fullPath: '/dashboard/edit/$id'
+      preLoaderRoute: typeof AppLeftNavbarDashboardEditIdIndexImport
       parentRoute: typeof AppLeftNavbarImport
     }
     '/_app/_left-navbar/home/rekomendasi/$rekomendasiId/': {
@@ -463,15 +491,17 @@ export const routeTree = rootRoute.addChildren({
           AppLeftNavbarHomeTestimoniTypeSemesterIndexRoute,
         }),
       AppLeftNavbarAddAnnouncementIndexRoute,
+      AppLeftNavbarDashboardPeopleIndexRoute,
       AppLeftNavbarDashboardIndexRoute,
       AppLeftNavbarHomeIndexRoute,
       AppLeftNavbarTimelineIndexRoute,
-      AppLeftNavbarDashboardEditIndexRoute,
       AppLeftNavbarHomeCompetitionIndexRoute,
       AppLeftNavbarHomeCurhatIndexRoute,
       AppLeftNavbarHomeDingdongIndexRoute,
       AppLeftNavbarHomeNimFinderIndexRoute,
       AppLeftNavbarTimelineInfoIdIndexRoute,
+      AppLeftNavbarDashboardPeopleDetailIdIndexRoute,
+      AppLeftNavbarDashboardEditIdIndexRoute,
       AppLeftNavbarHomeRekomendasiRekomendasiIdIndexRoute,
       AppLeftNavbarHomeTestimoniTypeSemesterCourseIdIndexRoute,
     }),
@@ -512,15 +542,17 @@ export const routeTree = rootRoute.addChildren({
         "/_app/_left-navbar/settings",
         "/_app/_left-navbar/home/testimoni",
         "/_app/_left-navbar/add-announcement/",
+        "/_app/_left-navbar/dashboard-people/",
         "/_app/_left-navbar/dashboard/",
         "/_app/_left-navbar/home/",
         "/_app/_left-navbar/timeline/",
-        "/_app/_left-navbar/dashboard/edit/",
         "/_app/_left-navbar/home/competition/",
         "/_app/_left-navbar/home/curhat/",
         "/_app/_left-navbar/home/dingdong/",
         "/_app/_left-navbar/home/nim-finder/",
         "/_app/_left-navbar/timeline/$infoId/",
+        "/_app/_left-navbar/dashboard-people/detail/$id/",
+        "/_app/_left-navbar/dashboard/edit/$id/",
         "/_app/_left-navbar/home/rekomendasi/$rekomendasiId/",
         "/_app/_left-navbar/home/testimoni/$type/$semester/$courseId/"
       ]
@@ -573,6 +605,10 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "_app/_left-navbar/add-announcement/index.tsx",
       "parent": "/_app/_left-navbar"
     },
+    "/_app/_left-navbar/dashboard-people/": {
+      "filePath": "_app/_left-navbar/dashboard-people/index.tsx",
+      "parent": "/_app/_left-navbar"
+    },
     "/_app/_left-navbar/dashboard/": {
       "filePath": "_app/_left-navbar/dashboard/index.tsx",
       "parent": "/_app/_left-navbar"
@@ -587,10 +623,6 @@ export const routeTree = rootRoute.addChildren({
     },
     "/_app/_left-navbar/timeline/": {
       "filePath": "_app/_left-navbar/timeline/index.tsx",
-      "parent": "/_app/_left-navbar"
-    },
-    "/_app/_left-navbar/dashboard/edit/": {
-      "filePath": "_app/_left-navbar/dashboard/edit/index.tsx",
       "parent": "/_app/_left-navbar"
     },
     "/_app/_left-navbar/home/competition/": {
@@ -615,6 +647,14 @@ export const routeTree = rootRoute.addChildren({
     },
     "/_app/_left-navbar/timeline/$infoId/": {
       "filePath": "_app/_left-navbar/timeline/$infoId/index.tsx",
+      "parent": "/_app/_left-navbar"
+    },
+    "/_app/_left-navbar/dashboard-people/detail/$id/": {
+      "filePath": "_app/_left-navbar/dashboard-people/detail/$id/index.tsx",
+      "parent": "/_app/_left-navbar"
+    },
+    "/_app/_left-navbar/dashboard/edit/$id/": {
+      "filePath": "_app/_left-navbar/dashboard/edit/$id/index.tsx",
       "parent": "/_app/_left-navbar"
     },
     "/_app/_left-navbar/home/rekomendasi/$rekomendasiId/": {

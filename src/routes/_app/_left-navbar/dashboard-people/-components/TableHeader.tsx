@@ -8,7 +8,7 @@ type TableHeaderProps = {
 
 export const TableHeader = ({ onSelectAll, allSelected }: TableHeaderProps) => {
   return (
-    <div className="flex items-center gap-4  bg-[#F8F8FA] p-2 font-inter text-sm font-medium lg:p-4">
+    <div className="flex items-center gap-4 bg-[#F8F8FA] p-2 font-inter text-sm font-medium lg:p-4">
       <Checkbox.Root
         checked={allSelected}
         onCheckedChange={onSelectAll}
@@ -19,14 +19,12 @@ export const TableHeader = ({ onSelectAll, allSelected }: TableHeaderProps) => {
         </Checkbox.Indicator>
       </Checkbox.Root>
 
-      <div className=" grid flex-1 grid-cols-11 gap-4 lg:grid-cols-10">
-        <div className="col-span-3 mx-auto  lg:col-span-2">Profil</div>
+      <div className="grid flex-1 grid-cols-11 gap-4 lg:grid-cols-10">
+        <div className="col-span-3 mx-auto lg:col-span-2">Profil</div>
         <div className="col-span-3 mx-auto">Nama Prestasi</div>
-        <div className="col-span-1  pl-4 lg:pl-0">Jenis Prestasi</div>
-        <div className="col-span-3 mx-auto pl-7 text-center lg:pl-0 ">
-          Nama Organisasi / Perlombaan
-        </div>
-        <div className="col-span-1 mx-auto">Aksi</div>
+        <div className="col-span-1 mx-auto">Jenis Perlombaan</div>
+        <div className="col-span-3 mx-auto">Nama Organisasi / Perlombaan</div>
+        <div className="col-span-1 mx-auto">Periode</div>
       </div>
     </div>
   );

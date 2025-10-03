@@ -2,12 +2,12 @@ import { useState, useEffect } from 'react';
 import { TableHeader } from './TableHeader';
 import { TableRow } from './TableRow';
 import { Pagination } from '../../-dashboard-component/Pagination';
-import { PrestasiData } from '../-constant';
+import { PeoplePrestasiData } from '../-constant';
 import { useNavigate } from '@tanstack/react-router';
 import { ConfirmModal } from '../../-dashboard-component/ConfirmModal';
 
 type PrestasiTableProps = {
-  data: PrestasiData[];
+  data: PeoplePrestasiData[];
   selectedItems: number[];
   onSelectItem: (id: number) => void;
   onSelectAll: () => void;
@@ -34,7 +34,7 @@ export const DashboardTable = ({
   const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 768);
   const [deleteModal, setDeleteModal] = useState<{
     isOpen: boolean;
-    item: PrestasiData | null;
+    item: PeoplePrestasiData | null;
   }>({
     isOpen: false,
     item: null,
@@ -55,7 +55,7 @@ export const DashboardTable = ({
   const paginatedData = data.slice(startIndex, endIndex);
   const calculatedTotalPages = Math.ceil(data.length / entriesPerPage);
 
-  const handleDelete = (item: PrestasiData) => {
+  const handleDelete = (item: PeoplePrestasiData) => {
     setDeleteModal({ isOpen: true, item });
   };
 
@@ -82,14 +82,15 @@ export const DashboardTable = ({
 
   const handleEdit = () => {
     navigate({
-      to: '/dashboard',
+      to: '/dashboard-people',
       params: { id: '123' },
     });
   };
+
   return (
     <div className="overflow-hidden rounded-lg">
       <div className="overflow-x-auto">
-        <div className="min-w-[900px]">
+        <div className="min-w-[1200px]">
           <TableHeader onSelectAll={onSelectAll} allSelected={allSelected} />
 
           {paginatedData.length === 0 ? (
@@ -105,8 +106,6 @@ export const DashboardTable = ({
                 prestasi={prestasi}
                 isSelected={selectedItems.includes(prestasi.id)}
                 onSelect={() => onSelectItem(prestasi.id)}
-                onEdit={() => handleEdit()}
-                onDelete={() => handleDelete(prestasi)}
               />
             ))
           )}

@@ -1,26 +1,25 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
-import { TableActionsBar } from './-components/TableActionsBar';
+import { TableActionsBar } from './-components/TableActionBar';
 import { DashboardTable } from './-components/DashboardTable';
 import { Alert } from '../-dashboard-component/ALert';
-import { mockPrestasiData } from './-constant';
+import { mockPeoplePrestasiData } from './-constant';
 import { ChevronLeft } from 'lucide-react';
 import { ConfirmModal } from '../-dashboard-component/ConfirmModal';
 
-export const Route = createFileRoute('/_app/_left-navbar/dashboard/')({
-  component: AdminDashboard,
+export const Route = createFileRoute('/_app/_left-navbar/dashboard-people/')({
+  component: PeopleDashboard,
 });
 
-function AdminDashboard() {
+function PeopleDashboard() {
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
-  const [filterJenis, setFilterJenis] = useState<string>('all');
-  const [data] = useState(mockPrestasiData);
+  const [filterKategori, setFilterKategori] = useState<string>('all');
+  const [data] = useState(mockPeoplePrestasiData);
   const [currentPage, setCurrentPage] = useState(1);
   const [showAlert, setShowAlert] = useState(false);
   const [alertType, setAlertType] = useState<'success' | 'error'>('success');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [itemsToDelete, setItemsToDelete] = useState<number[]>([]);
-  // TAMBAH STATE UNTUK PERIOD FILTER
   const [periodFilter, setPeriodFilter] = useState<{
     from: string;
     to: string;
@@ -30,9 +29,11 @@ function AdminDashboard() {
   });
 
   const filteredData =
-    filterJenis === 'all' || !filterJenis
+    filterKategori === 'all' || !filterKategori
       ? data
-      : data.filter((item) => item.jenisPrestasi.toLowerCase() === filterJenis);
+      : data.filter(
+          (item) => item.jenisPrestasi.toLowerCase() === filterKategori,
+        );
 
   const allSelected =
     selectedItems.length === filteredData.length && filteredData.length > 0;
@@ -57,23 +58,9 @@ function AdminDashboard() {
     setShowAlert(true);
   };
 
-  const handleBulkChange = (value: string) => {
-    console.log('Bulk change to:', value, 'for items:', selectedItems);
-  };
-
-  // TAMBAH HANDLER UNTUK PERIOD CHANGE
   const handlePeriodChange = (from: string, to: string) => {
     setPeriodFilter({ from, to });
     console.log('Period filter changed:', { from, to });
-
-    // TODO: Tambahkan logika filtering berdasarkan periode di sini
-    // Contoh: filter data berdasarkan tanggal prestasi
-    // const filtered = data.filter(item => {
-    //   const itemDate = new Date(item.tanggalPrestasi);
-    //   const fromDate = parseDate(from); // MM/YYYY -> Date
-    //   const toDate = parseDate(to);
-    //   return itemDate >= fromDate && itemDate <= toDate;
-    // });
   };
 
   const handlePageChange = (page: number) => {
@@ -93,7 +80,6 @@ function AdminDashboard() {
 
   const handleConfirmDelete = () => {
     console.log('Deleting items:', itemsToDelete);
-
     setShowDeleteModal(false);
     setSelectedItems([]);
     setAlertType('success');
@@ -160,10 +146,9 @@ function AdminDashboard() {
             onSelectAll={handleSelectAll}
             allSelected={allSelected}
             onExport={handleExport}
-            onBulkChange={handleBulkChange}
-            filterJenis={filterJenis}
-            onFilterChange={setFilterJenis}
-            onPeriodChange={handlePeriodChange} // GANTI onPeriodClick dengan onPeriodChange
+            filterKategori={filterKategori}
+            onFilterChange={setFilterKategori}
+            onPeriodChange={handlePeriodChange}
             onDelete={handleDeleteClick}
           />
 

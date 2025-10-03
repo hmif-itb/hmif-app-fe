@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { ChevronLeft } from 'lucide-react';
 import { FormCard } from './-components/FormCard';
 
-export const Route = createFileRoute('/_app/_left-navbar/dashboard/edit/')({
+export const Route = createFileRoute('/_app/_left-navbar/dashboard/edit/$id/')({
   component: EditPrestasiPage,
 });
 
@@ -61,7 +61,7 @@ function EditPrestasiPage() {
           </h1>
         </div>
 
-        <div className="  mx-auto">
+        <div className="mx-auto">
           <FormCard />
         </div>
       </div>
