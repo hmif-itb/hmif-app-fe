@@ -40,6 +40,7 @@ import { Route as AppLeftNavbarSettingsSettingsItemCoursesIndexImport } from './
 import { Route as AppLeftNavbarHomeTestimoniTypeIndexImport } from './routes/_app/_left-navbar/home/testimoni/$type/index'
 import { Route as AppLeftNavbarHomeRekomendasiRekomendasiIdIndexImport } from './routes/_app/_left-navbar/home/rekomendasi/$rekomendasiId/index'
 import { Route as AppLeftNavbarDashboardEditIdIndexImport } from './routes/_app/_left-navbar/dashboard/edit/$id/index'
+import { Route as AppLeftNavbarDashboardDetailIdIndexImport } from './routes/_app/_left-navbar/dashboard/detail/$id/index'
 import { Route as AppLeftNavbarDashboardCncDetailIdIndexImport } from './routes/_app/_left-navbar/dashboard-cnc/detail/$id/index'
 import { Route as AppLeftNavbarSettingsSettingsItemCoursesAddIndexImport } from './routes/_app/_left-navbar/settings/_settings-item/courses/add/index'
 import { Route as AppLeftNavbarHomeTestimoniTypeSemesterIndexImport } from './routes/_app/_left-navbar/home/testimoni/$type/$semester/index'
@@ -210,6 +211,12 @@ const AppLeftNavbarHomeRekomendasiRekomendasiIdIndexRoute =
 const AppLeftNavbarDashboardEditIdIndexRoute =
   AppLeftNavbarDashboardEditIdIndexImport.update({
     path: '/dashboard/edit/$id/',
+    getParentRoute: () => AppLeftNavbarRoute,
+  } as any)
+
+const AppLeftNavbarDashboardDetailIdIndexRoute =
+  AppLeftNavbarDashboardDetailIdIndexImport.update({
+    path: '/dashboard/detail/$id/',
     getParentRoute: () => AppLeftNavbarRoute,
   } as any)
 
@@ -402,6 +409,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppLeftNavbarDashboardCncDetailIdIndexImport
       parentRoute: typeof AppLeftNavbarImport
     }
+    '/_app/_left-navbar/dashboard/detail/$id/': {
+      id: '/_app/_left-navbar/dashboard/detail/$id/'
+      path: '/dashboard/detail/$id'
+      fullPath: '/dashboard/detail/$id'
+      preLoaderRoute: typeof AppLeftNavbarDashboardDetailIdIndexImport
+      parentRoute: typeof AppLeftNavbarImport
+    }
     '/_app/_left-navbar/dashboard/edit/$id/': {
       id: '/_app/_left-navbar/dashboard/edit/$id/'
       path: '/dashboard/edit/$id'
@@ -501,6 +515,7 @@ export const routeTree = rootRoute.addChildren({
       AppLeftNavbarHomeNimFinderIndexRoute,
       AppLeftNavbarTimelineInfoIdIndexRoute,
       AppLeftNavbarDashboardCncDetailIdIndexRoute,
+      AppLeftNavbarDashboardDetailIdIndexRoute,
       AppLeftNavbarDashboardEditIdIndexRoute,
       AppLeftNavbarHomeRekomendasiRekomendasiIdIndexRoute,
       AppLeftNavbarHomeTestimoniTypeSemesterCourseIdIndexRoute,
@@ -552,6 +567,7 @@ export const routeTree = rootRoute.addChildren({
         "/_app/_left-navbar/home/nim-finder/",
         "/_app/_left-navbar/timeline/$infoId/",
         "/_app/_left-navbar/dashboard-cnc/detail/$id/",
+        "/_app/_left-navbar/dashboard/detail/$id/",
         "/_app/_left-navbar/dashboard/edit/$id/",
         "/_app/_left-navbar/home/rekomendasi/$rekomendasiId/",
         "/_app/_left-navbar/home/testimoni/$type/$semester/$courseId/"
@@ -651,6 +667,10 @@ export const routeTree = rootRoute.addChildren({
     },
     "/_app/_left-navbar/dashboard-cnc/detail/$id/": {
       "filePath": "_app/_left-navbar/dashboard-cnc/detail/$id/index.tsx",
+      "parent": "/_app/_left-navbar"
+    },
+    "/_app/_left-navbar/dashboard/detail/$id/": {
+      "filePath": "_app/_left-navbar/dashboard/detail/$id/index.tsx",
       "parent": "/_app/_left-navbar"
     },
     "/_app/_left-navbar/dashboard/edit/$id/": {

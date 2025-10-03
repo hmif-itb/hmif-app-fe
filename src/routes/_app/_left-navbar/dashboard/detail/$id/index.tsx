@@ -5,7 +5,7 @@ import { ImageCarousel } from '../../../-dashboard-component/ImageCarousel';
 import { CertificateButton } from '../../../-dashboard-component/CertificateButton';
 
 export const Route = createFileRoute(
-  '/_app/_left-navbar/dashboard-cnc/detail/$id/',
+  '/_app/_left-navbar/dashboard/detail/$id/',
 )({
   component: DetailPrestasi,
 });

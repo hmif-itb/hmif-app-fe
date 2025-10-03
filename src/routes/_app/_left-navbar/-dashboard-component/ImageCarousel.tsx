@@ -54,12 +54,12 @@ export const ImageCarousel = ({ images }: ImageCarouselProps) => {
       </div>
 
       {/* Thumbnails */}
-      <div className="flex justify-center gap-2 lg:gap-3">
+      <div className="flex justify-center gap-2  lg:gap-3">
         {images.map((image, index) => (
           <button
             key={index}
             onClick={() => goToSlide(index)}
-            className={`size-16 overflow-hidden rounded-lg transition-all lg:size-20 ${
+            className={`size-16 overflow-hidden rounded-lg bg-gray-200 transition-all lg:size-20${
               currentIndex === index
                 ? 'ring-2 ring-[#2F754A] ring-offset-2'
                 : 'opacity-60 hover:opacity-100'
@@ -68,7 +68,7 @@ export const ImageCarousel = ({ images }: ImageCarouselProps) => {
             <img
               src={image}
               alt={`Thumbnail ${index + 1}`}
-              className="size-full object-cover"
+              className="size-full object-cover text-[0.7rem]"
             />
           </button>
         ))}
