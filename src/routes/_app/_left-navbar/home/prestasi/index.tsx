@@ -24,7 +24,18 @@ export const Route = createFileRoute('/_app/_left-navbar/home/prestasi/')({
 const prestasiOptions = [
   'Organisasi non-HMIF',
   'Kepanitian non-HMIF',
-  'Kompetisi atau Lomba'
+  'Kompetisi atau Lomba',
+];
+
+// Options buat jenis lomba
+const jenisLombaOptions = [
+  'Competitive Programming',
+  'Capture The Flag',
+  'Business Case Competition',
+  'UI/UX',
+  'Data Science',
+  'Hackathon',
+  'Artificial Intelligence',
 ];
 
 // Deskripsi prestasi max word
@@ -35,6 +46,7 @@ const prestasiScheme = z.object({
   namaPrestasi: z.string().min(1, 'This field is required'),
   jenisPrestasi: z.string().min(1, 'This field is required'),
   periodePrestasi: z.string().min(1, 'This field is required'),
+  jenisLomba: z.string().min(1, 'This field is required'),
   deskripsiPrestasi: z.string().min(1, 'This field is required').refine((text: string) => {
     const wordCount = text.trim().split(/\s+/).filter(word => word.length > 0).length;
     return wordCount <= deskripsiMaxWord;
@@ -52,6 +64,7 @@ interface ErrorForms {
   namaPrestasi: string;
   jenisPrestasi: string;
   periodePrestasi: string;
+  jenisLomba: string;
   deskripsiPrestasi: string;
   fotoSertifikat: string;
   fotoDiri: string;
@@ -63,6 +76,7 @@ function PrestasiPage(): JSX.Element {
   const navigate = useNavigate();
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [jenisLomba, setJenisLomba] = useState('');
 
   const [alert, setAlert] = useState<{
     type: 'success' | 'error';
@@ -76,6 +90,7 @@ function PrestasiPage(): JSX.Element {
     namaPrestasi: '',
     jenisPrestasi: '',
     periodePrestasi: '',
+    jenisLomba: '',
     deskripsiPrestasi: '',
     fotoSertifikat: null as any,
     fotoDiri: null as any,
@@ -86,6 +101,7 @@ function PrestasiPage(): JSX.Element {
     namaPrestasi: '',
     jenisPrestasi: '',
     periodePrestasi: '',
+    jenisLomba: '',
     deskripsiPrestasi: '',
     fotoSertifikat: '',
     fotoDiri: '',
@@ -102,6 +118,7 @@ function PrestasiPage(): JSX.Element {
         namaPrestasi: '',
         jenisPrestasi: '',
         periodePrestasi: '',
+        jenisLomba: '',
         deskripsiPrestasi: '',
         fotoSertifikat: '',
         fotoDiri: '',
@@ -123,6 +140,7 @@ function PrestasiPage(): JSX.Element {
         namaPrestasi: '',
         jenisPrestasi: '',
         periodePrestasi: '',
+        jenisLomba: '',
         deskripsiPrestasi: '',
         fotoSertifikat: '',
         fotoDiri: '',
@@ -160,6 +178,22 @@ function PrestasiPage(): JSX.Element {
   
   const handleCategorySelect = (value: string) => {
     handleInputChange('jenisPrestasi', value);
+
+    // Handle jenis lomba
+    if (value !== 'Kompetisi atau Lomba') {
+      setJenisLomba('');
+      setFormData(prev => ({  ...prev, jenisLomba: '' }));
+      setErrors(prev => ({ ...prev, jenisLomba: '' }));
+    }
+  };
+
+  const handleJenisLombaSelect = (value: string) => {
+    setJenisLomba(value);
+
+    setFormData(prev => ({  ...prev, jenisLomba: value }));
+    if (errors.jenisLomba) {
+      setErrors(prev => ({ ...prev, jenisLomba: '' }));
+    }
   };
 
   const handlePeriodSelect = (month: string, year: number) => {
@@ -326,10 +360,28 @@ function PrestasiPage(): JSX.Element {
               </div>
             </div>
 
+             { /* Jenis Lomba */ }
+            {formData.jenisPrestasi === 'Kompetisi atau Lomba' && (
+              <div className='flex flex-col gap-2'>
+                <span className='text-sm'>Jenis Lomba <span className='text-red-400'>*</span></span>
+                <DropdownCategory
+                  placeholder='Pilih jenis lomba'
+                  options={jenisLombaOptions}
+                  onSelect={handleJenisLombaSelect}
+                  className={errors.jenisLomba ? 'border-red-400' : ''}
+                />
+                {errors.jenisLomba && (
+                  <span className='text-red-400 text-xs font-semibold'>
+                    {errors.jenisLomba}
+                  </span>
+                )}
+              </div>
+            )}
+
           </div>
 
           {/* Deskripsi Prestasi */}
-          <div className='flex flex-col gap-2 w-full lg:w-[50%]'>
+          <div className='flex flex-col gap-2 w-full h-full lg:w-[50%]'>
             <span className='text-sm'>Deskripsi Prestasi <span className='text-red-400'>*</span></span>
             <Textarea className={`bg-[#FCFCFC] rounded-lg resize-none h-[130px] ${
               errors.deskripsiPrestasi ? 'border-red-400 focus-visible:border-red-400' : ''
