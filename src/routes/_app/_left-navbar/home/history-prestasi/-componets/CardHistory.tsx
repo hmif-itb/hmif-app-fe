@@ -14,7 +14,10 @@ export interface Achievement {
   updated_at: string;
 }
 
-const CardHistory: React.FC<{ data: Achievement }> = ({ data }) => {
+const CardHistory: React.FC<{ data: Achievement; className?: string }> = ({
+  data,
+  className,
+}) => {
   const styleJenisPrestasi = () => {
     switch (data.jenis_prestasi.toLowerCase()) {
       case 'perlombaan':
@@ -29,22 +32,36 @@ const CardHistory: React.FC<{ data: Achievement }> = ({ data }) => {
   };
 
   return (
-    <div className="flex items-center justify-center gap-4 rounded-lg bg-white p-4">
+    <div
+      className={
+        'flex items-center justify-center gap-4 rounded-lg bg-white p-4 lg:relative ' +
+        className
+      }
+    >
       <img
         src="/img/history-prestasi/default-history-image.webp"
         alt="Gambar Prestasi"
-        className="w-1/3"
+        className="w-1/3 lg:w-full"
       />
-      <div className="flex flex-col gap-1 text-sm">
+      <div className="flex flex-col gap-1 text-sm lg:gap-3">
         <div className="font-bold">{data.nama_prestasi}</div>
-        <div className="flex gap-2">
-          <div className="rounded-full border-2 border-black px-2">STI'23</div>
-          <div className={'rounded-full border-2 px-2 ' + styleJenisPrestasi()}>
+        <div className="flex justify-between gap-2">
+          <div className="rounded-full border-2 border-black px-2 text-center">
+            STI'23
+          </div>
+          <div
+            className={
+              'w-full max-w-32 rounded-full border-2 px-2 text-center ' +
+              styleJenisPrestasi()
+            }
+          >
             {data.jenis_prestasi}
           </div>
         </div>
-        <div>Lorem ipsum dolor sit amet, consectetur adipisicing eli</div>
-        <div className="self-end pt-2 text-[#666666]">
+        <div className="lg:mb-6">
+          Lorem ipsum dolor sit amet, consectetur adipisicing eli
+        </div>
+        <div className="self-end pt-2 text-[#666666] lg:absolute lg:bottom-2 lg:self-start">
           {data.periode_prestasi}
         </div>
       </div>

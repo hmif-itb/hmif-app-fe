@@ -27,12 +27,12 @@ function HistoryPrestasi() {
   };
 
   return (
-    <div className="flex flex-col gap-4 bg-[#2F754A] bg-[url('/img/history-prestasi/vector-history-prestasi.svg')] bg-cover bg-center p-4">
+    <div className="flex flex-col gap-4 bg-[#2F754A] bg-[url('/img/history-prestasi/vector-history-prestasi.svg')] bg-cover bg-center p-4 lg:px-14">
       <div className="mt-4 text-center text-[36px] font-[700] text-white">
         History <span className="font-normal italic">Prestasi</span>
       </div>
-      <div className="flex flex-col gap-4">
-        <div className="relative">
+      <div className="flex flex-col gap-4 lg:flex-row">
+        <div className="relative lg:w-2/3">
           <input
             className="w-full rounded-lg p-2 pr-10"
             type="text"
@@ -50,14 +50,19 @@ function HistoryPrestasi() {
           placeholder="Category"
           options={prestasiOptions}
           onSelect={handleCategorySelect}
+          className="lg:w-1/3"
         />
       </div>
-      <div className="text-center text-sm font-light text-white">
+      <div className="text-center text-sm font-light text-white lg:text-base lg:font-normal">
         Menampilkan {resultsCount} hasil
       </div>
-      <div className="mb-40 flex w-full flex-col justify-start gap-5">
+      <div className="mb-40 grid w-full grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {dummyAchievements.map((achievement) => (
-          <CardHistory key={achievement.id} data={achievement} />
+          <CardHistory
+            key={achievement.id}
+            data={achievement}
+            className="w-full lg:flex-col"
+          />
         ))}
       </div>
     </div>
