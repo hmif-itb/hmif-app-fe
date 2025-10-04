@@ -29,6 +29,7 @@ import { Route as AppLeftNavbarHomeTestimoniImport } from './routes/_app/_left-n
 import { Route as AppLeftNavbarTimelineInfoIdIndexImport } from './routes/_app/_left-navbar/timeline/$infoId/index'
 import { Route as AppLeftNavbarHomeTestimoniIndexImport } from './routes/_app/_left-navbar/home/testimoni/index'
 import { Route as AppLeftNavbarHomeNimFinderIndexImport } from './routes/_app/_left-navbar/home/nim-finder/index'
+import { Route as AppLeftNavbarHomeHistoryPrestasiIndexImport } from './routes/_app/_left-navbar/home/history-prestasi/index'
 import { Route as AppLeftNavbarHomeDingdongIndexImport } from './routes/_app/_left-navbar/home/dingdong/index'
 import { Route as AppLeftNavbarHomeCurhatIndexImport } from './routes/_app/_left-navbar/home/curhat/index'
 import { Route as AppLeftNavbarHomeCompetitionIndexImport } from './routes/_app/_left-navbar/home/competition/index'
@@ -140,6 +141,12 @@ const AppLeftNavbarHomeTestimoniIndexRoute =
 const AppLeftNavbarHomeNimFinderIndexRoute =
   AppLeftNavbarHomeNimFinderIndexImport.update({
     path: '/home/nim-finder/',
+    getParentRoute: () => AppLeftNavbarRoute,
+  } as any)
+
+const AppLeftNavbarHomeHistoryPrestasiIndexRoute =
+  AppLeftNavbarHomeHistoryPrestasiIndexImport.update({
+    path: '/home/history-prestasi/',
     getParentRoute: () => AppLeftNavbarRoute,
   } as any)
 
@@ -332,6 +339,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppLeftNavbarHomeDingdongIndexImport
       parentRoute: typeof AppLeftNavbarImport
     }
+    '/_app/_left-navbar/home/history-prestasi/': {
+      id: '/_app/_left-navbar/home/history-prestasi/'
+      path: '/home/history-prestasi'
+      fullPath: '/home/history-prestasi'
+      preLoaderRoute: typeof AppLeftNavbarHomeHistoryPrestasiIndexImport
+      parentRoute: typeof AppLeftNavbarImport
+    }
     '/_app/_left-navbar/home/nim-finder/': {
       id: '/_app/_left-navbar/home/nim-finder/'
       path: '/home/nim-finder'
@@ -440,6 +454,7 @@ export const routeTree = rootRoute.addChildren({
       AppLeftNavbarHomeCompetitionIndexRoute,
       AppLeftNavbarHomeCurhatIndexRoute,
       AppLeftNavbarHomeDingdongIndexRoute,
+      AppLeftNavbarHomeHistoryPrestasiIndexRoute,
       AppLeftNavbarHomeNimFinderIndexRoute,
       AppLeftNavbarTimelineInfoIdIndexRoute,
       AppLeftNavbarHomeRekomendasiRekomendasiIdIndexRoute,
@@ -487,6 +502,7 @@ export const routeTree = rootRoute.addChildren({
         "/_app/_left-navbar/home/competition/",
         "/_app/_left-navbar/home/curhat/",
         "/_app/_left-navbar/home/dingdong/",
+        "/_app/_left-navbar/home/history-prestasi/",
         "/_app/_left-navbar/home/nim-finder/",
         "/_app/_left-navbar/timeline/$infoId/",
         "/_app/_left-navbar/home/rekomendasi/$rekomendasiId/",
@@ -563,6 +579,10 @@ export const routeTree = rootRoute.addChildren({
     },
     "/_app/_left-navbar/home/dingdong/": {
       "filePath": "_app/_left-navbar/home/dingdong/index.tsx",
+      "parent": "/_app/_left-navbar"
+    },
+    "/_app/_left-navbar/home/history-prestasi/": {
+      "filePath": "_app/_left-navbar/home/history-prestasi/index.tsx",
       "parent": "/_app/_left-navbar"
     },
     "/_app/_left-navbar/home/nim-finder/": {
