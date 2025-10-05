@@ -373,7 +373,8 @@ function PrestasiPage(): JSX.Element {
       setShowConfirmModal(false);
       setFormData({
         namaPrestasi: '',
-        jenisPrestasi: 'Organisasi non-HMIF' as PrestasiFormData['jenisPrestasi'],
+        jenisPrestasi:
+          'Organisasi non-HMIF' as PrestasiFormData['jenisPrestasi'],
         periodePrestasi: '',
         jenisLomba: '',
         deskripsiPrestasi: '',
