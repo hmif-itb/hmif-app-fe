@@ -5,6 +5,7 @@
 import type { BaseHttpRequest } from './core/BaseHttpRequest';
 import type { OpenAPIConfig } from './core/OpenAPI';
 import { FetchHttpRequest } from './core/FetchHttpRequest';
+import { AchievementsService } from './services/AchievementsService';
 import { AuthService } from './services/AuthService';
 import { CalendarService } from './services/CalendarService';
 import { CategoryService } from './services/CategoryService';
@@ -25,6 +26,7 @@ import { UserFinderService } from './services/UserFinderService';
 import { UserProfileService } from './services/UserProfileService';
 type HttpRequestConstructor = new (config: OpenAPIConfig) => BaseHttpRequest;
 export class ApiClient {
+  public readonly achievements: AchievementsService;
   public readonly auth: AuthService;
   public readonly calendar: CalendarService;
   public readonly category: CategoryService;
@@ -56,6 +58,7 @@ export class ApiClient {
       HEADERS: config?.HEADERS,
       ENCODE_PATH: config?.ENCODE_PATH,
     });
+    this.achievements = new AchievementsService(this.request);
     this.auth = new AuthService(this.request);
     this.calendar = new CalendarService(this.request);
     this.category = new CategoryService(this.request);

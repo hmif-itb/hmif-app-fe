@@ -10,15 +10,40 @@ import { ConfirmModal } from './-components/confirm-modal';
 import { Alert } from './-components/alert';
 import { useState } from 'react';
 import { z } from 'zod';
-// import { CreateAchievementRequest } from '~/api/generated/models/Achievement';
-// import { AchievementService } from '~/api/generated/services/AchievementService';
-// import { api } from '~/api/client';
+import { api } from '~/api/client';
+import { ApiError } from '~/api/generated';
 
 export const Route = createFileRoute('/_app/_left-navbar/home/prestasi/')({
   component: PrestasiPage,
 });
 
-// const achivementService = new AchievementService(api as any);
+// For urlss files
+async function uploadViaPresigned(file: File): Promise<string> {
+  const fullName = file.name;
+  const lastDot = fullName.lastIndexOf('.');
+  const base = lastDot === -1 ? fullName : fullName.slice(0, lastDot);
+  const ext = lastDot === -1 ? '' : fullName.slice(lastDot + 1).toLowerCase();
+  if (!ext) {
+    throw new Error('File must have an extension (e.g. .jpg, .png, .pdf)');
+  }
+
+  const presigned = await api.media.createPresignedUrl({
+    requestBody: {
+      fileName: base, 
+      fileType: ext, 
+    },
+  });
+
+  await fetch(presigned.presignedUrl, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': file.type || 'application/octet-stream',
+    },
+    body: file,
+  });
+
+  return presigned.mediaUrl;
+}
 
 // Options buat dropdown prestasi
 const prestasiOptions = [
@@ -44,9 +69,9 @@ const deskripsiMaxWord = 200;
 // Skema validasi input
 const prestasiScheme = z.object({
   namaPrestasi: z.string().min(1, 'This field is required'),
-  jenisPrestasi: z.string().min(1, 'This field is required'),
+  jenisPrestasi: z.enum(['Organisasi non-HMIF', 'Kepanitian non-HMIF', 'Kompetisi atau Lomba']),
   periodePrestasi: z.string().min(1, 'This field is required'),
-  jenisLomba: z.string().min(1, 'This field is required'),
+  jenisLomba: z.string().optional(),
   deskripsiPrestasi: z.string().min(1, 'This field is required').refine((text: string) => {
     const wordCount = text.trim().split(/\s+/).filter(word => word.length > 0).length;
     return wordCount <= deskripsiMaxWord;
@@ -71,12 +96,12 @@ interface ErrorForms {
   fotoAwarding: string;
 }
 
-
 function PrestasiPage(): JSX.Element {
   const navigate = useNavigate();
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [jenisLomba, setJenisLomba] = useState('');
+  const [resetKey, setResetKey] = useState(0);
 
   const [alert, setAlert] = useState<{
     type: 'success' | 'error';
@@ -88,7 +113,7 @@ function PrestasiPage(): JSX.Element {
 
   const [formData, setFormData] = useState<PrestasiFormData>({
     namaPrestasi: '',
-    jenisPrestasi: '',
+    jenisPrestasi: 'Organisasi non-HMIF' as any,
     periodePrestasi: '',
     jenisLomba: '',
     deskripsiPrestasi: '',
@@ -189,7 +214,6 @@ function PrestasiPage(): JSX.Element {
 
   const handleJenisLombaSelect = (value: string) => {
     setJenisLomba(value);
-
     setFormData(prev => ({  ...prev, jenisLomba: value }));
     if (errors.jenisLomba) {
       setErrors(prev => ({ ...prev, jenisLomba: '' }));
@@ -226,48 +250,101 @@ function PrestasiPage(): JSX.Element {
     }
   };
 
+
   const handleConfirmSubmit = async () => {
     setIsSubmitting(true);
-    
     try {
-
-      // Simulasi sementara buat form submission
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // const achievementData: CreateAchievementRequest = {
-      //   user_id: 1, 
-      //   jenis_prestasi: formData.jenisPrestasi,
-      //   nama_prestasi: formData.namaPrestasi,
-      //   penyelenggara: formData.namaPrestasi,
-      //   periode_prestasi: formData.periodePrestasi,
-      //   url_sertifikat: '', 
-      //   url_foto_diri: '', 
-      //   url_foto_awarding: '', 
-      // };
+      const [monthName, yearStr] = formData.periodePrestasi.split(' ');
+      const monthMap: Record<string, number> = {
+        'Januari': 1, 'Februari': 2, 'Maret': 3, 'April': 4,
+        'Mei': 5, 'Juni': 6, 'Juli': 7, 'Agustus': 8,
+        'September': 9, 'Oktober': 10, 'November': 11, 'Desember': 12
+      };
+      const bulan = monthMap[monthName];
+      const tahun = parseInt(yearStr);
   
-      // const result = await achivementService.createAchievement(achievementData);
-      // console.log('Achievement created:', result);
+      const jenisPrestasiMap: Record<string, 'organisasi' | 'kepanitiaan' | 'kompetisi'> = {
+        'Organisasi non-HMIF': 'organisasi',
+        'Kepanitian non-HMIF': 'kepanitiaan',
+        'Kompetisi atau Lomba': 'kompetisi',
+      };
+  
+      const competitionTypeMap: Record<string, 'CP' | 'CTF' | 'BCC' | 'DS' | 'AI' | 'Hackathon' | null> = {
+        'Competitive Programming': 'CP',
+        'Capture The Flag': 'CTF',
+        'Business Case Competition': 'BCC',
+        'UI/UX': null,
+        'Data Science': 'DS',
+        'Hackathon': 'Hackathon',
+        'Artificial Intelligence': 'AI',
+      };
+  
+      // Upload file ke storage
+      const mediaUrls: string[] = [];
+      if (formData.fotoSertifikat) {
+        mediaUrls.push(await uploadViaPresigned(formData.fotoSertifikat));
+      }
+      if (formData.fotoDiri) {
+        mediaUrls.push(await uploadViaPresigned(formData.fotoDiri));
+      }
+      if (formData.fotoAwarding) {
+        mediaUrls.push(await uploadViaPresigned(formData.fotoAwarding));
+      }
 
-      // Alert success
-      setAlert({
-        type: 'success',
-        isVisible: true
-      });
+      if (mediaUrls.length < 2) {
+        throw new Error('Minimal upload 2 file: Sertifikat dan Foto Diri');
+      }
+  
+      let competitionTypeValue: 'CP' | 'CTF' | 'BCC' | 'DS' | 'AI' | 'Hackathon' | null = null;
+      if (formData.jenisPrestasi === 'Kompetisi atau Lomba' && formData.jenisLomba) {
+        const key = formData.jenisLomba as keyof typeof competitionTypeMap;
+        competitionTypeValue = competitionTypeMap[key] ?? null;
+      }
 
-      // Tutup modal
+      const payload = {
+        jenisPrestasi: jenisPrestasiMap[formData.jenisPrestasi],
+        penyelenggara: formData.namaPrestasi,
+        deskripsi: formData.deskripsiPrestasi,
+        bulan,
+        tahun,
+        competitionType: competitionTypeValue,
+        mediaUrls,
+      };
+  
+      const result = await api.achievements.createPrestasi({ requestBody: payload });
+      console.log('Prestasi created:', result);
+  
+      setAlert({ type: 'success', isVisible: true });
       setShowConfirmModal(false);
-
-      // Ini kalo udah fungsional reset form
-      
-    } catch (error) {
-      console.error('Error creating achievement:', error);
-      
-      // Alert gagal
-      setAlert({
-        type: 'error',
-        isVisible: true
+      setFormData({
+        namaPrestasi: '',
+        jenisPrestasi: 'Organisasi non-HMIF' as any,
+        periodePrestasi: '',
+        jenisLomba: '',
+        deskripsiPrestasi: '',
+        fotoSertifikat: null as any,
+        fotoDiri: null as any,
+        fotoAwarding: null as any,
       });
-
+      setJenisLomba('');
+      setErrors({
+        namaPrestasi: '',
+        jenisPrestasi: '',
+        periodePrestasi: '',
+        jenisLomba: '',
+        deskripsiPrestasi: '',
+        fotoSertifikat: '',
+        fotoDiri: '',
+        fotoAwarding: '',
+      });
+      setResetKey((v) => v + 1);
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.error('API error:', error.status, error.body);
+      } else {
+        console.error('Error creating achievement:', error);
+      }
+      setAlert({ type: 'error', isVisible: true });
     } finally {
       setIsSubmitting(false);
     }
@@ -293,7 +370,7 @@ function PrestasiPage(): JSX.Element {
         </span>
       </div>
 
-      <div className='mt-6 sm:mt-8 flex flex-col gap-6 sm:gap-8 bg-white rounded-[12px] p-4 sm:p-8 pb-8'>
+      <div key={resetKey} className='mt-6 sm:mt-8 flex flex-col gap-6 sm:gap-8 bg-white rounded-[12px] p-4 sm:p-8 pb-8'>
         
         <div className='flex flex-col gap-6'>
           <div className='flex flex-row gap-3 items-center'>
