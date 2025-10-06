@@ -258,6 +258,11 @@ function PrestasiPage(): JSX.Element {
     }
   };
 
+  // Handle invalid file type
+  const handleInvalidFile = (field: keyof PrestasiFormData, error: string) => {
+    setErrors((prev) => ({ ...prev, [field]: error }));
+  };
+
   // Handle remove file di upload file button
   const handleRemoveFile = (field: keyof PrestasiFormData) => {
     setFormData(
@@ -567,6 +572,9 @@ function PrestasiPage(): JSX.Element {
               text="Upload File"
               onFileSelect={(file) => handleFileSelect('fotoSertifikat', file)}
               onFileRemove={() => handleRemoveFile('fotoSertifikat')}
+              onInvalidFile={(error) =>
+                handleInvalidFile('fotoSertifikat', error)
+              }
               accept="image/*,application/pdf"
               className={`mt-4 ${errors.fotoSertifikat ? 'border-red-400' : ''}`}
               disabled={false}
@@ -592,6 +600,7 @@ function PrestasiPage(): JSX.Element {
               text="Upload File"
               onFileSelect={(file) => handleFileSelect('fotoDiri', file)}
               onFileRemove={() => handleRemoveFile('fotoDiri')}
+              onInvalidFile={(error) => handleInvalidFile('fotoDiri', error)}
               accept="image/*"
               className={`mt-4 ${errors.fotoDiri ? 'border-red-400' : ''}`}
               disabled={false}
@@ -615,6 +624,9 @@ function PrestasiPage(): JSX.Element {
               text="Upload File"
               onFileSelect={(file) => handleFileSelect('fotoAwarding', file)}
               onFileRemove={() => handleRemoveFile('fotoAwarding')}
+              onInvalidFile={(error) =>
+                handleInvalidFile('fotoAwarding', error)
+              }
               accept="image/*"
               className={`mt-4 ${errors.fotoAwarding ? 'border-red-400' : ''}`}
               disabled={false}

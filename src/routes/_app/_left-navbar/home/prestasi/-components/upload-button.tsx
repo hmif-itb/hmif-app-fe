@@ -10,6 +10,7 @@ interface UploadButtonProps {
   className?: string;
   disabled?: boolean;
   maxWidth?: string;
+  onInvalidFile?: (error: string) => void;
 }
 
 // Upload button untuk upload file
@@ -21,12 +22,67 @@ export function UploadButton({
   className = '',
   disabled = false,
   maxWidth = '80px',
+  onInvalidFile,
 }: UploadButtonProps) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
+  // Function to validate file type based on accept prop
+  const validateFileType = (file: File): boolean => {
+    if (accept === '*/*') return true;
+
+    const acceptedTypes = accept.split(',').map((type) => type.trim());
+
+    for (const acceptedType of acceptedTypes) {
+      // Handle MIME types (e.g., "image/*", "application/pdf")
+      if (acceptedType.includes('/')) {
+        if (acceptedType.endsWith('/*')) {
+          const baseType = acceptedType.split('/')[0];
+          if (file.type.startsWith(baseType + '/')) return true;
+        } else if (file.type === acceptedType) {
+          return true;
+        }
+      }
+      // Handle file extensions (e.g., ".pdf", ".jpg")
+      else if (acceptedType.startsWith('.')) {
+        const fileExtension = '.' + file.name.split('.').pop()?.toLowerCase();
+        if (fileExtension === acceptedType.toLowerCase()) return true;
+      }
+    }
+    return false;
+  };
+
+  // Function to get readable file types from accept prop
+  const getAcceptedFileTypes = (): string => {
+    if (accept === '*/*') return 'all file types';
+
+    const types = accept.split(',').map((type) => type.trim());
+    const readableTypes: string[] = [];
+
+    types.forEach((type) => {
+      if (type === 'image/*') readableTypes.push('images');
+      else if (type === 'application/pdf') readableTypes.push('PDF');
+      else if (type.startsWith('.')) readableTypes.push(type.toUpperCase());
+      else readableTypes.push(type);
+    });
+
+    return readableTypes.join(', ');
+  };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+      // Validate file type
+      if (!validateFileType(file)) {
+        const acceptedTypes = getAcceptedFileTypes();
+        const errorMessage = `Invalid file type. Please select ${acceptedTypes} only.`;
+        if (onInvalidFile) {
+          onInvalidFile(errorMessage);
+        }
+        // Reset the input value to allow selecting the same file again
+        event.target.value = '';
+        return;
+      }
+
       setSelectedFile(file);
       if (onFileSelect) {
         onFileSelect(file);
@@ -81,6 +137,16 @@ export function UploadButton({
                 input.onchange = (e) => {
                   const file = (e.target as HTMLInputElement).files?.[0];
                   if (file) {
+                    // Validate file type
+                    if (!validateFileType(file)) {
+                      const acceptedTypes = getAcceptedFileTypes();
+                      const errorMessage = `Invalid file type. Please select ${acceptedTypes} only.`;
+                      if (onInvalidFile) {
+                        onInvalidFile(errorMessage);
+                      }
+                      return;
+                    }
+
                     setSelectedFile(file);
                     if (onFileSelect) {
                       onFileSelect(file);
