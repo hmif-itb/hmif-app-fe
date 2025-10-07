@@ -1,6 +1,6 @@
 import { Upload, File, Trash } from 'lucide-react';
 import { Button } from '~/components/ui/button';
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 
 interface UploadButtonProps {
   text: string;
@@ -25,6 +25,7 @@ export function UploadButton({
   onInvalidFile,
 }: UploadButtonProps) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   // Function to validate file type based on accept prop
   const validateFileType = (file: File): boolean => {
@@ -111,51 +112,30 @@ export function UploadButton({
     return `${truncatedName}...${extension}`;
   };
   return (
-    <div className={`relative ${className}`}>
-      {!selectedFile && (
-        <input
-          type="file"
-          accept={accept}
-          onChange={handleFileChange}
-          className="absolute inset-0 z-10 size-full cursor-pointer opacity-0"
-          disabled={disabled}
-        />
-      )}
+    <div className={`relative inline-block w-fit ${className}`}>
+      <input
+        ref={inputRef}
+        type="file"
+        accept={accept}
+        onChange={handleFileChange}
+        className="sr-only"
+        tabIndex={-1}
+        aria-hidden="true"
+        disabled={disabled}
+      />
       <Button
         variant="outlined"
-        className={`flex items-center gap-2 rounded-lg border border-[#BABABA]/30 bg-[#FCFCFC] text-xs font-semibold duration-300 ${
+        className={`z-100 flex cursor-pointer items-center gap-2 rounded-lg border border-[#BABABA]/30 bg-[#FCFCFC] text-xs font-semibold duration-300 ${
           className.includes('border-red-400') ? 'border-red-400' : ''
         }`}
         disabled={disabled}
-        onClick={
-          !selectedFile
-            ? undefined
-            : () => {
-                const input = document.createElement('input');
-                input.type = 'file';
-                input.accept = accept;
-                input.onchange = (e) => {
-                  const file = (e.target as HTMLInputElement).files?.[0];
-                  if (file) {
-                    // Validate file type
-                    if (!validateFileType(file)) {
-                      const acceptedTypes = getAcceptedFileTypes();
-                      const errorMessage = `Invalid file type. Please select ${acceptedTypes} only.`;
-                      if (onInvalidFile) {
-                        onInvalidFile(errorMessage);
-                      }
-                      return;
-                    }
-
-                    setSelectedFile(file);
-                    if (onFileSelect) {
-                      onFileSelect(file);
-                    }
-                  }
-                };
-                input.click();
-              }
-        }
+        onClick={() => {
+          if (disabled) return;
+          if (inputRef.current) {
+            inputRef.current.value = '';
+            inputRef.current.click();
+          }
+        }}
       >
         {selectedFile ? (
           <>
@@ -170,7 +150,7 @@ export function UploadButton({
             <button
               type="button"
               onClick={handleRemoveFile}
-              className="relative z-20 ml-1 rounded transition-colors hover:bg-red-100"
+              className="relative z-50 ml-1 rounded transition-colors hover:bg-red-100"
               title="Remove file"
             >
               <Trash className="size-4 text-red-500" />
