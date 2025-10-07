@@ -6,7 +6,10 @@ type DatePeriodPickerProps = {
   className?: string;
 };
 
-export const DatePeriodPicker = ({ onPeriodChange, className }: DatePeriodPickerProps) => {
+export const DatePeriodPicker = ({
+  onPeriodChange,
+  className,
+}: DatePeriodPickerProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
@@ -17,7 +20,10 @@ export const DatePeriodPicker = ({ onPeriodChange, className }: DatePeriodPicker
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
@@ -35,7 +41,12 @@ export const DatePeriodPicker = ({ onPeriodChange, className }: DatePeriodPicker
     const fromParts = tempFromDate.split('/');
     const toParts = tempToDate.split('/');
 
-    if (!tempFromDate || !tempToDate || fromParts.length !== 2 || toParts.length !== 2) {
+    if (
+      !tempFromDate ||
+      !tempToDate ||
+      fromParts.length !== 2 ||
+      toParts.length !== 2
+    ) {
       setIsInvalid(true);
       return;
     }
@@ -46,10 +57,13 @@ export const DatePeriodPicker = ({ onPeriodChange, className }: DatePeriodPicker
     const toYear = parseInt(toParts[1]);
 
     if (
-      fromMonth < 1 || fromMonth > 12 ||
-      toMonth < 1 || toMonth > 12 ||
-      fromYear < 1900 || toYear < 1900 ||
-      (fromYear > toYear) ||
+      fromMonth < 1 ||
+      fromMonth > 12 ||
+      toMonth < 1 ||
+      toMonth > 12 ||
+      fromYear < 1900 ||
+      toYear < 1900 ||
+      fromYear > toYear ||
       (fromYear === toYear && fromMonth > toMonth)
     ) {
       setIsInvalid(true);
@@ -60,7 +74,7 @@ export const DatePeriodPicker = ({ onPeriodChange, className }: DatePeriodPicker
     setFromDate(tempFromDate);
     setToDate(tempToDate);
     setIsOpen(false);
-    
+
     if (onPeriodChange) {
       onPeriodChange(tempFromDate, tempToDate);
     }
@@ -78,26 +92,34 @@ export const DatePeriodPicker = ({ onPeriodChange, className }: DatePeriodPicker
     }
   };
 
-  const displayText = fromDate && toDate 
-    ? `${formatDateForDisplay(fromDate)} - ${formatDateForDisplay(toDate)}`
-    : 'Pilih Periode';
+  const displayText =
+    fromDate && toDate
+      ? `${formatDateForDisplay(fromDate)} - ${formatDateForDisplay(toDate)}`
+      : 'Pilih Periode';
 
   return (
-    <div className={`relative inline-block ${className || ''}`} ref={dropdownRef}>
+    <div
+      className={`relative inline-block ${className || ''}`}
+      ref={dropdownRef}
+    >
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center justify-between gap-1.5 rounded-lg border border-gray-300 bg-white px-5 py-0.5 font-inter text-xs font-medium text-[#666666] hover:bg-gray-50 md:gap-2 md:px-3 md:py-2 md:text-sm lg:w-72"
       >
         <div className="flex items-center gap-1.5 md:gap-2">
           <CalendarSearch size={14} color="#666666" className="md:hidden" />
-          <CalendarSearch size={16} color="#666666" className="hidden md:block" />
+          <CalendarSearch
+            size={16}
+            color="#666666"
+            className="hidden md:block"
+          />
           <span className="text-sm">{displayText}</span>
         </div>
-        
+
         {fromDate && toDate ? (
-          <X 
-            size={14} 
-            color="#666666" 
+          <X
+            size={14}
+            color="#666666"
             onClick={handleReset}
             className="cursor-pointer hover:text-gray-800 md:hidden"
           />
@@ -105,9 +127,9 @@ export const DatePeriodPicker = ({ onPeriodChange, className }: DatePeriodPicker
           <RotateCcw size={14} color="#666666" className="md:hidden" />
         )}
         {fromDate && toDate ? (
-          <X 
-            size={16} 
-            color="#666666" 
+          <X
+            size={16}
+            color="#666666"
             onClick={handleReset}
             className="hidden cursor-pointer hover:text-gray-800 md:block"
           />
@@ -155,7 +177,10 @@ export const DatePeriodPicker = ({ onPeriodChange, className }: DatePeriodPicker
             </div>
 
             {/* Horizontal Separator before button */}
-            <div className="mb-4 border-t border-[#BABABA66]" style={{ marginLeft: '8px', marginRight: '8px' }} />
+            <div
+              className="mb-4 border-t border-[#BABABA66]"
+              style={{ marginLeft: '8px', marginRight: '8px' }}
+            />
 
             {/* Bottom Section - Invalid Message & Button */}
             <div className="flex items-center justify-between gap-3">

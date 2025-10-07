@@ -83,9 +83,7 @@ export const Pagination = ({
   };
 
   return (
-    <div
-      className={`flex items-center gap-4 border-t p-4 ${className}`}
-    >
+    <div className={`flex items-center gap-4 border-t p-4 ${className}`}>
       <div className="flex items-center gap-2">
         <button
           onClick={() => onPageChange(currentPage - 1)}

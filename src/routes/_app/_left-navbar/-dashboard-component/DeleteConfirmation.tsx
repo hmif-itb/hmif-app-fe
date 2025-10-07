@@ -1,4 +1,4 @@
-import { PrestasiData } from '../-constant';
+import { PrestasiData } from '../dashboard/-constant';
 
 type DeleteConfirmationProps = {
   isOpen: boolean;
