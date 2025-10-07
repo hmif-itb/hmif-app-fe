@@ -17,6 +17,6 @@ export type Prestasi = {
     nim: string;
     fullName: string;
     picture: string | null;
-  };
+  } | null;
 };
 

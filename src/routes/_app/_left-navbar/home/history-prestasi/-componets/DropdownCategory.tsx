@@ -4,7 +4,9 @@ import { useState } from 'react';
 interface DropdownCategoryProps {
   options: string[];
   placeholder?: string;
-  onSelect?: (value: string) => void;
+  onSelect?: (
+    value: 'competition' | 'organization' | 'committee' | undefined,
+  ) => void;
   className?: string;
   disabled?: boolean;
 }
@@ -24,7 +26,20 @@ export function DropdownCategory({
     setSelectedValue(option);
     setIsOpen(false);
     if (onSelect) {
-      onSelect(option);
+      switch (option) {
+        case 'Semua':
+          onSelect(undefined);
+          break;
+        case 'Organisasi':
+          onSelect('organization');
+          break;
+        case 'Kepanitian':
+          onSelect('committee');
+          break;
+        case 'Kompetisi':
+          onSelect('competition');
+          break;
+      }
     }
   };
 
