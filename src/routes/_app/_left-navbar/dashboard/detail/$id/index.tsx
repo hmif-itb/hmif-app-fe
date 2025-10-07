@@ -14,7 +14,7 @@ function DetailPrestasi() {
   // Mock data - nanti bisa diganti dengan data dari API
   const prestasiData = {
     jenis: 'Jenis Kompetisi',
-    nama: 'Nama Prestasi #1',
+    nama: 'Nama Kompetisi/Organisasi',
     identitas: {
       nama: 'Noumisyfa Nabila Nareswari',
       avatar: 'NN',
@@ -22,11 +22,9 @@ function DetailPrestasi() {
       tahun: "'23",
       kampus: 'Ganesha',
     },
-    title: 'Title Prestasi Lengkap',
-    organisasi: 'Organisasi penyelenggara',
     periode: 'Sept 2025',
     deskripsi:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc volutpat id mi ac vulputate. Nulla posuere a leo id sagittis. Suspendisse nibh est, tristique id nunc sit amet, venenatis molestie velit.',
+      'Deskripsi Prestas i  Prestasi Prestasi Prestas Prestas Prestas Prestas',
     images: [
       '/img/prestasi/1.jpg',
       '/img/prestasi/2.jpg',
@@ -127,11 +125,11 @@ function DetailPrestasi() {
                   {/* Description Section - Mobile only */}
                   <div className="lg:hidden">
                     <h3 className="mb-2 font-inter text-lg font-bold text-black">
-                      {prestasiData.title}
+                      {prestasiData.nama}
                     </h3>
-                    <p className="mb-3 font-inter text-sm text-[#7B7A73]">
+                    {/* <p className="mb-3 font-inter text-sm text-[#7B7A73]">
                       {prestasiData.organisasi} | {prestasiData.periode}
-                    </p>
+                    </p> */}
                     <p className="mb-4 font-inter text-sm leading-relaxed text-black">
                       {prestasiData.deskripsi}
                     </p>
@@ -143,11 +141,11 @@ function DetailPrestasi() {
                   {/* Description Section - Desktop only */}
                   <div className="hidden lg:block">
                     <h3 className="mb-2 font-inter text-lg font-bold text-black">
-                      {prestasiData.title}
+                      {prestasiData.nama}
                     </h3>
-                    <p className="mb-3 font-inter text-sm text-[#7B7A73]">
+                    {/* <p className="mb-3 font-inter text-sm text-[#7B7A73]">
                       {prestasiData.organisasi} | {prestasiData.periode}
-                    </p>
+                    </p> */}
                     <p className="mb-4 font-inter text-sm leading-relaxed text-black">
                       {prestasiData.deskripsi}
                     </p>
