@@ -45,7 +45,7 @@ function HistoryPrestasi() {
   };
 
   // Fetch achievements
-  const { data, isLoading, isError, error } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['achievements', { page, category, search }],
     queryFn: async () =>
       api.achievements.getListPrestasi({
@@ -131,15 +131,6 @@ function HistoryPrestasi() {
             className="w-full lg:flex-col"
           />
         ))}
-
-        {/* Error message */}
-        {isError && !isLoading && (
-          <div className="col-span-full rounded-lg bg-red-100 p-4 text-center text-red-700">
-            {error instanceof Error
-              ? error.message
-              : 'Gagal memuat data. Silakan coba lagi.'}
-          </div>
-        )}
 
         {/* Loading skeletons for infinite scroll */}
         {isLoading &&
