@@ -26,7 +26,10 @@ const CardHistory: React.FC<{ data: Prestasi; className?: string }> = ({
       }
     >
       <img
-        src="/img/history-prestasi/default-history-image.webp"
+        src={
+          data.user?.picture ??
+          '/img/history-prestasi/default-history-image.webp'
+        }
         alt="Gambar Prestasi"
         className="w-1/3 lg:w-full"
       />
@@ -42,7 +45,8 @@ const CardHistory: React.FC<{ data: Prestasi; className?: string }> = ({
               styleJenisPrestasi()
             }
           >
-            {data.jenisPrestasi}
+            {data.jenisPrestasi.charAt(0).toUpperCase() +
+              data.jenisPrestasi.slice(1).toLowerCase()}
           </div>
         </div>
         <div className="lg:mb-6">{data.deskripsi}</div>
