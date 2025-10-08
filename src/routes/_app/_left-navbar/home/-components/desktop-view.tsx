@@ -93,6 +93,13 @@ function DesktopView() {
                 (window.location.href = 'https://s.hmif.dev/LowonginAja!')
               }
             />
+
+            <NavigationItem
+              src="/img/home/trophy.svg"
+              alt="Prestasi"
+              title="Prestasi"
+              onClick={() => navigate({ to: '/home/prestasi' })}
+            />
           </section>
 
           <a href="https://pemilu.hmif.dev" className="mx-8 my-4">

@@ -84,7 +84,12 @@ export function AddAnnouncementPage({
 
   const mobileHandleSuccess = () => navigate({ to: '/timeline' });
   const desktopHandleSuccess = () =>
-    navigate({ search: (prev) => ({ ...prev, showAnnounce: undefined }) });
+    navigate({
+      search: (prev: Record<string, unknown>) => ({
+        ...prev,
+        showAnnounce: undefined,
+      }),
+    });
 
   const postInfo = useMutation({
     mutationFn: api.info.createInfo.bind(api.info),

@@ -13,7 +13,7 @@ const testiSearchSchema = z.object({
 });
 
 export const Route = createFileRoute(
-  '/_app/_left-navbar/home/testimoni/$type/$semester/$courseId/',
+  '/_app/_left-navbar/home/testimoni_/$type/$semester/$courseId/',
 )({
   component: TestimoniListPage,
   validateSearch: (search) => testiSearchSchema.parse(search),
@@ -130,7 +130,7 @@ function TestimoniListPage(): JSX.Element {
 
       <div className="mt-10 flex w-full items-center justify-between">
         <Link
-          search={(prev) => ({
+          search={(prev: Record<string, unknown>) => ({
             ...prev,
             page: currentPage > 1 ? currentPage - 1 : currentPage,
           })}
@@ -180,7 +180,7 @@ function TestimoniListPage(): JSX.Element {
         </div>
 
         <Link
-          search={(prev) => ({
+          search={(prev: Record<string, unknown>) => ({
             ...prev,
             page: currentPage < testiLength ? currentPage + 1 : currentPage,
           })}
