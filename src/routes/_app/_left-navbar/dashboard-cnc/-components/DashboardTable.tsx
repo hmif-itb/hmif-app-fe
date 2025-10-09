@@ -2,21 +2,20 @@ import { useState, useEffect } from 'react';
 import { TableHeader } from './TableHeader';
 import { TableRow } from './TableRow';
 import { Pagination } from '../../-dashboard-component/Pagination';
-import { PeoplePrestasiData } from '../-constant';
-import { useNavigate } from '@tanstack/react-router';
+import { Prestasi } from '~/api/generated';
 import { ConfirmModal } from '../../-dashboard-component/ConfirmModal';
 
 type PrestasiTableProps = {
-  data: PeoplePrestasiData[];
-  selectedItems: number[];
-  onSelectItem: (id: number) => void;
+  data: Prestasi[];
+  selectedItems: string[];
+  onSelectItem: (id: string) => void;
   onSelectAll: () => void;
   allSelected: boolean;
   currentPage?: number;
   totalPages?: number;
   onPageChange?: (page: number) => void;
   loading?: boolean;
-  onDelete?: (id: number) => Promise<{ success: boolean; error?: string }>;
+  onDelete?: (id: string) => Promise<{ success: boolean; error?: string }>;
 };
 
 export const DashboardTable = ({
@@ -26,15 +25,15 @@ export const DashboardTable = ({
   onSelectAll,
   allSelected,
   currentPage = 1,
-  totalPages = 2,
+  totalPages = 1,
   onPageChange = (page) => console.log('Page:', page),
+  loading = false,
   onDelete,
 }: PrestasiTableProps) => {
-  const navigate = useNavigate();
   const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 768);
   const [deleteModal, setDeleteModal] = useState<{
     isOpen: boolean;
-    item: PeoplePrestasiData | null;
+    item: Prestasi | null;
   }>({
     isOpen: false,
     item: null,
@@ -44,24 +43,15 @@ export const DashboardTable = ({
     const handleResize = () => {
       setIsDesktop(window.innerWidth >= 768);
     };
-
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const entriesPerPage = isDesktop ? 10 : 6;
-  const startIndex = (currentPage - 1) * entriesPerPage;
-  const endIndex = startIndex + entriesPerPage;
-  const paginatedData = data.slice(startIndex, endIndex);
-  const calculatedTotalPages = Math.ceil(data.length / entriesPerPage);
-
-  const handleDelete = (item: PeoplePrestasiData) => {
-    setDeleteModal({ isOpen: true, item });
-  };
+  const entriesPerPage = isDesktop ? 10 : 6; // Untuk UI Pagination
 
   const handleConfirmDelete = async () => {
     if (!deleteModal.item || !onDelete) {
-      console.log('Deleting:', deleteModal.item);
+      console.log('No item or onDelete handler');
       setDeleteModal({ isOpen: false, item: null });
       return;
     }
@@ -69,7 +59,7 @@ export const DashboardTable = ({
     try {
       const result = await onDelete(deleteModal.item.id);
       if (result.success) {
-        console.log('ok');
+        console.log('Delete successful');
       } else {
         console.error('Delete failed:', result.error);
       }
@@ -80,48 +70,49 @@ export const DashboardTable = ({
     }
   };
 
-  const handleEdit = () => {
-    navigate({
-      to: '/dashboard-cnc',
-      params: { id: '123' },
-    });
-  };
-
   return (
     <div className="overflow-hidden rounded-lg">
-      <div className="overflow-x-auto">
-        <div className="min-w-[1200px]">
-          <TableHeader onSelectAll={onSelectAll} allSelected={allSelected} />
-
-          {paginatedData.length === 0 ? (
-            <div className="p-8 text-center font-inter text-gray-500">
-              <h3 className="mb-2 text-lg font-medium">
-                Tidak ada data prestasi
-              </h3>
-            </div>
-          ) : (
-            paginatedData.map((prestasi) => (
-              <TableRow
-                key={prestasi.id}
-                prestasi={prestasi}
-                isSelected={selectedItems.includes(prestasi.id)}
-                onSelect={() => onSelectItem(prestasi.id)}
-              />
-            ))
-          )}
+      {loading ? (
+        <div className="p-8 text-center font-inter text-gray-500">
+          <h3 className="mb-2 text-lg font-medium">Memuat data...</h3>
         </div>
-      </div>
-
-      <div className="flex justify-start pl-2">
-        <Pagination
-          currentPage={currentPage}
-          totalPages={calculatedTotalPages}
-          onPageChange={onPageChange}
-          totalEntries={data.length}
-          entriesPerPage={entriesPerPage}
-        />
-      </div>
-
+      ) : (
+        <>
+          <div className="overflow-x-auto">
+            <div className="min-w-[900px]">
+              <TableHeader
+                onSelectAll={onSelectAll}
+                allSelected={allSelected}
+              />
+              {data.length === 0 ? (
+                <div className="p-8 text-center font-inter text-gray-500">
+                  <h3 className="mb-2 text-lg font-medium">
+                    Tidak ada data prestasi
+                  </h3>
+                </div>
+              ) : (
+                data.map((prestasi) => (
+                  <TableRow
+                    key={prestasi.id}
+                    prestasi={prestasi}
+                    isSelected={selectedItems.includes(prestasi.id)}
+                    onSelect={() => onSelectItem(prestasi.id)}
+                  />
+                ))
+              )}
+            </div>
+          </div>
+          <div className="flex justify-start pl-2">
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={onPageChange}
+              totalEntries={totalPages * entriesPerPage}
+              entriesPerPage={entriesPerPage}
+            />
+          </div>
+        </>
+      )}
       <ConfirmModal
         isOpen={deleteModal.isOpen}
         onClose={() => setDeleteModal({ isOpen: false, item: null })}

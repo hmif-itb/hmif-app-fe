@@ -1,25 +1,27 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
+import { useQuery, useMutation } from '@tanstack/react-query';
+import { api, queryClient } from '~/api/client';
 import { TableActionsBar } from './-components/TableActionBar';
 import { DashboardTable } from './-components/DashboardTable';
 import { Alert } from '../-dashboard-component/ALert';
-import { mockPeoplePrestasiData } from './-constant';
 import { ChevronLeft } from 'lucide-react';
 import { ConfirmModal } from '../-dashboard-component/ConfirmModal';
+// import { Prestasi } from '~/api/generated';
 
 export const Route = createFileRoute('/_app/_left-navbar/dashboard-cnc/')({
   component: PeopleDashboard,
 });
 
 function PeopleDashboard() {
-  const [selectedItems, setSelectedItems] = useState<number[]>([]);
+  const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [filterKategori, setFilterKategori] = useState<string>('all');
-  const [data] = useState(mockPeoplePrestasiData);
   const [currentPage, setCurrentPage] = useState(1);
   const [showAlert, setShowAlert] = useState(false);
   const [alertType, setAlertType] = useState<'success' | 'error'>('success');
+  const [alertMessage, setAlertMessage] = useState('');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [itemsToDelete, setItemsToDelete] = useState<number[]>([]);
+  const [itemsToDelete, setItemsToDelete] = useState<string[]>([]);
   const [periodFilter, setPeriodFilter] = useState<{
     from: string;
     to: string;
@@ -28,12 +30,49 @@ function PeopleDashboard() {
     to: '',
   });
 
-  const filteredData =
-    filterKategori === 'all' || !filterKategori
-      ? data
-      : data.filter(
-          (item) => item.jenisPrestasi.toLowerCase() === filterKategori,
-        );
+  const LIMIT = 10;
+
+  // Fetch achievements
+  const { data, isLoading, error } = useQuery({
+    queryKey: [
+      'achievements-cnc',
+      {
+        page: currentPage,
+        period: periodFilter,
+      },
+    ],
+    queryFn: async () =>
+      api.achievements.getListPrestasi({
+        startDate: periodFilter.from || undefined,
+        endDate: periodFilter.to || undefined,
+        page: currentPage,
+        limit: LIMIT,
+      }),
+    staleTime: 30000,
+  });
+
+  const allAchievements = data?.prestasi || [];
+  const total = data?.total || 0;
+  const totalPages = Math.ceil(total / LIMIT);
+
+  // Filter client-side berdasarkan competitionType
+  const competitionTypeMap: Record<string, string> = {
+    cp: 'CP',
+    ctf: 'CTF',
+    bcc: 'BCC',
+    ds: 'DS',
+    ai: 'AI',
+    hackatahon: 'Hackathon',
+  };
+
+  const targetType =
+    filterKategori === 'all' ? null : competitionTypeMap[filterKategori];
+  const filteredData = targetType
+    ? allAchievements.filter(
+        (item) =>
+          item.competitionType?.toLowerCase() === targetType.toLowerCase(),
+      )
+    : allAchievements;
 
   const allSelected =
     selectedItems.length === filteredData.length && filteredData.length > 0;
@@ -46,31 +85,60 @@ function PeopleDashboard() {
     }
   };
 
-  const handleSelectItem = (id: number) => {
+  const handleSelectItem = (id: string) => {
     setSelectedItems((prev) =>
       prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id],
     );
   };
 
-  const handleExport = () => {
-    console.log('Export selected items:', selectedItems);
-    setAlertType('success');
-    setShowAlert(true);
+  const deleteMutation = useMutation({
+    mutationFn: async (id: string) =>
+      api.achievements.deletePrestasi({ idPrestasi: id }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['achievements-cnc'] });
+      setSelectedItems([]);
+      setAlertType('success');
+      setAlertMessage('Prestasi berhasil dihapus');
+      setShowAlert(true);
+    },
+    onError: () => {
+      setAlertType('error');
+      setAlertMessage('Gagal menghapus prestasi');
+      setShowAlert(true);
+    },
+  });
+
+  const handleExport = async () => {
+    try {
+      const params = new URLSearchParams();
+      if (periodFilter.from) params.append('start_date', periodFilter.from);
+      if (periodFilter.to) params.append('end_date', periodFilter.to);
+
+      setAlertType('success');
+      setAlertMessage('Data berhasil diekspor');
+      setShowAlert(true);
+    } catch (err) {
+      console.error('Export error:', err);
+      setAlertType('error');
+      setAlertMessage('Gagal mengekspor data');
+      setShowAlert(true);
+    }
   };
 
   const handlePeriodChange = (from: string, to: string) => {
     setPeriodFilter({ from, to });
-    console.log('Period filter changed:', { from, to });
+    setCurrentPage(1);
   };
 
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  // const handlePageChange = (page: number) => {
+  //   setCurrentPage(page);
+  //   window.scrollTo({ top: 0, behavior: 'smooth' });
+  // };
 
   const handleDeleteClick = () => {
     if (selectedItems.length === 0) {
       setAlertType('error');
+      setAlertMessage('Pilih item yang akan dihapus');
       setShowAlert(true);
       return;
     }
@@ -79,12 +147,18 @@ function PeopleDashboard() {
   };
 
   const handleConfirmDelete = () => {
-    console.log('Deleting items:', itemsToDelete);
+    itemsToDelete.forEach((id) => deleteMutation.mutate(id));
     setShowDeleteModal(false);
-    setSelectedItems([]);
-    setAlertType('success');
-    setShowAlert(true);
+    setItemsToDelete([]);
   };
+
+  if (error) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#FFFFFF] font-inter">
+        <div className="text-red-600">Error loading data: {error.message}</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#FFFFFF] font-inter">
@@ -100,7 +174,6 @@ function PeopleDashboard() {
             alt=""
             className="absolute right-0 top-0 z-30 lg:hidden"
           />
-
           <img
             src="/img/admin/green-peer-top-left-desktop.png"
             alt=""
@@ -111,7 +184,6 @@ function PeopleDashboard() {
             alt=""
             className="absolute left-0 top-0 z-20 lg:hidden"
           />
-
           <img
             src="/img/admin/green-peer-top-right-desktop.png"
             alt=""
@@ -151,7 +223,6 @@ function PeopleDashboard() {
             onPeriodChange={handlePeriodChange}
             onDelete={handleDeleteClick}
           />
-
           <DashboardTable
             data={filteredData}
             selectedItems={selectedItems}
@@ -159,7 +230,19 @@ function PeopleDashboard() {
             onSelectAll={handleSelectAll}
             allSelected={allSelected}
             currentPage={currentPage}
-            onPageChange={handlePageChange}
+            totalPages={totalPages}
+            loading={isLoading}
+            onDelete={(id: string) =>
+              deleteMutation
+                .mutateAsync(id)
+                .then(() => ({
+                  success: true,
+                }))
+                .catch(() => ({
+                  success: false,
+                  error: 'Gagal menghapus prestasi',
+                }))
+            }
           />
         </div>
       </div>
@@ -168,8 +251,8 @@ function PeopleDashboard() {
         type={alertType}
         isVisible={showAlert}
         onClose={() => setShowAlert(false)}
-        title="Export Berhasil"
-        message="Entry yang dipilih berhasil dieksport"
+        title={alertType === 'success' ? 'Aksi Berhasil' : 'Aksi Gagal'}
+        message={alertMessage}
         className="!left-1/2 !right-auto top-36"
       />
 
