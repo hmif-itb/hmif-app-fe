@@ -1,8 +1,10 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { useQuery } from '@tanstack/react-query';
 import { ChevronLeft, ArrowLeft, ArrowRight } from 'lucide-react';
 import { IdentityCard } from '../../../-dashboard-component/IdentityCard';
 import { ImageCarousel } from '../../../-dashboard-component/ImageCarousel';
 import { CertificateButton } from '../../../-dashboard-component/CertificateButton';
+import { api } from '~/api/client';
 
 export const Route = createFileRoute(
   '/_app/_left-navbar/dashboard/detail/$id/',
@@ -11,26 +13,116 @@ export const Route = createFileRoute(
 });
 
 function DetailPrestasi() {
-  // Mock data - nanti bisa diganti dengan data dari API
-  const prestasiData = {
-    jenis: 'Jenis Kompetisi',
-    nama: 'Nama Kompetisi/Organisasi',
-    identitas: {
-      nama: 'Noumisyfa Nabila Nareswari',
-      avatar: 'NN',
-      jurusan: 'Teknik Informatika',
-      tahun: "'23",
-      kampus: 'Ganesha',
-    },
-    periode: 'Sept 2025',
-    deskripsi:
-      'Deskripsi Prestas i  Prestasi Prestasi Prestas Prestas Prestas Prestas',
-    images: [
-      '/img/prestasi/1.jpg',
-      '/img/prestasi/2.jpg',
-      '/img/prestasi/3.jpg',
-    ],
-    sertifikatUrl: '#',
+  const { id } = Route.useParams();
+  const navigate = useNavigate();
+
+  // Fetch prestasi detail
+  const { data: prestasi, isLoading } = useQuery({
+    queryKey: ['prestasi-detail', id],
+    queryFn: () => api.achievements.getPrestasiById({ idPrestasi: id }),
+  });
+
+  // Fetch all prestasi for navigation
+  const { data: allPrestasi } = useQuery({
+    queryKey: ['all-prestasi'],
+    queryFn: () => api.achievements.getListPrestasi({ page: 1, limit: 1000 }),
+  });
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#2F754A]">
+        <div className="text-white">Loading...</div>
+      </div>
+    );
+  }
+
+  if (!prestasi) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#2F754A]">
+        <div className="text-white">Prestasi tidak ditemukan</div>
+      </div>
+    );
+  }
+
+  // Map jenisPrestasi to readable format
+  const jenisMap = {
+    kompetisi: 'Kompetisi',
+    organisasi: 'Organisasi',
+    kepanitiaan: 'Kepanitiaan',
+  };
+
+  // Format bulan tahun
+  const monthNames = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'Mei',
+    'Jun',
+    'Jul',
+    'Agu',
+    'Sep',
+    'Okt',
+    'Nov',
+    'Des',
+  ];
+  const periode = `${monthNames[prestasi.bulan - 1]} ${prestasi.tahun}`;
+
+  // Prepare identity data
+  const identitas = prestasi.user
+    ? {
+        nama: prestasi.user.fullName,
+        avatar: prestasi.user.fullName
+          .split(' ')
+          .map((n) => n[0])
+          .join('')
+          .toUpperCase()
+          .slice(0, 2),
+        jurusan:
+          prestasi.user.major === 'IF'
+            ? 'Teknik Informatika'
+            : 'Sistem dan Teknologi Informasi',
+        tahun: `'${prestasi.user.angkatan.toString().slice(-2)}`,
+        kampus: prestasi.user.region,
+      }
+    : {
+        nama: 'Unknown',
+        avatar: '??',
+        jurusan: 'Unknown',
+        tahun: '??',
+        kampus: 'Unknown',
+      };
+
+  // Prepare images array
+  const images = [
+    prestasi.mediaSertifikat,
+    prestasi.mediaFotoAwarding,
+    prestasi.mediaFotoPribadi,
+  ].filter(Boolean) as string[];
+
+  // Navigation logic
+  const currentIndex =
+    allPrestasi?.prestasi.findIndex((p) => p.id === id) ?? -1;
+  const total = allPrestasi?.total ?? 0;
+  const hasPrevious = currentIndex > 0;
+  const hasNext = currentIndex < (allPrestasi?.prestasi.length ?? 0) - 1;
+
+  const goToPrevious = () => {
+    if (hasPrevious && allPrestasi) {
+      const prevId = allPrestasi.prestasi[currentIndex - 1].id;
+      navigate({ to: '/dashboard/detail/$id', params: { id: prevId } });
+    }
+  };
+
+  const goToNext = () => {
+    if (hasNext && allPrestasi) {
+      const nextId = allPrestasi.prestasi[currentIndex + 1].id;
+      navigate({ to: '/dashboard/detail/$id', params: { id: nextId } });
+    }
+  };
+
+  const goBack = () => {
+    navigate({ to: '/dashboard' });
   };
 
   return (
@@ -75,7 +167,10 @@ function DetailPrestasi() {
       <div className="relative z-40 lg:p-4">
         {/* Header */}
         <div className="mb-8 flex items-center gap-4 p-2 lg:relative lg:-left-4">
-          <button className="text-white transition-colors hover:text-yellow-200">
+          <button
+            onClick={goBack}
+            className="text-white transition-colors hover:text-yellow-200"
+          >
             <ChevronLeft className="hidden lg:block" size={54} />
             <ChevronLeft size={24} className="block lg:hidden" />
           </button>
@@ -94,19 +189,19 @@ function DetailPrestasi() {
                 {/* Mobile: Vertical */}
                 <div className="lg:hidden">
                   <p className="mb-1 font-inter text-sm font-semibold text-gray-600">
-                    [{prestasiData.jenis}]
+                    [{jenisMap[prestasi.jenisPrestasi]}]
                   </p>
                   <h2 className="font-inter text-lg font-bold text-black">
-                    {prestasiData.nama}
+                    {prestasi.penyelenggara}
                   </h2>
                 </div>
 
                 {/* Desktop: Horizontal */}
                 <h2 className="hidden font-inter text-2xl font-bold text-black lg:block">
                   <span className="font-inter font-semibold text-gray-600">
-                    [{prestasiData.jenis}]
+                    [{jenisMap[prestasi.jenisPrestasi]}]
                   </span>{' '}
-                  {prestasiData.nama}
+                  {prestasi.penyelenggara}
                 </h2>
               </div>
 
@@ -115,65 +210,85 @@ function DetailPrestasi() {
                 {/* Left Column */}
                 <div className="space-y-6">
                   {/* Identity Card */}
-                  <IdentityCard data={prestasiData.identitas} />
+                  <IdentityCard data={identitas} />
 
                   {/* Image Carousel - Mobile */}
-                  <div className="lg:hidden">
-                    <ImageCarousel images={prestasiData.images} />
-                  </div>
+                  {images.length > 0 && (
+                    <div className="lg:hidden">
+                      <ImageCarousel images={images} />
+                    </div>
+                  )}
 
                   {/* Description Section - Mobile only */}
                   <div className="lg:hidden">
                     <h3 className="mb-2 font-inter text-lg font-bold text-black">
-                      {prestasiData.nama}
+                      {prestasi.penyelenggara}
                     </h3>
-                    {/* <p className="mb-3 font-inter text-sm text-[#7B7A73]">
-                      {prestasiData.organisasi} | {prestasiData.periode}
-                    </p> */}
-                    <p className="mb-4 font-inter text-sm leading-relaxed text-black">
-                      {prestasiData.deskripsi}
+                    <p className="mb-3 font-inter text-sm text-[#7B7A73]">
+                      {periode}
+                      {prestasi.competitionType &&
+                        ` | ${prestasi.competitionType}`}
                     </p>
-                    <div className="flex justify-end">
-                      <CertificateButton url={prestasiData.sertifikatUrl} />
-                    </div>
+                    <p className="mb-4 font-inter text-sm leading-relaxed text-black">
+                      {prestasi.deskripsi || 'Tidak ada deskripsi'}
+                    </p>
+                    {prestasi.mediaSertifikat && (
+                      <div className="flex justify-end">
+                        <CertificateButton url={prestasi.mediaSertifikat} />
+                      </div>
+                    )}
                   </div>
 
                   {/* Description Section - Desktop only */}
                   <div className="hidden lg:block">
                     <h3 className="mb-2 font-inter text-lg font-bold text-black">
-                      {prestasiData.nama}
+                      {prestasi.penyelenggara}
                     </h3>
-                    {/* <p className="mb-3 font-inter text-sm text-[#7B7A73]">
-                      {prestasiData.organisasi} | {prestasiData.periode}
-                    </p> */}
-                    <p className="mb-4 font-inter text-sm leading-relaxed text-black">
-                      {prestasiData.deskripsi}
+                    <p className="mb-3 font-inter text-sm text-[#7B7A73]">
+                      {periode}
+                      {prestasi.competitionType &&
+                        ` | ${prestasi.competitionType}`}
                     </p>
-                    <div className="flex justify-end">
-                      <CertificateButton url={prestasiData.sertifikatUrl} />
-                    </div>
+                    <p className="mb-4 font-inter text-sm leading-relaxed text-black">
+                      {prestasi.deskripsi || 'Tidak ada deskripsi'}
+                    </p>
+                    {prestasi.mediaSertifikat && (
+                      <div className="flex justify-end">
+                        <CertificateButton url={prestasi.mediaSertifikat} />
+                      </div>
+                    )}
                   </div>
                 </div>
 
                 {/* Right Column - Desktop only */}
-                <div className="hidden lg:block">
-                  <ImageCarousel images={prestasiData.images} />
-                </div>
+                {images.length > 0 && (
+                  <div className="hidden lg:block">
+                    <ImageCarousel images={images} />
+                  </div>
+                )}
               </div>
 
               {/* Navigation */}
               <div className="mt-8 flex items-center justify-between border-t pt-6 lg:mt-12">
-                <button className="flex items-center gap-1.5 rounded-lg border border-gray-300 px-3 py-1.5 font-inter text-xs font-medium transition-colors hover:bg-gray-50 lg:gap-2 lg:px-6 lg:py-3 lg:text-base">
+                <button
+                  onClick={goToPrevious}
+                  disabled={!hasPrevious}
+                  className="flex items-center gap-1.5 rounded-lg border border-gray-300 px-3 py-1.5 font-inter text-xs font-medium transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50 lg:gap-2 lg:px-6 lg:py-3 lg:text-base"
+                >
                   <ArrowLeft size={16} className="lg:size-5" />
                   <span className="hidden sm:inline">Entri sebelumnya</span>
                   <span className="sm:hidden">Sebelumnya</span>
                 </button>
 
                 <span className="font-inter text-xs text-gray-600 lg:text-sm">
-                  Entri 17 dari 190
+                  Entri {currentIndex + 1} dari {total}
                 </span>
 
-                <button className="flex items-center gap-1.5 rounded-lg border border-gray-300 px-3 py-1.5 font-inter text-xs font-medium transition-colors hover:bg-gray-50 lg:gap-2 lg:px-6 lg:py-3 lg:text-base">
+                <button
+                  onClick={goToNext}
+                  disabled={!hasNext}
+                  className="flex items-center gap-1.5 rounded-lg border border-gray-300 px-3 py-1.5 font-inter text-xs font-medium transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50 lg:gap-2 lg:px-6 lg:py-3 lg:text-base"
+                >
                   <span className="hidden sm:inline">Entri selanjutnya</span>
                   <span className="sm:hidden">Selanjutnya</span>
                   <ArrowRight size={16} className="lg:size-5" />

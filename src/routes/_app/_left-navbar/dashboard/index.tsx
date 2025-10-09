@@ -1,26 +1,22 @@
-import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
+import { useQuery, useMutation } from '@tanstack/react-query';
+import { api, queryClient } from '~/api/client';
 import { TableActionsBar } from './-components/TableActionsBar';
 import { DashboardTable } from './-components/DashboardTable';
 import { Alert } from '../-dashboard-component/ALert';
-import { mockPrestasiData } from './-constant';
 import { ChevronLeft } from 'lucide-react';
 import { ConfirmModal } from '../-dashboard-component/ConfirmModal';
+// import { Prestasi } from '~/api/generated';
+import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/_app/_left-navbar/dashboard/')({
   component: AdminDashboard,
 });
 
 function AdminDashboard() {
-  const [selectedItems, setSelectedItems] = useState<number[]>([]);
+  // const navigate = useNavigate();
+  const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [filterJenis, setFilterJenis] = useState<string>('all');
-  const [data] = useState(mockPrestasiData);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertType, setAlertType] = useState<'success' | 'error'>('success');
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [itemsToDelete, setItemsToDelete] = useState<number[]>([]);
-  // TAMBAH STATE UNTUK PERIOD FILTER
   const [periodFilter, setPeriodFilter] = useState<{
     from: string;
     to: string;
@@ -28,62 +24,162 @@ function AdminDashboard() {
     from: '',
     to: '',
   });
+  const [search, setSearch] = useState<string>('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertType, setAlertType] = useState<'success' | 'error'>('success');
+  const [alertMessage, setAlertMessage] = useState('');
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [itemsToDelete, setItemsToDelete] = useState<string[]>([]);
 
-  const filteredData =
-    filterJenis === 'all' || !filterJenis
-      ? data
-      : data.filter((item) => item.jenisPrestasi.toLowerCase() === filterJenis);
+  const LIMIT = 10;
+
+  // Map frontend filter to API format
+  const categoryMap: Record<
+    string,
+    'competition' | 'organization' | 'committee'
+  > = {
+    kompetisi: 'competition',
+    organisasi: 'organization',
+    kepanitiaan: 'committee',
+  };
+
+  // Fetch achievements
+  const { data, isLoading } = useQuery({
+    queryKey: [
+      'achievements',
+      {
+        page: currentPage,
+        category: filterJenis,
+        search,
+        period: periodFilter,
+      },
+    ],
+    queryFn: async () =>
+      api.achievements.getListPrestasi({
+        category:
+          filterJenis !== 'all' && categoryMap[filterJenis]
+            ? categoryMap[filterJenis]
+            : undefined,
+        startDate: periodFilter.from || undefined,
+        endDate: periodFilter.to || undefined,
+        search: search || undefined,
+        page: currentPage,
+        limit: LIMIT,
+      }),
+    staleTime: 30000,
+  });
+
+  const achievements = data?.prestasi || [];
+  const total = data?.total || 0;
+  const totalPages = Math.ceil(total / LIMIT);
 
   const allSelected =
-    selectedItems.length === filteredData.length && filteredData.length > 0;
+    selectedItems.length === achievements.length && achievements.length > 0;
 
   const handleSelectAll = () => {
     if (allSelected) {
       setSelectedItems([]);
     } else {
-      setSelectedItems(filteredData.map((item) => item.id));
+      setSelectedItems(achievements.map((item) => item.id));
     }
   };
 
-  const handleSelectItem = (id: number) => {
+  const handleSelectItem = (id: string) => {
     setSelectedItems((prev) =>
       prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id],
     );
   };
 
-  const handleExport = () => {
-    console.log('Export selected items:', selectedItems);
-    setAlertType('success');
-    setShowAlert(true);
+  const deleteMutation = useMutation({
+    mutationFn: async (id: string) =>
+      api.achievements.deletePrestasi({ idPrestasi: id }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['achievements'] });
+      setSelectedItems([]);
+      setAlertType('success');
+      setAlertMessage('Prestasi berhasil dihapus');
+      setShowAlert(true);
+    },
+    onError: () => {
+      setAlertType('error');
+      setAlertMessage('Gagal menghapus prestasi');
+      setShowAlert(true);
+    },
+  });
+
+  const handleExport = async () => {
+    try {
+      const categoryForExport =
+        filterJenis !== 'all' && categoryMap[filterJenis]
+          ? categoryMap[filterJenis]
+          : undefined;
+
+      // Build query params
+      const params = new URLSearchParams();
+      if (categoryForExport) params.append('category', categoryForExport);
+      if (periodFilter.from) params.append('start_date', periodFilter.from);
+      if (periodFilter.to) params.append('end_date', periodFilter.to);
+
+      // Direct fetch with blob response
+      const response = await fetch(
+        `/api/achievements/export/excel?${params.toString()}`,
+        {
+          method: 'GET',
+          headers: {
+            // TODO: Adjust sesuai auth setup kalian
+            // Contoh: 'Authorization': `Bearer ${useAuth().token}`
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error('Export failed');
+      }
+
+      const blob = await response.blob();
+
+      // Create download link
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `prestasi_export_${new Date().toISOString().split('T')[0]}.xlsx`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+
+      setAlertType('success');
+      setAlertMessage('Data berhasil diekspor');
+      setShowAlert(true);
+    } catch (err) {
+      console.error('Export error:', err);
+      setAlertType('error');
+      setAlertMessage('Gagal mengekspor data');
+      setShowAlert(true);
+    }
   };
 
   const handleBulkChange = (value: string) => {
     console.log('Bulk change to:', value, 'for items:', selectedItems);
+    // TODO: Implementasi bulk update jika diperlukan
   };
 
-  // TAMBAH HANDLER UNTUK PERIOD CHANGE
   const handlePeriodChange = (from: string, to: string) => {
     setPeriodFilter({ from, to });
-    console.log('Period filter changed:', { from, to });
-
-    // TODO: Tambahkan logika filtering berdasarkan periode di sini
-    // Contoh: filter data berdasarkan tanggal prestasi
-    // const filtered = data.filter(item => {
-    //   const itemDate = new Date(item.tanggalPrestasi);
-    //   const fromDate = parseDate(from); // MM/YYYY -> Date
-    //   const toDate = parseDate(to);
-    //   return itemDate >= fromDate && itemDate <= toDate;
-    // });
+    setCurrentPage(1);
   };
 
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  const handleSearchChange = (value: string) => {
+    setSearch(value);
+    setCurrentPage(1);
   };
 
   const handleDeleteClick = () => {
     if (selectedItems.length === 0) {
       setAlertType('error');
+      setAlertMessage('Pilih item yang akan dihapus');
       setShowAlert(true);
       return;
     }
@@ -92,52 +188,23 @@ function AdminDashboard() {
   };
 
   const handleConfirmDelete = () => {
-    console.log('Deleting items:', itemsToDelete);
-
+    itemsToDelete.forEach((id) => deleteMutation.mutate(id));
     setShowDeleteModal(false);
-    setSelectedItems([]);
-    setAlertType('success');
-    setShowAlert(true);
+    setItemsToDelete([]);
   };
+
+  // const handleEdit = (id: string) => {
+  //   // Navigate ke halaman edit
+  //   navigate({
+  //     to: '/dashboard/edit/$id',
+  //     params: { id },
+  //   });
+  // };
 
   return (
     <div className="min-h-screen bg-[#FFFFFF] font-inter">
       <div className="relative overflow-hidden bg-[#2F754A]">
-        <div className="absolute inset-0">
-          <img
-            src="/img/admin/yellow-gradient-top-right-desktop.png"
-            alt=""
-            className="absolute right-0 top-0 z-30 hidden lg:block"
-          />
-          <img
-            src="/img/admin/yellow-gradient-top-right-mobile.png"
-            alt=""
-            className="absolute right-0 top-0 z-30 lg:hidden"
-          />
-
-          <img
-            src="/img/admin/green-peer-top-left-desktop.png"
-            alt=""
-            className="absolute left-0 top-0 z-20 hidden lg:block"
-          />
-          <img
-            src="/img/admin/green-peer-top-left-mobile.png"
-            alt=""
-            className="absolute left-0 top-0 z-20 lg:hidden"
-          />
-
-          <img
-            src="/img/admin/green-peer-top-right-desktop.png"
-            alt=""
-            className="absolute right-0 top-0 z-10 hidden lg:block"
-          />
-          <img
-            src="/img/admin/green-peer-top-right-mobile.png"
-            alt=""
-            className="absolute right-0 top-0 z-10 mt-12 lg:hidden"
-          />
-        </div>
-
+        <div className="absolute inset-0">{/* Background images */}</div>
         <div className="relative z-40 px-4 py-12">
           <div className="max-w-7xl">
             <div className="flex items-center space-x-4">
@@ -163,18 +230,31 @@ function AdminDashboard() {
             onBulkChange={handleBulkChange}
             filterJenis={filterJenis}
             onFilterChange={setFilterJenis}
-            onPeriodChange={handlePeriodChange} // GANTI onPeriodClick dengan onPeriodChange
+            onPeriodChange={handlePeriodChange}
             onDelete={handleDeleteClick}
+            onSearchChange={handleSearchChange}
+            search={search}
           />
-
           <DashboardTable
-            data={filteredData}
+            data={achievements}
             selectedItems={selectedItems}
             onSelectItem={handleSelectItem}
             onSelectAll={handleSelectAll}
             allSelected={allSelected}
             currentPage={currentPage}
-            onPageChange={handlePageChange}
+            totalPages={totalPages}
+            loading={isLoading}
+            onDelete={(id: string) =>
+              deleteMutation
+                .mutateAsync(id)
+                .then(() => ({
+                  success: true,
+                }))
+                .catch(() => ({
+                  success: false,
+                  error: 'Gagal menghapus prestasi',
+                }))
+            }
           />
         </div>
       </div>
@@ -183,8 +263,8 @@ function AdminDashboard() {
         type={alertType}
         isVisible={showAlert}
         onClose={() => setShowAlert(false)}
-        title="Export Berhasil"
-        message="Entry yang dipilih berhasil dieksport"
+        title={alertType === 'success' ? 'Aksi Berhasil' : 'Aksi Gagal'}
+        message={alertMessage}
         className="!left-1/2 !right-auto top-36"
       />
 

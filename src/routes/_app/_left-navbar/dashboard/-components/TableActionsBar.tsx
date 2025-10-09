@@ -16,6 +16,8 @@ type TableActionsBarProps = {
   filterJenis: string;
   onFilterChange: (value: string) => void;
   onPeriodChange?: (from: string, to: string) => void;
+  onSearchChange?: (value: string) => void; // Add search handler
+  search?: string; // Add search value
 };
 
 const jenisPrestasiOptions: DropdownOption[] = [
@@ -35,10 +37,35 @@ export const TableActionsBar = ({
   filterJenis,
   onFilterChange,
   onPeriodChange,
+  onSearchChange,
+  search,
 }: TableActionsBarProps) => {
   return (
     <div className="flex flex-col justify-between gap-4 bg-[#FFFFFF] py-4 pl-3 md:flex-row md:items-center lg:pl-4">
       <div className="order-2 flex flex-wrap items-center gap-2 md:order-1">
+        <div className="relative w-full md:w-auto">
+          <input
+            className="w-full rounded-lg border border-gray-300 p-2 pr-10 md:w-64"
+            type="text"
+            value={search}
+            onChange={(e) => onSearchChange?.(e.target.value)}
+            placeholder="Cari nama atau prestasi"
+          />
+          <svg
+            className="absolute right-3 top-1/2 size-5 -translate-y-1/2 text-gray-500"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            />
+          </svg>
+        </div>
         <button
           onClick={onDelete}
           className="flex items-center gap-1.5 rounded-full border border-black px-2 py-1.5 font-inter text-xs font-medium hover:bg-gray-50 md:gap-2 md:px-3 md:py-2 md:text-sm"
@@ -63,7 +90,6 @@ export const TableActionsBar = ({
           <Download size={16} className="hidden md:block" />
           Export
         </button>
-
         <KategoriDropdown
           value={filterJenis}
           onChange={onFilterChange}
@@ -71,7 +97,6 @@ export const TableActionsBar = ({
           placeholder="Pilih Jenis Prestasi"
           placeholderMobile="Pilih Jenis ..."
         />
-
         {selectedCount > 0 && (
           <span className="font-inter text-sm text-gray-600">
             {selectedCount} item terpilih
@@ -79,18 +104,15 @@ export const TableActionsBar = ({
         )}
       </div>
 
-      {/* Filter Section */}
       <p className="block font-inter text-sm font-medium lg:hidden">filter:</p>
       <div className="relative order-1 mx-auto flex flex-wrap items-center gap-2 md:order-2 md:gap-4 lg:justify-between">
         <span className="hidden font-inter text-sm font-medium lg:block">
           filter:
         </span>
-
         <DatePeriodPicker
           onPeriodChange={onPeriodChange}
           className="order-1 lg:relative lg:-right-52 lg:order-2"
         />
-
         <ToggleGroup.Root
           type="single"
           value={filterJenis === 'all' ? undefined : filterJenis}

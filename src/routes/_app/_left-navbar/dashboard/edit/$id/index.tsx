@@ -8,6 +8,16 @@ export const Route = createFileRoute('/_app/_left-navbar/dashboard/edit/$id/')({
 
 function EditPrestasiPage() {
   const navigate = useNavigate();
+  const { id } = Route.useParams();
+
+  const handleSuccess = () => {
+    // Navigate back to dashboard after successful update
+    navigate({ to: '/dashboard' });
+  };
+
+  const handleBack = () => {
+    navigate({ to: '/dashboard' });
+  };
 
   return (
     <div className="relative min-h-screen bg-[#2F754A] lg:overflow-hidden">
@@ -41,28 +51,32 @@ function EditPrestasiPage() {
         />
         <img
           src="/img/admin/green-peer-top-right-mobile.png"
-          alt="ss"
+          alt=""
           className="absolute right-0 z-10 mt-12 lg:hidden"
         />
       </div>
 
       <div className="relative z-40 lg:p-4">
-        <div className="mb-8 flex items-center gap-4 p-2  lg:relative lg:-left-4">
+        <div className="mb-8 flex items-center gap-4 p-2 lg:relative lg:-left-4">
           <button
-            onClick={() => navigate({ to: '/dashboard' })}
+            onClick={handleBack}
             className="text-white transition-colors hover:text-yellow-200"
           >
             <ChevronLeft className="hidden lg:block" size={54} />
             <ChevronLeft size={24} className="block lg:hidden" />
           </button>
-          <h1 className="p-4 text-2xl  text-white lg:text-5xl">
-            <span className="font-bold ">Edit Entri</span> {''}
+          <h1 className="p-4 text-2xl text-white lg:text-5xl">
+            <span className="font-bold">Edit Entri</span>{' '}
             <span className="italic">Prestasi</span>
           </h1>
         </div>
 
-        <div className="mx-auto">
-          <FormCard />
+        <div className="mx-auto px-4 lg:px-0">
+          <FormCard
+            prestasiId={id}
+            onSuccess={handleSuccess}
+            onBack={handleBack}
+          />
         </div>
       </div>
     </div>

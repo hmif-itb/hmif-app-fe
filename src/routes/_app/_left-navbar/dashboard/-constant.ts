@@ -72,7 +72,7 @@ export const mockPrestasiData: PrestasiData[] = [
     namaOrganisasi: 'Panitia Dies Natalis Universitas',
     avatar: 'B',
   },
-   {
+  {
     id: 9,
     nama: 'Noumisyifa Nabila N.',
     namaPrestasi: 'Lorem ipsum dolor sit amet consectetur adipiscing elit',
