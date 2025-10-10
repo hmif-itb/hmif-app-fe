@@ -16,9 +16,6 @@ const prestasiSchema = z.object({
   periodePencapaian: z.string().min(1, 'Periode pencapaian wajib diisi'),
   jenisLomba: z.string().optional(),
   deskripsi: z.string().min(1, 'Deskripsi prestasi wajib diisi'),
-  fotoDiri: z.instanceof(FileList).optional().or(z.string()),
-  fotoSertifikat: z.instanceof(FileList).optional().or(z.string()),
-  fotoAwarding: z.instanceof(FileList).optional().or(z.string()),
 });
 
 type PrestasiFormData = z.infer<typeof prestasiSchema>;
@@ -47,7 +44,6 @@ interface FormCardProps {
   onBack?: () => void;
 }
 
-// Upload helper function
 async function uploadViaPresigned(file: File): Promise<string> {
   const fullName = file.name;
   const lastDot = fullName.lastIndexOf('.');
@@ -82,7 +78,21 @@ export function FormCard({ prestasiId, onSuccess, onBack }: FormCardProps) {
   const [jenisLombaValue, setJenisLombaValue] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [prestasiData, setPrestasiData] = useState<PrestasiDetail | null>(null);
+  const [, setPrestasiData] = useState<PrestasiDetail | null>(null);
+
+  // File states
+  const [fotoSertifikat, setFotoSertifikat] = useState<File | string | null>(
+    null,
+  );
+  const [fotoDiri, setFotoDiri] = useState<File | string | null>(null);
+  const [fotoAwarding, setFotoAwarding] = useState<File | string | null>(null);
+
+  // File errors
+  const [fileErrors, setFileErrors] = useState({
+    fotoSertifikat: '',
+    fotoDiri: '',
+    fotoAwarding: '',
+  });
 
   const {
     register,
@@ -101,7 +111,6 @@ export function FormCard({ prestasiId, onSuccess, onBack }: FormCardProps) {
     },
   });
 
-  // Fetch prestasi data
   useEffect(() => {
     const fetchPrestasi = async () => {
       try {
@@ -112,7 +121,6 @@ export function FormCard({ prestasiId, onSuccess, onBack }: FormCardProps) {
 
         setPrestasiData(data);
 
-        // Map jenisPrestasi to form value
         const jenisMap: Record<string, string> = {
           kompetisi: 'kompetisi',
           organisasi: 'organisasi',
@@ -122,13 +130,11 @@ export function FormCard({ prestasiId, onSuccess, onBack }: FormCardProps) {
         const jenis = jenisMap[data.jenisPrestasi] || '';
         setJenisPrestasiValue(jenis);
 
-        // Set competition type if applicable
         if (data.competitionType) {
           setJenisLombaValue(data.competitionType);
           setValue('jenisLomba', data.competitionType);
         }
 
-        // Format period
         const monthNames = [
           'Januari',
           'Februari',
@@ -146,16 +152,17 @@ export function FormCard({ prestasiId, onSuccess, onBack }: FormCardProps) {
         const period = `${monthNames[data.bulan - 1]} ${data.tahun}`;
         setPeriodValue(period);
 
-        // Set form values
+        // Initialize file states with existing URLs
+        setFotoSertifikat(data.mediaSertifikat || null);
+        setFotoDiri(data.mediaFotoPribadi || null);
+        setFotoAwarding(data.mediaFotoAwarding || null);
+
         reset({
           namaKompetisi: data.penyelenggara,
           jenisPrestasiId: jenis,
           periodePencapaian: period,
           jenisLomba: data.competitionType || '',
           deskripsi: data.deskripsi || '',
-          fotoSertifikat: data.mediaSertifikat || '',
-          fotoDiri: data.mediaFotoPribadi || '',
-          fotoAwarding: data.mediaFotoAwarding || '',
         });
       } catch (error) {
         console.error('Error fetching prestasi:', error);
@@ -170,11 +177,32 @@ export function FormCard({ prestasiId, onSuccess, onBack }: FormCardProps) {
     }
   }, [prestasiId, reset, setValue]);
 
+  const validateFiles = (): boolean => {
+    const newErrors = {
+      fotoSertifikat: '',
+      fotoDiri: '',
+      fotoAwarding: '',
+    };
+
+    if (!fotoSertifikat) {
+      newErrors.fotoSertifikat = 'Foto sertifikat wajib diupload';
+    }
+    if (!fotoDiri) {
+      newErrors.fotoDiri = 'Foto diri wajib diupload';
+    }
+
+    setFileErrors(newErrors);
+    return !newErrors.fotoSertifikat && !newErrors.fotoDiri;
+  };
+
   const onSubmit = async (data: PrestasiFormData) => {
+    if (!validateFiles()) {
+      return;
+    }
+
     try {
       setIsSubmitting(true);
 
-      // Parse period
       const [monthName, yearStr] = periodValue.split(' ');
       const monthMap: Record<string, number> = {
         Januari: 1,
@@ -193,7 +221,6 @@ export function FormCard({ prestasiId, onSuccess, onBack }: FormCardProps) {
       const bulan = monthMap[monthName];
       const tahun = parseInt(yearStr);
 
-      // Map jenis prestasi
       const jenisMap: Record<
         string,
         'organisasi' | 'kepanitiaan' | 'kompetisi'
@@ -203,35 +230,29 @@ export function FormCard({ prestasiId, onSuccess, onBack }: FormCardProps) {
         kompetisi: 'kompetisi',
       };
 
-      // Handle file uploads
       const mediaUrls: string[] = [];
 
-      // Check if files need to be uploaded
-      if (
-        data.fotoSertifikat instanceof FileList &&
-        data.fotoSertifikat.length > 0
-      ) {
-        mediaUrls.push(await uploadViaPresigned(data.fotoSertifikat[0]));
-      } else if (typeof data.fotoSertifikat === 'string') {
-        mediaUrls.push(data.fotoSertifikat);
+      // Handle fotoSertifikat
+      if (fotoSertifikat instanceof File) {
+        mediaUrls.push(await uploadViaPresigned(fotoSertifikat));
+      } else if (typeof fotoSertifikat === 'string') {
+        mediaUrls.push(fotoSertifikat);
       }
 
-      if (data.fotoDiri instanceof FileList && data.fotoDiri.length > 0) {
-        mediaUrls.push(await uploadViaPresigned(data.fotoDiri[0]));
-      } else if (typeof data.fotoDiri === 'string') {
-        mediaUrls.push(data.fotoDiri);
+      // Handle fotoDiri
+      if (fotoDiri instanceof File) {
+        mediaUrls.push(await uploadViaPresigned(fotoDiri));
+      } else if (typeof fotoDiri === 'string') {
+        mediaUrls.push(fotoDiri);
       }
 
-      if (
-        data.fotoAwarding instanceof FileList &&
-        data.fotoAwarding.length > 0
-      ) {
-        mediaUrls.push(await uploadViaPresigned(data.fotoAwarding[0]));
-      } else if (typeof data.fotoAwarding === 'string' && data.fotoAwarding) {
-        mediaUrls.push(data.fotoAwarding);
+      // Handle fotoAwarding (optional)
+      if (fotoAwarding instanceof File) {
+        mediaUrls.push(await uploadViaPresigned(fotoAwarding));
+      } else if (typeof fotoAwarding === 'string' && fotoAwarding) {
+        mediaUrls.push(fotoAwarding);
       }
 
-      // Prepare payload with proper typing
       type UpdatePayload = {
         jenisPrestasi: 'organisasi' | 'kepanitiaan' | 'kompetisi';
         penyelenggara: string;
@@ -251,7 +272,6 @@ export function FormCard({ prestasiId, onSuccess, onBack }: FormCardProps) {
         mediaUrls,
       };
 
-      // Add competition type if applicable
       if (jenisPrestasiValue === 'kompetisi' && jenisLombaValue) {
         payload.competitionType = jenisLombaValue as
           | 'CP'
@@ -309,7 +329,6 @@ export function FormCard({ prestasiId, onSuccess, onBack }: FormCardProps) {
           className="space-y-6 lg:space-y-8"
         >
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8">
-            {/* Left Column */}
             <div className="space-y-4 lg:space-y-6">
               <div className="space-y-2">
                 <label className="block text-sm font-medium text-gray-900">
@@ -335,7 +354,6 @@ export function FormCard({ prestasiId, onSuccess, onBack }: FormCardProps) {
               </div>
 
               <div className="grid grid-cols-2 gap-4">
-                {/* Jenis Prestasi */}
                 <CustomDropdown
                   label="Jenis Prestasi"
                   placeholder="Pilih jenis prestasi"
@@ -353,7 +371,6 @@ export function FormCard({ prestasiId, onSuccess, onBack }: FormCardProps) {
                   error={errors.jenisPrestasiId?.message}
                 />
 
-                {/* Periode Pencapaian */}
                 <PeriodInput
                   label="Periode Prestasi"
                   required
@@ -366,7 +383,6 @@ export function FormCard({ prestasiId, onSuccess, onBack }: FormCardProps) {
                 />
               </div>
 
-              {/* Jenis Lomba - conditional */}
               {jenisPrestasiValue === 'kompetisi' && (
                 <CustomDropdown
                   label="Jenis Lomba"
@@ -383,7 +399,6 @@ export function FormCard({ prestasiId, onSuccess, onBack }: FormCardProps) {
               )}
             </div>
 
-            {/* Right Column - Deskripsi */}
             <div className="lg:block">
               <div className="space-y-2">
                 <label className="block text-sm font-medium text-gray-900">
@@ -408,30 +423,39 @@ export function FormCard({ prestasiId, onSuccess, onBack }: FormCardProps) {
             </div>
           </div>
 
-          {/* File Upload Section */}
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
             <UploadFile
               label="Foto Sertifikat"
               required
               description="Upload 1 supported file: PDF, document, or image. Max 10 MB."
-              error={errors.fotoSertifikat?.message}
-              currentFile={prestasiData?.mediaSertifikat}
-              {...register('fotoSertifikat')}
+              currentFile={
+                typeof fotoSertifikat === 'string' ? fotoSertifikat : null
+              }
+              onChange={(file) => {
+                setFotoSertifikat(file);
+                setFileErrors((prev) => ({ ...prev, fotoSertifikat: '' }));
+              }}
+              error={fileErrors.fotoSertifikat}
             />
             <UploadFile
               label="Foto Diri"
               required
               description="Ukuran 1:1. Disarankan foto formal dengan baju berkerah dan latar polos"
-              error={errors.fotoDiri?.message}
-              currentFile={prestasiData?.mediaFotoPribadi}
-              {...register('fotoDiri')}
+              currentFile={typeof fotoDiri === 'string' ? fotoDiri : null}
+              onChange={(file) => {
+                setFotoDiri(file);
+                setFileErrors((prev) => ({ ...prev, fotoDiri: '' }));
+              }}
+              error={fileErrors.fotoDiri}
             />
             <UploadFile
               label="Foto Awarding"
               description="Foto saat awarding, lagi megang sertifikat, atau foto bukti lainnya"
-              error={errors.fotoAwarding?.message}
-              currentFile={prestasiData?.mediaFotoAwarding}
-              {...register('fotoAwarding')}
+              currentFile={
+                typeof fotoAwarding === 'string' ? fotoAwarding : null
+              }
+              onChange={(file) => setFotoAwarding(file)}
+              error={fileErrors.fotoAwarding}
             />
           </div>
 

@@ -1,68 +1,60 @@
-import React, { forwardRef, useEffect } from 'react';
+import React, { forwardRef, useEffect, useState } from 'react';
 import { Upload, File, X, ExternalLink } from 'lucide-react';
 
-interface FormFileUploadProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
+interface FormFileUploadProps {
   label: string;
   required?: boolean;
   error?: string;
   description?: string;
-  fileName?: string;
-  currentFile?: string | null; // URL of existing file
+  currentFile?: string | null;
+  onChange?: (file: File | null) => void;
+  value?: File | string | null;
 }
 
 export const UploadFile = forwardRef<HTMLInputElement, FormFileUploadProps>(
-  (
-    {
-      label,
-      required,
-      error,
-      description,
-      fileName = '',
-      currentFile,
-      ...props
-    },
-    ref,
-  ) => {
-    const [uploadedFile, setUploadedFile] = React.useState<string | null>(
-      fileName || null,
-    );
-    const [existingFileUrl, setExistingFileUrl] = React.useState<string | null>(
+  ({ label, required, error, description, currentFile, onChange }, ref) => {
+    const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+    const [existingFileUrl, setExistingFileUrl] = useState<string | null>(
       currentFile || null,
     );
-    const [hasNewFile, setHasNewFile] = React.useState(false);
+    const [displayName, setDisplayName] = useState<string>('');
 
-    // Update when currentFile prop changes
     useEffect(() => {
-      if (currentFile && !hasNewFile) {
+      if (currentFile && !uploadedFile) {
         setExistingFileUrl(currentFile);
-        // Extract filename from URL
         try {
           const url = new URL(currentFile);
           const pathParts = url.pathname.split('/');
           const filename = pathParts[pathParts.length - 1];
-          setUploadedFile(decodeURIComponent(filename));
+          setDisplayName(decodeURIComponent(filename));
         } catch {
-          setUploadedFile('Existing file');
+          setDisplayName('Existing file');
         }
       }
-    }, [currentFile, hasNewFile]);
+    }, [currentFile, uploadedFile]);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0];
       if (file) {
-        setUploadedFile(file.name);
-        setHasNewFile(true);
+        setUploadedFile(file);
+        setDisplayName(file.name);
         setExistingFileUrl(null);
+        onChange?.(file);
       }
     };
 
     const handleRemoveFile = () => {
       setUploadedFile(null);
-      setHasNewFile(false);
+      setDisplayName('');
       setExistingFileUrl(null);
-      if (ref && 'current' in ref && ref.current) {
-        ref.current.value = '';
+      onChange?.(null);
+
+      // Reset input value
+      const inputElement = document.querySelector(
+        `input[type="file"][data-label="${label}"]`,
+      ) as HTMLInputElement;
+      if (inputElement) {
+        inputElement.value = '';
       }
     };
 
@@ -73,6 +65,8 @@ export const UploadFile = forwardRef<HTMLInputElement, FormFileUploadProps>(
       }
     };
 
+    const hasFile = uploadedFile || existingFileUrl;
+
     return (
       <div className="space-y-2">
         <label className="block text-sm font-medium text-gray-900">
@@ -81,18 +75,17 @@ export const UploadFile = forwardRef<HTMLInputElement, FormFileUploadProps>(
 
         {description && <p className="text-xs text-gray-600">{description}</p>}
 
-        {uploadedFile ? (
+        {hasFile ? (
           <div className="space-y-2">
             <div className="flex max-w-full items-center justify-between gap-2 rounded-xl border border-[#BABABA4D] bg-[#FCFCFC] p-3">
               <div className="flex min-w-0 flex-1 items-center gap-2">
                 <File className="size-4 shrink-0 text-red-600" />
                 <span className="truncate text-sm text-black">
-                  {uploadedFile}
+                  {displayName}
                 </span>
               </div>
               <div className="flex items-center gap-1">
-                {/* View button for existing files */}
-                {existingFileUrl && !hasNewFile && (
+                {existingFileUrl && !uploadedFile && (
                   <button
                     type="button"
                     onClick={handleViewFile}
@@ -102,7 +95,6 @@ export const UploadFile = forwardRef<HTMLInputElement, FormFileUploadProps>(
                     <ExternalLink className="size-4" />
                   </button>
                 )}
-                {/* Remove button */}
                 <button
                   type="button"
                   onClick={handleRemoveFile}
@@ -114,18 +106,14 @@ export const UploadFile = forwardRef<HTMLInputElement, FormFileUploadProps>(
               </div>
             </div>
 
-            {/* Show indicator if it's an existing file */}
-            {existingFileUrl && !hasNewFile && (
+            {/* {existingFileUrl && !uploadedFile && (
               <p className="text-xs text-gray-500">
                 📎 File yang sudah ada (klik ikon untuk melihat)
               </p>
-            )}
+            )} */}
 
-            {/* Show indicator if it's a new file */}
-            {hasNewFile && (
-              <p className="text-xs text-green-600">
-                ✓ File baru dipilih (akan diupload saat submit)
-              </p>
+            {uploadedFile && (
+              <p className="text-xs text-green-600">File baru dipilih</p>
             )}
           </div>
         ) : (
@@ -133,9 +121,10 @@ export const UploadFile = forwardRef<HTMLInputElement, FormFileUploadProps>(
             <input
               ref={ref}
               type="file"
+              data-label={label}
               className="absolute inset-0 size-full cursor-pointer opacity-0"
               onChange={handleFileChange}
-              {...props}
+              accept="image/*,.pdf,.doc,.docx"
             />
             <div
               className={`flex w-36 cursor-pointer items-center gap-2 rounded-xl border px-3 py-2.5 transition-colors hover:bg-gray-50 ${
