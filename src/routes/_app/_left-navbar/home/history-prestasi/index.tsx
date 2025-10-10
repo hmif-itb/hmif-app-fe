@@ -7,6 +7,7 @@ import { Prestasi } from '~/api/generated';
 import SkeletonCardHistory from './-componets/SkeletonCardHistory';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '~/api/client';
+import { DEBOUNCE_TIME } from '~/lib/constants';
 
 const LIMIT = 12;
 
@@ -20,24 +21,36 @@ const prestasiOptions = ['Semua', 'Organisasi', 'Kepanitian', 'Kompetisi'];
 
 function HistoryPrestasi() {
   const [search, setSearch] = useState<string>('');
+  const [searchInput, setSearchInput] = useState<string>('');
   const [category, setCategory] = useState<
     'competition' | 'organization' | 'committee' | undefined
   >(undefined);
   const [achievements, setAchievements] = useState<Prestasi[]>([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const timeoutRef = useRef<number | null>(null);
 
   const observerRef = useRef<HTMLDivElement | null>(null);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    setSearch(e.target.value);
-    setPage(1);
-    setAchievements([]);
-    setHasMore(true);
+    const value = e.target.value;
+    setSearchInput(value);
+
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    timeoutRef.current = window.setTimeout(() => {
+      setSearch(value);
+      setPage(1);
+      setAchievements([]);
+      setHasMore(true);
+    }, DEBOUNCE_TIME);
   };
 
-  const handleCategorySelect = (value: typeof category) => {
+  const handleCategorySelect = (
+    value: 'competition' | 'organization' | 'committee' | undefined,
+  ) => {
     setCategory(value);
     setPage(1);
     setAchievements([]);
@@ -61,14 +74,23 @@ function HistoryPrestasi() {
     if (!data) return;
 
     setAchievements((prev) => {
-      if (page === 1) {
-        return data.prestasi || [];
-      }
-      return [...prev, ...(data.prestasi || [])];
-    });
+      const newAchievements =
+        page === 1 ? data.prestasi || [] : [...prev, ...(data.prestasi || [])];
 
-    setHasMore((data?.prestasi?.length || 0) === LIMIT);
+      setHasMore(newAchievements.length < (data?.total || 0));
+      return newAchievements;
+    });
   }, [data, page]);
+
+  // Infinite scroll
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   // Infinite scroll
   useEffect(() => {
@@ -104,7 +126,7 @@ function HistoryPrestasi() {
             className="w-full rounded-lg p-2 pr-10"
             type="text"
             onChange={handleSearchChange}
-            value={search}
+            value={searchInput}
             placeholder="Cari nama atau prestasi"
           />
           <img
