@@ -18,14 +18,14 @@ export default function Announce(): JSX.Element {
         onOpenChange={(open) => {
           if (open) {
             navigate({
-              search: (prev) => ({
+              search: (prev: Record<string, unknown>) => ({
                 ...prev,
                 showAnnounce: true,
               }),
             });
           } else {
             navigate({
-              search: (prev) => ({
+              search: (prev: Record<string, unknown>) => ({
                 ...prev,
                 showAnnounce: undefined,
               }),

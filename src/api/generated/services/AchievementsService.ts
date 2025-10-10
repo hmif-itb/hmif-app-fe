@@ -34,7 +34,7 @@ export class AchievementsService {
      */
     endDate?: string,
     /**
-     * Search by user full name
+     * Search by user full name or judul prestasi (penyelenggara)
      */
     search?: string,
     /**

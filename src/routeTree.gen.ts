@@ -28,6 +28,7 @@ import { Route as AppLeftNavbarSettingsSettingsItemImport } from './routes/_app/
 import { Route as AppLeftNavbarHomeTestimoniImport } from './routes/_app/_left-navbar/home/testimoni'
 import { Route as AppLeftNavbarTimelineInfoIdIndexImport } from './routes/_app/_left-navbar/timeline/$infoId/index'
 import { Route as AppLeftNavbarHomeTestimoniIndexImport } from './routes/_app/_left-navbar/home/testimoni/index'
+import { Route as AppLeftNavbarHomePrestasiIndexImport } from './routes/_app/_left-navbar/home/prestasi/index'
 import { Route as AppLeftNavbarHomeNimFinderIndexImport } from './routes/_app/_left-navbar/home/nim-finder/index'
 import { Route as AppLeftNavbarHomeHistoryPrestasiIndexImport } from './routes/_app/_left-navbar/home/history-prestasi/index'
 import { Route as AppLeftNavbarHomeDingdongIndexImport } from './routes/_app/_left-navbar/home/dingdong/index'
@@ -136,6 +137,12 @@ const AppLeftNavbarHomeTestimoniIndexRoute =
   AppLeftNavbarHomeTestimoniIndexImport.update({
     path: '/',
     getParentRoute: () => AppLeftNavbarHomeTestimoniRoute,
+  } as any)
+
+const AppLeftNavbarHomePrestasiIndexRoute =
+  AppLeftNavbarHomePrestasiIndexImport.update({
+    path: '/home/prestasi/',
+    getParentRoute: () => AppLeftNavbarRoute,
   } as any)
 
 const AppLeftNavbarHomeNimFinderIndexRoute =
@@ -353,6 +360,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppLeftNavbarHomeNimFinderIndexImport
       parentRoute: typeof AppLeftNavbarImport
     }
+    '/_app/_left-navbar/home/prestasi/': {
+      id: '/_app/_left-navbar/home/prestasi/'
+      path: '/home/prestasi'
+      fullPath: '/home/prestasi'
+      preLoaderRoute: typeof AppLeftNavbarHomePrestasiIndexImport
+      parentRoute: typeof AppLeftNavbarImport
+    }
     '/_app/_left-navbar/home/testimoni/': {
       id: '/_app/_left-navbar/home/testimoni/'
       path: '/'
@@ -456,6 +470,7 @@ export const routeTree = rootRoute.addChildren({
       AppLeftNavbarHomeDingdongIndexRoute,
       AppLeftNavbarHomeHistoryPrestasiIndexRoute,
       AppLeftNavbarHomeNimFinderIndexRoute,
+      AppLeftNavbarHomePrestasiIndexRoute,
       AppLeftNavbarTimelineInfoIdIndexRoute,
       AppLeftNavbarHomeRekomendasiRekomendasiIdIndexRoute,
       AppLeftNavbarHomeTestimoniTypeSemesterCourseIdIndexRoute,
@@ -504,6 +519,7 @@ export const routeTree = rootRoute.addChildren({
         "/_app/_left-navbar/home/dingdong/",
         "/_app/_left-navbar/home/history-prestasi/",
         "/_app/_left-navbar/home/nim-finder/",
+        "/_app/_left-navbar/home/prestasi/",
         "/_app/_left-navbar/timeline/$infoId/",
         "/_app/_left-navbar/home/rekomendasi/$rekomendasiId/",
         "/_app/_left-navbar/home/testimoni/$type/$semester/$courseId/"
@@ -587,6 +603,10 @@ export const routeTree = rootRoute.addChildren({
     },
     "/_app/_left-navbar/home/nim-finder/": {
       "filePath": "_app/_left-navbar/home/nim-finder/index.tsx",
+      "parent": "/_app/_left-navbar"
+    },
+    "/_app/_left-navbar/home/prestasi/": {
+      "filePath": "_app/_left-navbar/home/prestasi/index.tsx",
       "parent": "/_app/_left-navbar"
     },
     "/_app/_left-navbar/home/testimoni/": {
