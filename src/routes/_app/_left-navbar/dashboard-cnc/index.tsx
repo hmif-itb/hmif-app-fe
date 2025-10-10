@@ -10,10 +10,10 @@ import { ConfirmModal } from '../-dashboard-component/ConfirmModal';
 // import { Prestasi } from '~/api/generated';
 
 export const Route = createFileRoute('/_app/_left-navbar/dashboard-cnc/')({
-  component: PeopleDashboard,
+  component: CncDashboard,
 });
 
-function PeopleDashboard() {
+function CncDashboard() {
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [filterKategori, setFilterKategori] = useState<string>('all');
   const [currentPage, setCurrentPage] = useState(1);
@@ -55,7 +55,6 @@ function PeopleDashboard() {
   const total = data?.total || 0;
   const totalPages = Math.ceil(total / LIMIT);
 
-  // Filter client-side berdasarkan competitionType
   const competitionTypeMap: Record<string, string> = {
     cp: 'CP',
     ctf: 'CTF',
@@ -107,20 +106,79 @@ function PeopleDashboard() {
       setShowAlert(true);
     },
   });
-
   const handleExport = async () => {
     try {
-      const params = new URLSearchParams();
-      if (periodFilter.from) params.append('start_date', periodFilter.from);
-      if (periodFilter.to) params.append('end_date', periodFilter.to);
+      console.log('Calling exportPrestasi...');
+
+      const result = await api.achievements.exportPrestasi({
+        category: 'competition', // CNC dashboard khusus untuk competition
+        startDate: periodFilter.from || undefined,
+        endDate: periodFilter.to || undefined,
+      });
+
+      console.log('Result received, type:', typeof result);
+
+      let blob: Blob;
+
+      // Result adalah binary string, convert ke Uint8Array lalu ke Blob
+      if (typeof result === 'string') {
+        // Convert string ke array of char codes
+        const binaryString = result as string;
+        const len = binaryString.length;
+        const bytes = new Uint8Array(len);
+        for (let i = 0; i < len; i++) {
+          bytes[i] = binaryString.charCodeAt(i);
+        }
+        blob = new Blob([bytes], {
+          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        });
+      } else if (result instanceof Blob) {
+        blob = result;
+      } else if (result && typeof result === 'object') {
+        // Fallback untuk object dengan numeric keys
+        const resultObj = result as Record<string, number>;
+        const keys = Object.keys(resultObj);
+        const bytes = new Uint8Array(keys.length);
+        keys.forEach((key, index) => {
+          bytes[index] = resultObj[key];
+        });
+        blob = new Blob([bytes], {
+          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        });
+      } else {
+        throw new Error('Invalid response type from API');
+      }
+
+      console.log('Blob created:', blob.size, 'bytes');
+
+      if (blob.size === 0) {
+        throw new Error('File kosong, tidak ada data untuk diekspor');
+      }
+
+      // Create download link
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `prestasi_cnc_export_${new Date().toISOString().split('T')[0]}.xlsx`;
+      document.body.appendChild(a);
+      a.click();
+
+      // Cleanup
+      setTimeout(() => {
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+      }, 100);
 
       setAlertType('success');
       setAlertMessage('Data berhasil diekspor');
       setShowAlert(true);
     } catch (err) {
       console.error('Export error:', err);
+
       setAlertType('error');
-      setAlertMessage('Gagal mengekspor data');
+      setAlertMessage(
+        `Gagal mengekspor data: ${err instanceof Error ? err.message : 'Unknown error'}`,
+      );
       setShowAlert(true);
     }
   };

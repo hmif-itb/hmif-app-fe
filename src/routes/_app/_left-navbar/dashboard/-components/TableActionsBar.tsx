@@ -16,8 +16,6 @@ type TableActionsBarProps = {
   filterJenis: string;
   onFilterChange: (value: string) => void;
   onPeriodChange?: (from: string, to: string) => void;
-  onSearchChange?: (value: string) => void; // Add search handler
-  search?: string; // Add search value
 };
 
 const jenisPrestasiOptions: DropdownOption[] = [
@@ -32,18 +30,15 @@ export const TableActionsBar = ({
   onSelectAll,
   allSelected,
   onExport,
-  onBulkChange,
   onDelete,
   filterJenis,
   onFilterChange,
   onPeriodChange,
-  onSearchChange,
-  search,
 }: TableActionsBarProps) => {
   return (
     <div className="flex flex-col justify-between gap-4 bg-[#FFFFFF] py-4 pl-3 md:flex-row md:items-center lg:pl-4">
       <div className="order-2 flex flex-wrap items-center gap-2 md:order-1">
-        <div className="relative w-full md:w-auto">
+        {/* <div className="relative w-full md:w-auto">
           <input
             className="w-full rounded-lg border border-gray-300 p-2 pr-10 md:w-64"
             type="text"
@@ -65,7 +60,7 @@ export const TableActionsBar = ({
               d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
             />
           </svg>
-        </div>
+        </div> */}
         <button
           onClick={onDelete}
           className="flex items-center gap-1.5 rounded-full border border-black px-2 py-1.5 font-inter text-xs font-medium hover:bg-gray-50 md:gap-2 md:px-3 md:py-2 md:text-sm"
