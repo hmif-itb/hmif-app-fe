@@ -17,6 +17,7 @@ export class AchievementsService {
     category,
     startDate,
     endDate,
+    search,
     page = 1,
     limit = 10,
   }: {
@@ -32,6 +33,10 @@ export class AchievementsService {
      * End date filter (YYYY-MM format)
      */
     endDate?: string,
+    /**
+     * Search by user full name or judul prestasi (penyelenggara)
+     */
+    search?: string,
     /**
      * Page number
      */
@@ -51,6 +56,7 @@ export class AchievementsService {
         'category': category,
         'start_date': startDate,
         'end_date': endDate,
+        'search': search,
         'page': page,
         'limit': limit,
       },
