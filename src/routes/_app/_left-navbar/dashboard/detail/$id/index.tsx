@@ -169,7 +169,7 @@ function DetailPrestasi() {
         <div className="mb-8 flex items-center gap-4 p-2 lg:relative lg:-left-4">
           <button
             onClick={goBack}
-            className="text-white transition-colors hover:text-yellow-200"
+            className="text-white transition-all duration-300 hover:-translate-x-1"
           >
             <ChevronLeft className="hidden lg:block" size={54} />
             <ChevronLeft size={24} className="block lg:hidden" />

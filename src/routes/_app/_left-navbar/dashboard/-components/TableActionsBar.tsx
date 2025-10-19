@@ -1,10 +1,11 @@
 import { CheckCheck, Download, Trash2 } from 'lucide-react';
 import * as ToggleGroup from '@radix-ui/react-toggle-group';
-import { DatePeriodPicker } from '../../-dashboard-component/DatePeriodPicker';
+import { DropdownCalendar } from '../../home/prestasi/-components/monthly-calendar';
 import {
   KategoriDropdown,
   DropdownOption,
 } from '../../-dashboard-component/KategoriDropdown';
+import { useState } from 'react';
 
 type TableActionsBarProps = {
   selectedCount: number;
@@ -35,6 +36,24 @@ export const TableActionsBar = ({
   onFilterChange,
   onPeriodChange,
 }: TableActionsBarProps) => {
+  const [selectedPeriod, setSelectedPeriod] = useState('');
+
+  const handlePeriodSelect = (month: string, year: number) => {
+    const periodText = `${month} ${year}`;
+    setSelectedPeriod(periodText);
+    
+    const monthMap: Record<string, number> = {
+      'Januari': 1, 'Februari': 2, 'Maret': 3, 'April': 4, 'Mei': 5, 'Juni': 6,
+      'Juli': 7, 'Agustus': 8, 'September': 9, 'Oktober': 10, 'November': 11, 'Desember': 12
+    };
+    
+    const monthNum = monthMap[month];
+    const formattedDate = `${monthNum.toString().padStart(2, '0')}/${year}`;
+    
+    if (onPeriodChange) {
+      onPeriodChange(formattedDate, formattedDate);
+    }
+  };
   return (
     <div className="flex flex-col justify-between gap-4 bg-[#FFFFFF] py-4 pl-3 md:flex-row md:items-center lg:pl-4">
       <div className="order-2 flex flex-wrap items-center gap-2 md:order-1">
@@ -104,8 +123,10 @@ export const TableActionsBar = ({
         <span className="hidden font-inter text-sm font-medium lg:block">
           filter:
         </span>
-        <DatePeriodPicker
-          onPeriodChange={onPeriodChange}
+        <DropdownCalendar
+          placeholder="Pilih Periode"
+          onSelect={handlePeriodSelect}
+          value={selectedPeriod}
           className="order-1 lg:relative lg:-right-52 lg:order-2"
         />
         <ToggleGroup.Root

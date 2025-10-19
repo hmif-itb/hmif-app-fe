@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { api, queryClient } from '~/api/client';
@@ -14,6 +14,7 @@ export const Route = createFileRoute('/_app/_left-navbar/dashboard-cnc/')({
 });
 
 function CncDashboard() {
+  const navigate = useNavigate();
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [filterKategori, setFilterKategori] = useState<string>('all');
   const [currentPage, setCurrentPage] = useState(1);
@@ -32,7 +33,7 @@ function CncDashboard() {
 
   const LIMIT = 10;
 
-  // Fetch achievements
+  // Fetch achievements (only compe type)
   const { data, isLoading, error } = useQuery({
     queryKey: [
       'achievements-cnc',
@@ -43,6 +44,7 @@ function CncDashboard() {
     ],
     queryFn: async () =>
       api.achievements.getListPrestasi({
+        category: 'competition', // Only compe
         startDate: periodFilter.from || undefined,
         endDate: periodFilter.to || undefined,
         page: currentPage,
@@ -111,7 +113,7 @@ function CncDashboard() {
       console.log('Calling exportPrestasi...');
 
       const result = await api.achievements.exportPrestasi({
-        category: 'competition', // CNC dashboard khusus untuk competition
+        category: 'competition', // valid compe
         startDate: periodFilter.from || undefined,
         endDate: periodFilter.to || undefined,
       });
@@ -257,8 +259,8 @@ function CncDashboard() {
         <div className="relative z-40 px-4 py-12">
           <div className="max-w-7xl">
             <div className="flex items-center space-x-4">
-              <button className="text-white transition-colors hover:text-gray-200">
-                <ChevronLeft className="hidden lg:block" size={54} />
+              <button className="text-white transition-all duration-300 hover:-translate-x-1">
+                <ChevronLeft className="hidden lg:block" size={54} onClick = {() => navigate({ to: '/home' })}/>
                 <ChevronLeft size={24} className="block lg:hidden" />
               </button>
               <h1 className="text-3xl font-bold text-white lg:text-5xl">

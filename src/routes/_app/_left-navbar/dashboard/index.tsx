@@ -7,14 +7,14 @@ import { Alert } from '../-dashboard-component/ALert';
 import { ChevronLeft } from 'lucide-react';
 import { ConfirmModal } from '../-dashboard-component/ConfirmModal';
 // import { Prestasi } from '~/api/generated';
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/_app/_left-navbar/dashboard/')({
   component: PeopleDashboard,
 });
 
 function PeopleDashboard() {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [filterJenis, setFilterJenis] = useState<string>('all');
   const [periodFilter, setPeriodFilter] = useState<{
@@ -231,8 +231,8 @@ function PeopleDashboard() {
         <div className="relative z-40 px-4 py-12">
           <div className="max-w-7xl">
             <div className="flex items-center space-x-4">
-              <button className="text-white transition-colors hover:text-gray-200">
-                <ChevronLeft className="hidden lg:block" size={54} />
+              <button className="text-white transition-all duration-300 hover:-translate-x-1">
+                <ChevronLeft className="hidden lg:block" size={54} onClick={() => navigate({ to: '/home' })}/>
                 <ChevronLeft size={24} className="block lg:hidden" />
               </button>
               <h1 className="text-3xl font-bold text-white lg:text-5xl">

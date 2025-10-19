@@ -1,11 +1,12 @@
 import { Calendar, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface DropdownCalendarProps {
   placeholder?: string;
   onSelect?: (month: string, year: number) => void;
   className?: string;
   disabled?: boolean;
+  value?: string; // Initial value prop (format: "Month Year")
 }
 
 export function DropdownCalendar({
@@ -13,10 +14,23 @@ export function DropdownCalendar({
   onSelect,
   className = '',
   disabled = false,
+  value = '',
 }: DropdownCalendarProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedValue, setSelectedValue] = useState('');
+  const [selectedValue, setSelectedValue] = useState(value);
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear()); // Curr Year sekarang
+
+  // Update selectedValue when value prop changes
+  useEffect(() => {
+    setSelectedValue(value);
+    // Extract year from value if provided
+    if (value) {
+      const yearMatch = value.match(/\d{4}$/);
+      if (yearMatch) {
+        setCurrentYear(parseInt(yearMatch[0]));
+      }
+    }
+  }, [value]);
 
   // Bulan untuk disimpan
   const months = [
