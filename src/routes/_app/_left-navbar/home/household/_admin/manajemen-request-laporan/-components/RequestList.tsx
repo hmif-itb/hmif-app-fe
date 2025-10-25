@@ -1,6 +1,6 @@
 import React from 'react';
 import { RequestItem } from './RequestItem';
-import { RequestData } from '../-api';
+import { RequestData } from '../../../-types';
 import { FilterOptions } from './FilterModal';
 
 interface RequestListProps {
@@ -23,7 +23,7 @@ function RequestList({
 
     // Filter by search term (search in name, item, and reason)
     const matchesSearch =
-      request.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      request.borrowerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (request.item &&
         request.item.toLowerCase().includes(searchTerm.toLowerCase())) ||
       (request.reason &&

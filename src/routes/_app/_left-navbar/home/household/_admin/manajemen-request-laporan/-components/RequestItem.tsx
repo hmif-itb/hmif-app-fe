@@ -1,22 +1,10 @@
 import { useState } from 'react';
+import { RequestData } from '../../../-types';
 import { ChevronDown, X } from 'lucide-react';
 import Avatar from '~/components/user/avatar';
 import ConfirmationModal from './ConfirmationModal';
 import Status, { StatusType } from './Status';
-
-interface RequestData {
-  id: number;
-  name: string;
-  profilePicture?: string;
-  startDate: string;
-  endDate: string;
-  status: string;
-  item?: string;
-  borrowTime?: string;
-  quantity?: number;
-  type?: string;
-  reason?: string;
-}
+import { useUpdateRequestStatus } from '~/hooks/household';
 
 interface PeminjamanItemProps {
   request: RequestData;
@@ -33,8 +21,11 @@ export function RequestItem({ request }: PeminjamanItemProps) {
     type: null,
   });
 
-  const getInitials = (name: string) => {
-    return name
+  // 2. INISIASI HOOK MUTASI
+  const updateStatusMutation = useUpdateRequestStatus();
+
+  const getInitials = (borrowerName: string) => {
+    return borrowerName
       .split(' ')
       .map((n) => n[0])
       .join('')
@@ -51,13 +42,39 @@ export function RequestItem({ request }: PeminjamanItemProps) {
 
   const handleConfirm = () => {
     if (modalState.type === 'approve') {
-      console.log('Approved request:', request.id);
-      setCurrentStatus('accepted');
-      // TODO: Call API to update status in backend
-    } else {
-      console.log('Rejected request:', request.id);
-      setCurrentStatus('rejected');
-      // TODO: Call API to update status in backend
+      console.log('Approving request:', request.id);
+      updateStatusMutation.mutate(
+        {
+          peminjamanId: request.id,
+          data: { status: 'accepted' },
+        },
+        {
+          onSuccess: () => {
+            // Update status di UI secara lokal untuk respons instan
+            setCurrentStatus('accepted');
+          },
+          onError: (error) => {
+            // (Opsional) Tampilkan notifikasi error
+            console.error('Gagal menyetujui request:', error);
+          },
+        },
+      );
+    } else if (modalState.type === 'reject') {
+      console.log('Rejecting request:', request.id);
+      updateStatusMutation.mutate(
+        {
+          peminjamanId: request.id,
+          data: { status: 'rejected' },
+        },
+        {
+          onSuccess: () => {
+            setCurrentStatus('rejected');
+          },
+          onError: (error) => {
+            console.error('Gagal menolak request:', error);
+          },
+        },
+      );
     }
   };
 
@@ -82,12 +99,12 @@ export function RequestItem({ request }: PeminjamanItemProps) {
               ) : (
                 <div className="flex size-9 min-h-9 min-w-9 items-center justify-center rounded-full bg-amber-600 transition-transform duration-200 ">
                   <span className="text-[14px] font-semibold text-white lg:text-base">
-                    {getInitials(request.name)}
+                    {getInitials(request.borrowerName)}
                   </span>
                 </div>
               )}
               <div>
-                <h3 className="font-semibold text-black">{request.name}</h3>
+                <h3 className="font-semibold text-black">{request.borrowerName}</h3>
                 <p className="flex flex-col text-[12px] text-[#525352] lg:flex-row lg:gap-2 lg:text-sm">
                   <span>Mulai: {request.startDate}</span>
                   <span>Selesai: {request.endDate}</span>
@@ -112,7 +129,7 @@ export function RequestItem({ request }: PeminjamanItemProps) {
           {/* Expanded Content with Smooth Transition */}
           <div
             className={`overflow-hidden transition-all duration-500 ease-in-out ${
-              isExpanded ? 'opacity-100' : 'max-h-0 opacity-0'
+              isExpanded ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
             }`}
           >
             {request.item && (
@@ -185,7 +202,7 @@ export function RequestItem({ request }: PeminjamanItemProps) {
           onConfirm={handleConfirm}
           type={modalState.type}
           requestData={{
-            name: request.name,
+            borrowerName: request.borrowerName,
             item: request.item || '',
             reason: request.reason || '',
             startDate: request.startDate,

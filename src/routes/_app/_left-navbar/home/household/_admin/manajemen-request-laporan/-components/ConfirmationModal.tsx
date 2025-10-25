@@ -7,7 +7,7 @@ interface ConfirmationModalProps {
   onConfirm: () => void;
   type: 'approve' | 'reject';
   requestData: {
-    name: string;
+    borrowerName: string;
     item: string;
     reason: string;
     startDate: string;
@@ -97,7 +97,7 @@ export default function ConfirmationModal({
 
         {/* Details */}
         <p className="mb-6 text-center text-gray-500">
-          {requestData.item} oleh {requestData.name}
+          {requestData.item} oleh {requestData.borrowerName}
           <br />
           untuk {requestData.reason} pada {requestData.startDate} -{' '}
           {requestData.endDate}?

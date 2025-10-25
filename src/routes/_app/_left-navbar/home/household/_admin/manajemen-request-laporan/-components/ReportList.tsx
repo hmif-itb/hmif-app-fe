@@ -1,6 +1,6 @@
 import React from 'react';
 import { ReportItem } from './ReportItem';
-import { ReportData } from '../-api';
+import { ReportData } from '../../../-types';
 import { FilterOptions } from './FilterModal';
 
 interface ReportListProps {
@@ -23,7 +23,7 @@ function ReportList({
 
     // Filter by search term (search in name and report content)
     const matchesSearch =
-      report.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      report.borrowerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (report.reportContent &&
         report.reportContent.toLowerCase().includes(searchTerm.toLowerCase()));
 

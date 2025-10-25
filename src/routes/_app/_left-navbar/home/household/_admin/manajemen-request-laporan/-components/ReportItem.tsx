@@ -1,17 +1,7 @@
 import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
+import { ReportData } from '../../../-types';
 import Avatar from '~/components/user/avatar';
-
-interface ReportData {
-  id: number;
-  name: string;
-  profilePicture?: string;
-  startDate: string;
-  endDate: string;
-  status: string;
-  reportContent?: string;
-  photo?: string;
-}
 
 interface ReportItemProps {
   request: ReportData;
@@ -41,13 +31,13 @@ export function ReportItem({ request }: ReportItemProps) {
             ) : (
               <div className="flex size-9 min-h-9 min-w-9 items-center justify-center rounded-full bg-amber-600 transition-transform duration-200 ">
                 <span className="text-[14px] font-semibold text-white lg:text-base">
-                  {getInitials(request.name)}
+                  {getInitials(request.borrowerName)}
                 </span>
               </div>
             )}
 
             <div>
-              <h3 className="font-semibold text-black">{request.name}</h3>
+              <h3 className="font-semibold text-black">{request.borrowerName}</h3>
               <p className="text-sm text-[#525352]">{request.startDate}</p>
             </div>
           </div>

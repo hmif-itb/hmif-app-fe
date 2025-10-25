@@ -1,5 +1,5 @@
-import { createFileRoute, redirect } from '@tanstack/react-router';
-import { useState, useEffect } from 'react';
+import { createFileRoute } from '@tanstack/react-router';
+import { useState, useEffect, useMemo } from 'react';
 import { Button } from '~/components/ui/button';
 import { ChevronLeft } from 'lucide-react';
 import { useRouter } from '@tanstack/react-router';
@@ -8,26 +8,11 @@ import RequestList from './-components/RequestList';
 import ReportList from './-components/ReportList';
 import { SwitchToggle } from './-components/Switch';
 import { FilterOptions } from './-components/FilterModal';
-import { fetchRequestsAndReports, RequestData, ReportData } from './-api';
-import { isInRoles } from '~/lib/roles';
-import { loadUserCache } from '~/lib/session';
-
+import { useGetRequestList, useGetLaporanList } from '~/hooks/household';
 export const Route = createFileRoute(
   '/_app/_left-navbar/home/household/_admin/manajemen-request-laporan/',
 )({
   component: HouseholdAdminPage,
-  //   loader: () => {
-  //     if (!loadUserCache!()) {
-  //       throw redirect({ to: '/home/household' });
-  //     }
-  //     if (loadUserCache()) {
-  //       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  //       // @ts-expect-error
-  //       if (!isInRoles(loadUserCache(), ['household'])) {
-  //         throw redirect({ to: '/home/household' });
-  //       }
-  //     }
-  //   },
 });
 
 function HouseholdAdminPage() {
@@ -36,43 +21,57 @@ function HouseholdAdminPage() {
   const [isMobile, setIsMobile] = useState(false);
   const [filter, setFilter] = useState<FilterOptions>({ category: 'all' });
   const [searchTerm, setSearchTerm] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-
-  // Data states
-  const [requestData, setRequestData] = useState<RequestData[]>([]);
-  const [reportData, setReportData] = useState<ReportData[]>([]);
 
   useEffect(() => {
     const checkIfMobile = () => {
       setIsMobile(window.innerWidth < 1024);
     };
-
     checkIfMobile();
     window.addEventListener('resize', checkIfMobile);
-
     return () => window.removeEventListener('resize', checkIfMobile);
   }, []);
 
-  // Fetch data on component mount
-  useEffect(() => {
-    const loadData = async () => {
-      setIsLoading(true);
-      try {
-        const { requests, reports } = await fetchRequestsAndReports();
-        setRequestData(requests);
-        setReportData(reports);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      } finally {
-        setIsLoading(false);
-      }
+  const queryFilters = useMemo(() => {
+    return {
+      category:
+        filter.category === 'all'
+          ? undefined
+          : (filter.category as 'sekre' | 'properti'),
     };
+  }, [filter.category]);
 
-    loadData();
-  }, []);
+  const { data: requestData = [], isLoading: isLoadingRequests } =
+    useGetRequestList(queryFilters);
+  const { data: reportData = [], isLoading: isLoadingReports } =
+    useGetLaporanList(queryFilters);
+
+    const mappedRequestData = useMemo(() => {
+      return (requestData || []).map((item) => ({
+        ...item,
+        item: item.properti?.name,
+        category: item.properti?.category,
+        quantity: item.properti?.quantity, 
+        reason: item.alasan ?? undefined,
+        type: item.jenisPeminjaman,
+        borrowTime: item.createdAt ?? undefined
+      }));
+    }, [requestData]);
+
+    const mappedReportData = useMemo(() => {
+      return (reportData || []).map((item) => ({
+        ...item,
+        borrowerName: item.pelapor?.fullName ?? "Unknown",
+        startDate: item.properti?.createdAt ?? "",
+        endDate: item.createdAt ?? "",
+        category: item.properti?.category ?? "General",
+        reportContent: item.deskripsi,
+        photo: item.fotoUrl ?? undefined,
+      }));
+    }, [reportData]);
+
+  const isLoading = isLoadingRequests || isLoadingReports;
 
   const handleSwitchChange = (value: string) => {
-    console.log('Selected:', value);
     setActiveView(value);
   };
 
@@ -84,6 +83,10 @@ function HouseholdAdminPage() {
     setSearchTerm(newSearchTerm);
   };
 
+
+
+  
+
   const renderContent = () => {
     switch (activeView) {
       case 'Request':
@@ -91,7 +94,7 @@ function HouseholdAdminPage() {
           <RequestList
             filter={filter}
             searchTerm={searchTerm}
-            data={requestData}
+            data={mappedRequestData}
             isLoading={isLoading}
           />
         );
@@ -100,7 +103,7 @@ function HouseholdAdminPage() {
           <ReportList
             filter={filter}
             searchTerm={searchTerm}
-            data={reportData}
+            data={mappedReportData}
             isLoading={isLoading}
           />
         );
@@ -109,7 +112,7 @@ function HouseholdAdminPage() {
           <ReportList
             filter={filter}
             searchTerm={searchTerm}
-            data={reportData}
+            data={mappedReportData}
             isLoading={isLoading}
           />
         );
@@ -132,7 +135,6 @@ function HouseholdAdminPage() {
 
   return (
     <div className="flex h-full flex-col lg:px-10 lg:pb-[60px]">
-      {/* Back Button */}
       <Button
         variant="link"
         className="my-6 hidden w-full justify-start gap-8 p-0 text-3xl font-medium lg:flex"
