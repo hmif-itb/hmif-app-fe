@@ -36,7 +36,7 @@ export function PropertyItem({ item }: PropertyItemProps) {
             <h3 className="text-base font-semibold text-black">{item.name}</h3>
             <div className="flex items-center gap-7 text-xs text-[#525352]">
               <span className="rounded-full bg-[#AAB8AD] px-3 py-1 text-[#1D3122]">
-                {item.condition === 'new' ? 'Baik' : 'Rusak'}
+                {item.condition === 'good' ? 'Baik' : 'Rusak'}
               </span>
               <span>{item.amount} Tersedia</span>
               <span className="flex items-center gap-1">
@@ -107,7 +107,7 @@ export function PropertyItem({ item }: PropertyItemProps) {
                   <span className="text-sm font-medium ">Kondisi:</span>
                   <br />
                   <span className="text-xs">
-                    {item.condition === 'new' ? 'Baik' : 'Rusak'}
+                    {item.condition === 'good' ? 'Baik' : 'Rusak'}
                   </span>
                 </div>
                 {/* Lokasi */}

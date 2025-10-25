@@ -1,12 +1,6 @@
 import { X, ChevronDown } from 'lucide-react';
 import { useState, useRef, DragEvent } from 'react';
-
-export interface SekreFormData {
-  name: string;
-  condition: 'new' | 'used';
-  location: string;
-  photo?: string;
-}
+import { SekreFormData } from '../../../-types';
 
 interface EditSekreModalProps {
   isOpen: boolean;
@@ -130,7 +124,7 @@ export function EditSekreModal({
                 onChange={(e) =>
                   setFormData({
                     ...formData,
-                    condition: e.target.value as 'new' | 'used',
+                    condition: e.target.value as 'good' | 'broken' | 'cant_be_used' | 'lost'
                   })
                 }
                 className="w-full appearance-none rounded-lg border border-gray-300 px-4 py-3 pr-10 text-sm focus:border-gray-400 focus:outline-none"
