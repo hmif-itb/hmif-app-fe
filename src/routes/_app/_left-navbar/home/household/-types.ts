@@ -54,3 +54,23 @@ export interface ReportData {
   photo?: string;
   category: 'sekre' | 'properti';
 }
+
+export interface EventType {
+  user: string;
+  title: string;
+  type: 'sekre' | 'properti';
+  start_time: Date;
+}
+
+export interface PeminjamanItemData {
+  id: string;
+  name: string;
+  item: string;
+  startDate: string;
+  endDate: string;
+}
+
+interface HouseholdData {
+  events: EventType[];
+  peminjamanItems: PeminjamanItemData[];
+}

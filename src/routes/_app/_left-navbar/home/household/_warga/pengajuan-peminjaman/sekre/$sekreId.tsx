@@ -1,74 +1,37 @@
-import { createFileRoute, redirect } from '@tanstack/react-router';
+import { createFileRoute } from '@tanstack/react-router';
 import { useState, useEffect } from 'react';
 import { Button } from '~/components/ui/button';
 import { ChevronLeft } from 'lucide-react';
 import { useRouter } from '@tanstack/react-router';
-import { isInRoles } from '~/lib/roles';
-import { loadUserCache } from '~/lib/session';
 import { SekreLoanForm } from '../-components/SekreForm';
-import { SekreData, fetchSekreById } from '../-api';
+import { useGetPropertiById } from '~/hooks/household';
 
 export const Route = createFileRoute(
   '/_app/_left-navbar/home/household/_warga/pengajuan-peminjaman/sekre/$sekreId',
 )({
   component: SekreDetailPage,
-  //   loader: () => {
-  //     if (!loadUserCache!()) {
-  //       throw redirect({ to: '/home/household' });
-  //     }
-  //     if (loadUserCache()) {
-  //       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  //       // @ts-expect-error
-  //       if (!isInRoles(loadUserCache(), ['household'])) {
-  //         throw redirect({ to: '/home/household' });
-  //       }
-  //     }
-  //   },
 });
 
 function SekreDetailPage() {
   const router = useRouter();
   const { sekreId } = Route.useParams();
   const [isMobile, setIsMobile] = useState(false);
-  const [sekreData, setSekreData] = useState<SekreData | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+
+  const {
+    data: sekreData,
+    isLoading,
+    isError,
+    error,
+  } = useGetPropertiById(sekreId);
 
   useEffect(() => {
     const checkIfMobile = () => {
       setIsMobile(window.innerWidth < 1024);
     };
-
     checkIfMobile();
     window.addEventListener('resize', checkIfMobile);
-
     return () => window.removeEventListener('resize', checkIfMobile);
   }, []);
-
-  // Fetch sekre data
-  useEffect(() => {
-    const loadSekreData = async () => {
-      setIsLoading(true);
-      setError(null);
-      try {
-        const sekre = await fetchSekreById(sekreId);
-        if (sekre) {
-          setSekreData(sekre);
-        } else {
-          setError('Sekre tidak ditemukan');
-        }
-      } catch (error) {
-        console.error('Error fetching sekre:', error);
-        setError('Gagal memuat data sekre');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    if (sekreId) {
-      loadSekreData();
-    }
-  }, [sekreId]);
 
   const mobileStyles = {
     backgroundImage: `url('/img/household/mask-mobile.svg')`,
@@ -110,13 +73,17 @@ function SekreDetailPage() {
       );
     }
 
-    if (error || !sekreData) {
+    if (isError || !sekreData) {
       return (
         <div className="flex w-full flex-col items-center justify-center gap-4 rounded-lg bg-white px-[30px] py-[34px]">
           <div className="text-center">
-            <h2 className="text-xl font-semibold text-red-600">{error}</h2>
+            <h2 className="text-xl font-semibold text-red-600">
+              {isError ? 'Gagal memuat data sekre' : 'Sekre tidak ditemukan'}
+            </h2>
             <p className="mt-2 text-gray-600">
-              Sekre yang Anda cari tidak tersedia atau telah dihapus.
+              {isError
+                ? error.message
+                : 'Sekre yang Anda cari tidak tersedia atau telah dihapus.'}
             </p>
           </div>
           <Button
@@ -129,8 +96,7 @@ function SekreDetailPage() {
       );
     }
 
-    // Check if sekre is available for booking
-    if (sekreData.status === 'unavailable') {
+    if (sekreData.status === 'in_use') {
       return (
         <div className="flex w-full flex-col items-center justify-center gap-4 rounded-lg bg-white px-[30px] py-[34px]">
           <div className="text-center">
@@ -156,7 +122,6 @@ function SekreDetailPage() {
 
   return (
     <div className="flex h-full flex-col lg:px-10 lg:pb-[60px]">
-      {/* Back Button */}
       <Button
         variant="link"
         className="my-6 hidden w-full justify-start gap-8 p-0 text-3xl font-medium lg:flex"

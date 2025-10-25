@@ -94,7 +94,6 @@ function HouseholdPage() {
       handleMonthChange(selectedMonth + 1, selectedYear);
     }
   };
-
   return (
     <div className="flex h-full flex-col md:px-10 md:pb-[60px]">
       {/* Back Button */}

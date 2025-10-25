@@ -6,7 +6,8 @@ import type {
   CreatePropertiBodySchema,
   UpdatePropertiBodySchema,
   UpdatePeminjamanStatusSchema,
-  UpdateLaporanStatusSchema
+  UpdateLaporanStatusSchema,
+  CreatePengajuanBodySchema,
 } from '~/api/generated';
 import { z } from 'zod';
 
@@ -77,12 +78,22 @@ const PROPERTI_KEYS = {
   all: ['properti'] as const,
   lists: () => [...PROPERTI_KEYS.all, 'list'] as const,
   list: (filters: GetPropertiParams) => [...PROPERTI_KEYS.lists(), filters] as const,
+  details: () => [...PROPERTI_KEYS.all, 'detail'] as const,
+  detail: (id: string) => [...PROPERTI_KEYS.details(), id] as const,
 };
 
 export function useGetPropertiList(filters: GetPropertiParams) {
   return useQuery({
     queryKey: PROPERTI_KEYS.list(filters),
     queryFn: () => api.manajemenProperti.getPropertiList(filters),
+  });
+}
+
+export function useGetPropertiById(propertiId: string) {
+  return useQuery({
+    queryKey: PROPERTI_KEYS.detail(propertiId),
+    queryFn: () => api.manajemenProperti.getPropertiById({ propertiId }),
+    enabled: !!propertiId,
   });
 }
 
@@ -172,6 +183,33 @@ export function useUpdateLaporanStatus() {
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: REQ_LAPORAN_KEYS.laporan() });
+    },
+  });
+}
+
+/* -------------------- Pengajuan Peminjaman Warga -------------------- */
+
+const PENGAJUAN_KEYS = {
+  all: ['pengajuan'] as const,
+  lists: () => [...PENGAJUAN_KEYS.all, 'lists'] as const,
+  list: (filters: GetPropertiParams) => [...PENGAJUAN_KEYS.lists(), filters] as const,
+};
+
+export function useGetWargaPropertiList(filters: GetPropertiParams) {
+  return useQuery({
+    queryKey: PENGAJUAN_KEYS.list(filters),
+    queryFn: () => api.pengajuanPeminjaman.getWargaPropertiList(filters),
+    enabled: !!filters.category,
+  });
+}
+
+export function useCreatePengajuan() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: CreatePengajuanBodySchema) =>
+      api.pengajuanPeminjaman.createPengajuan({ requestBody: data }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: PENGAJUAN_KEYS.lists() });
     },
   });
 }

@@ -1,5 +1,5 @@
-import { createFileRoute, redirect } from '@tanstack/react-router';
-import { useState, useEffect } from 'react';
+import { createFileRoute } from '@tanstack/react-router';
+import { useState, useEffect, useMemo } from 'react';
 import { Button } from '~/components/ui/button';
 import { ChevronLeft } from 'lucide-react';
 import { useRouter } from '@tanstack/react-router';
@@ -8,72 +8,57 @@ import PropertyList from './-components/PropertyList';
 import SekreList from './-components/SekreList';
 import { SwitchToggle } from './-components/Switch';
 import { FilterOptions } from './-components/FilterModal';
-import { isInRoles } from '~/lib/roles';
-import { loadUserCache } from '~/lib/session';
-import { fetchAllPeminjamanData, PropertyData, SekreData } from './-api';
+import { useGetWargaPropertiList } from '~/hooks/household';
 
 export const Route = createFileRoute(
   '/_app/_left-navbar/home/household/_warga/pengajuan-peminjaman/',
 )({
   component: HouseholdPeminjamanPage,
-  //   loader: () => {
-  //     if (!loadUserCache!()) {
-  //       throw redirect({ to: '/home/household' });
-  //     }
-  //     if (loadUserCache()) {
-  //       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  //       // @ts-expect-error
-  //       if (!isInRoles(loadUserCache(), ['household'])) {
-  //         throw redirect({ to: '/home/household' });
-  //       }
-  //     }
-  //   },
 });
 
 function HouseholdPeminjamanPage() {
   const router = useRouter();
-  const [activeView, setActiveView] = useState('Properti');
+  const [activeView, setActiveView] = useState<'Properti' | 'Sekre'>('Properti');
   const [isMobile, setIsMobile] = useState(false);
   const [filter, setFilter] = useState<FilterOptions>({ condition: 'all' });
   const [searchTerm, setSearchTerm] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-
-  // Data States
-  const [propertyData, setPropertyData] = useState<PropertyData[]>([]);
-  const [sekreData, setSekreData] = useState<SekreData[]>([]);
 
   useEffect(() => {
     const checkIfMobile = () => {
       setIsMobile(window.innerWidth < 1024);
     };
-
     checkIfMobile();
     window.addEventListener('resize', checkIfMobile);
-
     return () => window.removeEventListener('resize', checkIfMobile);
   }, []);
 
-  // Fetch data on component mount
-  useEffect(() => {
-    const loadData = async () => {
-      setIsLoading(true);
-      try {
-        const { properties, sekre } = await fetchAllPeminjamanData();
-        setPropertyData(properties);
-        setSekreData(sekre);
-      } catch (error) {
-        console.error('Error fetching peminjaman data:', error);
-      } finally {
-        setIsLoading(false);
-      }
+  const queryFilters = useMemo(() => {
+    const conditionMap = {
+      new: 'good',
+      broken: 'broken',
+      hilang: 'lost',
+      cantBeUsed: 'cant_be_used'
     };
+    return {
+      search: searchTerm,
+      category: activeView.toLowerCase() as 'properti' | 'sekre',
+      condition:
+        filter.condition === 'all'
+          ? undefined
+          : (conditionMap[filter.condition as keyof typeof conditionMap] as
+              | 'good'
+              | 'broken'
+              | 'lost'
+              | 'cant_be_used'
+              | undefined),
+      sortBy: 'name_asc' as 'name_asc' | 'name_desc',
+    };
+  }, [searchTerm, activeView, filter.condition]);
 
-    loadData();
-  }, []);
+  const { data: propertiList = [], isLoading } = useGetWargaPropertiList(queryFilters);
 
   const handleSwitchChange = (value: string) => {
-    console.log('Selected:', value);
-    setActiveView(value);
+    setActiveView(value as 'Properti' | 'Sekre');
   };
 
   const handleFilterChange = (newFilter: FilterOptions) => {
@@ -91,7 +76,7 @@ function HouseholdPeminjamanPage() {
           <PropertyList
             filter={filter}
             searchTerm={searchTerm}
-            data={propertyData}
+            data={propertiList}
             isLoading={isLoading}
           />
         );
@@ -100,7 +85,7 @@ function HouseholdPeminjamanPage() {
           <SekreList
             filter={filter}
             searchTerm={searchTerm}
-            data={sekreData}
+            data={propertiList}
             isLoading={isLoading}
           />
         );
@@ -109,7 +94,7 @@ function HouseholdPeminjamanPage() {
           <PropertyList
             filter={filter}
             searchTerm={searchTerm}
-            data={propertyData}
+            data={propertiList}
             isLoading={isLoading}
           />
         );
@@ -132,7 +117,6 @@ function HouseholdPeminjamanPage() {
 
   return (
     <div className="flex h-full flex-col lg:px-10 lg:pb-[60px]">
-      {/* Back Button */}
       <Button
         variant="link"
         className="my-6 hidden w-full justify-start gap-8 p-0 text-3xl font-medium lg:flex"

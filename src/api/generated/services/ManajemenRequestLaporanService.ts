@@ -31,6 +31,7 @@ export class ManajemenRequestLaporanService {
       photo: string | null;
       createdAt: string;
       updatedAt: string;
+      status: 'in_use' | 'available';
     };
     createdAt: string | null;
   })>> {
@@ -66,6 +67,7 @@ export class ManajemenRequestLaporanService {
       photo: string | null;
       createdAt: string;
       updatedAt: string;
+      status: 'in_use' | 'available';
     };
     createdAt: string | null;
   })> {
@@ -110,6 +112,7 @@ export class ManajemenRequestLaporanService {
       photo: string | null;
       createdAt: string;
       updatedAt: string;
+      status: 'in_use' | 'available';
     };
     pelapor: {
       id: string;
@@ -154,6 +157,7 @@ export class ManajemenRequestLaporanService {
       photo: string | null;
       createdAt: string;
       updatedAt: string;
+      status: 'in_use' | 'available';
     };
     pelapor: {
       id: string;

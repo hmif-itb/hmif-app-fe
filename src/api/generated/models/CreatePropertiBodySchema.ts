@@ -10,5 +10,6 @@ export type CreatePropertiBodySchema = {
   quantity: number;
   location: 'Sekretariat 1' | 'Sekretariat 2' | 'Jatinangor';
   photo: string | null;
+  status: 'in_use' | 'available';
 };
 

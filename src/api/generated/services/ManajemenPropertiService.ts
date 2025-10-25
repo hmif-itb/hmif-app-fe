@@ -33,6 +33,7 @@ export class ManajemenPropertiService {
     photo: string | null;
     createdAt: string;
     updatedAt: string;
+    status: 'in_use' | 'available';
   }>> {
     return this.httpRequest.request({
       method: 'GET',
@@ -67,6 +68,7 @@ export class ManajemenPropertiService {
     photo: string | null;
     createdAt: string;
     updatedAt: string;
+    status: 'in_use' | 'available';
   }> {
     return this.httpRequest.request({
       method: 'POST',
@@ -98,6 +100,7 @@ export class ManajemenPropertiService {
     photo: string | null;
     createdAt: string;
     updatedAt: string;
+    status: 'in_use' | 'available';
   }> {
     return this.httpRequest.request({
       method: 'GET',
@@ -131,6 +134,7 @@ export class ManajemenPropertiService {
     photo: string | null;
     createdAt: string;
     updatedAt: string;
+    status: 'in_use' | 'available';
   }> {
     return this.httpRequest.request({
       method: 'PUT',
