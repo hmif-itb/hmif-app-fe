@@ -6,20 +6,16 @@ import { useRouter } from '@tanstack/react-router';
 import LeftSection from './-components/LeftSection';
 import RightSection from './-components/RightSection';
 import dayjs from 'dayjs';
-import { fetchHouseholdData, EventType, PeminjamanItemData } from './-api';
 import useSession from '~/hooks/auth/useSession';
 import { isInRoles } from '~/lib/roles';
 import { generateDate } from '~/lib/calendar';
 import MobileSection from './-components/MobileSection';
+import { useGetHouseholdEvents, useGetNearingEndItems } from '~/hooks/household';
 
 export const Route = createFileRoute('/_app/_left-navbar/home/household/')({
   component: HouseholdPage,
 });
 
-interface HouseholdData {
-  events: EventType[];
-  peminjamanItems: PeminjamanItemData[];
-}
 
 function HouseholdPage() {
   const router = useRouter();
@@ -27,10 +23,17 @@ function HouseholdPage() {
   const [selectedMonth, setSelectedMonth] = useState(dayjs().month());
   const [selectedYear, setSelectedYear] = useState(dayjs().year());
   const [selectedDate, setSelectedDate] = useState(() => dayjs());
-  const [data, setData] = useState<HouseholdData | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
 
   const isAdmin = isInRoles(user, ['household']);
+
+  const { data: events = [], isLoading: isLoadingEvents } = useGetHouseholdEvents(
+    selectedMonth,
+    selectedYear,
+  );
+  const { data: peminjamanItems = [], isLoading: isLoadingItems } =
+    useGetNearingEndItems();
+
+  const isLoading = isLoadingEvents || isLoadingItems;
 
   const calendarDays = useMemo(
     () => generateDate(selectedMonth, selectedYear),
@@ -38,16 +41,12 @@ function HouseholdPage() {
   );
 
   const eventsForSelectedDate = useMemo(() => {
-    if (!data?.events) return [];
-
-    return data.events
+    return events
       .filter((event) => dayjs(event.start_time).isSame(selectedDate, 'day'))
       .sort(
         (a, b) => dayjs(a.start_time).valueOf() - dayjs(b.start_time).valueOf(),
       );
-  }, [data?.events, selectedDate]);
-
-  const peminjamanItems = data?.peminjamanItems ?? [];
+  }, [events, selectedDate]);
 
   const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   const monthLabel = dayjs()
@@ -55,23 +54,6 @@ function HouseholdPage() {
     .month(selectedMonth)
     .format('MMMM YYYY');
   const today = dayjs();
-
-  // Fetch data when month/year changes
-  useEffect(() => {
-    const loadData = async () => {
-      setIsLoading(true);
-      try {
-        const newData = await fetchHouseholdData(selectedMonth, selectedYear);
-        setData(newData);
-      } catch (error) {
-        console.error('Error fetching household data:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadData();
-  }, [selectedMonth, selectedYear]);
 
   const handleMonthChange = (
     month: number,
@@ -140,13 +122,13 @@ function HouseholdPage() {
           <LeftSection
             selectedMonth={selectedMonth}
             selectedYear={selectedYear}
-            events={data?.events || []}
+            events={events}
             isLoading={isLoading}
             onMonthChange={handleMonthChange}
           />
           <RightSection
             isAdmin={isAdmin}
-            peminjamanItems={data?.peminjamanItems || []}
+            peminjamanItems={peminjamanItems}
             isLoading={isLoading}
           />
         </div>
@@ -159,7 +141,7 @@ function HouseholdPage() {
             calendarDays={calendarDays}
             today={today}
             selectedDate={selectedDate}
-            events={data?.events || []}
+            events={events}
             eventsForSelectedDate={eventsForSelectedDate}
             peminjamanItems={peminjamanItems}
             isLoading={isLoading}
