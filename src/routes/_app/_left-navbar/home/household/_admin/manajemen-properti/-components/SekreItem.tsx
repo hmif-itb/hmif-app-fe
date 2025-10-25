@@ -1,14 +1,9 @@
 import { useState } from 'react';
 import { MapPin, SquarePen, Trash } from 'lucide-react';
 import { DeleteModal } from './DeleteModal';
-import { EditSekreModal, SekreFormData } from './EditSekreModal';
+import { EditSekreModal } from './EditSekreModal';
+import { SekreData, SekreFormData } from '../../../-types';
 
-export interface SekreData {
-  name: string;
-  condition: 'new' | 'used';
-  location: string;
-  photo?: string;
-}
 
 interface SekreItemProps {
   sekre: SekreData;

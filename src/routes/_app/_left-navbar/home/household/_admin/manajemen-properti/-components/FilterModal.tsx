@@ -8,7 +8,7 @@ interface FilterModalProps {
 }
 
 export interface FilterOptions {
-  condition: 'all' | 'new' | 'used';
+  condition: 'all' | 'good' | 'broken' | 'cant_be_used' | 'lost';
 }
 
 export function FilterModal({
@@ -19,7 +19,7 @@ export function FilterModal({
 }: FilterModalProps) {
   if (!isOpen) return null;
 
-  const handleApply = (condition: 'all' | 'new' | 'used') => {
+  const handleApply = (condition: 'all' | 'good' | 'broken' | 'cant_be_used' | 'lost') => {
     onApplyFilter({ condition });
     onClose();
   };
@@ -54,9 +54,9 @@ export function FilterModal({
           </button>
 
           <button
-            onClick={() => handleApply('new')}
+            onClick={() => handleApply('good')}
             className={`rounded-lg border px-4 py-3 text-left transition-colors ${
-              currentFilter.condition === 'new'
+              currentFilter.condition === 'good'
                 ? 'border-[#305138] bg-[#305138] text-white'
                 : 'border-gray-300 text-black hover:bg-gray-50'
             }`}
@@ -65,9 +65,9 @@ export function FilterModal({
           </button>
 
           <button
-            onClick={() => handleApply('used')}
+            onClick={() => handleApply('broken')}
             className={`rounded-lg border px-4 py-3 text-left transition-colors ${
-              currentFilter.condition === 'used'
+              currentFilter.condition === 'broken'
                 ? 'border-[#305138] bg-[#305138] text-white'
                 : 'border-gray-300 text-black hover:bg-gray-50'
             }`}

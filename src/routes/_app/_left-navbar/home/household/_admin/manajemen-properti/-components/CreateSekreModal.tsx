@@ -1,18 +1,14 @@
 import { X, ChevronDown } from 'lucide-react';
 import { useState, useRef, DragEvent } from 'react';
+import { CreatePropertiBodySchema } from '~/api/generated';
 
-export interface SekreFormData {
-  name: string;
-  condition: 'new' | 'used';
-  location: string;
-  photo?: string;
-}
 
 interface CreateSekreModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onConfirm: (data: SekreFormData) => void;
+  onConfirm: (data: CreatePropertiBodySchema) => void;
   locations: string[];
+  isSubmitting: boolean;
 }
 
 export function CreateSekreModal({
@@ -21,11 +17,14 @@ export function CreateSekreModal({
   onConfirm,
   locations,
 }: CreateSekreModalProps) {
-  const [formData, setFormData] = useState<SekreFormData>({
+  const [formData, setFormData] = useState<CreatePropertiBodySchema>({
     name: '',
-    condition: 'new',
-    location: locations[0] || '',
-    photo: '',
+    condition: 'good',
+    description: '',
+    category: 'sekre',
+    quantity: 1,
+    location: 'Sekretariat 1' || '',
+    photo:''
   });
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -39,9 +38,12 @@ export function CreateSekreModal({
     // Reset form after creation
     setFormData({
       name: '',
-      condition: 'new',
-      location: locations[0] || '',
-      photo: '',
+      condition: 'good',
+      description: '',
+      category: 'sekre',
+      quantity: 1,
+      location: 'Sekretariat 1' || '',
+      photo:''
     });
   };
 
@@ -136,7 +138,7 @@ export function CreateSekreModal({
                 onChange={(e) =>
                   setFormData({
                     ...formData,
-                    condition: e.target.value as 'new' | 'used',
+                    condition: e.target.value as 'good' | 'broken' | 'cant_be_used' | 'lost'
                   })
                 }
                 className="w-full appearance-none rounded-lg border border-gray-300 px-4 py-3 pr-10 text-sm focus:border-gray-400 focus:outline-none"
@@ -160,7 +162,7 @@ export function CreateSekreModal({
               <select
                 value={formData.location}
                 onChange={(e) =>
-                  setFormData({ ...formData, location: e.target.value })
+                  setFormData({ ...formData, location: e.target.value as "Sekretariat 1" | "Sekretariat 2" | "Jatinangor"})
                 }
                 className="w-full appearance-none rounded-lg border border-gray-300 px-4 py-3 pr-10 text-sm focus:border-gray-400 focus:outline-none"
               >

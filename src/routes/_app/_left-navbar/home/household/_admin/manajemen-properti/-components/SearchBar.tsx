@@ -37,9 +37,9 @@ function SearchBar({
   };
 
   const handleCreateClick = () => {
-    if (activeView === 'Properti' && onCreateProperty) {
+    if (activeView === 'properti' && onCreateProperty) {
       onCreateProperty();
-    } else if (activeView === 'Sekre' && onCreateSekre) {
+    } else if (activeView === 'sekre' && onCreateSekre) {
       onCreateSekre();
     }
   };

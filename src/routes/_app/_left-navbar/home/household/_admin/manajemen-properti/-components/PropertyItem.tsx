@@ -1,14 +1,10 @@
 import { useState } from 'react';
 import { MapPin, SquarePen, Trash } from 'lucide-react';
 import { DeleteModal } from './DeleteModal';
-import { EditPropertyModal, PropertyFormData } from './EditPropertyModal';
+import { EditPropertyModal } from './EditPropertyModal';
+import { PropertyFormData, PropertyData } from '../../../-types';
 
-export interface PropertyData {
-  name: string;
-  condition: 'new' | 'used';
-  amount: number;
-  location: string;
-}
+
 
 interface PropertyItemProps {
   property: PropertyData;
@@ -88,9 +84,9 @@ export function PropertyItem({
             </h3>
             <div className="flex items-center gap-4 text-xs text-[#525352] lg:gap-7">
               <span className="rounded-full bg-[#AAB8AD] px-3 py-1 text-[#1D3122]">
-                {property.condition === 'new' ? 'Baik' : 'Rusak'}
+                {property.condition === 'good' ? 'Baik' : 'Rusak'}
               </span>
-              <span>Jumlah: {property.amount}</span>
+              <span>Jumlah: {property.quantity}</span>
               <span className="flex items-center gap-1">
                 <MapPin size={12} />
                 {' ' + property.location}

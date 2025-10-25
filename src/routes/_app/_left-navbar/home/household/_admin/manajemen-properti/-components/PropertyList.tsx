@@ -1,13 +1,14 @@
 import React from 'react';
-import { PropertyItem, PropertyData } from './PropertyItem';
+import { PropertyItem } from './PropertyItem';
+import { PropertyData } from '../../../-types';
 import { FilterOptions } from './FilterModal';
 
 interface PropertyListProps {
   filter: FilterOptions;
   searchTerm: string;
   data: PropertyData[];
-  onUpdate: (index: number, updatedData: PropertyData) => void;
-  onDelete: (index: number) => void;
+  onUpdate: (id: string, updatedData: PropertyData) => void;
+  onDelete: (id: string) => void;
   locations: string[];
 }
 
@@ -32,19 +33,13 @@ function PropertyList({
     <div className="mb-20 flex w-full flex-col gap-3 lg:mb-5 lg:gap-5">
       {filteredProperties.map((property, idx) => {
         // Find the original index in the full data array
-        const originalIndex = data.findIndex(
-          (item) =>
-            item.name === property.name &&
-            item.location === property.location &&
-            item.amount === property.amount,
-        );
 
         return (
           <PropertyItem
-            key={`${property.name}-${originalIndex}`}
+            key={`${property.name}-${property.id}`}
             property={property}
-            onUpdate={(updatedData) => onUpdate(originalIndex, updatedData)}
-            onDelete={() => onDelete(originalIndex)}
+            onUpdate={(updatedData) => onUpdate(property.id, updatedData)}
+            onDelete={() => onDelete(property.id)}
             locations={locations}
           />
         );

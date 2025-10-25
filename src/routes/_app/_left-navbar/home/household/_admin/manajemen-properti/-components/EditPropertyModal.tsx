@@ -1,12 +1,7 @@
 import { X, ChevronDown } from 'lucide-react';
 import { useState } from 'react';
+import { PropertyFormData } from '../../../-types';
 
-export interface PropertyFormData {
-  name: string;
-  condition: 'new' | 'used';
-  amount: number;
-  location: string;
-}
 
 interface EditPropertyModalProps {
   isOpen: boolean;
@@ -26,7 +21,7 @@ export function EditPropertyModal({
   const [formData, setFormData] = useState<PropertyFormData>({
     name: data.name,
     condition: data.condition,
-    amount: data.amount,
+    quantity: data.quantity,
     location: data.location,
   });
 
@@ -84,7 +79,7 @@ export function EditPropertyModal({
                 onChange={(e) =>
                   setFormData({
                     ...formData,
-                    condition: e.target.value as 'new' | 'used',
+                    condition: e.target.value as 'good' | 'broken' | 'cant_be_used' | 'lost',
                   })
                 }
                 className="w-full appearance-none rounded-xl border border-gray-300 px-4 py-3 pr-10 text-sm focus:border-gray-400 focus:outline-none"
@@ -106,11 +101,11 @@ export function EditPropertyModal({
             </label>
             <input
               type="number"
-              value={formData.amount}
+              value={formData.quantity}
               onChange={(e) =>
                 setFormData({
                   ...formData,
-                  amount: parseInt(e.target.value) || 0,
+                  quantity: parseInt(e.target.value) || 0,
                 })
               }
               className="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm focus:border-gray-400 focus:outline-none"
