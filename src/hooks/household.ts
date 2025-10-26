@@ -273,10 +273,23 @@ export function useGetPeminjamanAktif() {
 export function useUploadFile() {
   return useMutation<PresignedURL, Error, File>({
     mutationFn: async (file: File) => {
+      const lastDotIndex = file.name.lastIndexOf('.');
+
+      let finalFileName: string;
+      let finalFileType: string;
+
+      if (lastDotIndex === -1 || lastDotIndex === 0) {
+        finalFileName = file.name;
+        finalFileType = file.type.split('/')[1] || '';
+      } else {
+        finalFileName = file.name.substring(0, lastDotIndex);
+        finalFileType = file.name.substring(lastDotIndex + 1);
+      }
+
       const presignedData = await api.media.createPresignedUrl({
         requestBody: {
-          fileName: file.name,
-          fileType: file.type,
+          fileName: finalFileName,
+          fileType: finalFileType,
         },
       });
 
