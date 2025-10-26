@@ -84,15 +84,17 @@ function SubmissionForm(): JSX.Element {
     if (!selectedFile) return;
 
     try {
-      const fotoUrl = await uploadFile(selectedFile);
+      const uploadResult = await uploadFile(selectedFile);
+      const buktiFotoFinalUrl = uploadResult.mediaUrl;
 
       submitReturn(
         {
           peminjamanId: pengembalianId,
-          data: { buktiFotoUrl: fotoUrl },
+          data: { buktiFotoUrl: buktiFotoFinalUrl },
         },
         {
           onSuccess: () => {
+            console.log('✅ Pengembalian berhasil disubmit ke backend:', buktiFotoFinalUrl);
             setShowSuccessModal(true);
             setReportText('');
             setSelectedFile(null);
@@ -108,8 +110,8 @@ function SubmissionForm(): JSX.Element {
         },
       );
     } catch (error) {
-      console.error('Gagal upload file:', error);
-      alert('Gagal mengunggah file.');
+      console.error('Gagal upload atau submit pengembalian:', error);
+      alert('Gagal mengunggah file bukti.');
     }
   };
 

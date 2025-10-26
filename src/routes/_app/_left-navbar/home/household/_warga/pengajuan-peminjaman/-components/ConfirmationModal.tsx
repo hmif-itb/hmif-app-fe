@@ -1,19 +1,11 @@
 import { X } from 'lucide-react';
-
-interface FormData {
-  startDate: string;
-  endDate: string;
-  startTime: string;
-  endTime: string;
-  type: string;
-  reason: string;
-}
+import { PengembalianFormData } from '../../../-types';
 
 interface ConfirmationModalProps {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: () => void;
-  formData: FormData;
+  formData: PengembalianFormData;
   isSubmitting: boolean;
 }
 
@@ -55,7 +47,7 @@ export function ConfirmationModal({
               Detail Peminjaman:
             </h3>
             <div className="space-y-2 text-sm text-black">
-              <p>Properti - {formData.type || 'Projektor'}</p>
+              <p>Properti - {formData.jenisPeminjaman || 'Projektor'}</p>
               <p>
                 Dari: {formatDisplayDate(formData.startDate)}{' '}
                 {formData.startTime}
@@ -63,7 +55,7 @@ export function ConfirmationModal({
               <p>
                 Hingga: {formatDisplayDate(formData.endDate)} {formData.endTime}
               </p>
-              <p>Alasan: {formData.reason}</p>
+              <p>Alasan: {formData.alasan}</p>
             </div>
           </div>
         </div>

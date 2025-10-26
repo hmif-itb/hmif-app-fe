@@ -15,7 +15,7 @@ import { FileText, MapPin, Users } from 'lucide-react';
 import { CalendarPicker } from './CalendarPicker';
 import { ConfirmationModal } from './ConfirmationModal';
 import { SuccessModal } from './SuccessModal';
-import { SekreData } from '../-api';
+import { SekreData } from '../../../-types';
 
 interface SekreLoanFormProps {
   sekreData: SekreData;
@@ -27,8 +27,8 @@ export function SekreLoanForm({ sekreData }: SekreLoanFormProps) {
     endDate: '',
     startTime: '',
     endTime: '',
-    type: '',
-    reason: '',
+    jenisPeminjaman: '',
+    alasan: '',
   });
 
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -98,8 +98,8 @@ export function SekreLoanForm({ sekreData }: SekreLoanFormProps) {
       endDate: '',
       startTime: '',
       endTime: '',
-      type: '',
-      reason: '',
+      jenisPeminjaman: '',
+      alasan: '',
     });
   };
 
@@ -108,8 +108,8 @@ export function SekreLoanForm({ sekreData }: SekreLoanFormProps) {
     | 'endDate'
     | 'startTime'
     | 'endTime'
-    | 'type'
-    | 'reason';
+    | 'jenisPeminjaman'
+    | 'alasan';
 
   const handleInputChange = (field: FieldName, value: string) => {
     setFormData((prev) => {
@@ -162,8 +162,8 @@ export function SekreLoanForm({ sekreData }: SekreLoanFormProps) {
         {/* Type */}
         <span className="font-semibold">
           Sekre - {sekreData.name}
-          {formData.type &&
-            ` (${formData.type.charAt(0).toUpperCase() + formData.type.slice(1)})`}
+          {formData.jenisPeminjaman &&
+            ` (${formData.jenisPeminjaman.charAt(0).toUpperCase() + formData.jenisPeminjaman.slice(1)})`}
         </span>
 
         {/* Form Content */}
@@ -249,8 +249,8 @@ export function SekreLoanForm({ sekreData }: SekreLoanFormProps) {
                 Tipe*
               </Label>
               <Select
-                value={formData.type}
-                onValueChange={(value) => handleInputChange('type', value)}
+                value={formData.jenisPeminjaman}
+                onValueChange={(value) => handleInputChange('jenisPeminjaman', value)}
               >
                 <SelectTrigger>
                   <SelectValue
@@ -278,8 +278,8 @@ export function SekreLoanForm({ sekreData }: SekreLoanFormProps) {
             <Textarea
               id="reason"
               placeholder="Deskripsikan alasanmu dalam mengajukan pinjaman..."
-              value={formData.reason}
-              onChange={(e) => handleInputChange('reason', e.target.value)}
+              value={formData.alasan}
+              onChange={(e) => handleInputChange('alasan', e.target.value)}
               className="min-h-[184px] resize-none"
               required
             />

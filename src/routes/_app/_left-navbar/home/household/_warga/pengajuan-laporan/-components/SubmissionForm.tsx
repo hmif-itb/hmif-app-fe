@@ -1,4 +1,4 @@
-import { NotebookPen, Upload, X } from 'lucide-react';
+import { NotebookPen, Upload, X, Loader2, ChevronDown } from 'lucide-react';
 import React, {
   useState,
   useRef,
@@ -7,31 +7,47 @@ import React, {
   FormEvent,
   DragEvent,
   MouseEvent,
+  useMemo,
 } from 'react';
 import { Button } from '~/components/ui/button';
 import { Textarea } from '~/components/ui/textarea';
 import ConfirmationModal from './ConfirmationModal';
 import SuccessModal from './SuccessModal';
-
-interface FormData {
-  report: string;
-  file: File | null;
-}
+import {
+  useCreateLaporan,
+  useUploadFile,
+  useGetWargaPropertiList,
+} from '~/hooks/household';
 
 function SubmissionForm(): JSX.Element {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [reportText, setReportText] = useState<string>('');
+  const [propertiId, setPropertiId] = useState<string>('');
   const [showConfirmationModal, setShowConfirmationModal] =
     useState<boolean>(false);
   const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
+  const { data: propertiList = [] } = useGetWargaPropertiList({
+    category: 'properti',
+  });
+  const { data: sekreList = [] } = useGetWargaPropertiList({ category: 'sekre' });
+
+  const allProperti = useMemo(
+    () => [...propertiList, ...sekreList],
+    [propertiList, sekreList],
+  );
+
+  const { mutateAsync: uploadFile, isPending: isUploading } = useUploadFile();
+  const { mutate: createLaporan, isPending: isSubmitting } = useCreateLaporan();
+
+  const isLoading = isUploading || isSubmitting;
+
   const handleFileSelect = (event: ChangeEvent<HTMLInputElement>): void => {
     const file = event.target.files?.[0];
     if (file) {
       setSelectedFile(file);
-      // Image preview URL
       const imageUrl = URL.createObjectURL(file);
       setImagePreview(imageUrl);
     }
@@ -50,7 +66,6 @@ function SubmissionForm(): JSX.Element {
     const file = event.dataTransfer.files[0];
     if (file && (file.type === 'image/jpeg' || file.type === 'image/png')) {
       setSelectedFile(file);
-      // Image preview URL
       const imageUrl = URL.createObjectURL(file);
       setImagePreview(imageUrl);
     }
@@ -67,30 +82,49 @@ function SubmissionForm(): JSX.Element {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
-    // Show confirmation modal
+    if (!propertiId) {
+      alert('Mohon pilih properti yang ingin dilaporkan.');
+      return;
+    }
     setShowConfirmationModal(true);
   };
 
-  const handleConfirmSubmission = (): void => {
-    // Close confirmation modal
+  const handleConfirmSubmission = async (): Promise<void> => {
     setShowConfirmationModal(false);
+    let finalMediaUrl: string | null = null;
 
-    const formData: FormData = {
-      report: reportText,
-      file: selectedFile,
-    };
+    try {
+      if (selectedFile) {
+        const uploadResult = await uploadFile(selectedFile);
+        finalMediaUrl = uploadResult.mediaUrl;
+      }
 
-    // TODO: Ganti logic BE
-    console.log('Form submitted with data:', formData);
-
-    setShowSuccessModal(true);
-
-    // Reset form
-    setReportText('');
-    setSelectedFile(null);
-    setImagePreview(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
+      createLaporan(
+        {
+          propertiId: propertiId,
+          deskripsi: reportText,
+          fotoUrl: finalMediaUrl,
+        },
+        {
+          onSuccess: () => {
+            setShowSuccessModal(true);
+            setReportText('');
+            setSelectedFile(null);
+            setImagePreview(null);
+            setPropertiId('');
+            if (fileInputRef.current) {
+              fileInputRef.current.value = '';
+            }
+          },
+          onError: (error) => {
+            console.error('Gagal membuat laporan:', error);
+            alert(`Gagal membuat laporan: ${error.message}`);
+          },
+        },
+      );
+    } catch (error) {
+      console.error('Gagal upload atau submit laporan:', error);
+      alert('Gagal mengunggah file atau mengirim data.');
     }
   };
 
@@ -108,7 +142,6 @@ function SubmissionForm(): JSX.Element {
     setReportText(event.target.value);
   };
 
-  // Cleanup object URL when component unmounts or image changes
   useEffect((): (() => void) | void => {
     return (): void => {
       if (imagePreview) {
@@ -123,7 +156,6 @@ function SubmissionForm(): JSX.Element {
         onSubmit={handleSubmit}
         className="flex flex-col gap-[28px] rounded-xl bg-white px-[30px] py-[34px]"
       >
-        {/* Header */}
         <div className="flex items-center gap-3">
           <div className="flex size-9 items-center justify-center rounded-[8px] bg-[#E8C55F]">
             <NotebookPen size={24} />
@@ -131,7 +163,34 @@ function SubmissionForm(): JSX.Element {
           <h2 className="text-base font-semibold">Formulir Laporan</h2>
         </div>
 
-        {/* Laporan */}
+        <div className="space-y-2">
+          <label htmlFor="properti" className="text-sm text-black">
+            Properti yang Dilaporkan*
+          </label>
+          <div className="relative">
+            <select
+              id="properti"
+              value={propertiId}
+              onChange={(e) => setPropertiId(e.target.value)}
+              className="w-full appearance-none rounded-xl border border-gray-300 px-4 py-3 pr-10 text-sm focus:border-gray-400 focus:outline-none"
+              required
+            >
+              <option value="" disabled>
+                Pilih properti atau sekre...
+              </option>
+              {allProperti.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.name} ({p.category})
+                </option>
+              ))}
+            </select>
+            <ChevronDown
+              className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+              size={20}
+            />
+          </div>
+        </div>
+
         <div className="space-y-2">
           <label htmlFor="laporan" className="text-sm text-black">
             Laporan*
@@ -147,7 +206,6 @@ function SubmissionForm(): JSX.Element {
           />
         </div>
 
-        {/* Foto Pendukung */}
         <div className="space-y-2">
           <label htmlFor="foto-pendukung" className="text-sm text-black">
             Foto Pendukung (Opsional)
@@ -171,21 +229,17 @@ function SubmissionForm(): JSX.Element {
               onChange={handleFileSelect}
               className="hidden"
             />
-
             {imagePreview ? (
               <>
-                {/* Desktop View */}
                 <div className="relative hidden h-full w-full md:block">
                   <img
                     src={imagePreview}
                     alt="Preview"
                     className="h-full w-full rounded-xl object-cover"
                   />
-                  {/* Filename - Bottom Left */}
                   <div className="absolute bottom-2 left-2 rounded bg-blue-500 px-2 py-1 text-xs text-white">
                     {selectedFile?.name || ''}
                   </div>
-                  {/* Clear Button - Bottom Right */}
                   <button
                     onClick={handleClearImage}
                     className="absolute bottom-2 right-2 flex size-6 items-center justify-center rounded-full bg-red-500 text-white transition-colors hover:bg-red-600"
@@ -194,8 +248,6 @@ function SubmissionForm(): JSX.Element {
                     <X size={14} />
                   </button>
                 </div>
-
-                {/* Mobile View */}
                 <div className="flex h-full flex-col items-center justify-center md:hidden">
                   <div className="relative">
                     <img
@@ -234,16 +286,19 @@ function SubmissionForm(): JSX.Element {
           </div>
         </div>
 
-        {/* Button */}
         <Button
           type="submit"
           className="w-full bg-[#E2C66F] text-[#333333] hover:opacity-50"
+          disabled={isLoading}
         >
-          Ajukan Laporan
+          {isLoading ? (
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          ) : (
+            'Ajukan Laporan'
+          )}
         </Button>
       </form>
 
-      {/* Modals */}
       <ConfirmationModal
         isOpen={showConfirmationModal}
         onClose={handleCloseConfirmationModal}

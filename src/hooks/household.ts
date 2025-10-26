@@ -9,6 +9,8 @@ import type {
   UpdateLaporanStatusSchema,
   CreatePengajuanBodySchema,
   SubmitPengembalianBodySchema,
+  CreateLaporanBodySchema,
+  PresignedURL
 } from '~/api/generated';
 import { z } from 'zod';
 
@@ -180,6 +182,17 @@ export function useUpdateLaporanStatus() {
   });
 }
 
+export function useCreateLaporan() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: CreateLaporanBodySchema) =>
+      api.laporanWarga.createLaporanWarga({ requestBody: data }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: REQ_LAPORAN_KEYS.laporan() });
+    },
+  });
+}
+
 const PENGAJUAN_KEYS = {
   all: ['pengajuan'] as const,
   lists: () => [...PENGAJUAN_KEYS.all, 'lists'] as const,
@@ -255,12 +268,24 @@ export function useGetPeminjamanAktif() {
   });
 }
 
+
+
 export function useUploadFile() {
-  return useMutation({
+  return useMutation<PresignedURL, Error, File>({
     mutationFn: async (file: File) => {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      console.log('Simulating file upload:', file.name);
-      return `https://cdn.example.com/bukti/${file.name}`;
+      const presignedData = await api.media.createPresignedUrl({
+        requestBody: {
+          fileName: file.name,
+          fileType: file.type,
+        },
+      });
+
+      await fetch(presignedData.presignedUrl, {
+        method: 'PUT',
+        body: file,
+      });
+
+      return presignedData;
     },
   });
 }

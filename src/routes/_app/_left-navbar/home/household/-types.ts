@@ -88,3 +88,12 @@ export interface PeminjamanData {
   status: 'aktif' | 'selesai' | 'pending' | 'pending_return' | 'ditolak';
   type: 'properti' | 'sekre';
 }
+
+export interface PengembalianFormData {
+  startDate: string;
+  endDate: string;
+  startTime: string;
+  endTime: string;
+  jenisPeminjaman: string;
+  alasan: string;
+}

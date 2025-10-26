@@ -14,6 +14,7 @@ import { CompetitionsService } from './services/CompetitionsService';
 import { CourseService } from './services/CourseService';
 import { CurhatService } from './services/CurhatService';
 import { InfoService } from './services/InfoService';
+import { LaporanWargaService } from './services/LaporanWargaService';
 import { ManajemenPropertiService } from './services/ManajemenPropertiService';
 import { ManajemenRequestLaporanService } from './services/ManajemenRequestLaporanService';
 import { MarkdownService } from './services/MarkdownService';
@@ -40,6 +41,7 @@ export class ApiClient {
   public readonly course: CourseService;
   public readonly curhat: CurhatService;
   public readonly info: InfoService;
+  public readonly laporanWarga: LaporanWargaService;
   public readonly manajemenProperti: ManajemenPropertiService;
   public readonly manajemenRequestLaporan: ManajemenRequestLaporanService;
   public readonly markdown: MarkdownService;
@@ -77,6 +79,7 @@ export class ApiClient {
     this.course = new CourseService(this.request);
     this.curhat = new CurhatService(this.request);
     this.info = new InfoService(this.request);
+    this.laporanWarga = new LaporanWargaService(this.request);
     this.manajemenProperti = new ManajemenPropertiService(this.request);
     this.manajemenRequestLaporan = new ManajemenRequestLaporanService(this.request);
     this.markdown = new MarkdownService(this.request);
