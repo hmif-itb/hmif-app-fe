@@ -1,4 +1,4 @@
-import { NotebookPen, Upload, X } from 'lucide-react';
+import { NotebookPen, Upload, X, Loader2 } from 'lucide-react';
 import React, {
   useState,
   useRef,
@@ -12,11 +12,9 @@ import { Button } from '~/components/ui/button';
 import { Textarea } from '~/components/ui/textarea';
 import ConfirmationModal from './ConfirmationModal';
 import SuccessModal from './SuccessModal';
-
-interface FormData {
-  report: string;
-  file: File | null;
-}
+import { useParams } from '@tanstack/react-router';
+import { useSubmitPengembalian, useUploadFile } from '~/hooks/household';
+import { Route } from '../index'
 
 function SubmissionForm(): JSX.Element {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -27,11 +25,19 @@ function SubmissionForm(): JSX.Element {
   const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
+
+  const { pengembalianId } = Route.useParams()
+
+  const { mutateAsync: uploadFile, isPending: isUploading } = useUploadFile();
+  const { mutate: submitReturn, isPending: isSubmitting } =
+    useSubmitPengembalian();
+
+  const isLoading = isUploading || isSubmitting;
+
   const handleFileSelect = (event: ChangeEvent<HTMLInputElement>): void => {
     const file = event.target.files?.[0];
     if (file) {
       setSelectedFile(file);
-      // Image preview URL
       const imageUrl = URL.createObjectURL(file);
       setImagePreview(imageUrl);
     }
@@ -50,7 +56,6 @@ function SubmissionForm(): JSX.Element {
     const file = event.dataTransfer.files[0];
     if (file && (file.type === 'image/jpeg' || file.type === 'image/png')) {
       setSelectedFile(file);
-      // Image preview URL
       const imageUrl = URL.createObjectURL(file);
       setImagePreview(imageUrl);
     }
@@ -67,30 +72,44 @@ function SubmissionForm(): JSX.Element {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
-    // Show confirmation modal
+    if (!selectedFile) {
+      alert('Mohon unggah foto bukti pengembalian.');
+      return;
+    }
     setShowConfirmationModal(true);
   };
 
-  const handleConfirmSubmission = (): void => {
-    // Close confirmation modal
+  const handleConfirmSubmission = async (): Promise<void> => {
     setShowConfirmationModal(false);
+    if (!selectedFile) return;
 
-    const formData: FormData = {
-      report: reportText,
-      file: selectedFile,
-    };
+    try {
+      const fotoUrl = await uploadFile(selectedFile);
 
-    // TODO: Ganti logic BE
-    console.log('Form submitted with data:', formData);
-
-    setShowSuccessModal(true);
-
-    // Reset form
-    setReportText('');
-    setSelectedFile(null);
-    setImagePreview(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
+      submitReturn(
+        {
+          peminjamanId: pengembalianId,
+          data: { buktiFotoUrl: fotoUrl },
+        },
+        {
+          onSuccess: () => {
+            setShowSuccessModal(true);
+            setReportText('');
+            setSelectedFile(null);
+            setImagePreview(null);
+            if (fileInputRef.current) {
+              fileInputRef.current.value = '';
+            }
+          },
+          onError: (error) => {
+            console.error('Gagal submit pengembalian:', error);
+            alert(`Gagal submit: ${error.message}`);
+          },
+        },
+      );
+    } catch (error) {
+      console.error('Gagal upload file:', error);
+      alert('Gagal mengunggah file.');
     }
   };
 
@@ -108,7 +127,6 @@ function SubmissionForm(): JSX.Element {
     setReportText(event.target.value);
   };
 
-  // Cleanup object URL when component unmounts or image changes
   useEffect((): (() => void) | void => {
     return (): void => {
       if (imagePreview) {
@@ -123,7 +141,6 @@ function SubmissionForm(): JSX.Element {
         onSubmit={handleSubmit}
         className="flex flex-col gap-[28px] rounded-xl bg-white px-[30px] py-[34px]"
       >
-        {/* Header */}
         <div className="flex items-center gap-3">
           <div className="flex size-9 items-center justify-center rounded-[8px] bg-[#E8C55F]">
             <NotebookPen size={24} />
@@ -131,26 +148,23 @@ function SubmissionForm(): JSX.Element {
           <h2 className="text-base font-semibold">Formulir Pengembalian</h2>
         </div>
 
-        {/* Detail Pengembalian */}
         <div className="space-y-2">
           <label htmlFor="laporan" className="text-sm text-black">
-            Detail Pengembalian*
+            Detail Pengembalian
           </label>
           <Textarea
             id="laporan"
             name="laporan"
-            placeholder="Deskripsikan masalah atau laporanmu..."
+            placeholder="Deskripsikan kondisi barang saat dikembalikan (opsional)..."
             className="h-[184px]"
             value={reportText}
             onChange={handleReportTextChange}
-            required
           />
         </div>
 
-        {/* Foto Bukti */}
         <div className="space-y-2">
           <label htmlFor="foto-pendukung" className="text-sm text-black">
-            Foto Bukti Pengembalian
+            Foto Bukti Pengembalian*
           </label>
           <div
             onClick={handleUploadClick}
@@ -174,18 +188,15 @@ function SubmissionForm(): JSX.Element {
 
             {imagePreview ? (
               <>
-                {/* Desktop View */}
                 <div className="relative hidden h-full w-full md:block">
                   <img
                     src={imagePreview}
                     alt="Preview"
                     className="h-full w-full rounded-xl object-cover"
                   />
-                  {/* Filename - Bottom Left */}
                   <div className="absolute bottom-2 left-2 rounded bg-blue-500 px-2 py-1 text-xs text-white">
                     {selectedFile?.name || ''}
                   </div>
-                  {/* Clear Button - Bottom Right */}
                   <button
                     onClick={handleClearImage}
                     className="absolute bottom-2 right-2 flex size-6 items-center justify-center rounded-full bg-red-500 text-white transition-colors hover:bg-red-600"
@@ -195,7 +206,6 @@ function SubmissionForm(): JSX.Element {
                   </button>
                 </div>
 
-                {/* Mobile View */}
                 <div className="flex h-full flex-col items-center justify-center md:hidden">
                   <div className="relative">
                     <img
@@ -234,16 +244,19 @@ function SubmissionForm(): JSX.Element {
           </div>
         </div>
 
-        {/* Button */}
         <Button
           type="submit"
           className="w-full bg-[#E2C66F] text-[#333333] hover:opacity-50"
+          disabled={isLoading}
         >
-          Ajukan Pengembalian
+          {isLoading ? (
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          ) : (
+            'Ajukan Pengembalian'
+          )}
         </Button>
       </form>
 
-      {/* Modals */}
       <ConfirmationModal
         isOpen={showConfirmationModal}
         onClose={handleCloseConfirmationModal}

@@ -74,3 +74,17 @@ interface HouseholdData {
   events: EventType[];
   peminjamanItems: PeminjamanItemData[];
 }
+
+export interface PeminjamanData {
+  id: string;
+  userName: string;
+  userAvatar?: string;
+  startDate: string;
+  endDate: string;
+  properti: string;
+  jumlah: number;
+  tanggalMulai: string;
+  tanggalSelesai: string;
+  status: 'aktif' | 'selesai' | 'pending' | 'pending_return' | 'ditolak';
+  type: 'properti' | 'sekre';
+}

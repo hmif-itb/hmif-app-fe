@@ -8,6 +8,7 @@ import type {
   UpdatePeminjamanStatusSchema,
   UpdateLaporanStatusSchema,
   CreatePengajuanBodySchema,
+  SubmitPengembalianBodySchema,
 } from '~/api/generated';
 import { z } from 'zod';
 
@@ -34,10 +35,6 @@ export interface GetPropertiParams {
   sortBy?: 'name_asc' | 'name_desc';
 }
 
-/**
- * Hook untuk mengambil data event peminjaman (untuk kalender)
- * dalam rentang bulan dan tahun tertentu.
- */
 export function useGetHouseholdEvents(month: number, year: number) {
   return useQuery({
     queryKey: ['household', 'events', { month, year }],
@@ -71,8 +68,6 @@ export function useGetNearingEndItems() {
     },
   });
 }
-
-/* -------------------- Properti Management -------------------- */
 
 const PROPERTI_KEYS = {
   all: ['properti'] as const,
@@ -133,8 +128,6 @@ export function useDeleteProperti() {
   });
 }
 
-/* -------------------- Request & Laporan Management -------------------- */
-
 const REQ_LAPORAN_KEYS = {
   all: ['req-laporan'] as const,
   requests: () => [...REQ_LAPORAN_KEYS.all, 'requests'] as const,
@@ -187,8 +180,6 @@ export function useUpdateLaporanStatus() {
   });
 }
 
-/* -------------------- Pengajuan Peminjaman Warga -------------------- */
-
 const PENGAJUAN_KEYS = {
   all: ['pengajuan'] as const,
   lists: () => [...PENGAJUAN_KEYS.all, 'lists'] as const,
@@ -210,6 +201,80 @@ export function useCreatePengajuan() {
       api.pengajuanPeminjaman.createPengajuan({ requestBody: data }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: PENGAJUAN_KEYS.lists() });
+    },
+  });
+}
+
+const PENGEMBALIAN_KEYS = {
+  all: ['pengembalian'] as const,
+  list: () => [...PENGEMBALIAN_KEYS.all, 'list'] as const,
+};
+
+const mapStatusToFrontend = (status: string):'aktif' | 'selesai' | 'pending' | 'pending_return' | 'ditolak' => {
+  switch (status) {
+    case 'accepted':
+      return 'aktif';
+    case 'completed':
+      return 'selesai';
+    case 'pending':
+      return 'pending';
+    case 'pending_return':
+      return 'pending';
+    case 'rejected':
+      return 'ditolak';
+    default:
+      return 'pending';
+  }
+};
+
+export function useGetPeminjamanAktif() {
+  return useQuery({
+    queryKey: PENGEMBALIAN_KEYS.list(),
+    queryFn: async () => {
+      const data = await api.pengembalian.getPeminjamanAktif();
+      return data.map((p) => {
+        const startDateFormatted = dayjs(p.startDate).format('DD/MM/YYYY');
+        const endDateFormatted = dayjs(p.endDate).format('DD/MM/YYYY');
+        
+        return {
+          id: p.id,
+          userName: p.borrowerName,
+          properti: p.properti?.name || 'Nama Properti Error',
+          jumlah: p.properti?.quantity || 1,
+          
+          startDate: startDateFormatted,
+          endDate: endDateFormatted,
+          tanggalMulai: startDateFormatted,
+          tanggalSelesai: endDateFormatted,
+          
+          status: mapStatusToFrontend(p.status),
+          type: p.properti?.category || 'properti',
+        };
+      });
+    },
+  });
+}
+
+export function useUploadFile() {
+  return useMutation({
+    mutationFn: async (file: File) => {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      console.log('Simulating file upload:', file.name);
+      return `https://cdn.example.com/bukti/${file.name}`;
+    },
+  });
+}
+
+export function useSubmitPengembalian() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (variables: { peminjamanId: string; data: SubmitPengembalianBodySchema }) =>
+      api.pengembalian.submitPengembalian({
+        peminjamanId: variables.peminjamanId,
+        requestBody: variables.data,
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: PENGEMBALIAN_KEYS.list() });
     },
   });
 }

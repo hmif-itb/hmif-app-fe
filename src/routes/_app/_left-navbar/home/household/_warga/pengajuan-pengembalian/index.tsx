@@ -1,4 +1,4 @@
-import { createFileRoute, redirect } from '@tanstack/react-router';
+import { createFileRoute } from '@tanstack/react-router';
 import { useState, useEffect } from 'react';
 import { Button } from '~/components/ui/button';
 import { ChevronLeft } from 'lucide-react';
@@ -6,26 +6,12 @@ import { useRouter } from '@tanstack/react-router';
 import SearchBar from './-components/SearchBar';
 import PeminjamanList from './-components/PeminjamanList';
 import { FilterOptions } from './-components/FilterModal';
-import { isInRoles } from '~/lib/roles';
-import { loadUserCache } from '~/lib/session';
-import { fetchAllPeminjaman, PeminjamanData } from './-api';
+import { useGetPeminjamanAktif } from '~/hooks/household';
 
 export const Route = createFileRoute(
   '/_app/_left-navbar/home/household/_warga/pengajuan-pengembalian/',
 )({
   component: PengembalianPeminjamanPage,
-  //   loader: () => {
-  //     if (!loadUserCache!()) {
-  //       throw redirect({ to: '/home/household' });
-  //     }
-  //     if (loadUserCache()) {
-  //       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  //       // @ts-expect-error
-  //       if (!isInRoles(loadUserCache(), ['household'])) {
-  //         throw redirect({ to: '/home/household' });
-  //       }
-  //     }
-  //   },
 });
 
 function PengembalianPeminjamanPage() {
@@ -33,8 +19,8 @@ function PengembalianPeminjamanPage() {
   const [isMobile, setIsMobile] = useState(false);
   const [filter, setFilter] = useState<FilterOptions>({ type: 'all' });
   const [searchTerm, setSearchTerm] = useState('');
-  const [peminjamanData, setPeminjamanData] = useState<PeminjamanData[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+
+  const { data: peminjamanData = [], isLoading } = useGetPeminjamanAktif();
 
   useEffect(() => {
     const checkIfMobile = () => {
@@ -45,23 +31,6 @@ function PengembalianPeminjamanPage() {
     window.addEventListener('resize', checkIfMobile);
 
     return () => window.removeEventListener('resize', checkIfMobile);
-  }, []);
-
-  // Fetch data on component mount
-  useEffect(() => {
-    const loadData = async () => {
-      setIsLoading(true);
-      try {
-        const data = await fetchAllPeminjaman();
-        setPeminjamanData(data);
-      } catch (error) {
-        console.error('Error fetching peminjaman data:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadData();
   }, []);
 
   const handleFilterChange = (newFilter: FilterOptions) => {
@@ -88,7 +57,6 @@ function PengembalianPeminjamanPage() {
 
   return (
     <div className="flex h-full flex-col lg:px-10 lg:pb-[60px]">
-      {/* Back Button */}
       <Button
         variant="link"
         className="my-6 hidden w-full justify-start gap-8 p-0 text-3xl font-medium lg:flex"

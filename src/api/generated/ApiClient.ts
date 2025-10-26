@@ -21,6 +21,7 @@ import { MediaService } from './services/MediaService';
 import { OpenGraphService } from './services/OpenGraphService';
 import { PeminjamanDashboardService } from './services/PeminjamanDashboardService';
 import { PengajuanPeminjamanService } from './services/PengajuanPeminjamanService';
+import { PengembalianService } from './services/PengembalianService';
 import { PushService } from './services/PushService';
 import { ReactionService } from './services/ReactionService';
 import { RecommendationService } from './services/RecommendationService';
@@ -46,6 +47,7 @@ export class ApiClient {
   public readonly openGraph: OpenGraphService;
   public readonly peminjamanDashboard: PeminjamanDashboardService;
   public readonly pengajuanPeminjaman: PengajuanPeminjamanService;
+  public readonly pengembalian: PengembalianService;
   public readonly push: PushService;
   public readonly reaction: ReactionService;
   public readonly recommendation: RecommendationService;
@@ -82,6 +84,7 @@ export class ApiClient {
     this.openGraph = new OpenGraphService(this.request);
     this.peminjamanDashboard = new PeminjamanDashboardService(this.request);
     this.pengajuanPeminjaman = new PengajuanPeminjamanService(this.request);
+    this.pengembalian = new PengembalianService(this.request);
     this.push = new PushService(this.request);
     this.reaction = new ReactionService(this.request);
     this.recommendation = new RecommendationService(this.request);

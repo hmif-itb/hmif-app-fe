@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { useNavigate } from '@tanstack/react-router';
-import { PeminjamanData } from '../-api';
+import { PeminjamanData } from '../../../-types';
 
 interface PeminjamanItemProps {
   item: PeminjamanData;

@@ -1,8 +1,7 @@
 import React from 'react';
 import { SekreItem } from './SekreItem';
 import { FilterOptions } from './FilterModal';
-import { SekreData } from '../-api';
-
+import { SekreData } from '../../../-types';
 interface SekreListProps {
   filter: FilterOptions;
   searchTerm: string;
