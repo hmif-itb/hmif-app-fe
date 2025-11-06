@@ -35,7 +35,7 @@ export const TableHeader = ({ onSelectAll, allSelected }: TableHeaderProps) => {
           <span className="text-xs md:text-sm">Jenis</span>
         </div>
         
-        {/* Nama Organisasi / Perlombaan - Center aligned */}
+        {/* Nama Organisasi/perlombaan */}
         <div className="col-span-3 flex items-center justify-center">
           <span className="text-xs md:text-sm">
             <span className="hidden md:inline">Nama Organisasi / Perlombaan</span>
@@ -43,7 +43,7 @@ export const TableHeader = ({ onSelectAll, allSelected }: TableHeaderProps) => {
           </span>
         </div>
         
-        {/* Aksi - Center aligned */}
+        {/* Aksi */}
         <div className="col-span-1 flex items-center justify-center">
           <span className="text-xs md:text-sm">Aksi</span>
         </div>

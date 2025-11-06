@@ -97,7 +97,7 @@ export const TableActionsBar = ({
         )}
       </div>
 
-      {/* Right Side - Filter Buttons and Calendar (Calendar on most right) */}
+      {/* Right Side */}
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3 md:gap-4">
         {/* Toggle Group Buttons */}
         <span className="hidden font-inter text-xs font-medium sm:inline md:text-sm lg:block">
@@ -134,7 +134,7 @@ export const TableActionsBar = ({
 
         {/* Filter Label and Calendar Container */}
         <div className="flex items-center gap-2 sm:gap-3">
-          {/* Monthly Calendar - Most Right */}
+          {/* Monthly Calendar */}
           <div className="flex-1 sm:flex-none sm:w-auto">
             <DropdownCalendar
               placeholder="Pilih Periode"
