@@ -1,5 +1,6 @@
-import { CheckCheck, Download } from 'lucide-react';
-import { DropdownCalendar } from '../../home/prestasi/-components/monthly-calendar';
+import { CheckCheck, Download, Trash2 } from 'lucide-react';
+import * as ToggleGroup from '@radix-ui/react-toggle-group';
+import { DropdownCalendar } from '../../-dashboard-component/MonthlyCalendar';
 import {
   KategoriDropdown,
   DropdownOption,
@@ -47,98 +48,70 @@ export const TableActionsBar = ({
     };
     
     const monthNum = monthMap[month];
-    const formattedDate = `${monthNum.toString().padStart(2, '0')}/${year}`;
+    const formattedDate = `${year}-${monthNum.toString().padStart(2, '0')}`;
     
     if (onPeriodChange) {
       onPeriodChange(formattedDate, formattedDate);
     }
   };
+
   return (
-    <div className="flex flex-col gap-4 bg-[#FFFFFF] py-4 pl-3 lg:flex-row lg:items-center lg:justify-between lg:pl-4">
-      {/* Mobile: Filter label */}
-      <p className="block font-inter text-sm font-medium lg:hidden">filter:</p>
-
-      {/* Mobile: Filter container (Dropdown + Period) */}
-      <div className="flex items-center gap-2 lg:hidden">
-        <KategoriDropdown
-          value={filterKategori}
-          onChange={onFilterChange}
-          options={kategoriOptions}
-          placeholder="Pilih jenis kompetisi"
-          placeholderMobile="Pilih jenis ..."
-        />
-        <DropdownCalendar
-          placeholder="Pilih Periode"
-          onSelect={handlePeriodSelect}
-          value={selectedPeriod}
-        />
-      </div>
-
-      {/* Mobile: Actions container (Select all + Export) */}
-      <div className="flex flex-wrap items-center gap-2 lg:hidden">
+    <div className="flex flex-col gap-3 bg-[#FFFFFF] p-3 md:flex-row md:items-center md:justify-between md:py-4 md:pl-4">
+      {/* Left Side */}
+      <div className="flex flex-wrap items-center gap-2">
+        <button
+          onClick={onDelete}
+          className="flex items-center gap-1 rounded-full border border-black px-2 py-1 font-inter text-[10px] font-medium transition-colors hover:bg-gray-50 sm:gap-1.5 sm:px-2.5 sm:py-1.5 sm:text-xs md:gap-2 md:px-3 md:py-2 md:text-sm"
+        >
+          <Trash2 size={12} className="sm:size-3 md:size-4" />
+          <span className="hidden sm:inline">Hapus</span>
+        </button>
         <button
           onClick={onSelectAll}
-          className="flex items-center gap-1.5 rounded-full border border-black px-2 py-1.5 font-inter text-xs font-medium hover:bg-gray-50"
+          className="flex items-center gap-1 rounded-full border border-black px-2 py-1 font-inter text-[10px] font-medium transition-colors hover:bg-gray-50 sm:gap-1.5 sm:px-2.5 sm:py-1.5 sm:text-xs md:gap-2 md:px-3 md:py-2 md:text-sm"
         >
-          <CheckCheck size={14} />
-          {allSelected ? 'Batalkan Semua' : 'Pilih Semua'}
+          <CheckCheck size={12} className="sm:size-3 md:size-4" />
+          <span className="hidden sm:inline">{allSelected ? 'Batalkan Semua' : 'Pilih Semua'}</span>
+          <span className="sm:hidden">{allSelected ? 'Batal' : 'Pilih'}</span>
         </button>
         <button
           onClick={onExport}
-          className="flex items-center gap-1.5 rounded-full border border-black px-2 py-1 font-inter text-xs font-medium hover:bg-gray-50"
+          className="flex items-center gap-1 rounded-full border border-black px-2 py-1 font-inter text-[10px] font-medium transition-colors hover:bg-gray-50 sm:gap-1.5 sm:px-2.5 sm:py-1.5 sm:text-xs md:gap-2 md:px-3 md:py-2 md:text-sm"
         >
-          <Download size={14} />
-          Export entri terpilih
+          <Download size={12} className="sm:size-3 md:size-4" />
+          <span className="hidden sm:inline">Export</span>
         </button>
-
         {selectedCount > 0 && (
-          <span className="font-inter text-sm text-gray-600">
+          <span className="hidden text-[10px] text-gray-600 sm:inline sm:text-xs md:text-sm font-inter">
             {selectedCount} item terpilih
           </span>
         )}
       </div>
 
-      {/* Desktop: Left Section - Actions */}
-      <div className="hidden items-center gap-2 lg:flex">
-        <button
-          onClick={onSelectAll}
-          className="flex items-center gap-2 rounded-full border border-black px-3 py-2 font-inter text-sm font-medium hover:bg-gray-50"
-        >
-          <CheckCheck size={16} />
-          {allSelected ? 'Batalkan Semua' : 'Pilih Semua'}
-        </button>
-        <button
-          onClick={onExport}
-          className="flex items-center gap-2 rounded-full border border-black px-3 py-2 font-inter text-sm font-medium hover:bg-gray-50"
-        >
-          <Download size={16} />
-          Export entri terpilih
-        </button>
-
-        {selectedCount > 0 && (
-          <span className="font-inter text-sm text-gray-600">
-            {selectedCount} item terpilih
-          </span>
-        )}
-      </div>
-
-      {/* Desktop: Right Section - Filters */}
-      <div className="hidden items-center gap-3 lg:flex">
-        <span className="font-inter text-sm font-medium">filter:</span>
-
-        <KategoriDropdown
-          value={filterKategori}
-          onChange={onFilterChange}
-          options={kategoriOptions}
-          placeholder="Pilih jenis kompetisi"
-          placeholderMobile="Pilih jenis ..."
-        />
-
-        <DropdownCalendar
-          placeholder="Pilih Periode"
-          onSelect={handlePeriodSelect}
-          value={selectedPeriod}
-        />
+      {/* Right Side */}
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3 md:gap-4">
+        <span className="hidden font-inter text-xs font-medium sm:inline md:text-sm lg:block">
+          filter:
+        </span>
+        <div className="flex flex-wrap items-center gap-2 lg:gap-4">
+          <div className="w-full sm:w-auto">
+            <KategoriDropdown
+              value={filterKategori}
+              onChange={onFilterChange}
+              options={kategoriOptions}
+              placeholder="Pilih jenis kompetisi"
+              placeholderMobile="Pilih jenis ..."
+            />
+          </div>
+          <div className="flex-1 sm:flex-none sm:w-auto">
+            <DropdownCalendar
+              placeholder="Pilih Periode"
+              onSelect={handlePeriodSelect}
+              value={selectedPeriod}
+              className="w-full sm:w-[160px] md:w-[180px]"
+            />
+          </div>
+        </div>
       </div>
     </div>
   );

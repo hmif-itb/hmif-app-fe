@@ -4,7 +4,7 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import { api, queryClient } from '~/api/client';
 import { TableActionsBar } from './-components/TableActionBar';
 import { DashboardTable } from './-components/DashboardTable';
-import { Alert } from '../-dashboard-component/ALert';
+import { Toast } from '../-dashboard-component/Toast';
 import { ChevronLeft } from 'lucide-react';
 import { ConfirmModal } from '../-dashboard-component/ConfirmModal';
 // import { Prestasi } from '~/api/generated';
@@ -18,9 +18,10 @@ function CncDashboard() {
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [filterKategori, setFilterKategori] = useState<string>('all');
   const [currentPage, setCurrentPage] = useState(1);
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertType, setAlertType] = useState<'success' | 'error'>('success');
-  const [alertMessage, setAlertMessage] = useState('');
+  const [showToast, setShowToast] = useState(false);
+  const [toastType, setToastType] = useState<'success' | 'error'>('success');
+  const [toastTitle, setToastTitle] = useState('');
+  const [toastMessage, setToastMessage] = useState('');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [itemsToDelete, setItemsToDelete] = useState<string[]>([]);
   const [periodFilter, setPeriodFilter] = useState<{
@@ -98,14 +99,16 @@ function CncDashboard() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['achievements-cnc'] });
       setSelectedItems([]);
-      setAlertType('success');
-      setAlertMessage('Prestasi berhasil dihapus');
-      setShowAlert(true);
+      setToastType('success');
+      setToastTitle('Aksi Berhasil');
+      setToastMessage('Prestasi berhasil dihapus');
+      setShowToast(true);
     },
     onError: () => {
-      setAlertType('error');
-      setAlertMessage('Gagal menghapus prestasi');
-      setShowAlert(true);
+      setToastType('error');
+      setToastTitle('Aksi Gagal');
+      setToastMessage('Gagal menghapus prestasi');
+      setShowToast(true);
     },
   });
   const handleExport = async () => {
@@ -171,17 +174,19 @@ function CncDashboard() {
         document.body.removeChild(a);
       }, 100);
 
-      setAlertType('success');
-      setAlertMessage('Data berhasil diekspor');
-      setShowAlert(true);
+      setToastType('success');
+      setToastTitle('Aksi Berhasil');
+      setToastMessage('Data berhasil diekspor');
+      setShowToast(true);
     } catch (err) {
       console.error('Export error:', err);
 
-      setAlertType('error');
-      setAlertMessage(
+      setToastType('error');
+      setToastTitle('Aksi Gagal');
+      setToastMessage(
         `Gagal mengekspor data: ${err instanceof Error ? err.message : 'Unknown error'}`,
       );
-      setShowAlert(true);
+      setShowToast(true);
     }
   };
 
@@ -190,16 +195,12 @@ function CncDashboard() {
     setCurrentPage(1);
   };
 
-  // const handlePageChange = (page: number) => {
-  //   setCurrentPage(page);
-  //   window.scrollTo({ top: 0, behavior: 'smooth' });
-  // };
-
   const handleDeleteClick = () => {
     if (selectedItems.length === 0) {
-      setAlertType('error');
-      setAlertMessage('Pilih item yang akan dihapus');
-      setShowAlert(true);
+      setToastType('error');
+      setToastTitle('Aksi Gagal');
+      setToastMessage('Pilih item yang akan dihapus');
+      setShowToast(true);
       return;
     }
     setItemsToDelete(selectedItems);
@@ -260,7 +261,7 @@ function CncDashboard() {
           <div className="max-w-7xl">
             <div className="flex items-center space-x-4">
               <button className="text-white transition-all duration-300 hover:-translate-x-1">
-                <ChevronLeft className="hidden lg:block" size={54} onClick = {() => navigate({ to: '/home' })}/>
+                <ChevronLeft className="hidden lg:block" size={54} onClick={() => navigate({ to: '/home' })}/>
                 <ChevronLeft size={24} className="block lg:hidden" />
               </button>
               <h1 className="text-3xl font-bold text-white lg:text-5xl">
@@ -272,48 +273,51 @@ function CncDashboard() {
       </div>
 
       <div className="min-h-screen w-full bg-[#FFFFFF] pb-24 lg:pb-0">
-        <div className="rounded-lg bg-white shadow-sm">
-          <TableActionsBar
-            selectedCount={selectedItems.length}
-            onSelectAll={handleSelectAll}
-            allSelected={allSelected}
-            onExport={handleExport}
-            filterKategori={filterKategori}
-            onFilterChange={setFilterKategori}
-            onPeriodChange={handlePeriodChange}
-            onDelete={handleDeleteClick}
-          />
-          <DashboardTable
-            data={filteredData}
-            selectedItems={selectedItems}
-            onSelectItem={handleSelectItem}
-            onSelectAll={handleSelectAll}
-            allSelected={allSelected}
-            currentPage={currentPage}
-            totalPages={totalPages}
-            loading={isLoading}
-            onDelete={(id: string) =>
-              deleteMutation
-                .mutateAsync(id)
-                .then(() => ({
-                  success: true,
-                }))
-                .catch(() => ({
-                  success: false,
-                  error: 'Gagal menghapus prestasi',
-                }))
-            }
-          />
+        <div className="mx-auto max-w-7xl px-4 lg:px-6">
+          <div className="rounded-lg bg-white shadow-sm">
+            <TableActionsBar
+              selectedCount={selectedItems.length}
+              onSelectAll={handleSelectAll}
+              allSelected={allSelected}
+              onExport={handleExport}
+              filterKategori={filterKategori}
+              onFilterChange={setFilterKategori}
+              onPeriodChange={handlePeriodChange}
+              onDelete={handleDeleteClick}
+            />
+            <DashboardTable
+              data={filteredData}
+              selectedItems={selectedItems}
+              onSelectItem={handleSelectItem}
+              onSelectAll={handleSelectAll}
+              allSelected={allSelected}
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+              loading={isLoading}
+              onDelete={(id: string) =>
+                deleteMutation
+                  .mutateAsync(id)
+                  .then(() => ({
+                    success: true,
+                  }))
+                  .catch(() => ({
+                    success: false,
+                    error: 'Gagal menghapus prestasi',
+                  }))
+              }
+            />
+          </div>
         </div>
       </div>
 
-      <Alert
-        type={alertType}
-        isVisible={showAlert}
-        onClose={() => setShowAlert(false)}
-        title={alertType === 'success' ? 'Aksi Berhasil' : 'Aksi Gagal'}
-        message={alertMessage}
-        className="!left-1/2 !right-auto top-36"
+      <Toast
+        type={toastType}
+        isVisible={showToast}
+        onClose={() => setShowToast(false)}
+        duration={5000}
+        title={toastTitle}
+        message={toastMessage}
       />
 
       <ConfirmModal

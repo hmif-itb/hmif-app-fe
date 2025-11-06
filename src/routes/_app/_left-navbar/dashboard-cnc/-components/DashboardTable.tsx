@@ -47,11 +47,12 @@ export const DashboardTable = ({
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const entriesPerPage = isDesktop ? 10 : 6; // Untuk UI Pagination
+  const handleDelete = (item: Prestasi) => {
+    setDeleteModal({ isOpen: true, item });
+  };
 
   const handleConfirmDelete = async () => {
     if (!deleteModal.item || !onDelete) {
-      console.log('No item or onDelete handler');
       setDeleteModal({ isOpen: false, item: null });
       return;
     }
@@ -79,7 +80,7 @@ export const DashboardTable = ({
       ) : (
         <>
           <div className="overflow-x-auto">
-            <div className="min-w-[900px]">
+            <div className="min-w-full md:min-w-[900px] lg:min-w-[1000px]">
               <TableHeader
                 onSelectAll={onSelectAll}
                 allSelected={allSelected}
@@ -102,13 +103,13 @@ export const DashboardTable = ({
               )}
             </div>
           </div>
-          <div className="flex justify-start pl-2">
+          <div className="flex justify-center border-t bg-white px-4 py-4 md:justify-start md:px-6">
             <Pagination
               currentPage={currentPage}
               totalPages={totalPages}
               onPageChange={onPageChange}
-              totalEntries={totalPages * entriesPerPage}
-              entriesPerPage={entriesPerPage}
+              totalEntries={totalPages * 10}
+              entriesPerPage={10}
             />
           </div>
         </>
