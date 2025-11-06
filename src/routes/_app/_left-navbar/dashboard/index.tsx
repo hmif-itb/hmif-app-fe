@@ -3,7 +3,7 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import { api, queryClient } from '~/api/client';
 import { TableActionsBar } from './-components/TableActionsBar';
 import { DashboardTable } from './-components/DashboardTable';
-import { Alert } from '../-dashboard-component/ALert';
+import { Toast } from '../-dashboard-component/Toast';
 import { ChevronLeft } from 'lucide-react';
 import { ConfirmModal } from '../-dashboard-component/ConfirmModal';
 // import { Prestasi } from '~/api/generated';
@@ -26,9 +26,10 @@ function PeopleDashboard() {
   });
   // const [search, setSearch] = useState<string>('');
   const [currentPage, setCurrentPage] = useState(1);
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertType, setAlertType] = useState<'success' | 'error'>('success');
-  const [alertMessage, setAlertMessage] = useState('');
+  const [showToast, setShowToast] = useState(false);
+  const [toastType, setToastType] = useState<'success' | 'error'>('success');
+  const [toastTitle, setToastTitle] = useState('');
+  const [toastMessage, setToastMessage] = useState('');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [itemsToDelete, setItemsToDelete] = useState<string[]>([]);
 
@@ -95,14 +96,16 @@ function PeopleDashboard() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['achievements'] });
       setSelectedItems([]);
-      setAlertType('success');
-      setAlertMessage('Prestasi berhasil dihapus');
-      setShowAlert(true);
+      setToastType('success');
+      setToastTitle('Aksi Berhasil');
+      setToastMessage('Prestasi berhasil dihapus');
+      setShowToast(true);
     },
     onError: () => {
-      setAlertType('error');
-      setAlertMessage('Gagal menghapus prestasi');
-      setShowAlert(true);
+      setToastType('error');
+      setToastTitle('Aksi Gagal');
+      setToastMessage('Gagal menghapus prestasi');
+      setShowToast(true);
     },
   });
   const handleExport = async () => {
@@ -172,17 +175,19 @@ function PeopleDashboard() {
         document.body.removeChild(a);
       }, 100);
 
-      setAlertType('success');
-      setAlertMessage('Data berhasil diekspor');
-      setShowAlert(true);
+      setToastType('success');
+      setToastTitle('Aksi Berhasil');
+      setToastMessage('Data berhasil diekspor');
+      setShowToast(true);
     } catch (err) {
       console.error('Export error:', err);
 
-      setAlertType('error');
-      setAlertMessage(
+      setToastType('error');
+      setToastTitle('Aksi Gagal');
+      setToastMessage(
         `Gagal mengekspor data: ${err instanceof Error ? err.message : 'Unknown error'}`,
       );
-      setShowAlert(true);
+      setShowToast(true);
     }
   };
   const handleBulkChange = () => {
@@ -201,9 +206,10 @@ function PeopleDashboard() {
 
   const handleDeleteClick = () => {
     if (selectedItems.length === 0) {
-      setAlertType('error');
-      setAlertMessage('Pilih item yang akan dihapus');
-      setShowAlert(true);
+      setToastType('error');
+      setToastTitle('Aksi Gagal');
+      setToastMessage('Pilih item yang akan dihapus');
+      setShowToast(true);
       return;
     }
     setItemsToDelete(selectedItems);
@@ -227,6 +233,39 @@ function PeopleDashboard() {
   return (
     <div className="min-h-screen bg-[#FFFFFF] font-inter">
       <div className="relative overflow-hidden bg-[#2F754A]">
+      <div className="absolute inset-0">
+          <img
+            src="/img/admin/yellow-gradient-top-right-desktop.png"
+            alt=""
+            className="absolute right-0 top-0 z-30 hidden lg:block"
+          />
+          <img
+            src="/img/admin/yellow-gradient-top-right-mobile.png"
+            alt=""
+            className="absolute right-0 top-0 z-30 lg:hidden"
+          />
+          <img
+            src="/img/admin/green-peer-top-left-desktop.png"
+            alt=""
+            className="absolute left-0 top-0 z-20 hidden lg:block"
+          />
+          <img
+            src="/img/admin/green-peer-top-left-mobile.png"
+            alt=""
+            className="absolute left-0 top-0 z-20 lg:hidden"
+          />
+          <img
+            src="/img/admin/green-peer-top-right-desktop.png"
+            alt=""
+            className="absolute right-0 top-0 z-10 hidden lg:block"
+          />
+          <img
+            src="/img/admin/green-peer-top-right-mobile.png"
+            alt=""
+            className="absolute right-0 top-0 z-10 mt-12 lg:hidden"
+          />
+        </div>
+
         <div className="absolute inset-0">{/* Background images */}</div>
         <div className="relative z-40 px-4 py-12">
           <div className="max-w-7xl">
@@ -244,49 +283,52 @@ function PeopleDashboard() {
       </div>
 
       <div className="min-h-screen w-full bg-[#FFFFFF] pb-24 lg:pb-0">
-        <div className="rounded-lg bg-white shadow-sm">
-          <TableActionsBar
-            selectedCount={selectedItems.length}
-            onSelectAll={handleSelectAll}
-            allSelected={allSelected}
-            onExport={handleExport}
-            onBulkChange={handleBulkChange}
-            filterJenis={filterJenis}
-            onFilterChange={setFilterJenis}
-            onPeriodChange={handlePeriodChange}
-            onDelete={handleDeleteClick}
-          />
-          <DashboardTable
-            data={achievements}
-            selectedItems={selectedItems}
-            onSelectItem={handleSelectItem}
-            onSelectAll={handleSelectAll}
-            allSelected={allSelected}
-            currentPage={currentPage}
-            totalPages={totalPages}
-            loading={isLoading}
-            onDelete={(id: string) =>
-              deleteMutation
-                .mutateAsync(id)
-                .then(() => ({
-                  success: true,
-                }))
-                .catch(() => ({
-                  success: false,
-                  error: 'Gagal menghapus prestasi',
-                }))
-            }
-          />
+        <div className='mx-auto max-w-7xl px-4 lg:px-6'>
+          <div className="rounded-lg bg-white shadow-sm">
+            <TableActionsBar
+              selectedCount={selectedItems.length}
+              onSelectAll={handleSelectAll}
+              allSelected={allSelected}
+              onExport={handleExport}
+              onBulkChange={handleBulkChange}
+              filterJenis={filterJenis}
+              onFilterChange={setFilterJenis}
+              onPeriodChange={handlePeriodChange}
+              onDelete={handleDeleteClick}
+            />
+            <DashboardTable
+              data={achievements}
+              selectedItems={selectedItems}
+              onSelectItem={handleSelectItem}
+              onSelectAll={handleSelectAll}
+              allSelected={allSelected}
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+              loading={isLoading}
+              onDelete={(id: string) =>
+                deleteMutation
+                  .mutateAsync(id)
+                  .then(() => ({
+                    success: true,
+                  }))
+                  .catch(() => ({
+                    success: false,
+                    error: 'Gagal menghapus prestasi',
+                  }))
+              }
+            />
+          </div>
         </div>
       </div>
 
-      <Alert
-        type={alertType}
-        isVisible={showAlert}
-        onClose={() => setShowAlert(false)}
-        title={alertType === 'success' ? 'Aksi Berhasil' : 'Aksi Gagal'}
-        message={alertMessage}
-        className="!left-1/2 !right-auto top-36"
+      <Toast
+        type={toastType}
+        isVisible={showToast}
+        onClose={() => setShowToast(false)}
+        duration={5000}
+        title={toastTitle}
+        message={toastMessage}
       />
 
       <ConfirmModal
