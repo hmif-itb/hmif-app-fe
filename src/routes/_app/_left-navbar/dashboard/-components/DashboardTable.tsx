@@ -90,7 +90,7 @@ export const DashboardTable = ({
       ) : (
         <>
           <div className="overflow-x-auto">
-            <div className="min-w-[900px]">
+            <div className="min-w-full md:min-w-[900px] lg:min-w-[1000px]">
               <TableHeader
                 onSelectAll={onSelectAll}
                 allSelected={allSelected}
@@ -115,12 +115,12 @@ export const DashboardTable = ({
               )}
             </div>
           </div>
-          <div className="flex justify-start pl-2">
+          <div className="flex justify-center border-t bg-white px-4 py-4 md:justify-start md:px-6">
             <Pagination
               currentPage={currentPage}
               totalPages={totalPages}
               onPageChange={onPageChange}
-              totalEntries={totalPages * 10} // Adjust based on API total
+              totalEntries={totalPages * 10}
               entriesPerPage={10}
             />
           </div>

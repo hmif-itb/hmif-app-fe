@@ -1,6 +1,6 @@
 import { CheckCheck, Download, Trash2 } from 'lucide-react';
 import * as ToggleGroup from '@radix-ui/react-toggle-group';
-import { DropdownCalendar } from '../../home/prestasi/-components/monthly-calendar';
+import { DropdownCalendar } from '../../-dashboard-component/MonthlyCalendar';
 import {
   KategoriDropdown,
   DropdownOption,
@@ -48,112 +48,102 @@ export const TableActionsBar = ({
     };
     
     const monthNum = monthMap[month];
-    const formattedDate = `${monthNum.toString().padStart(2, '0')}/${year}`;
+    const formattedDate = `${year}-${monthNum.toString().padStart(2, '0')}`;
     
     if (onPeriodChange) {
       onPeriodChange(formattedDate, formattedDate);
     }
   };
+
   return (
-    <div className="flex flex-col justify-between gap-4 bg-[#FFFFFF] py-4 pl-3 md:flex-row md:items-center lg:pl-4">
-      <div className="order-2 flex flex-wrap items-center gap-2 md:order-1">
-        {/* <div className="relative w-full md:w-auto">
-          <input
-            className="w-full rounded-lg border border-gray-300 p-2 pr-10 md:w-64"
-            type="text"
-            value={search}
-            onChange={(e) => onSearchChange?.(e.target.value)}
-            placeholder="Cari nama atau prestasi"
-          />
-          <svg
-            className="absolute right-3 top-1/2 size-5 -translate-y-1/2 text-gray-500"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            />
-          </svg>
-        </div> */}
+    <div className="flex flex-col gap-3 bg-[#FFFFFF] p-3 md:flex-row md:items-center md:justify-between md:py-4 md:pl-4">
+      {/* Left Side - Action Buttons */}
+      <div className="flex flex-wrap items-center gap-2">
         <button
           onClick={onDelete}
-          className="flex items-center gap-1.5 rounded-full border border-black px-2 py-1.5 font-inter text-xs font-medium hover:bg-gray-50 md:gap-2 md:px-3 md:py-2 md:text-sm"
+          className="flex items-center gap-1 rounded-full border border-black px-2 py-1 font-inter text-[10px] font-medium transition-colors hover:bg-gray-50 sm:gap-1.5 sm:px-2.5 sm:py-1.5 sm:text-xs md:gap-2 md:px-3 md:py-2 md:text-sm"
         >
-          <Trash2 size={14} className="md:hidden" />
-          <Trash2 size={16} className="hidden md:block" />
-          Hapus
+          <Trash2 size={12} className="sm:size-3 md:size-4" />
+          <span className="hidden sm:inline">Hapus</span>
         </button>
         <button
           onClick={onSelectAll}
-          className="flex items-center gap-1.5 rounded-full border border-black px-2 py-1.5 font-inter text-xs font-medium hover:bg-gray-50 md:gap-2 md:px-3 md:py-2 md:text-sm"
+          className="flex items-center gap-1 rounded-full border border-black px-2 py-1 font-inter text-[10px] font-medium transition-colors hover:bg-gray-50 sm:gap-1.5 sm:px-2.5 sm:py-1.5 sm:text-xs md:gap-2 md:px-3 md:py-2 md:text-sm"
         >
-          <CheckCheck size={14} className="md:hidden" />
-          <CheckCheck size={16} className="hidden md:block" />
-          {allSelected ? 'Batalkan Semua' : 'Pilih Semua'}
+          <CheckCheck size={12} className="sm:size-3 md:size-4" />
+          <span className="hidden sm:inline">{allSelected ? 'Batalkan Semua' : 'Pilih Semua'}</span>
+          <span className="sm:hidden">{allSelected ? 'Batal' : 'Pilih'}</span>
         </button>
         <button
           onClick={onExport}
-          className="flex items-center gap-1.5 rounded-full border border-black px-2 py-1 font-inter text-xs font-medium hover:bg-gray-50 md:gap-2 md:px-3 md:py-2 md:text-sm"
+          className="flex items-center gap-1 rounded-full border border-black px-2 py-1 font-inter text-[10px] font-medium transition-colors hover:bg-gray-50 sm:gap-1.5 sm:px-2.5 sm:py-1.5 sm:text-xs md:gap-2 md:px-3 md:py-2 md:text-sm"
         >
-          <Download size={14} className="md:hidden" />
-          <Download size={16} className="hidden md:block" />
-          Export
+          <Download size={12} className="sm:size-3 md:size-4" />
+          <span className="hidden sm:inline">Export</span>
         </button>
-        <KategoriDropdown
-          value={filterJenis}
-          onChange={onFilterChange}
-          options={jenisPrestasiOptions}
-          placeholder="Pilih Jenis Prestasi"
-          placeholderMobile="Pilih Jenis ..."
-        />
+        {/* <div className="w-full sm:w-auto">
+          <KategoriDropdown
+            value={filterJenis}
+            onChange={onFilterChange}
+            options={jenisPrestasiOptions}
+            placeholder="Pilih Jenis Prestasi"
+            placeholderMobile="Pilih Jenis ..."
+          />
+        </div> */}
         {selectedCount > 0 && (
-          <span className="font-inter text-sm text-gray-600">
+          <span className="hidden text-[10px] text-gray-600 sm:inline sm:text-xs md:text-sm font-inter">
             {selectedCount} item terpilih
           </span>
         )}
       </div>
 
-      <p className="block font-inter text-sm font-medium lg:hidden">filter:</p>
-      <div className="relative order-1 mx-auto flex flex-wrap items-center gap-2 md:order-2 md:gap-4 lg:justify-between">
-        <span className="hidden font-inter text-sm font-medium lg:block">
-          filter:
+      {/* Right Side - Filter Buttons and Calendar (Calendar on most right) */}
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3 md:gap-4">
+        {/* Toggle Group Buttons */}
+        <span className="hidden font-inter text-xs font-medium sm:inline md:text-sm lg:block">
+            filter:
         </span>
-        <DropdownCalendar
-          placeholder="Pilih Periode"
-          onSelect={handlePeriodSelect}
-          value={selectedPeriod}
-          className="order-1 lg:relative lg:-right-52 lg:order-2"
-        />
         <ToggleGroup.Root
           type="single"
           value={filterJenis === 'all' ? undefined : filterJenis}
           onValueChange={(value) => onFilterChange(value || 'all')}
-          className="order-2 flex lg:order-1"
+          className="flex w-full sm:w-auto"
         >
           <ToggleGroup.Item
             value="kompetisi"
-            className="rounded-l-lg border border-r-0 px-2 py-1 font-inter text-xs font-medium hover:bg-gray-50 data-[state=on]:bg-blue-100 data-[state=on]:text-blue-700 md:px-3 md:py-2 md:text-sm"
+            className="flex-1 rounded-l-lg border border-r-0 px-1.5 py-1 font-inter text-[10px] font-medium transition-colors hover:bg-gray-50 data-[state=on]:bg-blue-100 data-[state=on]:text-blue-700 sm:flex-none sm:px-2 sm:py-1 sm:text-xs md:px-3 md:py-2 md:text-sm"
           >
-            Kompetisi
+            <span className="hidden sm:inline">Kompetisi</span>
+            <span className="sm:hidden">Kom</span>
           </ToggleGroup.Item>
           <ToggleGroup.Item
             value="organisasi"
-            className="border px-2 py-1 font-inter text-xs font-medium hover:bg-gray-50 data-[state=on]:bg-blue-100 data-[state=on]:text-blue-700 md:px-3 md:py-2 md:text-sm"
+            className="flex-1 border px-1.5 py-1 font-inter text-[10px] font-medium transition-colors hover:bg-gray-50 data-[state=on]:bg-blue-100 data-[state=on]:text-blue-700 sm:flex-none sm:px-2 sm:py-1 sm:text-xs md:px-3 md:py-2 md:text-sm"
           >
-            Organisasi
+            <span className="hidden sm:inline">Organisasi</span>
+            <span className="sm:hidden">Org</span>
           </ToggleGroup.Item>
           <ToggleGroup.Item
             value="kepanitiaan"
-            className="rounded-r-lg border border-l-0 px-2 py-1 font-inter text-xs font-medium hover:bg-gray-50 data-[state=on]:bg-blue-100 data-[state=on]:text-blue-700 md:px-3 md:py-2 md:text-sm"
+            className="flex-1 rounded-r-lg border border-l-0 px-1.5 py-1 font-inter text-[10px] font-medium transition-colors hover:bg-gray-50 data-[state=on]:bg-blue-100 data-[state=on]:text-blue-700 sm:flex-none sm:px-2 sm:py-1 sm:text-xs md:px-3 md:py-2 md:text-sm"
           >
-            Kepanitiaan
+            <span className="hidden sm:inline">Kepanitiaan</span>
+            <span className="sm:hidden">Kep</span>
           </ToggleGroup.Item>
         </ToggleGroup.Root>
+
+        {/* Filter Label and Calendar Container */}
+        <div className="flex items-center gap-2 sm:gap-3">
+          {/* Monthly Calendar - Most Right */}
+          <div className="flex-1 sm:flex-none sm:w-auto">
+            <DropdownCalendar
+              placeholder="Pilih Periode"
+              onSelect={handlePeriodSelect}
+              value={selectedPeriod}
+              className="w-full sm:w-[160px] md:w-[180px]"
+            />
+          </div>
+        </div>
       </div>
     </div>
   );
