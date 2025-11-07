@@ -261,7 +261,11 @@ function CncDashboard() {
           <div className="max-w-7xl">
             <div className="flex items-center space-x-4">
               <button className="text-white transition-all duration-300 hover:-translate-x-1">
-                <ChevronLeft className="hidden lg:block" size={54} onClick={() => navigate({ to: '/home' })}/>
+                <ChevronLeft
+                  className="hidden lg:block"
+                  size={54}
+                  onClick={() => navigate({ to: '/home' })}
+                />
                 <ChevronLeft size={24} className="block lg:hidden" />
               </button>
               <h1 className="text-3xl font-bold text-white lg:text-5xl">

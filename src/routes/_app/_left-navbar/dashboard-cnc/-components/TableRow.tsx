@@ -9,7 +9,7 @@ type CompetitionType = 'CP' | 'CTF' | 'BCC' | 'DS' | 'AI' | 'Hackathon' | null;
 
 interface ExtendedPrestasi extends Prestasi {
   competitionType: CompetitionType;
-  periode?: string; 
+  periode?: string;
 }
 
 type TableRowProps = {

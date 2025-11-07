@@ -41,15 +41,25 @@ export const TableActionsBar = ({
   const handlePeriodSelect = (month: string, year: number) => {
     const periodText = `${month} ${year}`;
     setSelectedPeriod(periodText);
-    
+
     const monthMap: Record<string, number> = {
-      'Januari': 1, 'Februari': 2, 'Maret': 3, 'April': 4, 'Mei': 5, 'Juni': 6,
-      'Juli': 7, 'Agustus': 8, 'September': 9, 'Oktober': 10, 'November': 11, 'Desember': 12
+      Januari: 1,
+      Februari: 2,
+      Maret: 3,
+      April: 4,
+      Mei: 5,
+      Juni: 6,
+      Juli: 7,
+      Agustus: 8,
+      September: 9,
+      Oktober: 10,
+      November: 11,
+      Desember: 12,
     };
-    
+
     const monthNum = monthMap[month];
     const formattedDate = `${year}-${monthNum.toString().padStart(2, '0')}`;
-    
+
     if (onPeriodChange) {
       onPeriodChange(formattedDate, formattedDate);
     }
@@ -71,7 +81,9 @@ export const TableActionsBar = ({
           className="flex items-center gap-1 rounded-full border border-black px-2 py-1 font-inter text-[10px] font-medium transition-colors hover:bg-gray-50 sm:gap-1.5 sm:px-2.5 sm:py-1.5 sm:text-xs md:gap-2 md:px-3 md:py-2 md:text-sm"
         >
           <CheckCheck size={12} className="sm:size-3 md:size-4" />
-          <span className="hidden sm:inline">{allSelected ? 'Batalkan Semua' : 'Pilih Semua'}</span>
+          <span className="hidden sm:inline">
+            {allSelected ? 'Batalkan Semua' : 'Pilih Semua'}
+          </span>
           <span className="sm:hidden">{allSelected ? 'Batal' : 'Pilih'}</span>
         </button>
         <button
@@ -82,7 +94,7 @@ export const TableActionsBar = ({
           <span className="hidden sm:inline">Export</span>
         </button>
         {selectedCount > 0 && (
-          <span className="hidden text-[10px] text-gray-600 sm:inline sm:text-xs md:text-sm font-inter">
+          <span className="hidden font-inter text-[10px] text-gray-600 sm:inline sm:text-xs md:text-sm">
             {selectedCount} item terpilih
           </span>
         )}
@@ -103,7 +115,7 @@ export const TableActionsBar = ({
               placeholderMobile="Pilih jenis ..."
             />
           </div>
-          <div className="flex-1 sm:flex-none sm:w-auto">
+          <div className="flex-1 sm:w-auto sm:flex-none">
             <DropdownCalendar
               placeholder="Pilih Periode"
               onSelect={handlePeriodSelect}

@@ -52,7 +52,10 @@ const prestasiScheme = z.object({
     .string()
     .min(1, 'This field is required')
     .refine((text: string) => {
-      const wordCount = text.trim().split(/\s+/).filter((w) => w.length > 0).length;
+      const wordCount = text
+        .trim()
+        .split(/\s+/)
+        .filter((w) => w.length > 0).length;
       return wordCount <= deskripsiMaxWord;
     }, `${deskripsiMaxWord} words maximum`),
 });
@@ -103,7 +106,10 @@ function EditPrestasiPage(): JSX.Element {
 
   const [formData, setFormData] = useState<{
     namaPrestasi: string;
-    jenisPrestasi: 'Organisasi non-HMIF' | 'Kepanitian non-HMIF' | 'Kompetisi atau Lomba';
+    jenisPrestasi:
+      | 'Organisasi non-HMIF'
+      | 'Kepanitian non-HMIF'
+      | 'Kompetisi atau Lomba';
     periodePrestasi: string;
     jenisLomba: string;
     deskripsiPrestasi: string;
@@ -161,7 +167,7 @@ function EditPrestasiPage(): JSX.Element {
     'Business Case Competition': 'BCC',
     'UI/UX': null,
     'Data Science': 'DS',
-    'Hackathon': 'Hackathon',
+    Hackathon: 'Hackathon',
     'Artificial Intelligence': 'AI',
   };
 
@@ -172,12 +178,15 @@ function EditPrestasiPage(): JSX.Element {
           idPrestasi: id,
         });
 
-        const jenisFromApi: 'Organisasi non-HMIF' | 'Kepanitian non-HMIF' | 'Kompetisi atau Lomba' =
+        const jenisFromApi:
+          | 'Organisasi non-HMIF'
+          | 'Kepanitian non-HMIF'
+          | 'Kompetisi atau Lomba' =
           data.jenisPrestasi === 'organisasi'
             ? 'Organisasi non-HMIF'
             : data.jenisPrestasi === 'kepanitiaan'
-            ? 'Kepanitian non-HMIF'
-            : 'Kompetisi atau Lomba';
+              ? 'Kepanitian non-HMIF'
+              : 'Kompetisi atau Lomba';
 
         const monthNames = [
           'Januari',
@@ -196,13 +205,13 @@ function EditPrestasiPage(): JSX.Element {
         const period = `${monthNames[data.bulan - 1]} ${data.tahun}`;
 
         const competitionTypeToName: Record<string, string> = {
-          'CP': 'Competitive Programming',
-          'CTF': 'Capture The Flag',
-          'BCC': 'Business Case Competition',
-          'UIUX': 'UI/UX',
-          'DS': 'Data Science',
-          'Hackathon': 'Hackathon',
-          'AI': 'Artificial Intelligence',
+          CP: 'Competitive Programming',
+          CTF: 'Capture The Flag',
+          BCC: 'Business Case Competition',
+          UIUX: 'UI/UX',
+          DS: 'Data Science',
+          Hackathon: 'Hackathon',
+          AI: 'Artificial Intelligence',
         };
 
         setFormData((prev) => ({
@@ -210,7 +219,10 @@ function EditPrestasiPage(): JSX.Element {
           namaPrestasi: data.penyelenggara || '',
           jenisPrestasi: jenisFromApi,
           periodePrestasi: period,
-          jenisLomba: data.competitionType ? competitionTypeToName[data.competitionType] || data.competitionType : '',
+          jenisLomba: data.competitionType
+            ? competitionTypeToName[data.competitionType] ||
+              data.competitionType
+            : '',
           deskripsiPrestasi: data.deskripsi || '',
         }));
       } catch (e) {
@@ -266,11 +278,17 @@ function EditPrestasiPage(): JSX.Element {
 
   // Handle input yang berubah
   const handleInputChange = (field: keyof typeof formData, value: string) => {
-    setFormData((prev) => ({ ...(prev as typeof formData), [field]: value as never }));
+    setFormData((prev) => ({
+      ...(prev as typeof formData),
+      [field]: value as never,
+    }));
 
     // Max kata untuk deskripsi
     if (field === 'deskripsiPrestasi') {
-      const words = value.trim().split(/\s+/).filter((w) => w.length > 0);
+      const words = value
+        .trim()
+        .split(/\s+/)
+        .filter((w) => w.length > 0);
       if (words.length > deskripsiMaxWord) {
         setErrors((prev) => ({
           ...prev,
@@ -289,7 +307,13 @@ function EditPrestasiPage(): JSX.Element {
   };
 
   const handleCategorySelect = (value: string) => {
-    handleInputChange('jenisPrestasi', value as any);
+    handleInputChange(
+      'jenisPrestasi',
+      value as
+        | 'Organisasi non-HMIF'
+        | 'Kepanitian non-HMIF'
+        | 'Kompetisi atau Lomba',
+    );
 
     // Handle jenis lomba
     if (value !== 'Kompetisi atau Lomba') {
@@ -312,16 +336,27 @@ function EditPrestasiPage(): JSX.Element {
   };
 
   // Handle file upload
-  const handleFileSelect = (field: 'fotoSertifikat' | 'fotoDiri' | 'fotoAwarding', file: File) => {
-    setFormData((prev) => ({ ...(prev as typeof formData), [field]: file as never }));
+  const handleFileSelect = (
+    field: 'fotoSertifikat' | 'fotoDiri' | 'fotoAwarding',
+    file: File,
+  ) => {
+    setFormData((prev) => ({
+      ...(prev as typeof formData),
+      [field]: file as never,
+    }));
     if (errors[field]) {
       setErrors((prev) => ({ ...prev, [field]: '' }));
     }
   };
 
   // Handle remove file di upload file button
-  const handleRemoveFile = (field: 'fotoSertifikat' | 'fotoDiri' | 'fotoAwarding') => {
-    setFormData((prev) => ({ ...(prev as typeof formData), [field]: null as never }));
+  const handleRemoveFile = (
+    field: 'fotoSertifikat' | 'fotoDiri' | 'fotoAwarding',
+  ) => {
+    setFormData((prev) => ({
+      ...(prev as typeof formData),
+      [field]: null as never,
+    }));
     if (errors[field]) {
       setErrors((prev) => ({ ...prev, [field]: '' }));
     }
@@ -446,7 +481,11 @@ function EditPrestasiPage(): JSX.Element {
         <div className="flex flex-col gap-6">
           <div className="flex flex-row items-center gap-3">
             <div className="flex rounded-[4px] bg-yellow-200 p-2">
-              <img src="/img/icons/entry.svg" alt="Icon Prestasi" className="size-4" />
+              <img
+                src="/img/icons/entry.svg"
+                alt="Icon Prestasi"
+                className="size-4"
+              />
             </div>
             <h1 className="text-[16px] font-semibold">Formulir Prestasi</h1>
           </div>
@@ -458,15 +497,20 @@ function EditPrestasiPage(): JSX.Element {
             {/* Nama Prestasi */}
             <div className="flex flex-col gap-2">
               <span className="text-sm">
-                Nama Kompetisi/Organisasi <span className="text-red-400">*</span>
+                Nama Kompetisi/Organisasi{' '}
+                <span className="text-red-400">*</span>
               </span>
               <Input
                 className={`rounded-lg bg-[#FCFCFC] hover:border-[#CBD5E1] focus-visible:border-[#94A3B8] focus-visible:ring-0 focus-visible:ring-offset-0 ${
-                  errors.namaPrestasi ? 'border-red-400 focus-visible:border-red-400' : ''
+                  errors.namaPrestasi
+                    ? 'border-red-400 focus-visible:border-red-400'
+                    : ''
                 }`}
                 placeholder="Masukkan nama kompetisi/organisasi"
                 value={formData.namaPrestasi}
-                onChange={(e) => handleInputChange('namaPrestasi', e.target.value)}
+                onChange={(e) =>
+                  handleInputChange('namaPrestasi', e.target.value)
+                }
               />
               {errors.namaPrestasi && (
                 <span className="text-xs font-semibold text-red-400">
@@ -498,7 +542,8 @@ function EditPrestasiPage(): JSX.Element {
               {/* Periode Prestasi */}
               <div className="flex w-full flex-col gap-2 sm:w-[52%]">
                 <span className="text-sm">
-                  Periode Pencapaian Prestasi <span className="text-red-400">*</span>
+                  Periode Pencapaian Prestasi{' '}
+                  <span className="text-red-400">*</span>
                 </span>
                 <DropdownCalendar
                   placeholder="Bulan/Tahun"
@@ -543,11 +588,15 @@ function EditPrestasiPage(): JSX.Element {
             </span>
             <Textarea
               className={`h-[130px] resize-none rounded-lg bg-[#FCFCFC] ${
-                errors.deskripsiPrestasi ? 'border-red-400 focus-visible:border-red-400' : ''
+                errors.deskripsiPrestasi
+                  ? 'border-red-400 focus-visible:border-red-400'
+                  : ''
               }`}
               placeholder="Masukkan deskripsi prestasi..."
               value={formData.deskripsiPrestasi}
-              onChange={(e) => handleInputChange('deskripsiPrestasi', e.target.value)}
+              onChange={(e) =>
+                handleInputChange('deskripsiPrestasi', e.target.value)
+              }
             />
             {errors.deskripsiPrestasi && (
               <span className="text-xs font-semibold text-red-400">
@@ -570,7 +619,9 @@ function EditPrestasiPage(): JSX.Element {
               text="Upload File"
               onFileSelect={(file) => handleFileSelect('fotoSertifikat', file)}
               onFileRemove={() => handleRemoveFile('fotoSertifikat')}
-              onInvalidFile={(error) => handleInvalidFile('fotoSertifikat', error)}
+              onInvalidFile={(error) =>
+                handleInvalidFile('fotoSertifikat', error)
+              }
               accept="image/*,application/pdf"
               className={`mt-4 ${errors.fotoSertifikat ? 'border-red-400' : ''}`}
               disabled={false}
@@ -622,7 +673,9 @@ function EditPrestasiPage(): JSX.Element {
               text="Upload File"
               onFileSelect={(file) => handleFileSelect('fotoAwarding', file)}
               onFileRemove={() => handleRemoveFile('fotoAwarding')}
-              onInvalidFile={(error) => handleInvalidFile('fotoAwarding', error)}
+              onInvalidFile={(error) =>
+                handleInvalidFile('fotoAwarding', error)
+              }
               accept="image/*"
               className={`mt-4 ${errors.fotoAwarding ? 'border-red-400' : ''}`}
               disabled={false}

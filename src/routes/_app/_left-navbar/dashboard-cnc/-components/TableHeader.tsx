@@ -21,19 +21,23 @@ export const TableHeader = ({ onSelectAll, allSelected }: TableHeaderProps) => {
 
       <div className="grid flex-1 grid-cols-11 gap-2 md:grid-cols-10 md:gap-4">
         <div className="col-span-3 flex items-center justify-center md:col-span-2">
-          <span className="text-xs md:text-sm text-center">Profil</span>
+          <span className="text-center text-xs md:text-sm">Profil</span>
         </div>
         <div className="col-span-3 flex items-center justify-center md:col-span-3">
-          <span className="text-xs md:text-sm text-center">Nama Prestasi</span>
+          <span className="text-center text-xs md:text-sm">Nama Prestasi</span>
         </div>
         <div className="col-span-2 flex items-center justify-center md:col-span-2">
-          <span className="text-xs md:text-sm text-center">Jenis Perlombaan</span>
+          <span className="text-center text-xs md:text-sm">
+            Jenis Perlombaan
+          </span>
         </div>
         <div className="col-span-2 flex items-center justify-center md:col-span-2">
-          <span className="text-xs md:text-sm text-center">Nama Organisasi / Perlombaan</span>
+          <span className="text-center text-xs md:text-sm">
+            Nama Organisasi / Perlombaan
+          </span>
         </div>
         <div className="col-span-1 flex items-center justify-center">
-          <span className="text-xs md:text-sm text-center">Periode</span>
+          <span className="text-center text-xs md:text-sm">Periode</span>
         </div>
       </div>
     </div>

@@ -233,7 +233,7 @@ function PeopleDashboard() {
   return (
     <div className="min-h-screen bg-[#FFFFFF] font-inter">
       <div className="relative overflow-hidden bg-[#2F754A]">
-      <div className="absolute inset-0">
+        <div className="absolute inset-0">
           <img
             src="/img/admin/yellow-gradient-top-right-desktop.png"
             alt=""
@@ -271,7 +271,11 @@ function PeopleDashboard() {
           <div className="max-w-7xl">
             <div className="flex items-center space-x-4">
               <button className="text-white transition-all duration-300 hover:-translate-x-1">
-                <ChevronLeft className="hidden lg:block" size={54} onClick={() => navigate({ to: '/home' })}/>
+                <ChevronLeft
+                  className="hidden lg:block"
+                  size={54}
+                  onClick={() => navigate({ to: '/home' })}
+                />
                 <ChevronLeft size={24} className="block lg:hidden" />
               </button>
               <h1 className="text-3xl font-bold text-white lg:text-5xl">
@@ -283,7 +287,7 @@ function PeopleDashboard() {
       </div>
 
       <div className="min-h-screen w-full bg-[#FFFFFF] pb-24 lg:pb-0">
-        <div className='mx-auto max-w-7xl px-4 lg:px-6'>
+        <div className="mx-auto max-w-7xl px-4 lg:px-6">
           <div className="rounded-lg bg-white shadow-sm">
             <TableActionsBar
               selectedCount={selectedItems.length}

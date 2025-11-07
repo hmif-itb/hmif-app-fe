@@ -73,9 +73,7 @@ export function Toast({
           <p className="text-sm font-semibold text-black">
             {title || defaultTitle}
           </p>
-          <p className="text-xs text-gray-400">
-            {message || defaultMessage}
-          </p>
+          <p className="text-xs text-gray-400">{message || defaultMessage}</p>
         </div>
         <button
           onClick={handleClose}

@@ -103,7 +103,7 @@ export const DashboardTable = ({
               )}
             </div>
           </div>
-          <div className="flex justify-center border-t bg-white px-4 py-4 md:justify-start md:px-6">
+          <div className="flex justify-center border-t bg-white p-4 md:justify-start md:px-6">
             <Pagination
               currentPage={currentPage}
               totalPages={totalPages}

@@ -24,25 +24,27 @@ export const TableHeader = ({ onSelectAll, allSelected }: TableHeaderProps) => {
         <div className="col-span-3 flex items-center justify-center md:col-span-2">
           <span className="text-xs md:text-sm">Profil</span>
         </div>
-        
+
         {/* Nama Prestasi */}
         <div className="col-span-3 flex items-center justify-center">
           <span className="text-xs md:text-sm">Nama Prestasi</span>
         </div>
-        
+
         {/* Jenis Prestasi */}
         <div className="col-span-1 flex items-center justify-center">
           <span className="text-xs md:text-sm">Jenis</span>
         </div>
-        
+
         {/* Nama Organisasi/perlombaan */}
         <div className="col-span-3 flex items-center justify-center">
           <span className="text-xs md:text-sm">
-            <span className="hidden md:inline">Nama Organisasi / Perlombaan</span>
+            <span className="hidden md:inline">
+              Nama Organisasi / Perlombaan
+            </span>
             <span className="md:hidden">Organisasi</span>
           </span>
         </div>
-        
+
         {/* Aksi */}
         <div className="col-span-1 flex items-center justify-center">
           <span className="text-xs md:text-sm">Aksi</span>
