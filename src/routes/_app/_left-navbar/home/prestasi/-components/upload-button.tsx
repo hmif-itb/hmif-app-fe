@@ -11,6 +11,7 @@ interface UploadButtonProps {
   disabled?: boolean;
   maxWidth?: string;
   onInvalidFile?: (error: string) => void;
+  initialFile?: File | null; // Initial file prop
 }
 
 // Upload button untuk upload file
@@ -23,8 +24,9 @@ export function UploadButton({
   disabled = false,
   maxWidth = '80px',
   onInvalidFile,
+  initialFile = null,
 }: UploadButtonProps) {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(initialFile);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   // Function to validate file type based on accept prop

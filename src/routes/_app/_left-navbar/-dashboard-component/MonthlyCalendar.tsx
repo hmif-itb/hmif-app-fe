@@ -6,7 +6,7 @@ interface DropdownCalendarProps {
   onSelect?: (month: string, year: number) => void;
   className?: string;
   disabled?: boolean;
-  value?: string; // Initial value prop (format: "Month Year")
+  value?: string; // Initial value prop
 }
 
 export function DropdownCalendar({
@@ -88,7 +88,7 @@ export function DropdownCalendar({
       </button>
 
       {isOpen && (
-        <div className="absolute z-50 mt-1 w-80 rounded-lg border border-gray-300 bg-white shadow-lg">
+        <div className="absolute right-0 z-50 mt-1 w-80 rounded-lg border border-gray-300 bg-white shadow-lg">
           {/* Calendar Header */}
           <div className="flex items-center justify-between border-b p-3">
             <button

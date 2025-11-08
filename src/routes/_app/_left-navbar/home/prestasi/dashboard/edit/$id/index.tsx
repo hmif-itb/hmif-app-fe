@@ -1,49 +1,23 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { UploadButton } from './-components/upload-button';
+import { ChevronLeft } from 'lucide-react';
 import { Input } from '~/components/ui/input';
 import { Textarea } from '~/components/ui/textarea';
-import { ChevronLeft } from 'lucide-react';
-import { SubmitButton } from './-components/submit-button';
-import { DropdownCategory } from './-components/dropdown-category';
-import { DropdownCalendar } from './-components/monthly-calendar';
-import { ConfirmModal } from './-components/confirm-modal';
-import { Alert } from './-components/alert';
-import { useState } from 'react';
+import { DropdownCategory } from '../../../-components/dropdown-category';
+import { DropdownCalendar } from '../../../-components/monthly-calendar';
+import { UploadButton } from '../../../-components/upload-button';
+import { SubmitButton } from '../../../-components/submit-button';
+import { ConfirmModal } from '../../../-components/confirm-modal';
+import { Alert } from '../../../-components/alert';
+import { useEffect, useMemo, useState } from 'react';
 import { z } from 'zod';
 import { api } from '~/api/client';
 import { ApiError } from '~/api/generated';
 
-export const Route = createFileRoute('/_app/_left-navbar/home/prestasi/')({
-  component: PrestasiPage,
+export const Route = createFileRoute(
+  '/_app/_left-navbar/home/prestasi/dashboard/edit/$id/',
+)({
+  component: EditPrestasiPage,
 });
-
-// For urlss files
-async function uploadViaPresigned(file: File): Promise<string> {
-  const fullName = file.name;
-  const lastDot = fullName.lastIndexOf('.');
-  const base = lastDot === -1 ? fullName : fullName.slice(0, lastDot);
-  const ext = lastDot === -1 ? '' : fullName.slice(lastDot + 1).toLowerCase();
-  if (!ext) {
-    throw new Error('File must have an extension (e.g. .jpg, .png, .pdf)');
-  }
-
-  const presigned = await api.media.createPresignedUrl({
-    requestBody: {
-      fileName: base,
-      fileType: ext,
-    },
-  });
-
-  await fetch(presigned.presignedUrl, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': file.type || 'application/octet-stream',
-    },
-    body: file,
-  });
-
-  return presigned.mediaUrl;
-}
 
 // Options buat dropdown prestasi
 const prestasiOptions = [
@@ -83,31 +57,42 @@ const prestasiScheme = z.object({
       const wordCount = text
         .trim()
         .split(/\s+/)
-        .filter((word) => word.length > 0).length;
+        .filter((w) => w.length > 0).length;
       return wordCount <= deskripsiMaxWord;
     }, `${deskripsiMaxWord} words maximum`),
-  fotoSertifikat: z.instanceof(File, { message: 'This field is required' }),
-  fotoDiri: z.instanceof(File, { message: 'This field is required' }),
-  fotoAwarding: z.union([z.instanceof(File), z.null()]).optional(),
 });
 
-// Type interface dari zod schema
-type PrestasiFormData = z.infer<typeof prestasiScheme>;
+// For urlss files
+async function uploadViaPresigned(file: File): Promise<string> {
+  const fullName = file.name;
+  const lastDot = fullName.lastIndexOf('.');
+  const base = lastDot === -1 ? fullName : fullName.slice(0, lastDot);
+  const ext = lastDot === -1 ? '' : fullName.slice(lastDot + 1).toLowerCase();
+  if (!ext) {
+    throw new Error('File must have an extension (e.g. .jpg, .png, .pdf)');
+  }
 
-// Error state
-interface ErrorForms {
-  namaPrestasi: string;
-  jenisPrestasi: string;
-  periodePrestasi: string;
-  jenisLomba: string;
-  deskripsiPrestasi: string;
-  fotoSertifikat: string;
-  fotoDiri: string;
-  fotoAwarding: string;
+  const presigned = await api.media.createPresignedUrl({
+    requestBody: {
+      fileName: base,
+      fileType: ext,
+    },
+  });
+
+  await fetch(presigned.presignedUrl, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': file.type || 'application/octet-stream',
+    },
+    body: file,
+  });
+
+  return presigned.mediaUrl;
 }
 
-function PrestasiPage(): JSX.Element {
+function EditPrestasiPage(): JSX.Element {
   const navigate = useNavigate();
+  const { id } = Route.useParams();
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [, setJenisLomba] = useState('');
@@ -121,10 +106,21 @@ function PrestasiPage(): JSX.Element {
     isVisible: false,
   });
 
-  const [formData, setFormData] = useState<PrestasiFormData>({
-    namaPrestasi: '',
+  const [formData, setFormData] = useState<{
+    namaPrestasi: string;
     jenisPrestasi:
-      'Organisasi non-HMIF' as unknown as PrestasiFormData['jenisPrestasi'],
+      | 'Organisasi non-HMIF'
+      | 'Kepanitian non-HMIF'
+      | 'Kompetisi atau Lomba';
+    periodePrestasi: string;
+    jenisLomba: string;
+    deskripsiPrestasi: string;
+    fotoSertifikat: File | null;
+    fotoDiri: File | null;
+    fotoAwarding: File | null;
+  }>({
+    namaPrestasi: '',
+    jenisPrestasi: 'Organisasi non-HMIF',
     periodePrestasi: '',
     jenisLomba: '',
     deskripsiPrestasi: '',
@@ -133,7 +129,16 @@ function PrestasiPage(): JSX.Element {
     fotoAwarding: null as unknown as File,
   });
 
-  const [errors, setErrors] = useState<ErrorForms>({
+  const [errors, setErrors] = useState<{
+    namaPrestasi: string;
+    jenisPrestasi: string;
+    periodePrestasi: string;
+    jenisLomba: string;
+    deskripsiPrestasi: string;
+    fotoSertifikat: string;
+    fotoDiri: string;
+    fotoAwarding: string;
+  }>({
     namaPrestasi: '',
     jenisPrestasi: '',
     periodePrestasi: '',
@@ -144,13 +149,97 @@ function PrestasiPage(): JSX.Element {
     fotoAwarding: '',
   });
 
+  const handleBack = () => navigate({ to: '/home/prestasi/dashboard' });
+
+  const jenisPrestasiMap: Record<
+    'Organisasi non-HMIF' | 'Kepanitian non-HMIF' | 'Kompetisi atau Lomba',
+    'organisasi' | 'kepanitiaan' | 'kompetisi'
+  > = {
+    'Organisasi non-HMIF': 'organisasi',
+    'Kepanitian non-HMIF': 'kepanitiaan',
+    'Kompetisi atau Lomba': 'kompetisi',
+  };
+
+  const competitionTypeMap: Record<
+    string,
+    'CP' | 'CTF' | 'BCC' | 'DS' | 'AI' | 'Hackathon' | null
+  > = {
+    'Competitive Programming': 'CP',
+    'Capture The Flag': 'CTF',
+    'Business Case Competition': 'BCC',
+    'UI/UX': null,
+    'Data Science': 'DS',
+    Hackathon: 'Hackathon',
+    'Artificial Intelligence': 'AI',
+  };
+
+  useEffect(() => {
+    const fetchDetail = async () => {
+      try {
+        const data = await api.achievements.getPrestasiById({
+          idPrestasi: id,
+        });
+
+        const jenisFromApi:
+          | 'Organisasi non-HMIF'
+          | 'Kepanitian non-HMIF'
+          | 'Kompetisi atau Lomba' =
+          data.jenisPrestasi === 'organisasi'
+            ? 'Organisasi non-HMIF'
+            : data.jenisPrestasi === 'kepanitiaan'
+              ? 'Kepanitian non-HMIF'
+              : 'Kompetisi atau Lomba';
+
+        const monthNames = [
+          'Januari',
+          'Februari',
+          'Maret',
+          'April',
+          'Mei',
+          'Juni',
+          'Juli',
+          'Agustus',
+          'September',
+          'Oktober',
+          'November',
+          'Desember',
+        ];
+        const period = `${monthNames[data.bulan - 1]} ${data.tahun}`;
+
+        const competitionTypeToName: Record<string, string> = {
+          CP: 'Competitive Programming',
+          CTF: 'Capture The Flag',
+          BCC: 'Business Case Competition',
+          UIUX: 'UI/UX',
+          DS: 'Data Science',
+          Hackathon: 'Hackathon',
+          AI: 'Artificial Intelligence',
+        };
+
+        setFormData((prev) => ({
+          ...prev,
+          namaPrestasi: data.penyelenggara || '',
+          jenisPrestasi: jenisFromApi,
+          periodePrestasi: period,
+          jenisLomba: data.competitionType
+            ? competitionTypeToName[data.competitionType] ||
+              data.competitionType
+            : '',
+          deskripsiPrestasi: data.deskripsi || '',
+        }));
+      } catch (e) {
+        console.error(e);
+        setAlert({ type: 'error', isVisible: true });
+      }
+    };
+
+    fetchDetail();
+  }, [id]);
+
   const validateForms = (): boolean => {
     const result = prestasiScheme.safeParse(formData);
-
-    // Jika gagal, set error
     if (!result.success) {
-      // Reset semua error
-      const newErrors: ErrorForms = {
+      const newErrors = {
         namaPrestasi: '',
         jenisPrestasi: '',
         periodePrestasi: '',
@@ -159,11 +248,10 @@ function PrestasiPage(): JSX.Element {
         fotoSertifikat: '',
         fotoDiri: '',
         fotoAwarding: '',
-      };
+      } as typeof errors;
 
-      // Set error message dari zod
       result.error.issues.forEach((issue) => {
-        const fieldName = issue.path[0] as keyof ErrorForms;
+        const fieldName = issue.path[0] as keyof typeof newErrors;
         newErrors[fieldName] = issue.message;
       });
 
@@ -182,28 +270,28 @@ function PrestasiPage(): JSX.Element {
       fotoDiri: '',
       fotoAwarding: '',
     });
-
     return true;
   };
 
+  const isKompetisi = useMemo(
+    () => formData.jenisPrestasi === 'Kompetisi atau Lomba',
+    [formData.jenisPrestasi],
+  );
+
   // Handle input yang berubah
-  const handleInputChange = (field: keyof PrestasiFormData, value: string) => {
-    setFormData(
-      (prev): PrestasiFormData => ({
-        ...(prev as PrestasiFormData),
-        [field]: value as never,
-      }),
-    );
+  const handleInputChange = (field: keyof typeof formData, value: string) => {
+    setFormData((prev) => ({
+      ...(prev as typeof formData),
+      [field]: value as never,
+    }));
 
     // Max kata untuk deskripsi
     if (field === 'deskripsiPrestasi') {
       const words = value
         .trim()
         .split(/\s+/)
-        .filter((word) => word.length > 0);
-
+        .filter((w) => w.length > 0);
       if (words.length > deskripsiMaxWord) {
-        // Set error langsung saat user mengetik
         setErrors((prev) => ({
           ...prev,
           deskripsiPrestasi: `${deskripsiMaxWord} words maximum`,
@@ -214,14 +302,20 @@ function PrestasiPage(): JSX.Element {
       }
     } else {
       // Clear error untuk field lain jika input tidak kosong
-      if (errors[field]) {
+      if (errors[field as keyof typeof errors]) {
         setErrors((prev) => ({ ...prev, [field]: '' }));
       }
     }
   };
 
   const handleCategorySelect = (value: string) => {
-    handleInputChange('jenisPrestasi', value);
+    handleInputChange(
+      'jenisPrestasi',
+      value as
+        | 'Organisasi non-HMIF'
+        | 'Kepanitian non-HMIF'
+        | 'Kompetisi atau Lomba',
+    );
 
     // Handle jenis lomba
     if (value !== 'Kompetisi atau Lomba') {
@@ -244,37 +338,35 @@ function PrestasiPage(): JSX.Element {
   };
 
   // Handle file upload
-  const handleFileSelect = (field: keyof PrestasiFormData, file: File) => {
-    setFormData(
-      (prev): PrestasiFormData => ({
-        ...(prev as PrestasiFormData),
-        [field]: file as never,
-      }),
-    );
+  const handleFileSelect = (
+    field: 'fotoSertifikat' | 'fotoDiri' | 'fotoAwarding',
+    file: File,
+  ) => {
+    setFormData((prev) => ({
+      ...(prev as typeof formData),
+      [field]: file as never,
+    }));
+    if (errors[field]) {
+      setErrors((prev) => ({ ...prev, [field]: '' }));
+    }
+  };
 
-    // Clear error untuk file upload
+  // Handle remove file di upload file button
+  const handleRemoveFile = (
+    field: 'fotoSertifikat' | 'fotoDiri' | 'fotoAwarding',
+  ) => {
+    setFormData((prev) => ({
+      ...(prev as typeof formData),
+      [field]: null as never,
+    }));
     if (errors[field]) {
       setErrors((prev) => ({ ...prev, [field]: '' }));
     }
   };
 
   // Handle invalid file type
-  const handleInvalidFile = (field: keyof PrestasiFormData, error: string) => {
+  const handleInvalidFile = (field: keyof typeof formData, error: string) => {
     setErrors((prev) => ({ ...prev, [field]: error }));
-  };
-
-  // Handle remove file di upload file button
-  const handleRemoveFile = (field: keyof PrestasiFormData) => {
-    setFormData(
-      (prev): PrestasiFormData => ({
-        ...(prev as PrestasiFormData),
-        [field]: null as never,
-      }),
-    );
-
-    if (errors[field]) {
-      setErrors((prev) => ({ ...prev, [field]: '' }));
-    }
   };
 
   // Submission and modal popper
@@ -305,42 +397,19 @@ function PrestasiPage(): JSX.Element {
       const bulan = monthMap[monthName];
       const tahun = parseInt(yearStr);
 
-      const jenisPrestasiMap: Record<
-        string,
-        'organisasi' | 'kepanitiaan' | 'kompetisi'
-      > = {
-        'Organisasi non-HMIF': 'organisasi',
-        'Kepanitian non-HMIF': 'kepanitiaan',
-        'Kompetisi atau Lomba': 'kompetisi',
-      };
-
-      const competitionTypeMap: Record<
-        string,
-        'CP' | 'CTF' | 'BCC' | 'DS' | 'AI' | 'Hackathon' | null
-      > = {
-        'Competitive Programming': 'CP',
-        'Capture The Flag': 'CTF',
-        'Business Case Competition': 'BCC',
-        'UI/UX': null,
-        'Data Science': 'DS',
-        Hackathon: 'Hackathon',
-        'Artificial Intelligence': 'AI',
-      };
-
-      if (!formData.fotoSertifikat || !formData.fotoDiri) {
-        throw new Error('Sertifikat and Foto Diri are required');
+      const mediaUrls: string[] = [];
+      if (formData.fotoSertifikat) {
+        mediaUrls.push(await uploadViaPresigned(formData.fotoSertifikat));
+      }
+      if (formData.fotoDiri) {
+        mediaUrls.push(await uploadViaPresigned(formData.fotoDiri));
+      }
+      if (formData.fotoAwarding) {
+        mediaUrls.push(await uploadViaPresigned(formData.fotoAwarding));
       }
 
-      // Upload files
-      const fotoSertifikatUrl = await uploadViaPresigned(
-        formData.fotoSertifikat,
-      );
-
-      const fotoDiriUrl = await uploadViaPresigned(formData.fotoDiri);
-
-      let fotoAwardingUrl: string | null = null;
-      if (formData.fotoAwarding) {
-        fotoAwardingUrl = await uploadViaPresigned(formData.fotoAwarding);
+      if (mediaUrls.length < 2) {
+        throw new Error('Minimal upload 2 file: Sertifikat dan Foto Diri');
       }
 
       let competitionTypeValue:
@@ -351,10 +420,8 @@ function PrestasiPage(): JSX.Element {
         | 'AI'
         | 'Hackathon'
         | null = null;
-      if (
-        formData.jenisPrestasi === 'Kompetisi atau Lomba' &&
-        formData.jenisLomba
-      ) {
+
+      if (isKompetisi && formData.jenisLomba) {
         const key = formData.jenisLomba as keyof typeof competitionTypeMap;
         competitionTypeValue = competitionTypeMap[key] ?? null;
       }
@@ -365,47 +432,26 @@ function PrestasiPage(): JSX.Element {
         deskripsi: formData.deskripsiPrestasi,
         bulan,
         tahun,
-        competitionType: competitionTypeValue,
-        mediaSertifikat: fotoSertifikatUrl,
-        mediaFotoPribadi: fotoDiriUrl,
-        mediaFotoAwarding: fotoAwardingUrl ?? undefined,
+        competitionType: competitionTypeValue ?? undefined,
+        mediaUrls,
       };
 
-      const result = await api.achievements.createPrestasi({
+      await api.achievements.updatePrestasi({
+        idPrestasi: id,
         requestBody: payload,
       });
-      console.log('Prestasi created:', result);
 
       setAlert({ type: 'success', isVisible: true });
       setShowConfirmModal(false);
-      setFormData({
-        namaPrestasi: '',
-        jenisPrestasi:
-          'Organisasi non-HMIF' as PrestasiFormData['jenisPrestasi'],
-        periodePrestasi: '',
-        jenisLomba: '',
-        deskripsiPrestasi: '',
-        fotoSertifikat: null as unknown as File,
-        fotoDiri: null as unknown as File,
-        fotoAwarding: null as unknown as File,
-      });
-      setJenisLomba('');
-      setErrors({
-        namaPrestasi: '',
-        jenisPrestasi: '',
-        periodePrestasi: '',
-        jenisLomba: '',
-        deskripsiPrestasi: '',
-        fotoSertifikat: '',
-        fotoDiri: '',
-        fotoAwarding: '',
-      });
       setResetKey((v) => v + 1);
+      if (navigate) {
+        navigate({ to: '/home/prestasi/dashboard' });
+      }
     } catch (error) {
       if (error instanceof ApiError) {
         console.error('API error:', error.status, error.body);
       } else {
-        console.error('Error creating achievement:', error);
+        console.error('Error updating achievement:', error);
       }
       setAlert({ type: 'error', isVisible: true });
     } finally {
@@ -417,17 +463,15 @@ function PrestasiPage(): JSX.Element {
     setAlert((prev) => ({ ...prev, isVisible: false }));
   };
 
-  // const isFormValid = prestasiScheme.safeParse(formData).success;
-
   return (
     <div className="min-h-screen w-full overflow-auto bg-[url('/img/login/login-bg-desktop.jpg')] bg-cover bg-no-repeat p-4 pb-8 sm:p-6">
       <div className="flex flex-row items-center gap-2">
         <ChevronLeft
           className="size-8 cursor-pointer text-white duration-300 hover:-translate-x-1 sm:size-12"
-          onClick={() => navigate({ to: '/home' })}
+          onClick={handleBack}
         />
         <span className="flex gap-1 text-2xl font-bold text-white sm:flex-row sm:gap-3 sm:text-4xl">
-          Pendataan
+          Edit Entri
           <span className="font-normal italic">Prestasi</span>
         </span>
       </div>
@@ -488,6 +532,7 @@ function PrestasiPage(): JSX.Element {
                   options={prestasiOptions}
                   onSelect={handleCategorySelect}
                   className={errors.jenisPrestasi ? 'border-red-400' : ''}
+                  value={formData.jenisPrestasi}
                 />
                 {errors.jenisPrestasi && (
                   <span className="text-xs font-semibold text-red-400">
@@ -506,6 +551,7 @@ function PrestasiPage(): JSX.Element {
                   placeholder="Bulan/Tahun"
                   onSelect={handlePeriodSelect}
                   className={`${errors.periodePrestasi ? 'border-red-400' : ''}`}
+                  value={formData.periodePrestasi}
                 />
                 {errors.periodePrestasi && (
                   <span className="text-xs font-semibold text-red-400">
@@ -516,7 +562,7 @@ function PrestasiPage(): JSX.Element {
             </div>
 
             {/* Jenis Lomba */}
-            {formData.jenisPrestasi === 'Kompetisi atau Lomba' && (
+            {isKompetisi && (
               <div className="flex flex-col gap-2">
                 <span className="text-sm">
                   Jenis Lomba <span className="text-red-400">*</span>
@@ -526,6 +572,7 @@ function PrestasiPage(): JSX.Element {
                   options={jenisLombaOptions}
                   onSelect={handleJenisLombaSelect}
                   className={errors.jenisLomba ? 'border-red-400' : ''}
+                  value={formData.jenisLomba}
                 />
                 {errors.jenisLomba && (
                   <span className="text-xs font-semibold text-red-400">
@@ -581,6 +628,7 @@ function PrestasiPage(): JSX.Element {
               className={`mt-4 ${errors.fotoSertifikat ? 'border-red-400' : ''}`}
               disabled={false}
               maxWidth="100px"
+              initialFile={formData.fotoSertifikat}
             />
             {errors.fotoSertifikat && (
               <span className="text-xs font-semibold text-red-400">
@@ -607,6 +655,7 @@ function PrestasiPage(): JSX.Element {
               className={`mt-4 ${errors.fotoDiri ? 'border-red-400' : ''}`}
               disabled={false}
               maxWidth="100px"
+              initialFile={formData.fotoDiri}
             />
             {errors.fotoDiri && (
               <span className="text-xs font-semibold text-red-400">
@@ -633,6 +682,7 @@ function PrestasiPage(): JSX.Element {
               className={`mt-4 ${errors.fotoAwarding ? 'border-red-400' : ''}`}
               disabled={false}
               maxWidth="100px"
+              initialFile={formData.fotoAwarding}
             />
             {errors.fotoAwarding && (
               <span className="text-xs font-semibold text-red-400">
@@ -646,8 +696,7 @@ function PrestasiPage(): JSX.Element {
           <SubmitButton
             text="Submit"
             onSubmit={handleSubmit}
-            disabled={false}
-            // isValid={isFormValid}
+            disabled={isSubmitting}
           />
         </div>
       </div>

@@ -39,9 +39,13 @@ import { Route as AppLeftNavbarSettingsSettingsItemCreditsIndexImport } from './
 import { Route as AppLeftNavbarSettingsSettingsItemCoursesIndexImport } from './routes/_app/_left-navbar/settings/_settings-item/courses/index'
 import { Route as AppLeftNavbarHomeTestimoniTypeIndexImport } from './routes/_app/_left-navbar/home/testimoni/$type/index'
 import { Route as AppLeftNavbarHomeRekomendasiRekomendasiIdIndexImport } from './routes/_app/_left-navbar/home/rekomendasi/$rekomendasiId/index'
+import { Route as AppLeftNavbarHomePrestasiDashboardIndexImport } from './routes/_app/_left-navbar/home/prestasi/dashboard/index'
+import { Route as AppLeftNavbarHomePrestasiDashboardCncIndexImport } from './routes/_app/_left-navbar/home/prestasi/dashboard-cnc/index'
 import { Route as AppLeftNavbarSettingsSettingsItemCoursesAddIndexImport } from './routes/_app/_left-navbar/settings/_settings-item/courses/add/index'
 import { Route as AppLeftNavbarHomeTestimoniTypeSemesterIndexImport } from './routes/_app/_left-navbar/home/testimoni/$type/$semester/index'
 import { Route as AppLeftNavbarHomeTestimoniTypeSemesterCourseIdIndexImport } from './routes/_app/_left-navbar/home/testimoni_/$type/$semester/$courseId/index'
+import { Route as AppLeftNavbarHomePrestasiDashboardEditIdIndexImport } from './routes/_app/_left-navbar/home/prestasi/dashboard/edit/$id/index'
+import { Route as AppLeftNavbarHomePrestasiDashboardDetailIdIndexImport } from './routes/_app/_left-navbar/home/prestasi/dashboard/detail/$id/index'
 
 // Create Virtual Routes
 
@@ -205,6 +209,18 @@ const AppLeftNavbarHomeRekomendasiRekomendasiIdIndexRoute =
     getParentRoute: () => AppLeftNavbarRoute,
   } as any)
 
+const AppLeftNavbarHomePrestasiDashboardIndexRoute =
+  AppLeftNavbarHomePrestasiDashboardIndexImport.update({
+    path: '/home/prestasi/dashboard/',
+    getParentRoute: () => AppLeftNavbarRoute,
+  } as any)
+
+const AppLeftNavbarHomePrestasiDashboardCncIndexRoute =
+  AppLeftNavbarHomePrestasiDashboardCncIndexImport.update({
+    path: '/home/prestasi/dashboard-cnc/',
+    getParentRoute: () => AppLeftNavbarRoute,
+  } as any)
+
 const AppLeftNavbarSettingsSettingsItemCoursesAddIndexRoute =
   AppLeftNavbarSettingsSettingsItemCoursesAddIndexImport.update({
     path: '/courses/add/',
@@ -220,6 +236,18 @@ const AppLeftNavbarHomeTestimoniTypeSemesterIndexRoute =
 const AppLeftNavbarHomeTestimoniTypeSemesterCourseIdIndexRoute =
   AppLeftNavbarHomeTestimoniTypeSemesterCourseIdIndexImport.update({
     path: '/home/testimoni/$type/$semester/$courseId/',
+    getParentRoute: () => AppLeftNavbarRoute,
+  } as any)
+
+const AppLeftNavbarHomePrestasiDashboardEditIdIndexRoute =
+  AppLeftNavbarHomePrestasiDashboardEditIdIndexImport.update({
+    path: '/home/prestasi/dashboard/edit/$id/',
+    getParentRoute: () => AppLeftNavbarRoute,
+  } as any)
+
+const AppLeftNavbarHomePrestasiDashboardDetailIdIndexRoute =
+  AppLeftNavbarHomePrestasiDashboardDetailIdIndexImport.update({
+    path: '/home/prestasi/dashboard/detail/$id/',
     getParentRoute: () => AppLeftNavbarRoute,
   } as any)
 
@@ -381,6 +409,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppLeftNavbarTimelineInfoIdIndexImport
       parentRoute: typeof AppLeftNavbarImport
     }
+    '/_app/_left-navbar/home/prestasi/dashboard-cnc/': {
+      id: '/_app/_left-navbar/home/prestasi/dashboard-cnc/'
+      path: '/home/prestasi/dashboard-cnc'
+      fullPath: '/home/prestasi/dashboard-cnc'
+      preLoaderRoute: typeof AppLeftNavbarHomePrestasiDashboardCncIndexImport
+      parentRoute: typeof AppLeftNavbarImport
+    }
+    '/_app/_left-navbar/home/prestasi/dashboard/': {
+      id: '/_app/_left-navbar/home/prestasi/dashboard/'
+      path: '/home/prestasi/dashboard'
+      fullPath: '/home/prestasi/dashboard'
+      preLoaderRoute: typeof AppLeftNavbarHomePrestasiDashboardIndexImport
+      parentRoute: typeof AppLeftNavbarImport
+    }
     '/_app/_left-navbar/home/rekomendasi/$rekomendasiId/': {
       id: '/_app/_left-navbar/home/rekomendasi/$rekomendasiId/'
       path: '/home/rekomendasi/$rekomendasiId'
@@ -430,6 +472,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppLeftNavbarSettingsSettingsItemCoursesAddIndexImport
       parentRoute: typeof AppLeftNavbarSettingsSettingsItemImport
     }
+    '/_app/_left-navbar/home/prestasi/dashboard/detail/$id/': {
+      id: '/_app/_left-navbar/home/prestasi/dashboard/detail/$id/'
+      path: '/home/prestasi/dashboard/detail/$id'
+      fullPath: '/home/prestasi/dashboard/detail/$id'
+      preLoaderRoute: typeof AppLeftNavbarHomePrestasiDashboardDetailIdIndexImport
+      parentRoute: typeof AppLeftNavbarImport
+    }
+    '/_app/_left-navbar/home/prestasi/dashboard/edit/$id/': {
+      id: '/_app/_left-navbar/home/prestasi/dashboard/edit/$id/'
+      path: '/home/prestasi/dashboard/edit/$id'
+      fullPath: '/home/prestasi/dashboard/edit/$id'
+      preLoaderRoute: typeof AppLeftNavbarHomePrestasiDashboardEditIdIndexImport
+      parentRoute: typeof AppLeftNavbarImport
+    }
     '/_app/_left-navbar/home/testimoni/$type/$semester/$courseId/': {
       id: '/_app/_left-navbar/home/testimoni/$type/$semester/$courseId/'
       path: '/home/testimoni/$type/$semester/$courseId'
@@ -472,7 +528,11 @@ export const routeTree = rootRoute.addChildren({
       AppLeftNavbarHomeNimFinderIndexRoute,
       AppLeftNavbarHomePrestasiIndexRoute,
       AppLeftNavbarTimelineInfoIdIndexRoute,
+      AppLeftNavbarHomePrestasiDashboardCncIndexRoute,
+      AppLeftNavbarHomePrestasiDashboardIndexRoute,
       AppLeftNavbarHomeRekomendasiRekomendasiIdIndexRoute,
+      AppLeftNavbarHomePrestasiDashboardDetailIdIndexRoute,
+      AppLeftNavbarHomePrestasiDashboardEditIdIndexRoute,
       AppLeftNavbarHomeTestimoniTypeSemesterCourseIdIndexRoute,
     }),
     AppCalendarRoute: AppCalendarRoute.addChildren({ AppCalendarIndexRoute }),
@@ -521,7 +581,11 @@ export const routeTree = rootRoute.addChildren({
         "/_app/_left-navbar/home/nim-finder/",
         "/_app/_left-navbar/home/prestasi/",
         "/_app/_left-navbar/timeline/$infoId/",
+        "/_app/_left-navbar/home/prestasi/dashboard-cnc/",
+        "/_app/_left-navbar/home/prestasi/dashboard/",
         "/_app/_left-navbar/home/rekomendasi/$rekomendasiId/",
+        "/_app/_left-navbar/home/prestasi/dashboard/detail/$id/",
+        "/_app/_left-navbar/home/prestasi/dashboard/edit/$id/",
         "/_app/_left-navbar/home/testimoni/$type/$semester/$courseId/"
       ]
     },
@@ -617,6 +681,14 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "_app/_left-navbar/timeline/$infoId/index.tsx",
       "parent": "/_app/_left-navbar"
     },
+    "/_app/_left-navbar/home/prestasi/dashboard-cnc/": {
+      "filePath": "_app/_left-navbar/home/prestasi/dashboard-cnc/index.tsx",
+      "parent": "/_app/_left-navbar"
+    },
+    "/_app/_left-navbar/home/prestasi/dashboard/": {
+      "filePath": "_app/_left-navbar/home/prestasi/dashboard/index.tsx",
+      "parent": "/_app/_left-navbar"
+    },
     "/_app/_left-navbar/home/rekomendasi/$rekomendasiId/": {
       "filePath": "_app/_left-navbar/home/rekomendasi/$rekomendasiId/index.tsx",
       "parent": "/_app/_left-navbar"
@@ -644,6 +716,14 @@ export const routeTree = rootRoute.addChildren({
     "/_app/_left-navbar/settings/_settings-item/courses/add/": {
       "filePath": "_app/_left-navbar/settings/_settings-item/courses/add/index.tsx",
       "parent": "/_app/_left-navbar/settings/_settings-item"
+    },
+    "/_app/_left-navbar/home/prestasi/dashboard/detail/$id/": {
+      "filePath": "_app/_left-navbar/home/prestasi/dashboard/detail/$id/index.tsx",
+      "parent": "/_app/_left-navbar"
+    },
+    "/_app/_left-navbar/home/prestasi/dashboard/edit/$id/": {
+      "filePath": "_app/_left-navbar/home/prestasi/dashboard/edit/$id/index.tsx",
+      "parent": "/_app/_left-navbar"
     },
     "/_app/_left-navbar/home/testimoni/$type/$semester/$courseId/": {
       "filePath": "_app/_left-navbar/home/testimoni_/$type/$semester/$courseId/index.tsx",

@@ -1,5 +1,5 @@
 import { ChevronDown } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface DropdownCategoryProps {
   options: string[]; // Multiple string options
@@ -7,6 +7,7 @@ interface DropdownCategoryProps {
   onSelect?: (value: string) => void;
   className?: string;
   disabled?: boolean;
+  value?: string; // Initial value prop
 }
 
 export function DropdownCategory({
@@ -15,9 +16,15 @@ export function DropdownCategory({
   onSelect,
   className = '',
   disabled = false,
+  value = '',
 }: DropdownCategoryProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedValue, setSelectedValue] = useState('');
+  const [selectedValue, setSelectedValue] = useState(value);
+
+  // Update selectedValue when value prop changes
+  useEffect(() => {
+    setSelectedValue(value);
+  }, [value]);
 
   // Handling selection nanti
   const handleSelect = (option: string) => {

@@ -79,8 +79,10 @@ export class AchievementsService {
       deskripsi?: string | null;
       bulan: number;
       tahun: number;
+      mediaSertifikat?: string | null;
+      mediaFotoAwarding?: string | null;
+      mediaFotoPribadi?: string | null;
       competitionType?: 'CP' | 'CTF' | 'BCC' | 'DS' | 'AI' | 'Hackathon' | null;
-      mediaUrls?: Array<string>;
     },
   }): CancelablePromise<CreatePrestasiResponse> {
     return this.httpRequest.request({
