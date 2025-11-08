@@ -13,20 +13,20 @@ import { loadUserCache } from '~/lib/session';
 export const Route = createFileRoute(
   '/_app/_left-navbar/home/prestasi/dashboard-cnc/',
 )({
-  beforeLoad: async () => {
+  beforeLoad: async (): Promise<void> => {
     const user = loadUserCache();
 
     if (!user) {
-      return redirect({ to: '/login' });
+      throw redirect({ to: '/login' });
     }
 
     const allowedRoles = ['cnc'] as const;
     const peopleRoles = ['people', 'peoplemanage', 'peopledev'] as const;
     if (!user.roles || !allowedRoles.some((r) => user.roles.includes(r))) {
       if (user.roles && peopleRoles.some((r) => user.roles.includes(r))) {
-        return redirect({ to: '/home/prestasi/dashboard' });
+        throw redirect({ to: '/home/prestasi/dashboard' });
       }
-      return redirect({ to: '/home' });
+      throw redirect({ to: '/home' });
     }
   },
   component: CncDashboard,
