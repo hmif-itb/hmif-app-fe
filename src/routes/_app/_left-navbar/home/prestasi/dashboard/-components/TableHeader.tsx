@@ -20,24 +20,35 @@ export const TableHeader = ({ onSelectAll, allSelected }: TableHeaderProps) => {
       </Checkbox.Root>
 
       <div className="grid flex-1 grid-cols-11 gap-2 md:grid-cols-10 md:gap-4">
+        {/* Profil */}
         <div className="col-span-3 flex items-center justify-center md:col-span-2">
-          <span className="text-center text-xs md:text-sm">Profil</span>
+          <span className="text-xs md:text-sm">Profil</span>
         </div>
-        <div className="col-span-3 flex items-center justify-center md:col-span-3">
-          <span className="text-center text-xs md:text-sm">Nama Prestasi</span>
+
+        {/* Nama Kompetisi / Organisasi */}
+        <div className="col-span-3 flex items-center justify-center">
+          <span className="hidden text-xs md:inline md:text-sm">
+            Nama Kompetisi / Organisasi
+          </span>
+          <span className="md:hidden">Nama</span>
         </div>
-        <div className="col-span-2 flex items-center justify-center md:col-span-2">
-          <span className="text-center text-xs md:text-sm">
-            Jenis Perlombaan
+
+        {/* Nama Organisasi/perlombaan */}
+        <div className="col-span-3 flex items-center justify-center">
+          <span className="text-xs md:text-sm">
+            <span className="hidden md:inline">Deskripsi Prestasi</span>
+            <span className="md:hidden">Deskripsi</span>
           </span>
         </div>
-        <div className="col-span-2 flex items-center justify-center md:col-span-2">
-          <span className="text-center text-xs md:text-sm">
-            Nama Organisasi / Perlombaan
-          </span>
-        </div>
+
+        {/* Jenis Prestasi */}
         <div className="col-span-1 flex items-center justify-center">
-          <span className="text-center text-xs md:text-sm">Periode</span>
+          <span className="text-xs md:text-sm">Jenis</span>
+        </div>
+
+        {/* Aksi */}
+        <div className="col-span-1 flex items-center justify-center">
+          <span className="text-xs md:text-sm">Aksi</span>
         </div>
       </div>
     </div>

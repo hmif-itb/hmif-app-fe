@@ -1,21 +1,22 @@
 import { useState, useEffect } from 'react';
 import { TableHeader } from './TableHeader';
 import { TableRow } from './TableRow';
-import { Pagination } from '../../-dashboard-component/Pagination';
+import { Pagination } from '../../../../-dashboard-component/Pagination';
 import { Prestasi } from '~/api/generated';
-import { ConfirmModal } from '../../-dashboard-component/ConfirmModal';
+import { useNavigate } from '@tanstack/react-router';
+import { ConfirmModal } from '../../../../-dashboard-component/ConfirmModal';
 
 type PrestasiTableProps = {
   data: Prestasi[];
-  selectedItems: string[];
-  onSelectItem: (id: string) => void;
+  selectedItems: string[]; // Change to string[]
+  onSelectItem: (id: string) => void; // Change to string
   onSelectAll: () => void;
   allSelected: boolean;
   currentPage?: number;
   totalPages?: number;
   onPageChange?: (page: number) => void;
   loading?: boolean;
-  onDelete?: (id: string) => Promise<{ success: boolean; error?: string }>;
+  onDelete?: (id: string) => Promise<{ success: boolean; error?: string }>; // Change to string
 };
 
 export const DashboardTable = ({
@@ -30,6 +31,7 @@ export const DashboardTable = ({
   loading = false,
   onDelete,
 }: PrestasiTableProps) => {
+  const navigate = useNavigate();
   const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 768);
   const [deleteModal, setDeleteModal] = useState<{
     isOpen: boolean;
@@ -53,6 +55,7 @@ export const DashboardTable = ({
 
   const handleConfirmDelete = async () => {
     if (!deleteModal.item || !onDelete) {
+      console.log('Deleting:', deleteModal.item);
       setDeleteModal({ isOpen: false, item: null });
       return;
     }
@@ -69,6 +72,13 @@ export const DashboardTable = ({
     } finally {
       setDeleteModal({ isOpen: false, item: null });
     }
+  };
+
+  const handleEdit = (id: string) => {
+    navigate({
+      to: '/home/prestasi/dashboard/edit/$id',
+      params: { id },
+    });
   };
 
   return (
@@ -98,6 +108,8 @@ export const DashboardTable = ({
                     prestasi={prestasi}
                     isSelected={selectedItems.includes(prestasi.id)}
                     onSelect={() => onSelectItem(prestasi.id)}
+                    onEdit={() => handleEdit(prestasi.id)}
+                    onDelete={() => handleDelete(prestasi)}
                   />
                 ))
               )}

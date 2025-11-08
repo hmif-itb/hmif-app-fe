@@ -1,35 +1,24 @@
-import { Check } from 'lucide-react';
+import { Check, Pencil, Trash } from 'lucide-react';
 import * as Avatar from '@radix-ui/react-avatar';
 import * as Checkbox from '@radix-ui/react-checkbox';
 import { Prestasi } from '~/api/generated';
 import { useNavigate } from '@tanstack/react-router';
 
-// Define competitionType enum
-type CompetitionType = 'CP' | 'CTF' | 'BCC' | 'DS' | 'AI' | 'Hackathon' | null;
-
-interface ExtendedPrestasi extends Prestasi {
-  competitionType: CompetitionType;
-  periode?: string;
-}
-
 type TableRowProps = {
-  prestasi: ExtendedPrestasi;
+  prestasi: Prestasi;
   isSelected: boolean;
   onSelect: () => void;
+  onEdit: () => void;
+  onDelete: () => void;
 };
 
-const getJenisBadgeColor = (jenis: CompetitionType) => {
-  const lowerJenis = jenis?.toLowerCase();
-  if (lowerJenis === 'cp') return 'bg-[#D3E1FE] text-blue-800';
-  if (lowerJenis === 'ctf') return 'bg-[#FFF4D6] text-yellow-800';
-  if (lowerJenis === 'hackathon') return 'bg-[#FFE4E1] text-red-800';
-  if (lowerJenis === 'bcc') return 'bg-[#E0F7FA] text-cyan-800';
-  if (lowerJenis === 'ds') return 'bg-[#E6E6FA] text-purple-800';
-  if (lowerJenis === 'ai') return 'bg-[#F0FFF0] text-green-800';
-  return 'bg-gray-200 text-gray-800';
-};
-
-export const TableRow = ({ prestasi, isSelected, onSelect }: TableRowProps) => {
+export const TableRow = ({
+  prestasi,
+  isSelected,
+  onSelect,
+  onEdit,
+  onDelete,
+}: TableRowProps) => {
   const navigate = useNavigate();
 
   // Derive avatar initials from user.fullName
@@ -42,11 +31,14 @@ export const TableRow = ({ prestasi, isSelected, onSelect }: TableRowProps) => {
 
   // Navigate to detail page when row is clicked
   const handleRowClick = (e: React.MouseEvent) => {
+    // Prevent navigation when clicking on checkbox or action buttons
     const target = e.target as HTMLElement;
     const isCheckbox = target.closest('[role="checkbox"]');
-    if (!isCheckbox) {
+    const isButton = target.closest('button');
+
+    if (!isCheckbox && !isButton) {
       navigate({
-        to: '/dashboard/detail/$id',
+        to: '/home/prestasi/dashboard/detail/$id',
         params: { id: prestasi.id },
       });
     }
@@ -83,39 +75,53 @@ export const TableRow = ({ prestasi, isSelected, onSelect }: TableRowProps) => {
 
         {/* Nama Prestasi */}
         <div
-          className="col-span-3 flex min-w-0 items-center justify-center md:col-span-3"
-          title={prestasi.deskripsi ?? 'N/A'}
-        >
-          <span className="min-w-0 truncate text-left text-xs text-gray-900 md:text-sm">
-            {prestasi.deskripsi}
-          </span>
-        </div>
-
-        {/* Jenis Perlombaan */}
-        <div className="col-span-2 flex items-center justify-center md:col-span-2">
-          <span
-            className={`inline-flex items-center justify-center rounded-full px-2 py-1 text-center text-[10px] font-medium md:min-w-[100px] md:px-3 md:py-1.5 md:text-xs ${getJenisBadgeColor(prestasi.competitionType)}`}
-          >
-            {prestasi.competitionType || 'N/A'}
-          </span>
-        </div>
-
-        {/* Nama Organisasi/Perlombaan */}
-        <div
-          className="col-span-2 flex min-w-0 items-center justify-center md:col-span-2"
-          title={prestasi.penyelenggara}
+          className="col-span-3 flex min-w-0 items-center justify-center md:text-sm"
+          title={prestasi.penyelenggara ?? 'N/A'}
         >
           <span className="min-w-0 truncate text-left text-xs text-gray-900 md:text-sm">
             {prestasi.penyelenggara}
           </span>
         </div>
 
-        {/* Periode */}
+        {/* Deskripsi */}
         <div
-          className="col-span-1 flex items-center justify-center truncate text-xs text-gray-900 md:text-sm"
-          title={prestasi.periode || 'N/A'}
+          className="col-span-3 flex min-w-0 items-center justify-center md:text-sm"
+          title={prestasi.deskripsi ?? 'N/A'}
         >
-          {prestasi.periode || 'N/A'}
+          <span className="min-w-0 truncate text-left text-xs text-gray-900 md:text-sm">
+            {prestasi.deskripsi ?? 'N/A'}
+          </span>
+        </div>
+
+        {/* Jenis Prestasi */}
+        <div className="col-span-1 flex items-center justify-center">
+          <span className="inline-flex items-center justify-center rounded-full bg-[#D3E1FE] px-2 py-1 text-center text-[10px] font-medium text-blue-800 md:min-w-[80px] md:px-3 md:py-1.5 md:text-xs">
+            {prestasi.jenisPrestasi}
+          </span>
+        </div>
+
+        {/* Aksi */}
+        <div className="col-span-1 flex items-center justify-center gap-1">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onEdit();
+            }}
+            className="rounded p-1.5 transition-colors hover:bg-gray-200 md:p-2"
+            title="Edit"
+          >
+            <Pencil size={14} className="text-gray-700 md:size-4" />
+          </button>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete();
+            }}
+            className="rounded p-1.5 text-red-600 transition-colors hover:bg-red-100 md:p-2"
+            title="Hapus"
+          >
+            <Trash size={14} className="md:size-4" />
+          </button>
         </div>
       </div>
     </div>

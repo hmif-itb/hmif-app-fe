@@ -20,34 +20,26 @@ export const TableHeader = ({ onSelectAll, allSelected }: TableHeaderProps) => {
       </Checkbox.Root>
 
       <div className="grid flex-1 grid-cols-11 gap-2 md:grid-cols-10 md:gap-4">
-        {/* Profil */}
         <div className="col-span-3 flex items-center justify-center md:col-span-2">
-          <span className="text-xs md:text-sm">Profil</span>
+          <span className="text-center text-xs md:text-sm">Profil</span>
         </div>
-
-        {/* Nama Prestasi */}
-        <div className="col-span-3 flex items-center justify-center">
-          <span className="text-xs md:text-sm">Nama Prestasi</span>
-        </div>
-
-        {/* Jenis Prestasi */}
-        <div className="col-span-1 flex items-center justify-center">
-          <span className="text-xs md:text-sm">Jenis</span>
-        </div>
-
-        {/* Nama Organisasi/perlombaan */}
-        <div className="col-span-3 flex items-center justify-center">
-          <span className="text-xs md:text-sm">
-            <span className="hidden md:inline">
-              Nama Organisasi / Perlombaan
-            </span>
-            <span className="md:hidden">Organisasi</span>
+        <div className="col-span-3 flex items-center justify-center md:col-span-3">
+          <span className="text-center text-xs md:text-sm">
+            Nama Kompetisi / Organisasi
           </span>
         </div>
-
-        {/* Aksi */}
+        <div className="col-span-2 flex items-center justify-center md:col-span-2">
+          <span className="text-center text-xs md:text-sm">
+            Deskripsi Prestasi
+          </span>
+        </div>
+        <div className="col-span-2 flex items-center justify-center md:col-span-2">
+          <span className="text-center text-xs md:text-sm">
+            Jenis Perlombaan
+          </span>
+        </div>
         <div className="col-span-1 flex items-center justify-center">
-          <span className="text-xs md:text-sm">Aksi</span>
+          <span className="text-center text-xs md:text-sm">Periode</span>
         </div>
       </div>
     </div>

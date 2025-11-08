@@ -3,13 +3,32 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import { api, queryClient } from '~/api/client';
 import { TableActionsBar } from './-components/TableActionsBar';
 import { DashboardTable } from './-components/DashboardTable';
-import { Toast } from '../-dashboard-component/Toast';
+import { Toast } from '../../../-dashboard-component/Toast';
 import { ChevronLeft } from 'lucide-react';
-import { ConfirmModal } from '../-dashboard-component/ConfirmModal';
+import { ConfirmModal } from '../../../-dashboard-component/ConfirmModal';
 // import { Prestasi } from '~/api/generated';
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router';
+import { loadUserCache } from '~/lib/session';
 
-export const Route = createFileRoute('/_app/_left-navbar/dashboard/')({
+export const Route = createFileRoute(
+  '/_app/_left-navbar/home/prestasi/dashboard/',
+)({
+  beforeLoad: async () => {
+    const user = loadUserCache();
+
+    if (!user) {
+      return redirect({ to: '/login' });
+    }
+
+    const allowedRoles = ['people', 'peoplemanage', 'peopledev'] as const;
+    const cncRoles = ['cnc'] as const;
+    if (!user.roles || !allowedRoles.some((r) => user.roles.includes(r))) {
+      if (user.roles && cncRoles.some((r) => user.roles.includes(r))) {
+        return redirect({ to: '/home/prestasi/dashboard-cnc' });
+      }
+      return redirect({ to: '/home' });
+    }
+  },
   component: PeopleDashboard,
 });
 
@@ -115,64 +134,62 @@ function PeopleDashboard() {
           ? categoryMap[filterJenis]
           : undefined;
 
-      console.log('Calling exportPrestasi...');
-
-      const result = await api.achievements.exportPrestasi({
-        category: categoryForExport,
-        startDate: periodFilter.from || undefined,
-        endDate: periodFilter.to || undefined,
-      });
-
-      console.log('Result received, type:', typeof result);
-
-      let blob: Blob;
-
-      // Result adalah binary string, convert ke Uint8Array lalu ke Blob
-      if (typeof result === 'string') {
-        // Convert string ke array of char codes
-        const binaryString = result as string;
-        const len = binaryString.length;
-        const bytes = new Uint8Array(len);
-        for (let i = 0; i < len; i++) {
-          bytes[i] = binaryString.charCodeAt(i);
-        }
-        blob = new Blob([bytes], {
-          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        });
-      } else if (result instanceof Blob) {
-        blob = result;
-      } else if (result && typeof result === 'object') {
-        // Fallback untuk object dengan numeric keys
-        const resultObj = result as Record<string, number>;
-        const keys = Object.keys(resultObj);
-        const bytes = new Uint8Array(keys.length);
-        keys.forEach((key, index) => {
-          bytes[index] = resultObj[key];
-        });
-        blob = new Blob([bytes], {
-          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        });
-      } else {
-        throw new Error('Invalid response type from API');
+      // Build query parameters for GET request
+      const params = new URLSearchParams();
+      if (categoryForExport) {
+        params.append('category', categoryForExport);
+      }
+      if (periodFilter.from) {
+        params.append('start_date', periodFilter.from);
+      }
+      if (periodFilter.to) {
+        params.append('end_date', periodFilter.to);
       }
 
-      console.log('Blob created:', blob.size, 'bytes');
+      const baseUrl = import.meta.env.VITE_API_URL || '';
+      const endpoint = '/api/achievements/export/excel';
+      const fullUrl = `${baseUrl}${endpoint}${params.toString() ? `?${params.toString()}` : ''}`;
+      console.log('Export URL:', fullUrl);
+
+      const response = await fetch(fullUrl, {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+          Accept:
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        },
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(
+          `Export failed: ${response.status} ${response.statusText}. ${errorText}`,
+        );
+      }
+
+      const blob = await response.blob();
 
       if (blob.size === 0) {
         throw new Error('File kosong, tidak ada data untuk diekspor');
       }
 
-      const url = window.URL.createObjectURL(blob);
+      const downloadBlob = new Blob([blob], {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      });
+
+      const downloadUrl = window.URL.createObjectURL(downloadBlob);
       const a = document.createElement('a');
-      a.href = url;
+      a.href = downloadUrl;
       a.download = `prestasi_export_${new Date().toISOString().split('T')[0]}.xlsx`;
+      a.style.display = 'none';
+
       document.body.appendChild(a);
       a.click();
+      document.body.removeChild(a);
 
       // Cleanup
       setTimeout(() => {
-        window.URL.revokeObjectURL(url);
-        document.body.removeChild(a);
+        window.URL.revokeObjectURL(downloadUrl);
       }, 100);
 
       setToastType('success');

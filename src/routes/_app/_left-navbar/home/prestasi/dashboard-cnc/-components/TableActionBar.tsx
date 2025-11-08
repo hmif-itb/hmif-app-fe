@@ -1,10 +1,10 @@
 import { CheckCheck, Download, Trash2 } from 'lucide-react';
 import * as ToggleGroup from '@radix-ui/react-toggle-group';
-import { DropdownCalendar } from '../../-dashboard-component/MonthlyCalendar';
+import { DropdownCalendar } from '../../../../-dashboard-component/MonthlyCalendar';
 import {
   KategoriDropdown,
   DropdownOption,
-} from '../../-dashboard-component/KategoriDropdown';
+} from '../../../../-dashboard-component/KategoriDropdown';
 import { useState } from 'react';
 
 type TableActionsBarProps = {

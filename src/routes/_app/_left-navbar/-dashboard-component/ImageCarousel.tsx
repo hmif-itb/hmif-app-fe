@@ -1,8 +1,19 @@
 import { useState } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import {
+  ChevronLeft,
+  ChevronRight,
+  FileText,
+  ExternalLink,
+} from 'lucide-react';
 
 type ImageCarouselProps = {
   images: string[];
+};
+
+const isPDF = (url: string): boolean => {
+  return (
+    url.toLowerCase().includes('.pdf') || url.toLowerCase().includes('pdf')
+  );
 };
 
 export const ImageCarousel = ({ images }: ImageCarouselProps) => {
@@ -45,12 +56,30 @@ export const ImageCarousel = ({ images }: ImageCarouselProps) => {
           <ChevronRight size={20} className="text-gray-700 lg:size-6" />
         </button>
 
-        {/* Image */}
-        <img
-          src={images[currentIndex]}
-          alt={`Prestasi image ${currentIndex + 1}`}
-          className="size-full object-cover"
-        />
+        {/* Image or PDF */}
+        {isPDF(images[currentIndex]) ? (
+          <div className="relative size-full">
+            <iframe
+              src={images[currentIndex]}
+              className="size-full border-0"
+              title={`PDF Document ${currentIndex + 1}`}
+            />
+            {/* Fallback button in case iframe doesn't work */}
+            <button
+              onClick={() => window.open(images[currentIndex], '_blank')}
+              className="absolute bottom-4 right-4 flex items-center gap-2 rounded-lg bg-[#2F754A]/90 px-3 py-2 text-sm text-white backdrop-blur-sm transition-colors hover:bg-[#245a39]/90"
+            >
+              <ExternalLink size={14} />
+              Open
+            </button>
+          </div>
+        ) : (
+          <img
+            src={images[currentIndex]}
+            alt={`Prestasi image ${currentIndex + 1}`}
+            className="size-full object-cover"
+          />
+        )}
       </div>
 
       {/* Thumbnails */}
@@ -65,11 +94,18 @@ export const ImageCarousel = ({ images }: ImageCarouselProps) => {
                 : 'opacity-60 hover:opacity-100'
             }`}
           >
-            <img
-              src={image}
-              alt={`Thumbnail ${index + 1}`}
-              className="size-full object-cover text-[0.7rem]"
-            />
+            {isPDF(image) ? (
+              <div className="flex size-full flex-col items-center justify-center bg-gray-100">
+                <FileText size={20} className="text-gray-500" />
+                <span className="mt-1 text-[0.6rem] text-gray-500">PDF</span>
+              </div>
+            ) : (
+              <img
+                src={image}
+                alt={`Thumbnail ${index + 1}`}
+                className="size-full object-cover text-[0.7rem]"
+              />
+            )}
           </button>
         ))}
       </div>

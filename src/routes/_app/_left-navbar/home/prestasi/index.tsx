@@ -327,20 +327,20 @@ function PrestasiPage(): JSX.Element {
         'Artificial Intelligence': 'AI',
       };
 
-      // Upload file ke storage
-      const mediaUrls: string[] = [];
-      if (formData.fotoSertifikat) {
-        mediaUrls.push(await uploadViaPresigned(formData.fotoSertifikat));
-      }
-      if (formData.fotoDiri) {
-        mediaUrls.push(await uploadViaPresigned(formData.fotoDiri));
-      }
-      if (formData.fotoAwarding) {
-        mediaUrls.push(await uploadViaPresigned(formData.fotoAwarding));
+      if (!formData.fotoSertifikat || !formData.fotoDiri) {
+        throw new Error('Sertifikat and Foto Diri are required');
       }
 
-      if (mediaUrls.length < 2) {
-        throw new Error('Minimal upload 2 file: Sertifikat dan Foto Diri');
+      // Upload files
+      const fotoSertifikatUrl = await uploadViaPresigned(
+        formData.fotoSertifikat,
+      );
+
+      const fotoDiriUrl = await uploadViaPresigned(formData.fotoDiri);
+
+      let fotoAwardingUrl: string | null = null;
+      if (formData.fotoAwarding) {
+        fotoAwardingUrl = await uploadViaPresigned(formData.fotoAwarding);
       }
 
       let competitionTypeValue:
@@ -366,7 +366,9 @@ function PrestasiPage(): JSX.Element {
         bulan,
         tahun,
         competitionType: competitionTypeValue,
-        mediaUrls,
+        mediaSertifikat: fotoSertifikatUrl,
+        mediaFotoPribadi: fotoDiriUrl,
+        mediaFotoAwarding: fotoAwardingUrl ?? undefined,
       };
 
       const result = await api.achievements.createPrestasi({

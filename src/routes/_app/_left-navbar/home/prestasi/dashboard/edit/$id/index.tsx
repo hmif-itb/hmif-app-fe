@@ -2,18 +2,20 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { ChevronLeft } from 'lucide-react';
 import { Input } from '~/components/ui/input';
 import { Textarea } from '~/components/ui/textarea';
-import { DropdownCategory } from '../../../home/prestasi/-components/dropdown-category';
-import { DropdownCalendar } from '../../../home/prestasi/-components/monthly-calendar';
-import { UploadButton } from '../../../home/prestasi/-components/upload-button';
-import { SubmitButton } from '../../../home/prestasi/-components/submit-button';
-import { ConfirmModal } from '../../../home/prestasi/-components/confirm-modal';
-import { Alert } from '../../../home/prestasi/-components/alert';
+import { DropdownCategory } from '../../../-components/dropdown-category';
+import { DropdownCalendar } from '../../../-components/monthly-calendar';
+import { UploadButton } from '../../../-components/upload-button';
+import { SubmitButton } from '../../../-components/submit-button';
+import { ConfirmModal } from '../../../-components/confirm-modal';
+import { Alert } from '../../../-components/alert';
 import { useEffect, useMemo, useState } from 'react';
 import { z } from 'zod';
 import { api } from '~/api/client';
 import { ApiError } from '~/api/generated';
 
-export const Route = createFileRoute('/_app/_left-navbar/dashboard/edit/$id/')({
+export const Route = createFileRoute(
+  '/_app/_left-navbar/home/prestasi/dashboard/edit/$id/',
+)({
   component: EditPrestasiPage,
 });
 
@@ -147,7 +149,7 @@ function EditPrestasiPage(): JSX.Element {
     fotoAwarding: '',
   });
 
-  const handleBack = () => navigate({ to: '/dashboard' });
+  const handleBack = () => navigate({ to: '/home/prestasi/dashboard' });
 
   const jenisPrestasiMap: Record<
     'Organisasi non-HMIF' | 'Kepanitian non-HMIF' | 'Kompetisi atau Lomba',
@@ -443,7 +445,7 @@ function EditPrestasiPage(): JSX.Element {
       setShowConfirmModal(false);
       setResetKey((v) => v + 1);
       if (navigate) {
-        navigate({ to: '/dashboard' });
+        navigate({ to: '/home/prestasi/dashboard' });
       }
     } catch (error) {
       if (error instanceof ApiError) {

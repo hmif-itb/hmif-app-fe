@@ -1,13 +1,13 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
 import { ChevronLeft, ArrowLeft, ArrowRight } from 'lucide-react';
-import { IdentityCard } from '../../../-dashboard-component/IdentityCard';
-import { ImageCarousel } from '../../../-dashboard-component/ImageCarousel';
-import { CertificateButton } from '../../../-dashboard-component/CertificateButton';
+import { IdentityCard } from '../../../../../-dashboard-component/IdentityCard';
+import { ImageCarousel } from '../../../../../-dashboard-component/ImageCarousel';
+import { CertificateButton } from '../../../../../-dashboard-component/CertificateButton';
 import { api } from '~/api/client';
 
 export const Route = createFileRoute(
-  '/_app/_left-navbar/dashboard/detail/$id/',
+  '/_app/_left-navbar/home/prestasi/dashboard/detail/$id/',
 )({
   component: DetailPrestasi,
 });
@@ -110,19 +110,25 @@ function DetailPrestasi() {
   const goToPrevious = () => {
     if (hasPrevious && allPrestasi) {
       const prevId = allPrestasi.prestasi[currentIndex - 1].id;
-      navigate({ to: '/dashboard/detail/$id', params: { id: prevId } });
+      navigate({
+        to: '/home/prestasi/dashboard/detail/$id',
+        params: { id: prevId },
+      });
     }
   };
 
   const goToNext = () => {
     if (hasNext && allPrestasi) {
       const nextId = allPrestasi.prestasi[currentIndex + 1].id;
-      navigate({ to: '/dashboard/detail/$id', params: { id: nextId } });
+      navigate({
+        to: '/home/prestasi/dashboard/detail/$id',
+        params: { id: nextId },
+      });
     }
   };
 
   const goBack = () => {
-    navigate({ to: '/dashboard' });
+    navigate({ to: '/home/prestasi/dashboard' });
   };
 
   return (
