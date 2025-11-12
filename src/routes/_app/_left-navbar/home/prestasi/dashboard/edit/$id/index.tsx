@@ -129,6 +129,16 @@ function EditPrestasiPage(): JSX.Element {
     fotoAwarding: null as unknown as File,
   });
 
+  const [existingMedia, setExistingMedia] = useState<{
+    fotoSertifikat: string | null;
+    fotoDiri: string | null;
+    fotoAwarding: string | null;
+  }>({
+    fotoSertifikat: null,
+    fotoDiri: null,
+    fotoAwarding: null,
+  });
+
   const [errors, setErrors] = useState<{
     namaPrestasi: string;
     jenisPrestasi: string;
@@ -227,6 +237,12 @@ function EditPrestasiPage(): JSX.Element {
             : '',
           deskripsiPrestasi: data.deskripsi || '',
         }));
+
+        setExistingMedia({
+          fotoSertifikat: data.mediaSertifikat,
+          fotoDiri: data.mediaFotoPribadi,
+          fotoAwarding: data.mediaFotoAwarding,
+        });
       } catch (e) {
         console.error(e);
         setAlert({ type: 'error', isVisible: true });
@@ -238,6 +254,11 @@ function EditPrestasiPage(): JSX.Element {
 
   const validateForms = (): boolean => {
     const result = prestasiScheme.safeParse(formData);
+
+    const hasSertifikat =
+      formData.fotoSertifikat || existingMedia.fotoSertifikat;
+    const hasFotoDiri = formData.fotoDiri || existingMedia.fotoDiri;
+
     if (!result.success) {
       const newErrors = {
         namaPrestasi: '',
@@ -255,6 +276,26 @@ function EditPrestasiPage(): JSX.Element {
         newErrors[fieldName] = issue.message;
       });
 
+      if (!hasSertifikat) {
+        newErrors.fotoSertifikat = 'This field is required';
+      }
+      if (!hasFotoDiri) {
+        newErrors.fotoDiri = 'This field is required';
+      }
+
+      setErrors(newErrors);
+      return false;
+    }
+
+    // Additional validation for required files
+    if (!hasSertifikat || !hasFotoDiri) {
+      const newErrors = { ...errors };
+      if (!hasSertifikat) {
+        newErrors.fotoSertifikat = 'This field is required';
+      }
+      if (!hasFotoDiri) {
+        newErrors.fotoDiri = 'This field is required';
+      }
       setErrors(newErrors);
       return false;
     }
@@ -346,6 +387,12 @@ function EditPrestasiPage(): JSX.Element {
       ...(prev as typeof formData),
       [field]: file as never,
     }));
+
+    setExistingMedia((prev) => ({
+      ...prev,
+      [field]: null,
+    }));
+
     if (errors[field]) {
       setErrors((prev) => ({ ...prev, [field]: '' }));
     }
@@ -359,6 +406,14 @@ function EditPrestasiPage(): JSX.Element {
       ...(prev as typeof formData),
       [field]: null as never,
     }));
+
+    // Also clear the existing media URL
+    setExistingMedia((prev) => ({
+      ...prev,
+      [field]: null,
+    }));
+
+    // Force validation after removal to update error state
     if (errors[field]) {
       setErrors((prev) => ({ ...prev, [field]: '' }));
     }
@@ -397,19 +452,30 @@ function EditPrestasiPage(): JSX.Element {
       const bulan = monthMap[monthName];
       const tahun = parseInt(yearStr);
 
-      const mediaUrls: string[] = [];
+      let mediaSertifikat: string | null = null;
+      let mediaFotoPribadi: string | null = null;
+      let mediaFotoAwarding: string | null = null;
+
       if (formData.fotoSertifikat) {
-        mediaUrls.push(await uploadViaPresigned(formData.fotoSertifikat));
-      }
-      if (formData.fotoDiri) {
-        mediaUrls.push(await uploadViaPresigned(formData.fotoDiri));
-      }
-      if (formData.fotoAwarding) {
-        mediaUrls.push(await uploadViaPresigned(formData.fotoAwarding));
+        mediaSertifikat = await uploadViaPresigned(formData.fotoSertifikat);
+      } else if (existingMedia.fotoSertifikat) {
+        mediaSertifikat = existingMedia.fotoSertifikat;
       }
 
-      if (mediaUrls.length < 2) {
-        throw new Error('Minimal upload 2 file: Sertifikat dan Foto Diri');
+      if (formData.fotoDiri) {
+        mediaFotoPribadi = await uploadViaPresigned(formData.fotoDiri);
+      } else if (existingMedia.fotoDiri) {
+        mediaFotoPribadi = existingMedia.fotoDiri;
+      }
+
+      if (formData.fotoAwarding) {
+        mediaFotoAwarding = await uploadViaPresigned(formData.fotoAwarding);
+      } else if (existingMedia.fotoAwarding) {
+        mediaFotoAwarding = existingMedia.fotoAwarding;
+      }
+
+      if (!mediaSertifikat || !mediaFotoPribadi) {
+        throw new Error('Sertifikat and Foto Diri are required');
       }
 
       let competitionTypeValue:
@@ -433,7 +499,9 @@ function EditPrestasiPage(): JSX.Element {
         bulan,
         tahun,
         competitionType: competitionTypeValue ?? undefined,
-        mediaUrls,
+        mediaSertifikat,
+        mediaFotoPribadi,
+        mediaFotoAwarding: mediaFotoAwarding ?? undefined,
       };
 
       await api.achievements.updatePrestasi({
@@ -629,6 +697,7 @@ function EditPrestasiPage(): JSX.Element {
               disabled={false}
               maxWidth="100px"
               initialFile={formData.fotoSertifikat}
+              initialUrl={existingMedia.fotoSertifikat}
             />
             {errors.fotoSertifikat && (
               <span className="text-xs font-semibold text-red-400">
@@ -656,6 +725,7 @@ function EditPrestasiPage(): JSX.Element {
               disabled={false}
               maxWidth="100px"
               initialFile={formData.fotoDiri}
+              initialUrl={existingMedia.fotoDiri}
             />
             {errors.fotoDiri && (
               <span className="text-xs font-semibold text-red-400">
@@ -683,6 +753,7 @@ function EditPrestasiPage(): JSX.Element {
               disabled={false}
               maxWidth="100px"
               initialFile={formData.fotoAwarding}
+              initialUrl={existingMedia.fotoAwarding}
             />
             {errors.fotoAwarding && (
               <span className="text-xs font-semibold text-red-400">

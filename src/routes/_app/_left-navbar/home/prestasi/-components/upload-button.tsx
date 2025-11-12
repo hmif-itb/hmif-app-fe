@@ -1,6 +1,6 @@
 import { Upload, File, Trash } from 'lucide-react';
 import { Button } from '~/components/ui/button';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 interface UploadButtonProps {
   text: string;
@@ -12,6 +12,7 @@ interface UploadButtonProps {
   maxWidth?: string;
   onInvalidFile?: (error: string) => void;
   initialFile?: File | null; // Initial file prop
+  initialUrl?: string | null; // Initial URL prop for existing files
 }
 
 // Upload button untuk upload file
@@ -25,9 +26,18 @@ export function UploadButton({
   maxWidth = '80px',
   onInvalidFile,
   initialFile = null,
+  initialUrl = null,
 }: UploadButtonProps) {
   const [selectedFile, setSelectedFile] = useState<File | null>(initialFile);
+  const [existingFileUrl, setExistingFileUrl] = useState<string | null>(
+    initialUrl,
+  );
   const inputRef = useRef<HTMLInputElement | null>(null);
+
+  // Update existing file URL when prop changes
+  useEffect(() => {
+    setExistingFileUrl(initialUrl);
+  }, [initialUrl]);
 
   // Function to validate file type based on accept prop
   const validateFileType = (file: File): boolean => {
@@ -87,6 +97,7 @@ export function UploadButton({
       }
 
       setSelectedFile(file);
+      setExistingFileUrl(null); // Clear existing URL when new file is selected
       if (onFileSelect) {
         onFileSelect(file);
       }
@@ -97,6 +108,7 @@ export function UploadButton({
   const handleRemoveFile = (e: React.MouseEvent) => {
     e.stopPropagation();
     setSelectedFile(null); // Clear file di component
+    setExistingFileUrl(null); // Clear existing URL
     if (onFileRemove) {
       onFileRemove(); // Callback ke parent
     }
@@ -113,6 +125,24 @@ export function UploadButton({
     );
     return `${truncatedName}...${extension}`;
   };
+
+  // Get filename from URL
+  const getFileNameFromUrl = (url: string): string => {
+    try {
+      const urlObj = new URL(url);
+      const pathname = urlObj.pathname;
+      const fileName = pathname.split('/').pop() || 'existing-file';
+      return fileName;
+    } catch {
+      return 'existing-file';
+    }
+  };
+
+  const currentFileName = selectedFile
+    ? selectedFile.name
+    : existingFileUrl
+      ? getFileNameFromUrl(existingFileUrl)
+      : null;
   return (
     <div className={`relative inline-block w-fit ${className}`}>
       <input
@@ -127,7 +157,7 @@ export function UploadButton({
       />
       <Button
         variant="outlined"
-        className={`z-100 flex cursor-pointer items-center gap-2 rounded-lg border border-[#BABABA]/30 bg-[#FCFCFC] text-xs font-semibold duration-300 ${
+        className={`z-50 flex cursor-pointer items-center gap-2 rounded-lg border border-[#BABABA]/30 bg-[#FCFCFC] text-xs font-semibold duration-300 ${
           className.includes('border-red-400') ? 'border-red-400' : ''
         }`}
         disabled={disabled}
@@ -139,24 +169,23 @@ export function UploadButton({
           }
         }}
       >
-        {selectedFile ? (
+        {currentFileName ? (
           <>
             <File className="size-4" color="black" />
             <span
               className="flex-1 truncate"
               style={{ maxWidth }}
-              title={selectedFile.name}
+              title={currentFileName}
             >
-              {truncateFileName(selectedFile.name, 15)}
+              {truncateFileName(currentFileName, 15)}
             </span>
-            <button
-              type="button"
+            <span
               onClick={handleRemoveFile}
               className="relative z-50 ml-1 rounded transition-colors hover:bg-red-100"
               title="Remove file"
             >
               <Trash className="size-4 text-red-500" />
-            </button>
+            </span>
           </>
         ) : (
           <>
