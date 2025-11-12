@@ -141,7 +141,9 @@ export class AchievementsService {
       bulan?: number;
       tahun?: number;
       competitionType?: 'CP' | 'CTF' | 'BCC' | 'DS' | 'AI' | 'Hackathon';
-      mediaUrls?: Array<string>;
+      mediaSertifikat?: string;
+      mediaFotoAwarding?: string;
+      mediaFotoPribadi?: string;
     },
   }): CancelablePromise<CreatePrestasiResponse> {
     return this.httpRequest.request({
