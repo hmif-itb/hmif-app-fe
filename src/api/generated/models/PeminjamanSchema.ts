@@ -8,7 +8,7 @@ export type PeminjamanSchema = {
   propertyName: string;
   startDate: string;
   endDate: string;
-  status: 'pending' | 'accepted' | 'rejected';
+  status: 'pending' | 'rejected' | 'accepted' | 'pending_return' | 'completed';
   title: string;
   category: 'sekre' | 'properti';
 };
