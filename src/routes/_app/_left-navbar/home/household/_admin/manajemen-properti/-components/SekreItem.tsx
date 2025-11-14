@@ -2,12 +2,12 @@ import { useState } from 'react';
 import { MapPin, SquarePen, Trash } from 'lucide-react';
 import { DeleteModal } from './DeleteModal';
 import { EditSekreModal } from './EditSekreModal';
-import { SekreData, SekreFormData } from '../../../-types';
-
+import { SekreData } from '../../../-types';
+import type { UpdatePropertiBodySchema } from '~/api/generated';
 
 interface SekreItemProps {
   sekre: SekreData;
-  onUpdate: (updatedData: SekreData) => void;
+  onUpdate: (updatedData: UpdatePropertiBodySchema) => void;
   onDelete: () => void;
   locations: string[];
 }
@@ -36,7 +36,7 @@ export function SekreItem({
     setModalState({ isOpen: false, type: null });
   };
 
-  const handleEditConfirm = async (data: SekreFormData) => {
+  const handleEditConfirm = async (data: UpdatePropertiBodySchema) => {
     setIsLoading(true);
     try {
       // Simulate API call
@@ -83,7 +83,7 @@ export function SekreItem({
             </h3>
             <div className="flex items-center gap-4 text-xs text-[#525352] lg:gap-7">
               <span className="rounded-full bg-[#AAB8AD] px-3 py-1 text-[#1D3122]">
-                {sekre.condition === 'new' ? 'Baik' : 'Rusak'}
+                {sekre.condition.toUpperCase()}
               </span>
               <span className="flex items-center gap-1">
                 <MapPin size={12} />

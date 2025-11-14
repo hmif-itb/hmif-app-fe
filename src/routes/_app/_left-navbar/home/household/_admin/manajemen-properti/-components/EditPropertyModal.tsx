@@ -1,12 +1,12 @@
 import { X, ChevronDown } from 'lucide-react';
 import { useState } from 'react';
 import { PropertyFormData } from '../../../-types';
-
+import type { UpdatePropertiBodySchema } from '~/api/generated';
 
 interface EditPropertyModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onConfirm: (data: PropertyFormData) => void;
+  onConfirm: (data: UpdatePropertiBodySchema) => void;
   data: PropertyFormData;
   locations: string[];
 }
@@ -29,7 +29,13 @@ export function EditPropertyModal({
 
   const handleConfirm = () => {
     console.log('Editing property with data:', formData);
-    onConfirm(formData);
+    const payload: UpdatePropertiBodySchema = {
+      name: formData.name,
+      condition: formData.condition,
+      quantity: formData.quantity,
+      location: formData.location as UpdatePropertiBodySchema['location'],
+    };
+    onConfirm(payload);
     onClose();
   };
 
@@ -79,13 +85,19 @@ export function EditPropertyModal({
                 onChange={(e) =>
                   setFormData({
                     ...formData,
-                    condition: e.target.value as 'good' | 'broken' | 'cant_be_used' | 'lost',
+                    condition: e.target.value as
+                      | 'good'
+                      | 'broken'
+                      | 'cant_be_used'
+                      | 'lost',
                   })
                 }
                 className="w-full appearance-none rounded-xl border border-gray-300 px-4 py-3 pr-10 text-sm focus:border-gray-400 focus:outline-none"
               >
-                <option value="new">Baik</option>
-                <option value="used">Rusak</option>
+                <option value="good">Baik</option>
+                <option value="broken">Rusak Ringan</option>
+                <option value="cant_be_used">Rusak Berat</option>
+                <option value="lost">Hilang</option>
               </select>
               <ChevronDown
                 className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"

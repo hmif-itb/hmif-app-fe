@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { MapPin, Plus, ChevronDown } from 'lucide-react';
 import { useNavigate } from '@tanstack/react-router';
-import { PropertyData } from '../-api';
+import { PropertyData } from '../../../-types';
 
 interface PropertyItemProps {
   item: PropertyData;
@@ -10,6 +10,8 @@ interface PropertyItemProps {
 export function PropertyItem({ item }: PropertyItemProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const navigate = useNavigate();
+  const isAvailable = item.status === 'available';
+  const availabilityLabel = isAvailable ? 'Tersedia' : 'Sedang Dipakai';
 
   const handleBorrowClick = () => {
     navigate({
@@ -28,8 +30,12 @@ export function PropertyItem({ item }: PropertyItemProps) {
       <div className="hidden w-full items-center justify-between px-[22px] py-5 lg:flex">
         {/* Left Section */}
         <div className="flex items-center gap-3">
-          <div className="size-9 min-h-9 min-w-9 rounded-lg bg-[#E8C55F]">
-            <img src={item.image || ''} alt="" />
+          <div className="size-9 min-h-9 min-w-9 overflow-hidden rounded-lg bg-[#E8C55F]">
+            <img
+              src={item.photo || '/img/home/calendar-bg.png'}
+              alt={item.name}
+              className="size-full object-cover"
+            />
           </div>
           {/* Information */}
           <div className="flex flex-col gap-3">
@@ -38,7 +44,7 @@ export function PropertyItem({ item }: PropertyItemProps) {
               <span className="rounded-full bg-[#AAB8AD] px-3 py-1 text-[#1D3122]">
                 {item.condition === 'good' ? 'Baik' : 'Rusak'}
               </span>
-              <span>{item.amount} Tersedia</span>
+              <span>{item.quantity} Tersedia</span>
               <span className="flex items-center gap-1">
                 <MapPin size={12} />
                 {' ' + item.location}
@@ -50,13 +56,18 @@ export function PropertyItem({ item }: PropertyItemProps) {
         {/* Right Section */}
         <div className="flex items-center gap-6">
           {/* Tag */}
-          <div className="flex h-fit items-center rounded-full bg-[#30764B] px-5 py-1 text-sm text-white">
-            {item.type === 'eksklusif' ? 'Eksklusif' : 'Non-Eksklusif'}
+          <div
+            className={`flex h-fit items-center rounded-full px-5 py-1 text-sm text-white ${
+              isAvailable ? 'bg-[#30764B]' : 'bg-[#C23B30]'
+            }`}
+          >
+            {availabilityLabel}
           </div>
           {/* Borrow Button */}
           <button
             onClick={handleBorrowClick}
-            className="flex items-center rounded-xl bg-[#E8C55F] px-6 py-2 font-medium text-[#1D3122] transition-opacity hover:opacity-70"
+            className="flex items-center rounded-xl bg-[#E8C55F] px-6 py-2 font-medium text-[#1D3122] transition-opacity hover:opacity-70 disabled:cursor-not-allowed disabled:opacity-40"
+            disabled={!isAvailable}
           >
             <Plus size={15} />
             <span>Pinjam</span>
@@ -72,22 +83,30 @@ export function PropertyItem({ item }: PropertyItemProps) {
           onClick={toggleExpanded}
         >
           <div className="flex items-center gap-3">
-            <div className="size-9 min-h-9 min-w-9 rounded-lg bg-[#E8C55F]">
-              <img src={item.image || ''} alt="" />
+            <div className="size-9 min-h-9 min-w-9 overflow-hidden rounded-lg bg-[#E8C55F]">
+              <img
+                src={item.photo || '/img/home/calendar-bg.png'}
+                alt={item.name}
+                className="size-full object-cover"
+              />
             </div>
             <div className="flex flex-col justify-center gap-1 ">
               <h3 className="max-w-[120px] truncate text-sm font-semibold text-black md:max-w-[200px]">
                 {item.name}
               </h3>
-              <span className="flex  w-fit items-center rounded-full bg-[#30764B] px-3  text-xs text-white">
-                {item.type === 'eksklusif' ? 'Eksklusif' : 'Non-Eksklusif'}
+              <span
+                className={`flex  w-fit items-center rounded-full px-3  text-xs text-white ${
+                  isAvailable ? 'bg-[#30764B]' : 'bg-[#C23B30]'
+                }`}
+              >
+                {availabilityLabel}
               </span>
             </div>
           </div>
 
           <div className="flex items-center gap-2">
             <span className="text-sm text-[#525352]">
-              {item.amount} Tersedia
+              {item.quantity} Tersedia
             </span>
             <ChevronDown
               size={16}
@@ -120,7 +139,8 @@ export function PropertyItem({ item }: PropertyItemProps) {
               {/* Borrow Button */}
               <button
                 onClick={handleBorrowClick}
-                className="flex w-full items-center justify-center rounded-xl bg-[#E8C55F] px-4 py-2 font-medium text-[#1D3122] transition-opacity hover:opacity-70"
+                className="flex w-full items-center justify-center rounded-xl bg-[#E8C55F] px-4 py-2 font-medium text-[#1D3122] transition-opacity hover:opacity-70 disabled:cursor-not-allowed disabled:opacity-40"
+                disabled={!isAvailable}
               >
                 <Plus size={15} />
                 <span>Pinjam</span>

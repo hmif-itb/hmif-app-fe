@@ -45,29 +45,29 @@ function HouseholdAdminPage() {
   const { data: reportData = [], isLoading: isLoadingReports } =
     useGetLaporanList(queryFilters);
 
-    const mappedRequestData = useMemo(() => {
-      return (requestData || []).map((item) => ({
-        ...item,
-        item: item.properti?.name,
-        category: item.properti?.category,
-        quantity: item.properti?.quantity, 
-        reason: item.alasan ?? undefined,
-        type: item.jenisPeminjaman,
-        borrowTime: item.createdAt ?? undefined
-      }));
-    }, [requestData]);
+  const mappedRequestData = useMemo(() => {
+    return (requestData || []).map((item) => ({
+      ...item,
+      item: item.properti?.name,
+      category: item.properti?.category,
+      quantity: item.properti?.quantity,
+      reason: item.alasan ?? undefined,
+      type: item.jenisPeminjaman,
+      borrowTime: item.createdAt ?? undefined,
+    }));
+  }, [requestData]);
 
-    const mappedReportData = useMemo(() => {
-      return (reportData || []).map((item) => ({
-        ...item,
-        borrowerName: item.pelapor?.fullName ?? "Unknown",
-        startDate: item.properti?.createdAt ?? "",
-        endDate: item.createdAt ?? "",
-        category: item.properti?.category ?? "General",
-        reportContent: item.deskripsi,
-        photo: item.fotoUrl ?? undefined,
-      }));
-    }, [reportData]);
+  const mappedReportData = useMemo(() => {
+    return (reportData || []).map((item) => ({
+      ...item,
+      borrowerName: item.pelapor?.fullName ?? 'Unknown',
+      startDate: item.properti?.createdAt ?? '',
+      endDate: item.createdAt ?? '',
+      category: item.properti?.category ?? 'General',
+      reportContent: item.deskripsi,
+      photo: item.fotoUrl ?? undefined,
+    }));
+  }, [reportData]);
 
   const isLoading = isLoadingRequests || isLoadingReports;
 
@@ -82,10 +82,6 @@ function HouseholdAdminPage() {
   const handleSearchChange = (newSearchTerm: string) => {
     setSearchTerm(newSearchTerm);
   };
-
-
-
-  
 
   const renderContent = () => {
     switch (activeView) {

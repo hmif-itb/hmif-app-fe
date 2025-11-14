@@ -37,7 +37,9 @@ export function ReportItem({ request }: ReportItemProps) {
             )}
 
             <div>
-              <h3 className="font-semibold text-black">{request.borrowerName}</h3>
+              <h3 className="font-semibold text-black">
+                {request.borrowerName}
+              </h3>
               <p className="text-sm text-[#525352]">{request.startDate}</p>
             </div>
           </div>

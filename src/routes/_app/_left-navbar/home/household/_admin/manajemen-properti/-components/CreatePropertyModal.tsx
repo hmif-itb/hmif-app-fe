@@ -1,8 +1,6 @@
 import { X, ChevronDown } from 'lucide-react';
 import { useState } from 'react';
-import { z } from 'zod';
 import type { CreatePropertiBodySchema } from '~/api/generated';
-
 
 interface CreatePropertyModalProps {
   isOpen: boolean;
@@ -26,7 +24,8 @@ export function CreatePropertyModal({
     condition: 'good',
     quantity: 1,
     location: 'Sekretariat 1',
-    photo:''
+    photo: '',
+    status: 'available',
   });
 
   if (!isOpen) return null;
@@ -52,39 +51,52 @@ export function CreatePropertyModal({
 
         <div className="flex flex-col gap-5 p-6">
           <div>
-            <label className="mb-2 block text-sm font-medium text-black">Nama</label>
+            <label className="mb-2 block text-sm font-medium text-black">
+              Nama
+            </label>
             <input
               type="text"
               value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, name: e.target.value })
+              }
               className="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm focus:border-gray-400 focus:outline-none"
               placeholder="Masukkan nama properti"
             />
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-black">Kondisi</label>
+            <label className="mb-2 block text-sm font-medium text-black">
+              Kondisi
+            </label>
             <div className="relative">
               <select
                 value={formData.condition}
                 onChange={(e) =>
                   setFormData({
                     ...formData,
-                    condition: e.target.value as CreatePropertiBodySchema['condition'],
+                    condition: e.target
+                      .value as CreatePropertiBodySchema['condition'],
                   })
                 }
                 className="w-full appearance-none rounded-xl border border-gray-300 px-4 py-3 pr-10 text-sm focus:border-gray-400 focus:outline-none"
               >
-                <option value="BAIK">Baik</option>
-                <option value="RUSAK_RINGAN">Rusak Ringan</option>
-                <option value="RUSAK_BERAT">Rusak Berat</option>
+                <option value="good">Baik</option>
+                <option value="broken">Rusak Ringan</option>
+                <option value="cant_be_used">Rusak Berat</option>
+                <option value="lost">Hilang</option>
               </select>
-              <ChevronDown className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-500" size={20} />
+              <ChevronDown
+                className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+                size={20}
+              />
             </div>
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-black">Jumlah</label>
+            <label className="mb-2 block text-sm font-medium text-black">
+              Jumlah
+            </label>
             <input
               type="number"
               value={formData.quantity}
@@ -101,14 +113,17 @@ export function CreatePropertyModal({
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-black">Lokasi</label>
+            <label className="mb-2 block text-sm font-medium text-black">
+              Lokasi
+            </label>
             <div className="relative">
               <select
                 value={formData.location}
                 onChange={(e) =>
                   setFormData({
                     ...formData,
-                    location: e.target.value as CreatePropertiBodySchema['location'],
+                    location: e.target
+                      .value as CreatePropertiBodySchema['location'],
                   })
                 }
                 className="w-full appearance-none rounded-xl border border-gray-300 px-4 py-3 pr-10 text-sm focus:border-gray-400 focus:outline-none"
@@ -119,7 +134,10 @@ export function CreatePropertyModal({
                   </option>
                 ))}
               </select>
-              <ChevronDown className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-500" size={20} />
+              <ChevronDown
+                className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+                size={20}
+              />
             </div>
           </div>
         </div>

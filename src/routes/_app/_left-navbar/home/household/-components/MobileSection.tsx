@@ -1,10 +1,10 @@
 import { type Dayjs } from 'dayjs';
-import type { EventType, PeminjamanItemData } from '../-api';
 import MobileHeader from './mobile/MobileHeader';
 import CalendarMobile from './mobile/CalendarMobile';
 import TimelineMobile from './mobile/TimelineMobile';
 import BorrowListMobile from './mobile/BorrowListMobile';
 import MobileActions from './mobile/MobileActions';
+import { EventType, PeminjamanItemData } from '../-types';
 
 interface CalendarDayData {
   currentMonth: boolean;

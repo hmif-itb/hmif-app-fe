@@ -1,5 +1,5 @@
 import { Package } from 'lucide-react';
-import type { PeminjamanItemData } from '../../-api';
+import { PeminjamanItemData } from '../../-types';
 
 interface BorrowListMobileProps {
   items: PeminjamanItemData[];

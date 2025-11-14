@@ -1,7 +1,5 @@
 // import dayjs from 'dayjs';
 
-
-
 // // Generate dummy data for specific month/year
 // const generateDummyData = (month: number, year: number): HouseholdData => {
 //   const events: EventType[] = [

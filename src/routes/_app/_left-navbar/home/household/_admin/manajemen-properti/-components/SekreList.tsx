@@ -2,12 +2,13 @@ import React from 'react';
 import { SekreItem } from './SekreItem';
 import { FilterOptions } from './FilterModal';
 import { SekreData } from '../../../-types';
+import type { UpdatePropertiBodySchema } from '~/api/generated';
 
 interface SekreListProps {
   filter: FilterOptions;
   searchTerm: string;
   data: SekreData[];
-  onUpdate: (id: string, updatedData: SekreData) => void;
+  onUpdate: (id: string, updatedData: UpdatePropertiBodySchema) => void;
   onDelete: (id: string) => void;
   locations: string[];
 }
@@ -38,7 +39,9 @@ function SekreList({
           <SekreItem
             key={`${sekre.name}-${sekre.id.toString()}`}
             sekre={sekre}
-            onUpdate={(updatedData) => onUpdate(sekre.id.toString(), updatedData)}
+            onUpdate={(updatedData) =>
+              onUpdate(sekre.id.toString(), updatedData)
+            }
             onDelete={() => onDelete(sekre.id.toString())}
             locations={locations}
           />

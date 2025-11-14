@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '~/components/ui/select';
-import { FileText, MapPin, Users } from 'lucide-react';
+import { FileText } from 'lucide-react';
 import { CalendarPicker } from './CalendarPicker';
 import { ConfirmationModal } from './ConfirmationModal';
 import { SuccessModal } from './SuccessModal';
@@ -250,7 +250,9 @@ export function SekreLoanForm({ sekreData }: SekreLoanFormProps) {
               </Label>
               <Select
                 value={formData.jenisPeminjaman}
-                onValueChange={(value) => handleInputChange('jenisPeminjaman', value)}
+                onValueChange={(value) =>
+                  handleInputChange('jenisPeminjaman', value)
+                }
               >
                 <SelectTrigger>
                   <SelectValue

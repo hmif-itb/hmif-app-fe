@@ -2,12 +2,13 @@ import React from 'react';
 import { PropertyItem } from './PropertyItem';
 import { PropertyData } from '../../../-types';
 import { FilterOptions } from './FilterModal';
+import type { UpdatePropertiBodySchema } from '~/api/generated';
 
 interface PropertyListProps {
   filter: FilterOptions;
   searchTerm: string;
   data: PropertyData[];
-  onUpdate: (id: string, updatedData: PropertyData) => void;
+  onUpdate: (id: string, updatedData: UpdatePropertiBodySchema) => void;
   onDelete: (id: string) => void;
   locations: string[];
 }

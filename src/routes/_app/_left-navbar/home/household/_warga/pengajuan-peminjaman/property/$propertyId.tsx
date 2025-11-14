@@ -78,7 +78,9 @@ function PropertyDetailPage() {
         <div className="flex w-full flex-col items-center justify-center gap-4 rounded-lg bg-white px-[30px] py-[34px]">
           <div className="text-center">
             <h2 className="text-xl font-semibold text-red-600">
-              {isError ? 'Gagal memuat data properti' : 'Properti tidak ditemukan'}
+              {isError
+                ? 'Gagal memuat data properti'
+                : 'Properti tidak ditemukan'}
             </h2>
             <p className="mt-2 text-gray-600">
               {isError

@@ -39,7 +39,8 @@ export function PropertyLoanForm({ propertyData }: PropertyLoanFormProps) {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-  const { mutate: createPengajuan, isPending: isSubmitting } = useCreatePengajuan();
+  const { mutate: createPengajuan, isPending: isSubmitting } =
+    useCreatePengajuan();
 
   const formatTimeInput = (value: string): string => {
     const numbersOnly = value.replace(/\D/g, '');
@@ -52,20 +53,29 @@ export function PropertyLoanForm({ propertyData }: PropertyLoanFormProps) {
       const minutes = parseInt(limited.slice(2, 4), 10);
       if (minutes > 59) limited = limited.slice(0, 2) + '59';
     }
-    return limited.length >= 3 ? `${limited.slice(0, 2)}:${limited.slice(2)}` : limited;
+    return limited.length >= 3
+      ? `${limited.slice(0, 2)}:${limited.slice(2)}`
+      : limited;
   };
 
   const combineDateTime = (dateStr: string, timeStr: string): string | null => {
-    if (!dateStr || !timeStr || !dayjs(timeStr, 'HH:mm', true).isValid()) return null;
+    if (!dateStr || !timeStr || !dayjs(timeStr, 'HH:mm', true).isValid())
+      return null;
     const date = dayjs(dateStr, 'DD/MM/YYYY');
     const [hours, minutes] = timeStr.split(':');
     if (!date.isValid()) return null;
-    return date.hour(parseInt(hours, 10)).minute(parseInt(minutes, 10)).toISOString();
+    return date
+      .hour(parseInt(hours, 10))
+      .minute(parseInt(minutes, 10))
+      .toISOString();
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const startDateTime = combineDateTime(formData.startDate, formData.startTime);
+    const startDateTime = combineDateTime(
+      formData.startDate,
+      formData.startTime,
+    );
     const endDateTime = combineDateTime(formData.endDate, formData.endTime);
 
     if (!startDateTime || !endDateTime) {
@@ -77,15 +87,18 @@ export function PropertyLoanForm({ propertyData }: PropertyLoanFormProps) {
       return;
     }
     if (!formData.jenisPeminjaman) {
-        alert('Mohon pilih tipe peminjaman.');
-        return;
+      alert('Mohon pilih tipe peminjaman.');
+      return;
     }
 
     setShowConfirmModal(true);
   };
 
   const handleConfirmSubmit = async () => {
-    const startDateTime = combineDateTime(formData.startDate, formData.startTime);
+    const startDateTime = combineDateTime(
+      formData.startDate,
+      formData.startTime,
+    );
     const endDateTime = combineDateTime(formData.endDate, formData.endTime);
 
     if (!startDateTime || !endDateTime || !formData.jenisPeminjaman) return;
@@ -116,14 +129,17 @@ export function PropertyLoanForm({ propertyData }: PropertyLoanFormProps) {
   const handleSuccessClose = () => {
     setShowSuccessModal(false);
     setFormData({
-      startDate: '', endDate: '', startTime: '',
-      endTime: '', jenisPeminjaman: '', alasan: '',
+      startDate: '',
+      endDate: '',
+      startTime: '',
+      endTime: '',
+      jenisPeminjaman: '',
+      alasan: '',
     });
   };
 
   type FieldName = keyof typeof formData;
-  type FieldValue = typeof formData[FieldName];
-
+  type FieldValue = (typeof formData)[FieldName];
 
   const handleInputChange = (field: FieldName, value: string) => {
     setFormData((prev) => {
@@ -137,11 +153,11 @@ export function PropertyLoanForm({ propertyData }: PropertyLoanFormProps) {
         newData[field] = value;
       }
       if (field === 'startDate' && prev.endDate && value && prev.endDate) {
-         const start = dayjs(value, 'DD/MM/YYYY');
-         const end = dayjs(prev.endDate, 'DD/MM/YYYY');
-         if (start.isValid() && end.isValid() && start.isAfter(end)) {
-           newData.endDate = '';
-         }
+        const start = dayjs(value, 'DD/MM/YYYY');
+        const end = dayjs(prev.endDate, 'DD/MM/YYYY');
+        if (start.isValid() && end.isValid() && start.isAfter(end)) {
+          newData.endDate = '';
+        }
       }
       return newData;
     });
@@ -154,7 +170,9 @@ export function PropertyLoanForm({ propertyData }: PropertyLoanFormProps) {
           <div className="flex size-10 items-center justify-center rounded-lg bg-[#E8C55F]">
             <FileText className="size-5 text-[#8B6914]" />
           </div>
-          <h1 className="text-xl font-semibold text-gray-900">Formulir Peminjaman</h1>
+          <h1 className="text-xl font-semibold text-gray-900">
+            Formulir Peminjaman
+          </h1>
         </div>
         <span className="font-semibold">
           Properti - {propertyData.name}
@@ -165,7 +183,10 @@ export function PropertyLoanForm({ propertyData }: PropertyLoanFormProps) {
         <form onSubmit={handleSubmit} className="space-y-3 lg:space-y-7">
           <div className="flex flex-col gap-3 lg:flex-row lg:gap-[60px]">
             <div className="space-y-2 lg:max-w-[242px]">
-              <Label htmlFor="startDate" className="text-sm font-medium text-gray-700">
+              <Label
+                htmlFor="startDate"
+                className="text-sm font-medium text-gray-700"
+              >
                 Tanggal Mulai*
               </Label>
               <CalendarPicker
@@ -175,7 +196,10 @@ export function PropertyLoanForm({ propertyData }: PropertyLoanFormProps) {
               />
             </div>
             <div className="space-y-2 lg:max-w-[242px]">
-              <Label htmlFor="endDate" className="text-sm font-medium text-gray-700">
+              <Label
+                htmlFor="endDate"
+                className="text-sm font-medium text-gray-700"
+              >
                 Tanggal Selesai*
               </Label>
               <CalendarPicker
@@ -192,55 +216,85 @@ export function PropertyLoanForm({ propertyData }: PropertyLoanFormProps) {
 
           <div className="grid grid-cols-1 gap-3 lg:w-fit lg:grid-cols-2 lg:gap-[60px] xl:grid-cols-3">
             <div className="w-full space-y-2 lg:w-[242px] lg:max-w-[242px]">
-              <Label htmlFor="startTime" className="text-sm font-medium text-gray-700">
+              <Label
+                htmlFor="startTime"
+                className="text-sm font-medium text-gray-700"
+              >
                 Waktu Mulai*
               </Label>
               <Input
-                id="startTime" type="text" placeholder="JJ:MM"
+                id="startTime"
+                type="text"
+                placeholder="JJ:MM"
                 value={formData.startTime}
                 onChange={(e) => handleInputChange('startTime', e.target.value)}
-                maxLength={5} required
+                maxLength={5}
+                required
               />
             </div>
             <div className="w-full space-y-2 lg:w-[242px] lg:max-w-[242px]">
-              <Label htmlFor="endTime" className="text-sm font-medium text-gray-700">
+              <Label
+                htmlFor="endTime"
+                className="text-sm font-medium text-gray-700"
+              >
                 Waktu Selesai*
               </Label>
               <Input
-                id="endTime" type="text" placeholder="JJ:MM"
+                id="endTime"
+                type="text"
+                placeholder="JJ:MM"
                 value={formData.endTime}
                 onChange={(e) => handleInputChange('endTime', e.target.value)}
-                maxLength={5} required
+                maxLength={5}
+                required
               />
             </div>
             <div className="w-full space-y-2 lg:w-[242px] lg:max-w-[242px]">
-              <Label htmlFor="jenisPeminjaman" className="text-sm font-medium text-gray-700">
+              <Label
+                htmlFor="jenisPeminjaman"
+                className="text-sm font-medium text-gray-700"
+              >
                 Tipe*
               </Label>
               <Select
                 value={formData.jenisPeminjaman}
-                onValueChange={(value) => handleInputChange('jenisPeminjaman', value as 'eksklusif' | 'non-eksklusif')}
+                onValueChange={(value) =>
+                  handleInputChange(
+                    'jenisPeminjaman',
+                    value as 'eksklusif' | 'non-eksklusif',
+                  )
+                }
               >
                 <SelectTrigger id="jenisPeminjaman">
-                  <SelectValue className="text-[14px] text-[#666666] placeholder:text-[#666666]" placeholder="Pilih Tipe"/>
+                  <SelectValue
+                    className="text-[14px] text-[#666666] placeholder:text-[#666666]"
+                    placeholder="Pilih Tipe"
+                  />
                 </SelectTrigger>
                 <SelectContent className="text-[14px] text-[#666666]">
                   <SelectItem value="eksklusif">Eksklusif</SelectItem>
-                  <SelectItem value="non-eksklusif">Non-Eksklusif (Berbagi/Umum)</SelectItem>
+                  <SelectItem value="non-eksklusif">
+                    Non-Eksklusif (Berbagi/Umum)
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="alasan" className="text-sm font-medium text-gray-700">
+            <Label
+              htmlFor="alasan"
+              className="text-sm font-medium text-gray-700"
+            >
               Alasan*
             </Label>
             <Textarea
-              id="alasan" placeholder="Deskripsikan alasanmu..."
+              id="alasan"
+              placeholder="Deskripsikan alasanmu..."
               value={formData.alasan}
               onChange={(e) => handleInputChange('alasan', e.target.value)}
-              className="min-h-[184px] resize-none" required
+              className="min-h-[184px] resize-none"
+              required
             />
           </div>
 
@@ -249,7 +303,11 @@ export function PropertyLoanForm({ propertyData }: PropertyLoanFormProps) {
             className="w-full rounded-lg bg-[#E8C55F] py-3 font-medium text-[#333333] transition-colors hover:opacity-85"
             disabled={isSubmitting}
           >
-            {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Ajukan Peminjaman'}
+            {isSubmitting ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              'Ajukan Peminjaman'
+            )}
           </Button>
         </form>
       </div>
@@ -258,7 +316,7 @@ export function PropertyLoanForm({ propertyData }: PropertyLoanFormProps) {
         isOpen={showConfirmModal}
         onClose={() => setShowConfirmModal(false)}
         onConfirm={handleConfirmSubmit}
-        formData={formData} 
+        formData={formData}
         isSubmitting={isSubmitting}
       />
       <SuccessModal isOpen={showSuccessModal} onClose={handleSuccessClose} />

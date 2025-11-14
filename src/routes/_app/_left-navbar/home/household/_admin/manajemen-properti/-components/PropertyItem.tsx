@@ -2,13 +2,12 @@ import { useState } from 'react';
 import { MapPin, SquarePen, Trash } from 'lucide-react';
 import { DeleteModal } from './DeleteModal';
 import { EditPropertyModal } from './EditPropertyModal';
-import { PropertyFormData, PropertyData } from '../../../-types';
-
-
+import { PropertyData } from '../../../-types';
+import type { UpdatePropertiBodySchema } from '~/api/generated';
 
 interface PropertyItemProps {
   property: PropertyData;
-  onUpdate: (updatedData: PropertyData) => void;
+  onUpdate: (updatedData: UpdatePropertiBodySchema) => void;
   onDelete: () => void;
   locations: string[];
 }
@@ -37,7 +36,7 @@ export function PropertyItem({
     setModalState({ isOpen: false, type: null });
   };
 
-  const handleEditConfirm = async (data: PropertyFormData) => {
+  const handleEditConfirm = async (data: UpdatePropertiBodySchema) => {
     setIsLoading(true);
     try {
       // Simulate API call

@@ -1,6 +1,6 @@
 import { MapPin, Plus } from 'lucide-react';
 import { useNavigate } from '@tanstack/react-router';
-import { SekreData } from '../-api';
+import { SekreData } from '../../../-types';
 
 interface SekreItemProps {
   sekre: SekreData;
@@ -8,6 +8,7 @@ interface SekreItemProps {
 
 export function SekreItem({ sekre }: SekreItemProps) {
   const navigate = useNavigate();
+  const isAvailable = sekre.status === 'available';
 
   const handlePinjamClick = () => {
     navigate({
@@ -19,14 +20,18 @@ export function SekreItem({ sekre }: SekreItemProps) {
   return (
     <div
       className={`flex w-full flex-col rounded-xl bg-white px-4 py-[15px] lg:px-[22px] lg:py-5 ${
-        !sekre.status || sekre.status === 'unavailable' ? 'opacity-60' : ''
+        isAvailable ? '' : 'opacity-60'
       }`}
     >
       {/* Top Section */}
       <div className="flex justify-between">
         <div className="mb-5 flex items-center gap-3">
-          <div className="size-9 min-h-9 min-w-9 rounded-lg bg-[#E8C55F]">
-            <img src="" alt="" />
+          <div className="size-9 min-h-9 min-w-9 overflow-hidden rounded-lg bg-[#E8C55F]">
+            <img
+              src={sekre.photo || '/img/home/calendar-bg.png'}
+              alt={sekre.name}
+              className="size-full object-cover"
+            />
           </div>
           {/* Information */}
           <div className="flex flex-col gap-1">
@@ -35,7 +40,7 @@ export function SekreItem({ sekre }: SekreItemProps) {
             </h3>
             <div className="flex items-center gap-4 text-xs text-[#525352] ">
               <span className="rounded-full bg-[#AAB8AD] px-3 py-1 text-[#1D3122]">
-                {sekre.condition === 'new' ? 'Baik' : 'Rusak'}
+                {sekre.condition === 'good' ? 'Baik' : 'Rusak'}
               </span>
               <span className="flex items-center gap-1">
                 <MapPin size={12} />
@@ -47,7 +52,7 @@ export function SekreItem({ sekre }: SekreItemProps) {
           </div>
         </div>
         {/* Status Badge */}
-        {sekre.status && sekre.status === 'available' ? (
+        {isAvailable ? (
           <span className="size-fit rounded-full bg-[#305138]  px-2 text-[12px] font-normal text-white lg:py-[2px] lg:text-sm">
             Tersedia
           </span>
@@ -67,7 +72,7 @@ export function SekreItem({ sekre }: SekreItemProps) {
         />
         {/* Type Badge */}
         <span className="absolute bottom-2 left-2 flex w-fit items-center rounded-full bg-[#30764B] px-3 py-[2px] text-xs text-white">
-          {sekre.type === 'eksklusif' ? 'Eksklusif' : 'Non-Eksklusif'}
+          {sekre.category === 'sekre' ? 'Sekretariat' : 'Properti'}
         </span>
       </div>
 
@@ -75,7 +80,7 @@ export function SekreItem({ sekre }: SekreItemProps) {
       <div className="flex w-full justify-center gap-[60px]">
         <button
           onClick={handlePinjamClick}
-          disabled={sekre.status === 'unavailable'}
+          disabled={!isAvailable}
           className="flex items-center rounded-xl bg-[#E8C55F] px-6 py-1 font-medium text-[#1D3122] transition-opacity hover:opacity-70 disabled:cursor-not-allowed disabled:opacity-40 lg:py-2"
         >
           <Plus size={15} />

@@ -2,7 +2,6 @@ import { X, ChevronDown } from 'lucide-react';
 import { useState, useRef, DragEvent } from 'react';
 import { CreatePropertiBodySchema } from '~/api/generated';
 
-
 interface CreateSekreModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -16,6 +15,7 @@ export function CreateSekreModal({
   onClose,
   onConfirm,
   locations,
+  isSubmitting,
 }: CreateSekreModalProps) {
   const [formData, setFormData] = useState<CreatePropertiBodySchema>({
     name: '',
@@ -23,8 +23,9 @@ export function CreateSekreModal({
     description: '',
     category: 'sekre',
     quantity: 1,
-    location: 'Sekretariat 1' || '',
-    photo:''
+    location: 'Sekretariat 1',
+    photo: '',
+    status: 'available',
   });
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -42,8 +43,9 @@ export function CreateSekreModal({
       description: '',
       category: 'sekre',
       quantity: 1,
-      location: 'Sekretariat 1' || '',
-      photo:''
+      location: 'Sekretariat 1',
+      photo: '',
+      status: 'available',
     });
   };
 
@@ -138,13 +140,19 @@ export function CreateSekreModal({
                 onChange={(e) =>
                   setFormData({
                     ...formData,
-                    condition: e.target.value as 'good' | 'broken' | 'cant_be_used' | 'lost'
+                    condition: e.target.value as
+                      | 'good'
+                      | 'broken'
+                      | 'cant_be_used'
+                      | 'lost',
                   })
                 }
                 className="w-full appearance-none rounded-lg border border-gray-300 px-4 py-3 pr-10 text-sm focus:border-gray-400 focus:outline-none"
               >
-                <option value="new">Baik</option>
-                <option value="used">Rusak</option>
+                <option value="good">Baik</option>
+                <option value="broken">Rusak Ringan</option>
+                <option value="cant_be_used">Rusak Berat</option>
+                <option value="lost">Hilang</option>
               </select>
               <ChevronDown
                 className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
@@ -162,7 +170,13 @@ export function CreateSekreModal({
               <select
                 value={formData.location}
                 onChange={(e) =>
-                  setFormData({ ...formData, location: e.target.value as "Sekretariat 1" | "Sekretariat 2" | "Jatinangor"})
+                  setFormData({
+                    ...formData,
+                    location: e.target.value as
+                      | 'Sekretariat 1'
+                      | 'Sekretariat 2'
+                      | 'Jatinangor',
+                  })
                 }
                 className="w-full appearance-none rounded-lg border border-gray-300 px-4 py-3 pr-10 text-sm focus:border-gray-400 focus:outline-none"
               >
@@ -231,14 +245,16 @@ export function CreateSekreModal({
           <button
             onClick={onClose}
             className="flex-1 rounded-full border border-black px-6 py-3 font-medium text-black transition-colors hover:bg-gray-50"
+            disabled={isSubmitting}
           >
             Batal
           </button>
           <button
             onClick={handleConfirm}
             className="flex-1 rounded-full bg-[#305138] px-6 py-3 font-medium text-white transition-colors hover:bg-[#305138]/90"
+            disabled={isSubmitting}
           >
-            Tambah
+            {isSubmitting ? 'Menyimpan...' : 'Tambah'}
           </button>
         </div>
       </div>

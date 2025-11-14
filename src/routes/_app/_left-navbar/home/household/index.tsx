@@ -10,12 +10,14 @@ import useSession from '~/hooks/auth/useSession';
 import { isInRoles } from '~/lib/roles';
 import { generateDate } from '~/lib/calendar';
 import MobileSection from './-components/MobileSection';
-import { useGetHouseholdEvents, useGetNearingEndItems } from '~/hooks/household';
+import {
+  useGetHouseholdEvents,
+  useGetNearingEndItems,
+} from '~/hooks/household';
 
 export const Route = createFileRoute('/_app/_left-navbar/home/household/')({
   component: HouseholdPage,
 });
-
 
 function HouseholdPage() {
   const router = useRouter();
@@ -26,10 +28,8 @@ function HouseholdPage() {
 
   const isAdmin = isInRoles(user, ['household']);
 
-  const { data: events = [], isLoading: isLoadingEvents } = useGetHouseholdEvents(
-    selectedMonth,
-    selectedYear,
-  );
+  const { data: events = [], isLoading: isLoadingEvents } =
+    useGetHouseholdEvents(selectedMonth, selectedYear);
   const { data: peminjamanItems = [], isLoading: isLoadingItems } =
     useGetNearingEndItems();
 

@@ -104,7 +104,9 @@ export function RequestItem({ request }: PeminjamanItemProps) {
                 </div>
               )}
               <div>
-                <h3 className="font-semibold text-black">{request.borrowerName}</h3>
+                <h3 className="font-semibold text-black">
+                  {request.borrowerName}
+                </h3>
                 <p className="flex flex-col text-[12px] text-[#525352] lg:flex-row lg:gap-2 lg:text-sm">
                   <span>Mulai: {request.startDate}</span>
                   <span>Selesai: {request.endDate}</span>

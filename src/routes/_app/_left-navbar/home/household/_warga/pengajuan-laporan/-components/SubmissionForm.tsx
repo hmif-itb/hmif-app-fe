@@ -32,7 +32,9 @@ function SubmissionForm(): JSX.Element {
   const { data: propertiList = [] } = useGetWargaPropertiList({
     category: 'properti',
   });
-  const { data: sekreList = [] } = useGetWargaPropertiList({ category: 'sekre' });
+  const { data: sekreList = [] } = useGetWargaPropertiList({
+    category: 'sekre',
+  });
 
   const allProperti = useMemo(
     () => [...propertiList, ...sekreList],

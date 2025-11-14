@@ -18,7 +18,9 @@ export const Route = createFileRoute(
 
 function HouseholdPeminjamanPage() {
   const router = useRouter();
-  const [activeView, setActiveView] = useState<'Properti' | 'Sekre'>('Properti');
+  const [activeView, setActiveView] = useState<'Properti' | 'Sekre'>(
+    'Properti',
+  );
   const [isMobile, setIsMobile] = useState(false);
   const [filter, setFilter] = useState<FilterOptions>({ condition: 'all' });
   const [searchTerm, setSearchTerm] = useState('');
@@ -37,7 +39,7 @@ function HouseholdPeminjamanPage() {
       new: 'good',
       broken: 'broken',
       hilang: 'lost',
-      cantBeUsed: 'cant_be_used'
+      cantBeUsed: 'cant_be_used',
     };
     return {
       search: searchTerm,
@@ -55,7 +57,8 @@ function HouseholdPeminjamanPage() {
     };
   }, [searchTerm, activeView, filter.condition]);
 
-  const { data: propertiList = [], isLoading } = useGetWargaPropertiList(queryFilters);
+  const { data: propertiList = [], isLoading } =
+    useGetWargaPropertiList(queryFilters);
 
   const handleSwitchChange = (value: string) => {
     setActiveView(value as 'Properti' | 'Sekre');

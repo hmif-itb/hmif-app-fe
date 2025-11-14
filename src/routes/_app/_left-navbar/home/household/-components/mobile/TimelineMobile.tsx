@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import { cn } from '~/lib/utils';
-import type { EventType } from '../../-api';
+import { EventType } from '../../-types';
 
 interface TimelineMobileProps {
   events: EventType[];

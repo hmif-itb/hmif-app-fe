@@ -1,5 +1,5 @@
 import React from 'react';
-import { PeminjamanItemData } from '../-api';
+import { PeminjamanItemData } from '../-types';
 
 interface PeminjamanItemProps {
   data: PeminjamanItemData;

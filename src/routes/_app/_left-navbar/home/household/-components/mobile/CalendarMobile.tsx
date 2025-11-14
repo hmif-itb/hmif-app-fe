@@ -1,7 +1,7 @@
 import dayjs, { type Dayjs } from 'dayjs';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '~/lib/utils';
-import type { EventType } from '../../-api';
+import { EventType } from '../../-types';
 
 interface CalendarDayData {
   currentMonth: boolean;

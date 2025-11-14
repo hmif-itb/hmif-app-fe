@@ -1,12 +1,13 @@
 import { X, ChevronDown } from 'lucide-react';
 import { useState, useRef, DragEvent } from 'react';
-import { SekreFormData } from '../../../-types';
+import { SekreData, SekreFormData } from '../../../-types';
+import type { UpdatePropertiBodySchema } from '~/api/generated';
 
 interface EditSekreModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onConfirm: (data: SekreFormData) => void;
-  data: SekreFormData;
+  onConfirm: (data: UpdatePropertiBodySchema) => void;
+  data: SekreData;
   locations: string[];
 }
 
@@ -30,7 +31,13 @@ export function EditSekreModal({
 
   const handleConfirm = () => {
     console.log('Editing sekre with data:', formData);
-    onConfirm(formData);
+    const payload: UpdatePropertiBodySchema = {
+      name: formData.name,
+      condition: formData.condition,
+      location: formData.location as UpdatePropertiBodySchema['location'],
+      photo: formData.photo ?? null,
+    };
+    onConfirm(payload);
     onClose();
   };
 
@@ -124,13 +131,19 @@ export function EditSekreModal({
                 onChange={(e) =>
                   setFormData({
                     ...formData,
-                    condition: e.target.value as 'good' | 'broken' | 'cant_be_used' | 'lost'
+                    condition: e.target.value as
+                      | 'good'
+                      | 'broken'
+                      | 'cant_be_used'
+                      | 'lost',
                   })
                 }
                 className="w-full appearance-none rounded-lg border border-gray-300 px-4 py-3 pr-10 text-sm focus:border-gray-400 focus:outline-none"
               >
-                <option value="new">Baik</option>
-                <option value="used">Rusak</option>
+                <option value="good">Baik</option>
+                <option value="broken">Rusak Ringan</option>
+                <option value="cant_be_used">Rusak Berat</option>
+                <option value="lost">Hilang</option>
               </select>
               <ChevronDown
                 className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"

@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import { api } from '~/api/client';
-import type { 
+import type {
   PeminjamanSchema,
   CreatePropertiBodySchema,
   UpdatePropertiBodySchema,
@@ -10,7 +10,7 @@ import type {
   CreatePengajuanBodySchema,
   SubmitPengembalianBodySchema,
   CreateLaporanBodySchema,
-  PresignedURL
+  PresignedURL,
 } from '~/api/generated';
 import { z } from 'zod';
 
@@ -43,7 +43,10 @@ export function useGetHouseholdEvents(month: number, year: number) {
     queryFn: async () => {
       const startDate = dayjs(new Date(year, month, 1)).format('YYYY-MM-DD');
       const endDate = dayjs(new Date(year, month + 1, 0)).format('YYYY-MM-DD');
-      const data = await api.peminjamanDashboard.getPeminjaman({ startDate, endDate });
+      const data = await api.peminjamanDashboard.getPeminjaman({
+        startDate,
+        endDate,
+      });
       return data.map((p: PeminjamanSchema) => ({
         user: p.borrowerName,
         title: p.title,
@@ -59,7 +62,9 @@ export function useGetNearingEndItems() {
   return useQuery({
     queryKey: ['household', 'nearing-end'],
     queryFn: async () => {
-      const data = await api.peminjamanDashboard.getPeminjamanNearingEnd({ days: '7' });
+      const data = await api.peminjamanDashboard.getPeminjamanNearingEnd({
+        days: '7',
+      });
       return data.map((p: PeminjamanSchema) => ({
         id: p.id,
         name: p.borrowerName,
@@ -74,7 +79,8 @@ export function useGetNearingEndItems() {
 const PROPERTI_KEYS = {
   all: ['properti'] as const,
   lists: () => [...PROPERTI_KEYS.all, 'list'] as const,
-  list: (filters: GetPropertiParams) => [...PROPERTI_KEYS.lists(), filters] as const,
+  list: (filters: GetPropertiParams) =>
+    [...PROPERTI_KEYS.lists(), filters] as const,
   details: () => [...PROPERTI_KEYS.all, 'detail'] as const,
   detail: (id: string) => [...PROPERTI_KEYS.details(), id] as const,
 };
@@ -108,7 +114,10 @@ export function useCreateProperti() {
 export function useUpdateProperti() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (variables: { propertiId: string; data: UpdatePropertiBodySchema }) =>
+    mutationFn: (variables: {
+      propertiId: string;
+      data: UpdatePropertiBodySchema;
+    }) =>
       api.manajemenProperti.updateProperti({
         propertiId: variables.propertiId,
         requestBody: variables.data,
@@ -157,13 +166,16 @@ export function useGetLaporanList(filters: GetLaporanParamsSchema) {
 export function useUpdateRequestStatus() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (variables: { peminjamanId: string; data: UpdatePeminjamanStatusSchema }) =>
+    mutationFn: (variables: {
+      peminjamanId: string;
+      data: UpdatePeminjamanStatusSchema;
+    }) =>
       api.manajemenRequestLaporan.updateRequestStatus({
         peminjamanId: variables.peminjamanId,
         requestBody: variables.data,
       }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: REQ_LAPORAN_KEYS.requests() }); 
+      queryClient.invalidateQueries({ queryKey: REQ_LAPORAN_KEYS.requests() });
     },
   });
 }
@@ -171,10 +183,13 @@ export function useUpdateRequestStatus() {
 export function useUpdateLaporanStatus() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (variables: { laporanId: string; data: UpdateLaporanStatusSchema }) =>
+    mutationFn: (variables: {
+      laporanId: string;
+      data: UpdateLaporanStatusSchema;
+    }) =>
       api.manajemenRequestLaporan.updateLaporanStatus({
         laporanId: variables.laporanId,
-        requestBody: variables.data, 
+        requestBody: variables.data,
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: REQ_LAPORAN_KEYS.laporan() });
@@ -196,7 +211,8 @@ export function useCreateLaporan() {
 const PENGAJUAN_KEYS = {
   all: ['pengajuan'] as const,
   lists: () => [...PENGAJUAN_KEYS.all, 'lists'] as const,
-  list: (filters: GetPropertiParams) => [...PENGAJUAN_KEYS.lists(), filters] as const,
+  list: (filters: GetPropertiParams) =>
+    [...PENGAJUAN_KEYS.lists(), filters] as const,
 };
 
 export function useGetWargaPropertiList(filters: GetPropertiParams) {
@@ -223,7 +239,9 @@ const PENGEMBALIAN_KEYS = {
   list: () => [...PENGEMBALIAN_KEYS.all, 'list'] as const,
 };
 
-const mapStatusToFrontend = (status: string):'aktif' | 'selesai' | 'pending' | 'pending_return' | 'ditolak' => {
+const mapStatusToFrontend = (
+  status: string,
+): 'aktif' | 'selesai' | 'pending' | 'pending_return' | 'ditolak' => {
   switch (status) {
     case 'accepted':
       return 'aktif';
@@ -248,18 +266,18 @@ export function useGetPeminjamanAktif() {
       return data.map((p) => {
         const startDateFormatted = dayjs(p.startDate).format('DD/MM/YYYY');
         const endDateFormatted = dayjs(p.endDate).format('DD/MM/YYYY');
-        
+
         return {
           id: p.id,
           userName: p.borrowerName,
           properti: p.properti?.name || 'Nama Properti Error',
           jumlah: p.properti?.quantity || 1,
-          
+
           startDate: startDateFormatted,
           endDate: endDateFormatted,
           tanggalMulai: startDateFormatted,
           tanggalSelesai: endDateFormatted,
-          
+
           status: mapStatusToFrontend(p.status),
           type: p.properti?.category || 'properti',
         };
@@ -267,8 +285,6 @@ export function useGetPeminjamanAktif() {
     },
   });
 }
-
-
 
 export function useUploadFile() {
   return useMutation<PresignedURL, Error, File>({
@@ -306,7 +322,10 @@ export function useUploadFile() {
 export function useSubmitPengembalian() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (variables: { peminjamanId: string; data: SubmitPengembalianBodySchema }) =>
+    mutationFn: (variables: {
+      peminjamanId: string;
+      data: SubmitPengembalianBodySchema;
+    }) =>
       api.pengembalian.submitPengembalian({
         peminjamanId: variables.peminjamanId,
         requestBody: variables.data,

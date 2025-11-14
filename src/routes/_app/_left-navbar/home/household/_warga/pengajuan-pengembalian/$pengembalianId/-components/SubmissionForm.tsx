@@ -14,7 +14,7 @@ import ConfirmationModal from './ConfirmationModal';
 import SuccessModal from './SuccessModal';
 import { useParams } from '@tanstack/react-router';
 import { useSubmitPengembalian, useUploadFile } from '~/hooks/household';
-import { Route } from '../index'
+import { Route } from '../index';
 
 function SubmissionForm(): JSX.Element {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -25,8 +25,7 @@ function SubmissionForm(): JSX.Element {
   const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-
-  const { pengembalianId } = Route.useParams()
+  const { pengembalianId } = Route.useParams();
 
   const { mutateAsync: uploadFile, isPending: isUploading } = useUploadFile();
   const { mutate: submitReturn, isPending: isSubmitting } =
@@ -94,7 +93,10 @@ function SubmissionForm(): JSX.Element {
         },
         {
           onSuccess: () => {
-            console.log('✅ Pengembalian berhasil disubmit ke backend:', buktiFotoFinalUrl);
+            console.log(
+              '✅ Pengembalian berhasil disubmit ke backend:',
+              buktiFotoFinalUrl,
+            );
             setShowSuccessModal(true);
             setReportText('');
             setSelectedFile(null);

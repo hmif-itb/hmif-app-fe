@@ -19,7 +19,9 @@ export function FilterModal({
 }: FilterModalProps) {
   if (!isOpen) return null;
 
-  const handleApply = (condition: 'all' | 'good' | 'broken' | 'cant_be_used' | 'lost') => {
+  const handleApply = (
+    condition: 'all' | 'good' | 'broken' | 'cant_be_used' | 'lost',
+  ) => {
     onApplyFilter({ condition });
     onClose();
   };
