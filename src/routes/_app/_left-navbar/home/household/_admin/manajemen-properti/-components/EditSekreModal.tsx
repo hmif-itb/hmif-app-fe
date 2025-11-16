@@ -1,7 +1,8 @@
-import { X, ChevronDown } from 'lucide-react';
-import { useState, useRef, DragEvent } from 'react';
+import { X, ChevronDown, Loader2 } from 'lucide-react';
+import { useState, useRef, DragEvent, ChangeEvent, MouseEvent, useEffect } from 'react';
 import { SekreData, SekreFormData } from '../../../-types';
 import type { UpdatePropertiBodySchema } from '~/api/generated';
+import { useUploadFile } from '~/hooks/household';
 
 interface EditSekreModalProps {
   isOpen: boolean;
@@ -24,21 +25,48 @@ export function EditSekreModal({
     location: data.location,
     photo: data.photo || '',
   });
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(data.photo || null);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const { mutateAsync: uploadFile, isPending: isUploading } = useUploadFile();
+  const internalIsLoading = isUploading;
+
+  useEffect(() => {
+    setFormData({
+      name: data.name,
+      condition: data.condition,
+      location: data.location,
+      photo: data.photo || '',
+    });
+    setImagePreview(data.photo || null);
+    setSelectedFile(null);
+  }, [data, isOpen]);
+
   if (!isOpen) return null;
 
-  const handleConfirm = () => {
-    console.log('Editing sekre with data:', formData);
-    const payload: UpdatePropertiBodySchema = {
-      name: formData.name,
-      condition: formData.condition,
-      location: formData.location as UpdatePropertiBodySchema['location'],
-      photo: formData.photo ?? null,
-    };
-    onConfirm(payload);
-    onClose();
+  const handleConfirm = async () => {
+    try {
+      let finalPhotoUrl: string | null = formData.photo || null;
+      if (selectedFile) {
+        const uploadResult = await uploadFile(selectedFile);
+        finalPhotoUrl = uploadResult.mediaUrl;
+      }
+      
+      const payload: UpdatePropertiBodySchema = {
+        name: formData.name,
+        condition: formData.condition,
+        location: formData.location as UpdatePropertiBodySchema['location'],
+        photo: finalPhotoUrl ?? null,
+      };
+      
+      onConfirm(payload);
+      onClose();
+    } catch (error) {
+      console.error('Gagal mengunggah foto:', error);
+      alert('Gagal mengunggah foto. Silakan coba lagi.');
+    }
   };
 
   const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
@@ -63,11 +91,11 @@ export function EditSekreModal({
 
   const handleImageFile = (file: File) => {
     if (file.type.startsWith('image/')) {
+      setSelectedFile(file);
       const reader = new FileReader();
       reader.onload = (e) => {
         const result = e.target?.result as string;
-        setFormData({ ...formData, photo: result });
-        console.log('Image uploaded:', file.name);
+        setImagePreview(result);
       };
       reader.readAsDataURL(file);
     }
@@ -80,15 +108,16 @@ export function EditSekreModal({
     }
   };
 
-  const clearImage = () => {
+  const clearImage = (e: MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    setSelectedFile(null);
+    setImagePreview(null);
     setFormData({ ...formData, photo: '' });
-    console.log('Image cleared');
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
       <div className="relative mx-[30px] w-[564px] rounded-[15px] bg-white shadow-xl">
-        {/* Close Button */}
         <button
           onClick={onClose}
           className="absolute right-4 top-4 rounded-full p-1 transition-colors hover:bg-gray-100"
@@ -96,16 +125,13 @@ export function EditSekreModal({
           <X size={30} className="text-[#1D1B20]" />
         </button>
 
-        {/* Title */}
         <h2 className="w-full py-6 text-center text-xl font-semibold text-black">
           Edit Sekre
         </h2>
 
         <hr className="border-t-2 border-[#A1A1A1]" />
 
-        {/* Form Fields */}
         <div className="flex flex-col gap-5 p-6">
-          {/* Nama Field */}
           <div>
             <label className="mb-2 block text-sm font-medium text-black">
               Nama
@@ -120,7 +146,6 @@ export function EditSekreModal({
             />
           </div>
 
-          {/* Kondisi Field */}
           <div>
             <label className="mb-2 block text-sm font-medium text-black">
               Kondisi
@@ -152,7 +177,6 @@ export function EditSekreModal({
             </div>
           </div>
 
-          {/* Lokasi Field */}
           <div>
             <label className="mb-2 block text-sm font-medium text-black">
               Lokasi
@@ -178,7 +202,6 @@ export function EditSekreModal({
             </div>
           </div>
 
-          {/* Foto Field */}
           <div>
             <label className="mb-2 block text-sm font-medium text-black">
               Foto
@@ -192,18 +215,15 @@ export function EditSekreModal({
               onDrop={handleDrop}
               onClick={() => fileInputRef.current?.click()}
             >
-              {formData.photo ? (
+              {imagePreview ? (
                 <>
                   <img
-                    src={formData.photo}
+                    src={imagePreview}
                     alt="Property"
                     className="h-full w-full object-cover"
                   />
                   <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      clearImage();
-                    }}
+                    onClick={clearImage}
                     className="absolute bottom-2 right-2 rounded-full bg-red-500 px-3 py-1 text-xs text-white hover:bg-red-600"
                   >
                     Clear
@@ -225,19 +245,20 @@ export function EditSekreModal({
           </div>
         </div>
 
-        {/* Buttons */}
         <div className="flex gap-2 p-6">
           <button
             onClick={onClose}
             className="flex-1 rounded-full border border-black px-6 py-3 font-medium text-black transition-colors hover:bg-gray-50"
+            disabled={internalIsLoading}
           >
             Batal
           </button>
           <button
             onClick={handleConfirm}
             className="flex-1 rounded-full bg-[#305138] px-6 py-3 font-medium text-white transition-colors hover:bg-[#305138]/90"
+            disabled={internalIsLoading}
           >
-            Edit
+            {internalIsLoading ? <Loader2 className="mx-auto h-4 w-4 animate-spin" /> : 'Edit'}
           </button>
         </div>
       </div>
