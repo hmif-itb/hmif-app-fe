@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { useState, useMemo } from 'react';
 import { Button } from '~/components/ui/button';
 import { ChevronLeft } from 'lucide-react';
-import { useRouter } from '@tanstack/react-router';
+import { useNavigate } from '@tanstack/react-router';
 import SearchBar from './-components/SearchBar';
 import PropertyList from './-components/PropertyList';
 import SekreList from './-components/SekreList';
@@ -28,7 +28,7 @@ export const Route = createFileRoute(
 });
 
 function HouseholdAdminPage() {
-  const router = useRouter();
+  const navigate = useNavigate();
   const [activeView, setActiveView] = useState<'properti' | 'sekre'>(
     'properti',
   );
@@ -119,7 +119,7 @@ function HouseholdAdminPage() {
       <Button
         variant="link"
         className="my-6 hidden w-full justify-start gap-8 p-0 text-3xl font-medium lg:flex"
-        onClick={() => router.history.back()}
+        onClick={() => navigate({ to: '/home/household' })}
       >
         <ChevronLeft className="size-8" />
         <span>Back</span>
@@ -128,7 +128,7 @@ function HouseholdAdminPage() {
         <h1 className="flex items-center gap-3 text-[32px] font-bold text-white lg:text-center lg:text-5xl">
           <ChevronLeft
             className="size-9 lg:hidden"
-            onClick={() => router.history.back()}
+            onClick={() => navigate({ to: '/home/household' })}
           />
           Manajemen Properti
         </h1>

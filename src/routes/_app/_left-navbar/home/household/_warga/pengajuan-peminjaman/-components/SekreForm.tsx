@@ -16,6 +16,7 @@ import { CalendarPicker } from './CalendarPicker';
 import { ConfirmationModal } from './ConfirmationModal';
 import { SuccessModal } from './SuccessModal';
 import { SekreData } from '../../../-types';
+import { useNavigate } from '@tanstack/react-router';
 import {
   useCreatePengajuan,
   useGetPeminjamanSchedule,
@@ -30,6 +31,7 @@ interface SekreLoanFormProps {
 }
 
 export function SekreLoanForm({ sekreData }: SekreLoanFormProps) {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     startDate: '',
     endDate: '',
@@ -146,6 +148,7 @@ export function SekreLoanForm({ sekreData }: SekreLoanFormProps) {
       jenisPeminjaman: '',
       alasan: '',
     });
+    navigate({ to: '/home/household/pengajuan-peminjaman' });
   };
 
   type FieldName = keyof typeof formData;

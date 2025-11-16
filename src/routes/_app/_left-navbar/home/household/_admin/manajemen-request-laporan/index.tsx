@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { useState, useEffect, useMemo } from 'react';
 import { Button } from '~/components/ui/button';
 import { ChevronLeft } from 'lucide-react';
-import { useRouter } from '@tanstack/react-router';
+import { useNavigate } from '@tanstack/react-router';
 import SearchBar from './-components/SearchBar';
 import RequestList from './-components/RequestList';
 import ReportList from './-components/ReportList';
@@ -16,7 +16,7 @@ export const Route = createFileRoute(
 });
 
 function HouseholdAdminPage() {
-  const router = useRouter();
+  const navigate = useNavigate();
   const [activeView, setActiveView] = useState('Laporan');
   const [isMobile, setIsMobile] = useState(false);
   const [filter, setFilter] = useState<FilterOptions>({ category: 'all' });
@@ -135,7 +135,7 @@ function HouseholdAdminPage() {
         variant="link"
         className="my-6 hidden w-full justify-start gap-8 p-0 text-3xl font-medium lg:flex"
         onClick={() => {
-          router.history.back();
+          navigate({ to: '/home/household' });
         }}
       >
         <ChevronLeft className="size-8" />
@@ -149,7 +149,7 @@ function HouseholdAdminPage() {
           <ChevronLeft
             className="size-9 lg:hidden"
             onClick={() => {
-              router.history.back();
+              navigate({ to: '/home/household' });
             }}
           />
           Manajemen Request dan Laporan

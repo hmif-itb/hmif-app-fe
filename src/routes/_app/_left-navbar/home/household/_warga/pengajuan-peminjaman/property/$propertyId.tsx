@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { useState, useEffect } from 'react';
 import { Button } from '~/components/ui/button';
 import { ChevronLeft } from 'lucide-react';
-import { useRouter } from '@tanstack/react-router';
+import { useNavigate } from '@tanstack/react-router';
 import { PropertyLoanForm } from '../-components/PropertyForm';
 import { useGetPropertiById } from '~/hooks/household';
 
@@ -13,7 +13,7 @@ export const Route = createFileRoute(
 });
 
 function PropertyDetailPage() {
-  const router = useRouter();
+  const navigate = useNavigate();
   const { propertyId } = Route.useParams();
   const [isMobile, setIsMobile] = useState(false);
 
@@ -89,7 +89,7 @@ function PropertyDetailPage() {
             </p>
           </div>
           <Button
-            onClick={() => router.history.back()}
+            onClick={() => navigate({ to: '/home/household' })}
             className="bg-[#E8C55F] text-[#333333] hover:opacity-85"
           >
             Kembali
@@ -107,7 +107,7 @@ function PropertyDetailPage() {
         variant="link"
         className="my-6 hidden w-full justify-start gap-8 p-0 text-3xl font-medium lg:flex"
         onClick={() => {
-          router.history.back();
+          navigate({ to: '/home/household' });
         }}
       >
         <ChevronLeft className="size-8" />
@@ -121,7 +121,7 @@ function PropertyDetailPage() {
           <ChevronLeft
             className="size-16 lg:hidden"
             onClick={() => {
-              router.history.back();
+              navigate({ to: '/home/household' });
             }}
           />
           Pengajuan Peminjaman

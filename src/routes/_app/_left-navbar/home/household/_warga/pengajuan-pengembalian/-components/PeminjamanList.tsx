@@ -58,7 +58,7 @@ function PeminjamanList({
           <PeminjamanItem key={peminjaman.id} item={peminjaman} />
         ))
       ) : (
-        <div className="flex h-32 items-center justify-center text-gray-500">
+        <div className="flex h-32 items-center justify-center text-white/80">
           <p>Tidak ada data peminjaman yang sesuai dengan filter</p>
         </div>
       )}

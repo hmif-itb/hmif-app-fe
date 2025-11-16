@@ -2,7 +2,7 @@ import { createFileRoute, redirect } from '@tanstack/react-router';
 import { useState, useEffect } from 'react';
 import { Button } from '~/components/ui/button';
 import { ChevronLeft } from 'lucide-react';
-import { useRouter } from '@tanstack/react-router';
+import { useNavigate } from '@tanstack/react-router';
 import { isInRoles } from '~/lib/roles';
 import { loadUserCache } from '~/lib/session';
 import SubmissionForm from './-components/SubmissionForm';
@@ -26,7 +26,7 @@ export const Route = createFileRoute(
 });
 
 function HouseholdAdminPage() {
-  const router = useRouter();
+  const navigate = useNavigate();
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -61,7 +61,7 @@ function HouseholdAdminPage() {
         variant="link"
         className="my-6 hidden w-full justify-start gap-8 p-0 text-3xl font-medium lg:flex"
         onClick={() => {
-          router.history.back();
+          navigate({ to: '/home/household' });
         }}
       >
         <ChevronLeft className="size-8" />
@@ -75,7 +75,7 @@ function HouseholdAdminPage() {
           <ChevronLeft
             className="size-9 lg:hidden"
             onClick={() => {
-              router.history.back();
+              navigate({ to: '/home/household' });
             }}
           />
           Pengajuan Laporan

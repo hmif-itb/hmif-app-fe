@@ -12,7 +12,7 @@ import { Button } from '~/components/ui/button';
 import { Textarea } from '~/components/ui/textarea';
 import ConfirmationModal from './ConfirmationModal';
 import SuccessModal from './SuccessModal';
-import { useParams } from '@tanstack/react-router';
+import { useNavigate, useParams } from '@tanstack/react-router';
 import { useSubmitPengembalian, useUploadFile } from '~/hooks/household';
 import { Route } from '../index';
 
@@ -25,6 +25,7 @@ function SubmissionForm(): JSX.Element {
   const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
+  const navigate = useNavigate();
   const { pengembalianId } = Route.useParams();
 
   const { mutateAsync: uploadFile, isPending: isUploading } = useUploadFile();
@@ -123,6 +124,7 @@ function SubmissionForm(): JSX.Element {
 
   const handleCloseSuccessModal = (): void => {
     setShowSuccessModal(false);
+    navigate({ to: '/home/household/pengajuan-pengembalian' });
   };
 
   const handleReportTextChange = (

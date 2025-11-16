@@ -54,7 +54,7 @@ function SekreList({
 
   if (filteredSekre.length === 0) {
     return (
-      <div className="mb-20 flex w-full items-center justify-center text-white lg:mb-5">
+      <div className="mb-20 flex w-full items-center justify-center text-white/80 lg:mb-5">
         <p>Tidak ada sekre yang sesuai dengan filter</p>
       </div>
     );

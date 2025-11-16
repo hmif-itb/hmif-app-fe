@@ -15,6 +15,7 @@ import { FileText, MapPin, Loader2 } from 'lucide-react';
 import { CalendarPicker } from './CalendarPicker';
 import { ConfirmationModal } from './ConfirmationModal';
 import { SuccessModal } from './SuccessModal';
+import { useNavigate } from '@tanstack/react-router';
 import {
   useCreatePengajuan,
   useGetPeminjamanSchedule,
@@ -30,6 +31,7 @@ interface PropertyLoanFormProps {
 }
 
 export function PropertyLoanForm({ propertyData }: PropertyLoanFormProps) {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     startDate: '',
     endDate: '',
@@ -140,6 +142,7 @@ export function PropertyLoanForm({ propertyData }: PropertyLoanFormProps) {
       jenisPeminjaman: '',
       alasan: '',
     });
+    navigate({ to: '/home/household/pengajuan-peminjaman' });
   };
 
   type FieldName = keyof typeof formData;

@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { useState, useEffect } from 'react';
 import { Button } from '~/components/ui/button';
 import { ChevronLeft } from 'lucide-react';
-import { useRouter } from '@tanstack/react-router';
+import { useNavigate } from '@tanstack/react-router';
 import { SekreLoanForm } from '../-components/SekreForm';
 import { useGetPropertiById } from '~/hooks/household';
 
@@ -13,7 +13,7 @@ export const Route = createFileRoute(
 });
 
 function SekreDetailPage() {
-  const router = useRouter();
+  const navigate = useNavigate();
   const { sekreId } = Route.useParams();
   const [isMobile, setIsMobile] = useState(false);
 
@@ -87,7 +87,7 @@ function SekreDetailPage() {
             </p>
           </div>
           <Button
-            onClick={() => router.history.back()}
+            onClick={() => navigate({ to: '/home/household' })}
             className="bg-[#E8C55F] text-[#333333] hover:opacity-85"
           >
             Kembali
@@ -108,7 +108,7 @@ function SekreDetailPage() {
             </p>
           </div>
           <Button
-            onClick={() => router.history.back()}
+            onClick={() => navigate({ to: '/home/household' })}
             className="bg-[#E8C55F] text-[#333333] hover:opacity-85"
           >
             Kembali
@@ -126,7 +126,7 @@ function SekreDetailPage() {
         variant="link"
         className="my-6 hidden w-full justify-start gap-8 p-0 text-3xl font-medium lg:flex"
         onClick={() => {
-          router.history.back();
+          navigate({ to: '/home/household' });
         }}
       >
         <ChevronLeft className="size-8" />
@@ -140,7 +140,7 @@ function SekreDetailPage() {
           <ChevronLeft
             className="size-16 lg:hidden"
             onClick={() => {
-              router.history.back();
+              navigate({ to: '/home/household' });
             }}
           />
           Pengajuan Peminjaman
