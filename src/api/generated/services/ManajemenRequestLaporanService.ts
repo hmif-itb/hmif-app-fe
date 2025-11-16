@@ -44,6 +44,33 @@ export class ManajemenRequestLaporanService {
     });
   }
   /**
+   * @returns any Jadwal peminjaman properti
+   * @throws ApiError
+   */
+  public getPeminjamanSchedule({
+    propertiId,
+  }: {
+    propertiId: string,
+  }): CancelablePromise<{
+    propertyId: string;
+    schedules: Array<{
+      startDate: string;
+      endDate: string;
+      jenisPeminjaman: 'eksklusif' | 'non-eksklusif';
+    }>;
+  }> {
+    return this.httpRequest.request({
+      method: 'GET',
+      url: '/api/request/{propertiId}/schedule',
+      path: {
+        'propertiId': propertiId,
+      },
+      errors: {
+        404: `Error`,
+      },
+    });
+  }
+  /**
    * @returns any Status request berhasil diperbarui
    * @throws ApiError
    */

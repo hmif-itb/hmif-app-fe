@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Button } from '~/components/ui/button';
 import {
   Popover,
@@ -17,6 +17,11 @@ interface CalendarPickerProps {
   startDate?: string;
   endDate?: string;
   isEndDatePicker?: boolean;
+  schedules?: Array<{
+    startDate: string;
+    endDate: string;
+    jenisPeminjaman: 'eksklusif' | 'non-eksklusif';
+  }>;
 }
 
 export function CalendarPicker({
@@ -28,10 +33,24 @@ export function CalendarPicker({
   startDate,
   endDate,
   isEndDatePicker = false,
+  schedules,
 }: CalendarPickerProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [hoveredDate, setHoveredDate] = useState<Date | null>(null);
+  const normalizedSchedules = useMemo(() => {
+    return schedules?.map((item) => {
+      const start = new Date(item.startDate);
+      const end = new Date(item.endDate);
+      const normalizeDate = (date: Date) =>
+        new Date(date.getFullYear(), date.getMonth(), date.getDate());
+      return {
+        start: normalizeDate(start),
+        end: normalizeDate(end),
+        jenisPeminjaman: item.jenisPeminjaman,
+      };
+    });
+  }, [schedules]);
 
   const months = [
     'January',
@@ -126,6 +145,35 @@ export function CalendarPicker({
     return false;
   };
 
+  const getScheduleState = (date: Date) => {
+    const normalizedDate = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+    );
+
+    let isExclusiveMidRange = false;
+    let textColor: string | undefined;
+
+    normalizedSchedules?.forEach((item) => {
+      const isInRange =
+        normalizedDate >= item.start && normalizedDate <= item.end;
+
+      if (!isInRange) return;
+
+      if (item.jenisPeminjaman === 'eksklusif') {
+        textColor = '#f87171'; // red-400
+        if (normalizedDate > item.start && normalizedDate < item.end) {
+          isExclusiveMidRange = true;
+        }
+      } else if (!textColor) {
+        textColor = '#ea580c'; // orange-600
+      }
+    });
+
+    return { isExclusiveMidRange, textColor };
+  };
+
   const getDateStyle = (dayObj: {
     day: number;
     isCurrentMonth: boolean;
@@ -137,7 +185,9 @@ export function CalendarPicker({
     const currentValue = value ? parseDate(value) : null;
     const isSelected =
       currentValue && date.toDateString() === currentValue.toDateString();
-    const isDisabled = isDateDisabled(date);
+    const scheduleState = getScheduleState(date);
+    const isDisabled =
+      isDateDisabled(date) || scheduleState.isExclusiveMidRange;
 
     let isInRange = false;
     let isRangeStart = false;
@@ -155,6 +205,7 @@ export function CalendarPicker({
 
     return {
       isSelected,
+      scheduleTextColor: scheduleState.textColor,
       isDisabled,
       isInRange,
       isRangeStart,
@@ -163,7 +214,8 @@ export function CalendarPicker({
   };
 
   const handleDateSelect = (date: Date) => {
-    if (isDateDisabled(date)) return;
+    const scheduleState = getScheduleState(date);
+    if (isDateDisabled(date) || scheduleState.isExclusiveMidRange) return;
 
     const formattedDate = formatDate(date);
     onChange?.(formattedDate);
@@ -246,6 +298,7 @@ export function CalendarPicker({
             {days.map((dayObj, index) => {
               const {
                 isSelected,
+                scheduleTextColor,
                 isDisabled,
                 isInRange,
                 isRangeStart,
@@ -262,6 +315,9 @@ export function CalendarPicker({
                   }
                   onMouseLeave={() => isEndDatePicker && setHoveredDate(null)}
                   disabled={isDisabled}
+                  style={
+                    scheduleTextColor ? { color: scheduleTextColor } : undefined
+                  }
                   className={cn(
                     'relative h-8 w-8 rounded-xl bg-transparent p-0 font-normal text-[#2E2E2E]',
                     !dayObj.isCurrentMonth && 'text-[#8E8E93] opacity-50',

@@ -16,7 +16,10 @@ import { CalendarPicker } from './CalendarPicker';
 import { ConfirmationModal } from './ConfirmationModal';
 import { SuccessModal } from './SuccessModal';
 import { SekreData } from '../../../-types';
-import { useCreatePengajuan } from '~/hooks/household';
+import {
+  useCreatePengajuan,
+  useGetPeminjamanSchedule,
+} from '~/hooks/household';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 
@@ -40,6 +43,7 @@ export function SekreLoanForm({ sekreData }: SekreLoanFormProps) {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const { mutate: createPengajuan, isPending: isSubmitting } =
     useCreatePengajuan();
+  const { data: scheduleData = [] } = useGetPeminjamanSchedule(sekreData.id);
 
   const formatTimeInput = (value: string): string => {
     const numbersOnly = value.replace(/\D/g, '');
@@ -209,6 +213,7 @@ export function SekreLoanForm({ sekreData }: SekreLoanFormProps) {
                 value={formData.startDate}
                 onChange={(date) => handleInputChange('startDate', date)}
                 placeholder="HH/BB/TTTT"
+                schedules={scheduleData}
               />
             </div>
 
@@ -227,6 +232,7 @@ export function SekreLoanForm({ sekreData }: SekreLoanFormProps) {
                 startDate={formData.startDate}
                 endDate={formData.endDate}
                 isEndDatePicker={true}
+                schedules={scheduleData}
               />
             </div>
           </div>

@@ -15,7 +15,10 @@ import { FileText, MapPin, Loader2 } from 'lucide-react';
 import { CalendarPicker } from './CalendarPicker';
 import { ConfirmationModal } from './ConfirmationModal';
 import { SuccessModal } from './SuccessModal';
-import { useCreatePengajuan } from '~/hooks/household';
+import {
+  useCreatePengajuan,
+  useGetPeminjamanSchedule,
+} from '~/hooks/household';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { PropertyData } from '../../../-types';
@@ -41,6 +44,7 @@ export function PropertyLoanForm({ propertyData }: PropertyLoanFormProps) {
 
   const { mutate: createPengajuan, isPending: isSubmitting } =
     useCreatePengajuan();
+  const { data: scheduleData = [] } = useGetPeminjamanSchedule(propertyData.id);
 
   const formatTimeInput = (value: string): string => {
     const numbersOnly = value.replace(/\D/g, '');
@@ -193,6 +197,7 @@ export function PropertyLoanForm({ propertyData }: PropertyLoanFormProps) {
                 value={formData.startDate}
                 onChange={(date) => handleInputChange('startDate', date)}
                 placeholder="HH/BB/TTTT"
+                schedules={scheduleData}
               />
             </div>
             <div className="space-y-2 lg:max-w-[242px]">
@@ -210,6 +215,7 @@ export function PropertyLoanForm({ propertyData }: PropertyLoanFormProps) {
                 startDate={formData.startDate}
                 endDate={formData.endDate}
                 isEndDatePicker={true}
+                schedules={scheduleData}
               />
             </div>
           </div>

@@ -14,6 +14,12 @@ import type {
 } from '~/api/generated';
 import { z } from 'zod';
 
+type PeminjamanScheduleItem = {
+  startDate: string;
+  endDate: string;
+  jenisPeminjaman: 'eksklusif' | 'non-eksklusif';
+};
+
 export const GetRequestParamsSchema = z.object({
   search: z.string().optional(),
   category: z.enum(['sekre', 'properti']).optional(),
@@ -316,6 +322,26 @@ export function useUploadFile() {
 
       return presignedData;
     },
+  });
+}
+
+export function useGetPeminjamanSchedule(propertyId: string) {
+  return useQuery({
+    queryKey: ['peminjaman', 'schedule', propertyId],
+    queryFn: async (): Promise<PeminjamanScheduleItem[]> => {
+      const data = await api.request.request<{
+        propertyId: string;
+        schedules: PeminjamanScheduleItem[];
+      }>({
+        method: 'GET',
+        url: '/api/request/{propertiId}/schedule',
+        path: {
+          propertiId: propertyId,
+        },
+      });
+      return data.schedules;
+    },
+    enabled: !!propertyId,
   });
 }
 
