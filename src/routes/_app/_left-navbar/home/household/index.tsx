@@ -25,6 +25,7 @@ function HouseholdPage() {
   const [selectedMonth, setSelectedMonth] = useState(dayjs().month());
   const [selectedYear, setSelectedYear] = useState(dayjs().year());
   const [selectedDate, setSelectedDate] = useState(() => dayjs());
+  const [isMobile, setIsMobile] = useState(false);
 
   const isAdmin = isInRoles(user, ['household']);
 
@@ -54,6 +55,27 @@ function HouseholdPage() {
     .month(selectedMonth)
     .format('MMMM YYYY');
   const today = dayjs();
+
+  useEffect(() => {
+    const checkIfMobile = () => setIsMobile(window.innerWidth < 1024);
+    checkIfMobile();
+    window.addEventListener('resize', checkIfMobile);
+    return () => window.removeEventListener('resize', checkIfMobile);
+  }, []);
+
+  const mobileStyles = {
+    backgroundImage: `url('/img/household/mask-mobile.svg')`,
+    backgroundPosition: 'left top',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: '100% auto',
+  };
+
+  const desktopStyles = {
+    backgroundImage: `url('/img/household/mask-left-top.png'), url('/img/household/mask-right-bottom.png')`,
+    backgroundPosition: 'left top, right bottom',
+    backgroundRepeat: 'no-repeat, no-repeat',
+    backgroundSize: 'auto 1000px, auto 730px',
+  };
 
   const handleMonthChange = (
     month: number,
@@ -108,16 +130,11 @@ function HouseholdPage() {
         <span>Back</span>
       </Button>
       <main
-        className="
-    h-full
-    lg:bg-no-repeat
-    lg:[background-image:url('/img/household/mask-left-top.png'),url('/img/household/mask-right-bottom.png')]
-    lg:[background-position:left_top,right_bottom]
-    lg:[background-size:auto_1000px,auto_730px]
-  "
+        className="flex h-full flex-col gap-5 bg-[#30764B] px-[26px] py-[34px] lg:rounded-xl"
+        style={isMobile ? mobileStyles : desktopStyles}
       >
         {/* Desktop */}
-        <div className="hidden h-full justify-center gap-5 rounded-xl bg-[#30764B] px-[26px] py-[34px] lg:flex  ">
+        <div className="hidden h-full w-full justify-center gap-5 lg:flex">
           <LeftSection
             selectedMonth={selectedMonth}
             selectedYear={selectedYear}
@@ -132,7 +149,7 @@ function HouseholdPage() {
           />
         </div>
         {/* Mobile */}
-        <div className="lg:hidden">
+        <div className="flex-1 lg:hidden">
           <MobileSection
             isAdmin={isAdmin}
             monthLabel={monthLabel}
