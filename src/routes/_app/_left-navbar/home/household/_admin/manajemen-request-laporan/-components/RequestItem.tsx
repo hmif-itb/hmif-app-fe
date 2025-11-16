@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { RequestData } from '../../../-types';
 import { ChevronDown, X } from 'lucide-react';
 import Avatar from '~/components/user/avatar';
 import ConfirmationModal from './ConfirmationModal';
 import Status, { StatusType } from './Status';
 import { useUpdateRequestStatus } from '~/hooks/household';
+import dayjs from 'dayjs';
 
 interface PeminjamanItemProps {
   request: RequestData;
@@ -82,6 +83,30 @@ export function RequestItem({ request }: PeminjamanItemProps) {
     setModalState({ isOpen: false, type: null });
   };
 
+  const startDateFormatted = useMemo(() => {
+    const date = dayjs(request.startDate);
+    return date.isValid() ? date.format('DD/MM/YYYY') : request.startDate;
+  }, [request.startDate]);
+
+  const endDateFormatted = useMemo(() => {
+    const date = dayjs(request.endDate);
+    return date.isValid() ? date.format('DD/MM/YYYY') : request.endDate;
+  }, [request.endDate]);
+
+  const borrowTimeFormatted = useMemo(() => {
+    const start = dayjs(request.startDate);
+    const end = dayjs(request.endDate);
+    if (start.isValid() && end.isValid()) {
+      return `${start.format('HH.mm')} - ${end.format('HH.mm')}`;
+    }
+    return request.borrowTime ?? '-';
+  }, [request.borrowTime, request.endDate, request.startDate]);
+
+  const typeLabel = useMemo(() => {
+    if (!request.type) return '-';
+    return request.type.charAt(0).toUpperCase() + request.type.slice(1);
+  }, [request.type]);
+
   return (
     <>
       <div className="h-fit w-full rounded-xl border border-gray-200 bg-white shadow-sm transition-all duration-200 hover:shadow-md">
@@ -108,8 +133,8 @@ export function RequestItem({ request }: PeminjamanItemProps) {
                   {request.borrowerName}
                 </h3>
                 <p className="flex flex-col text-[12px] text-[#525352] lg:flex-row lg:gap-2 lg:text-sm">
-                  <span>Mulai: {request.startDate}</span>
-                  <span>Selesai: {request.endDate}</span>
+                  <span>Mulai: {startDateFormatted}</span>
+                  <span>Selesai: {endDateFormatted}</span>
                 </p>
               </div>
             </div>
@@ -151,7 +176,7 @@ export function RequestItem({ request }: PeminjamanItemProps) {
                     <p className=" text-sm font-medium text-black">
                       Waktu Peminjaman:
                     </p>
-                    <p className="text-xs text-black">{request.borrowTime}</p>
+                    <p className="text-xs text-black">{borrowTimeFormatted}</p>
                   </div>
                   <div className="transition-all delay-150 duration-300 ">
                     <p className=" text-sm font-medium text-black">Jumlah:</p>
@@ -159,7 +184,7 @@ export function RequestItem({ request }: PeminjamanItemProps) {
                   </div>
                   <div className="transition-all delay-200 duration-300 ">
                     <p className=" text-sm font-medium text-black">Tipe:</p>
-                    <p className="text-xs text-black">{request.type}</p>
+                    <p className="text-xs text-black">{typeLabel}</p>
                   </div>
                 </div>
 

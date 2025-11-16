@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { ReportData } from '../../../-types';
 import Avatar from '~/components/user/avatar';
+import dayjs from 'dayjs';
 
 interface ReportItemProps {
   request: ReportData;
@@ -9,6 +10,11 @@ interface ReportItemProps {
 
 export function ReportItem({ request }: ReportItemProps) {
   const [isExpanded, setIsExpanded] = useState(false);
+
+  const startDateFormatted = useMemo(() => {
+    const date = dayjs(request.startDate);
+    return date.isValid() ? date.format('DD/MM/YYYY') : request.startDate;
+  }, [request.startDate]);
 
   const getInitials = (name: string) => {
     return name
@@ -40,7 +46,7 @@ export function ReportItem({ request }: ReportItemProps) {
               <h3 className="font-semibold text-black">
                 {request.borrowerName}
               </h3>
-              <p className="text-sm text-[#525352]">{request.startDate}</p>
+              <p className="text-sm text-[#525352]">{startDateFormatted}</p>
             </div>
           </div>
           <button
