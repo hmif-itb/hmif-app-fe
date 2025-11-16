@@ -11,11 +11,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from '~/components/ui/select';
-import { FileText } from 'lucide-react';
+import { FileText, Loader2 } from 'lucide-react';
 import { CalendarPicker } from './CalendarPicker';
 import { ConfirmationModal } from './ConfirmationModal';
 import { SuccessModal } from './SuccessModal';
 import { SekreData } from '../../../-types';
+import { useCreatePengajuan } from '~/hooks/household';
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+
+dayjs.extend(customParseFormat);
 
 interface SekreLoanFormProps {
   sekreData: SekreData;
@@ -27,68 +32,104 @@ export function SekreLoanForm({ sekreData }: SekreLoanFormProps) {
     endDate: '',
     startTime: '',
     endTime: '',
-    jenisPeminjaman: '',
+    jenisPeminjaman: '' as 'eksklusif' | 'non-eksklusif' | '',
     alasan: '',
   });
 
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { mutate: createPengajuan, isPending: isSubmitting } =
+    useCreatePengajuan();
 
-  // Format time input to HH:MM with validation
   const formatTimeInput = (value: string): string => {
     const numbersOnly = value.replace(/\D/g, '');
     let limited = numbersOnly.slice(0, 4);
 
     if (limited.length >= 2) {
-      const hours = parseInt(limited.slice(0, 2));
+      const hours = parseInt(limited.slice(0, 2), 10);
       if (hours > 23) {
         limited = '23' + limited.slice(2);
       }
     }
 
     if (limited.length >= 4) {
-      const minutes = parseInt(limited.slice(2, 4));
+      const minutes = parseInt(limited.slice(2, 4), 10);
       if (minutes > 59) {
         limited = limited.slice(0, 2) + '59';
       }
     }
 
-    if (limited.length >= 3) {
-      return `${limited.slice(0, 2)}:${limited.slice(2)}`;
-    } else if (limited.length >= 1) {
-      return limited;
-    }
-
-    return '';
+    return limited.length >= 3
+      ? `${limited.slice(0, 2)}:${limited.slice(2)}`
+      : limited;
   };
 
-  const submitLoanRequest = async () => {
-    console.log('Submitting loan request for sekre:', sekreData.id, formData);
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        console.log('Sekre loan request submitted successfully!');
-        resolve(true);
-      }, 1500);
-    });
+  const combineDateTime = (dateStr: string, timeStr: string): string | null => {
+    if (!dateStr || !timeStr || !dayjs(timeStr, 'HH:mm', true).isValid())
+      return null;
+    const date = dayjs(dateStr, 'DD/MM/YYYY');
+    const [hours, minutes] = timeStr.split(':');
+    if (!date.isValid()) return null;
+    return date
+      .hour(parseInt(hours, 10))
+      .minute(parseInt(minutes, 10))
+      .toISOString();
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const startDateTime = combineDateTime(
+      formData.startDate,
+      formData.startTime,
+    );
+    const endDateTime = combineDateTime(formData.endDate, formData.endTime);
+
+    if (!startDateTime || !endDateTime) {
+      alert('Format tanggal atau waktu tidak valid.');
+      return;
+    }
+    if (new Date(startDateTime) >= new Date(endDateTime)) {
+      alert('Waktu selesai harus setelah waktu mulai.');
+      return;
+    }
+    if (!formData.jenisPeminjaman) {
+      alert('Mohon pilih tipe peminjaman.');
+      return;
+    }
+
     setShowConfirmModal(true);
   };
 
   const handleConfirmSubmit = async () => {
-    setIsSubmitting(true);
-    try {
-      await submitLoanRequest();
-      setShowConfirmModal(false);
-      setShowSuccessModal(true);
-    } catch (error) {
-      console.error('Error submitting loan request:', error);
-    } finally {
-      setIsSubmitting(false);
-    }
+    const startDateTime = combineDateTime(
+      formData.startDate,
+      formData.startTime,
+    );
+    const endDateTime = combineDateTime(formData.endDate, formData.endTime);
+
+    if (!startDateTime || !endDateTime || !formData.jenisPeminjaman) return;
+
+    createPengajuan(
+      {
+        propertyId: sekreData.id,
+        title: `Peminjaman ${sekreData.name}`,
+        startDate: startDateTime,
+        endDate: endDateTime,
+        alasan: formData.alasan || undefined,
+        jenisPeminjaman: formData.jenisPeminjaman,
+      },
+      {
+        onSuccess: () => {
+          setShowConfirmModal(false);
+          setShowSuccessModal(true);
+        },
+        onError: (error) => {
+          setShowConfirmModal(false);
+          console.error('Error submitting loan request:', error);
+          alert(`Gagal mengajukan: ${error.message}`);
+        },
+      },
+    );
   };
 
   const handleSuccessClose = () => {
@@ -103,44 +144,31 @@ export function SekreLoanForm({ sekreData }: SekreLoanFormProps) {
     });
   };
 
-  type FieldName =
-    | 'startDate'
-    | 'endDate'
-    | 'startTime'
-    | 'endTime'
-    | 'jenisPeminjaman'
-    | 'alasan';
+  type FieldName = keyof typeof formData;
+  type FieldValue = (typeof formData)[FieldName];
 
-  const handleInputChange = (field: FieldName, value: string) => {
+  const handleInputChange = (field: FieldName, value: FieldValue) => {
     setFormData((prev) => {
       const newData = { ...prev };
 
       if (field === 'startTime' || field === 'endTime') {
-        newData[field] = formatTimeInput(value);
+        newData[field] = formatTimeInput(value as string);
+      } else if (field === 'jenisPeminjaman') {
+        newData[field] = value as 'eksklusif' | 'non-eksklusif' | '';
       } else {
-        newData[field] = value;
+        newData[field] = value as string;
       }
 
       if (field === 'startDate' && prev.endDate) {
-        const startDate = parseDate(value);
-        const endDate = parseDate(prev.endDate);
-        if (startDate && endDate && startDate > endDate) {
+        const start = dayjs(value as string, 'DD/MM/YYYY');
+        const end = dayjs(prev.endDate, 'DD/MM/YYYY');
+        if (start.isValid() && end.isValid() && start.isAfter(end)) {
           newData.endDate = '';
         }
       }
 
       return newData;
     });
-  };
-
-  const parseDate = (dateString: string): Date | null => {
-    if (!dateString) return null;
-    const [day, month, year] = dateString.split('/');
-    return new Date(
-      Number.parseInt(year),
-      Number.parseInt(month) - 1,
-      Number.parseInt(day),
-    );
   };
 
   return (
@@ -195,7 +223,7 @@ export function SekreLoanForm({ sekreData }: SekreLoanFormProps) {
                 value={formData.endDate}
                 onChange={(date) => handleInputChange('endDate', date)}
                 placeholder="HH/BB/TTTT"
-                minDate={formData.startDate}
+                minDate={formData.startDate || undefined}
                 startDate={formData.startDate}
                 endDate={formData.endDate}
                 isEndDatePicker={true}
@@ -262,8 +290,9 @@ export function SekreLoanForm({ sekreData }: SekreLoanFormProps) {
                 </SelectTrigger>
                 <SelectContent className="text-[14px] text-[#666666]">
                   <SelectItem value="eksklusif">Eksklusif</SelectItem>
-                  <SelectItem value="berbagi">Berbagi</SelectItem>
-                  <SelectItem value="umum">Umum</SelectItem>
+                  <SelectItem value="non-eksklusif">
+                    Non-Eksklusif (Berbagi/Umum)
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -291,8 +320,13 @@ export function SekreLoanForm({ sekreData }: SekreLoanFormProps) {
           <Button
             type="submit"
             className="w-full rounded-lg bg-[#E8C55F] py-3 font-medium text-[#333333] transition-colors hover:opacity-85"
+            disabled={isSubmitting}
           >
-            Ajukan Peminjaman
+            {isSubmitting ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              'Ajukan Peminjaman'
+            )}
           </Button>
         </form>
       </div>
