@@ -1,5 +1,5 @@
 import { X, ChevronDown, Loader2 } from 'lucide-react';
-import { useState, useRef, DragEvent, ChangeEvent, MouseEvent } from 'react';
+import { useState, useRef, DragEvent, MouseEvent } from 'react';
 import { CreatePropertiBodySchema } from '~/api/generated';
 import { useUploadFile } from '~/hooks/household';
 
@@ -28,7 +28,7 @@ export function CreateSekreModal({
     photo: '',
     status: 'available',
   });
-  
+
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -46,7 +46,7 @@ export function CreateSekreModal({
         const uploadResult = await uploadFile(selectedFile);
         finalPhotoUrl = uploadResult.mediaUrl;
       }
-      
+
       onConfirm({ ...formData, photo: finalPhotoUrl });
 
       onClose();
@@ -69,7 +69,6 @@ export function CreateSekreModal({
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
-
     } catch (error) {
       console.error('Gagal mengunggah foto:', error);
       alert('Gagal mengunggah foto. Silakan coba lagi.');
@@ -99,12 +98,8 @@ export function CreateSekreModal({
   const handleImageFile = (file: File) => {
     if (file.type.startsWith('image/')) {
       setSelectedFile(file);
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const result = e.target?.result as string;
-        setImagePreview(result);
-      };
-      reader.readAsDataURL(file);
+      const imageUrl = URL.createObjectURL(file);
+      setImagePreview(imageUrl);
     }
   };
 
@@ -118,7 +113,13 @@ export function CreateSekreModal({
   const clearImage = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     setSelectedFile(null);
+    if (imagePreview) {
+      URL.revokeObjectURL(imagePreview);
+    }
     setImagePreview(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
   };
 
   return (
@@ -233,7 +234,7 @@ export function CreateSekreModal({
                   <img
                     src={imagePreview}
                     alt="Property"
-                    className="h-full w-full object-cover"
+                    className="size-full object-cover"
                   />
                   <button
                     onClick={clearImage}
@@ -271,7 +272,11 @@ export function CreateSekreModal({
             className="flex-1 rounded-full bg-[#305138] px-6 py-3 font-medium text-white transition-colors hover:bg-[#305138]/90"
             disabled={internalIsLoading}
           >
-            {internalIsLoading ? <Loader2 className="mx-auto h-4 w-4 animate-spin" /> : 'Tambah'}
+            {internalIsLoading ? (
+              <Loader2 className="mx-auto size-4 animate-spin" />
+            ) : (
+              'Tambah'
+            )}
           </button>
         </div>
       </div>

@@ -1,5 +1,5 @@
 import { X, ChevronDown, Loader2 } from 'lucide-react';
-import { useState, useRef, DragEvent, ChangeEvent, MouseEvent, useEffect } from 'react';
+import { useState, useRef, DragEvent, MouseEvent, useEffect } from 'react';
 import { SekreData, SekreFormData } from '../../../-types';
 import type { UpdatePropertiBodySchema } from '~/api/generated';
 import { useUploadFile } from '~/hooks/household';
@@ -25,8 +25,9 @@ export function EditSekreModal({
     location: data.location,
     photo: data.photo || '',
   });
+
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(data.photo || null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -34,14 +35,16 @@ export function EditSekreModal({
   const internalIsLoading = isUploading;
 
   useEffect(() => {
-    setFormData({
-      name: data.name,
-      condition: data.condition,
-      location: data.location,
-      photo: data.photo || '',
-    });
-    setImagePreview(data.photo || null);
-    setSelectedFile(null);
+    if (isOpen) {
+      setFormData({
+        name: data.name,
+        condition: data.condition,
+        location: data.location,
+        photo: data.photo || '',
+      });
+      setImagePreview(data.photo || null);
+      setSelectedFile(null);
+    }
   }, [data, isOpen]);
 
   if (!isOpen) return null;
@@ -53,14 +56,14 @@ export function EditSekreModal({
         const uploadResult = await uploadFile(selectedFile);
         finalPhotoUrl = uploadResult.mediaUrl;
       }
-      
+
       const payload: UpdatePropertiBodySchema = {
         name: formData.name,
         condition: formData.condition,
         location: formData.location as UpdatePropertiBodySchema['location'],
         photo: finalPhotoUrl ?? null,
       };
-      
+
       onConfirm(payload);
       onClose();
     } catch (error) {
@@ -82,7 +85,6 @@ export function EditSekreModal({
   const handleDrop = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setIsDragging(false);
-
     const files = e.dataTransfer.files;
     if (files && files[0]) {
       handleImageFile(files[0]);
@@ -92,12 +94,11 @@ export function EditSekreModal({
   const handleImageFile = (file: File) => {
     if (file.type.startsWith('image/')) {
       setSelectedFile(file);
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const result = e.target?.result as string;
-        setImagePreview(result);
-      };
-      reader.readAsDataURL(file);
+      if (imagePreview) {
+        URL.revokeObjectURL(imagePreview);
+      }
+      const imageUrl = URL.createObjectURL(file);
+      setImagePreview(imageUrl);
     }
   };
 
@@ -111,8 +112,14 @@ export function EditSekreModal({
   const clearImage = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     setSelectedFile(null);
+    if (imagePreview) {
+      URL.revokeObjectURL(imagePreview);
+    }
     setImagePreview(null);
     setFormData({ ...formData, photo: '' });
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
   };
 
   return (
@@ -220,7 +227,7 @@ export function EditSekreModal({
                   <img
                     src={imagePreview}
                     alt="Property"
-                    className="h-full w-full object-cover"
+                    className="size-full object-cover"
                   />
                   <button
                     onClick={clearImage}
@@ -258,7 +265,11 @@ export function EditSekreModal({
             className="flex-1 rounded-full bg-[#305138] px-6 py-3 font-medium text-white transition-colors hover:bg-[#305138]/90"
             disabled={internalIsLoading}
           >
-            {internalIsLoading ? <Loader2 className="mx-auto h-4 w-4 animate-spin" /> : 'Edit'}
+            {internalIsLoading ? (
+              <Loader2 className="mx-auto size-4 animate-spin" />
+            ) : (
+              'Edit'
+            )}
           </button>
         </div>
       </div>
