@@ -5,6 +5,7 @@
 import type { BaseHttpRequest } from './core/BaseHttpRequest';
 import type { OpenAPIConfig } from './core/OpenAPI';
 import { FetchHttpRequest } from './core/FetchHttpRequest';
+import { AchievementsService } from './services/AchievementsService';
 import { AuthService } from './services/AuthService';
 import { CalendarService } from './services/CalendarService';
 import { CategoryService } from './services/CategoryService';
@@ -13,9 +14,15 @@ import { CompetitionsService } from './services/CompetitionsService';
 import { CourseService } from './services/CourseService';
 import { CurhatService } from './services/CurhatService';
 import { InfoService } from './services/InfoService';
+import { LaporanWargaService } from './services/LaporanWargaService';
+import { ManajemenPropertiService } from './services/ManajemenPropertiService';
+import { ManajemenRequestLaporanService } from './services/ManajemenRequestLaporanService';
 import { MarkdownService } from './services/MarkdownService';
 import { MediaService } from './services/MediaService';
 import { OpenGraphService } from './services/OpenGraphService';
+import { PeminjamanDashboardService } from './services/PeminjamanDashboardService';
+import { PengajuanPeminjamanService } from './services/PengajuanPeminjamanService';
+import { PengembalianService } from './services/PengembalianService';
 import { PushService } from './services/PushService';
 import { ReactionService } from './services/ReactionService';
 import { RecommendationService } from './services/RecommendationService';
@@ -25,6 +32,7 @@ import { UserFinderService } from './services/UserFinderService';
 import { UserProfileService } from './services/UserProfileService';
 type HttpRequestConstructor = new (config: OpenAPIConfig) => BaseHttpRequest;
 export class ApiClient {
+  public readonly achievements: AchievementsService;
   public readonly auth: AuthService;
   public readonly calendar: CalendarService;
   public readonly category: CategoryService;
@@ -33,9 +41,15 @@ export class ApiClient {
   public readonly course: CourseService;
   public readonly curhat: CurhatService;
   public readonly info: InfoService;
+  public readonly laporanWarga: LaporanWargaService;
+  public readonly manajemenProperti: ManajemenPropertiService;
+  public readonly manajemenRequestLaporan: ManajemenRequestLaporanService;
   public readonly markdown: MarkdownService;
   public readonly media: MediaService;
   public readonly openGraph: OpenGraphService;
+  public readonly peminjamanDashboard: PeminjamanDashboardService;
+  public readonly pengajuanPeminjaman: PengajuanPeminjamanService;
+  public readonly pengembalian: PengembalianService;
   public readonly push: PushService;
   public readonly reaction: ReactionService;
   public readonly recommendation: RecommendationService;
@@ -56,6 +70,7 @@ export class ApiClient {
       HEADERS: config?.HEADERS,
       ENCODE_PATH: config?.ENCODE_PATH,
     });
+    this.achievements = new AchievementsService(this.request);
     this.auth = new AuthService(this.request);
     this.calendar = new CalendarService(this.request);
     this.category = new CategoryService(this.request);
@@ -64,9 +79,15 @@ export class ApiClient {
     this.course = new CourseService(this.request);
     this.curhat = new CurhatService(this.request);
     this.info = new InfoService(this.request);
+    this.laporanWarga = new LaporanWargaService(this.request);
+    this.manajemenProperti = new ManajemenPropertiService(this.request);
+    this.manajemenRequestLaporan = new ManajemenRequestLaporanService(this.request);
     this.markdown = new MarkdownService(this.request);
     this.media = new MediaService(this.request);
     this.openGraph = new OpenGraphService(this.request);
+    this.peminjamanDashboard = new PeminjamanDashboardService(this.request);
+    this.pengajuanPeminjaman = new PengajuanPeminjamanService(this.request);
+    this.pengembalian = new PengembalianService(this.request);
     this.push = new PushService(this.request);
     this.reaction = new ReactionService(this.request);
     this.recommendation = new RecommendationService(this.request);
