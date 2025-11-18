@@ -1,12 +1,40 @@
 import { useNavigate } from '@tanstack/react-router';
-import Calendar from '~/components/calendar';
 import HeaderTitle from '~/components/header-title';
 import NavigationItem from './navigation-item';
 import Timeline from '~/components/schedule/timeline';
 import MessageIcon from '~/assets/icons/curhat/message.svg';
+import { loadUserCache } from '~/lib/session';
 
 function DesktopView() {
   const navigate = useNavigate();
+  const user = loadUserCache();
+
+  const canViewManajemenPrestasi = (): boolean => {
+    if (!user?.roles) return false;
+    return user.roles.some((role) =>
+      ['cnc', 'people', 'peoplemanage', 'peopledev'].includes(role.toLowerCase()),
+    );
+  };
+
+  const handleManajemenPrestasiRoute = () => {
+    if (!user?.roles) return;
+
+    const userRoles = user.roles.map((role) => role.toLowerCase());
+    const isCncRole = userRoles.includes('cnc');
+    const isPeopleRole = ['people', 'peoplemanage', 'peopledev'].some((role) => 
+      userRoles.includes(role),
+    );
+
+    if (isCncRole) {
+      navigate({ to: '/home/prestasi/dashboard-cnc' });
+      return;
+    }
+
+    if (isPeopleRole) {
+      navigate({ to: '/home/prestasi/dashboard' });
+      return;
+    }
+  };
 
   return (
     <div className="hidden size-full max-h-full flex-col overflow-hidden lg:flex">
@@ -98,8 +126,18 @@ function DesktopView() {
               src="/img/home/trophy.svg"
               alt="Prestasi"
               title="Prestasi"
-              onClick={() => navigate({ to: '/home/prestasi' })}
+              onClick={() => navigate({ to: '/home/history-prestasi' })}
             />
+
+            {canViewManajemenPrestasi() && (
+                <NavigationItem
+                src="/img/home/manajemen-prestasi.svg"
+                alt="Manajemen Prestasi"
+                title="Manajemen Prestasi"
+                onClick={handleManajemenPrestasiRoute}
+              />
+              )
+            }
           </section>
 
           <a href="https://pemilu.hmif.dev" className="mx-8 my-4">
