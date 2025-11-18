@@ -12,7 +12,9 @@ function DesktopView() {
   const canViewManajemenPrestasi = (): boolean => {
     if (!user?.roles) return false;
     return user.roles.some((role) =>
-      ['cnc', 'people', 'peoplemanage', 'peopledev'].includes(role.toLowerCase()),
+      ['cnc', 'people', 'peoplemanage', 'peopledev'].includes(
+        role.toLowerCase(),
+      ),
     );
   };
 
@@ -21,7 +23,7 @@ function DesktopView() {
 
     const userRoles = user.roles.map((role) => role.toLowerCase());
     const isCncRole = userRoles.includes('cnc');
-    const isPeopleRole = ['people', 'peoplemanage', 'peopledev'].some((role) => 
+    const isPeopleRole = ['people', 'peoplemanage', 'peopledev'].some((role) =>
       userRoles.includes(role),
     );
 
@@ -130,14 +132,13 @@ function DesktopView() {
             />
 
             {canViewManajemenPrestasi() && (
-                <NavigationItem
+              <NavigationItem
                 src="/img/home/manajemen-prestasi.svg"
                 alt="Manajemen Prestasi"
                 title="Manajemen Prestasi"
                 onClick={handleManajemenPrestasiRoute}
               />
-              )
-            }
+            )}
           </section>
 
           <a href="https://pemilu.hmif.dev" className="mx-8 my-4">

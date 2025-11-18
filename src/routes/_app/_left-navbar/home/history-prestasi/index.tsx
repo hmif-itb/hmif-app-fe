@@ -186,16 +186,18 @@ function HistoryPrestasi() {
         onClick={() => navigate({ to: '/home/prestasi' })}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        className={`fixed bottom-24 right-4 lg:bottom-8 lg:right-10
-            z-50 flex items-center rounded-full bg-[#082c05]
-            p-3 text-white shadow-2xl transition-all duration-500 active:scale-95 ${
-            isHovered ? 'justify-start gap-3' : 'justify-center'
-        }`}
+        className={`fixed bottom-24 right-4 z-50 flex
+            items-center rounded-full bg-[#082c05] p-3 text-white
+            shadow-2xl transition-all duration-500 active:scale-95 lg:bottom-8 lg:right-10 ${
+              isHovered ? 'justify-start gap-3' : 'justify-center'
+            }`}
         aria-label="Tambah Prestasi"
-      >   
+      >
         <span
           className={`order-1 overflow-hidden whitespace-nowrap text-lg transition-all duration-500 ${
-            isHovered ? 'max-w-full translate-x-0 opacity-100 pl-2' : 'max-w-0 translate-x-4 opacity-0' 
+            isHovered
+              ? 'max-w-full translate-x-0 pl-2 opacity-100'
+              : 'max-w-0 translate-x-4 opacity-0'
           }`}
         >
           Daftarkan Prestasimu

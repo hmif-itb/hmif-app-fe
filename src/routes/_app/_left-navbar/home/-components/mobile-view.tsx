@@ -14,7 +14,9 @@ function MobileView() {
   const canViewManajemenPrestasi = (): boolean => {
     if (!user?.roles) return false;
     return user.roles.some((role) =>
-      ['cnc', 'people', 'peoplemanage', 'peopledev'].includes(role.toLowerCase()),
+      ['cnc', 'people', 'peoplemanage', 'peopledev'].includes(
+        role.toLowerCase(),
+      ),
     );
   };
 
@@ -23,7 +25,7 @@ function MobileView() {
 
     const userRoles = user.roles.map((role) => role.toLowerCase());
     const isCncRole = userRoles.includes('cnc');
-    const isPeopleRole = ['people', 'peoplemanage', 'peopledev'].some((role) => 
+    const isPeopleRole = ['people', 'peoplemanage', 'peopledev'].some((role) =>
       userRoles.includes(role),
     );
 
