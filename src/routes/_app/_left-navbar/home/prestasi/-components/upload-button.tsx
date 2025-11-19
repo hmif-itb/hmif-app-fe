@@ -157,7 +157,7 @@ export function UploadButton({
       />
       <Button
         variant="outlined"
-        className={`z-50 flex cursor-pointer items-center gap-2 rounded-lg border border-[#BABABA]/30 bg-[#FCFCFC] text-xs font-semibold duration-300 ${
+        className={`z-20 flex cursor-pointer items-center gap-2 rounded-lg border border-[#BABABA]/30 bg-[#FCFCFC] text-xs font-semibold duration-300 ${
           className.includes('border-red-400') ? 'border-red-400' : ''
         }`}
         disabled={disabled}
@@ -181,7 +181,7 @@ export function UploadButton({
             </span>
             <span
               onClick={handleRemoveFile}
-              className="relative z-50 ml-1 rounded transition-colors hover:bg-red-100"
+              className="relative z-30 ml-1 rounded transition-colors hover:bg-red-100"
               title="Remove file"
             >
               <Trash className="size-4 text-red-500" />

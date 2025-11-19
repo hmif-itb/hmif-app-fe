@@ -57,7 +57,7 @@ export function DropdownCategory({
 
       {/* Dropdown options */}
       {isOpen && (
-        <div className="absolute z-10 mt-1 max-h-60 w-full overflow-y-auto rounded-lg border border-gray-300 bg-white shadow-lg">
+        <div className="absolute z-50 mt-1 max-h-60 w-full overflow-y-auto rounded-lg border border-gray-300 bg-white shadow-lg">
           {options.map((option, index) => (
             <button
               key={index}

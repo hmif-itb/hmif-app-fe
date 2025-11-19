@@ -66,18 +66,41 @@ const jenisLombaOptions = [
 // Deskripsi prestasi max word
 const deskripsiMaxWord = 200;
 
+// Empty error state helper
+const emptyErrors: ErrorForms = {
+  namaPrestasi: '',
+  jenisPrestasi: '',
+  periodePrestasi: '',
+  jenisLomba: '',
+  deskripsiPrestasi: '',
+  fotoSertifikat: '',
+  fotoDiri: '',
+  fotoAwarding: '',
+};
+
+// Empty form data helper
+const defaultFormData: PrestasiFormData = {
+  namaPrestasi: '',
+  jenisPrestasi: '',
+  periodePrestasi: '',
+  jenisLomba: '',
+  deskripsiPrestasi: '',
+  fotoSertifikat: null as unknown as File,
+  fotoDiri: null as unknown as File,
+  fotoAwarding: null as unknown as File,
+};
+
 // Skema validasi input
 const prestasiScheme = z.object({
   namaPrestasi: z.string().min(1, 'This field is required'),
-  jenisPrestasi: z.enum([
-    'Organisasi non-HMIF',
-    'Kepanitian non-HMIF',
-    'Kompetisi atau Lomba',
-  ]),
+  jenisPrestasi: z
+    .string({ required_error: 'This field is required' })
+    .min(1, 'This field is required')
+    .refine((val) => val == '' || prestasiOptions.includes(val)),
   periodePrestasi: z.string().min(1, 'This field is required'),
   jenisLomba: z.string().optional(),
   deskripsiPrestasi: z
-    .string()
+    .string({ required_error: 'This field is required' })
     .min(1, 'This field is required')
     .refine((text: string) => {
       const wordCount = text
@@ -122,27 +145,10 @@ function PrestasiPage(): JSX.Element {
   });
 
   const [formData, setFormData] = useState<PrestasiFormData>({
-    namaPrestasi: '',
-    jenisPrestasi:
-      'Organisasi non-HMIF' as unknown as PrestasiFormData['jenisPrestasi'],
-    periodePrestasi: '',
-    jenisLomba: '',
-    deskripsiPrestasi: '',
-    fotoSertifikat: null as unknown as File,
-    fotoDiri: null as unknown as File,
-    fotoAwarding: null as unknown as File,
+    ...defaultFormData,
   });
 
-  const [errors, setErrors] = useState<ErrorForms>({
-    namaPrestasi: '',
-    jenisPrestasi: '',
-    periodePrestasi: '',
-    jenisLomba: '',
-    deskripsiPrestasi: '',
-    fotoSertifikat: '',
-    fotoDiri: '',
-    fotoAwarding: '',
-  });
+  const [errors, setErrors] = useState<ErrorForms>({ ...emptyErrors });
 
   const validateForms = (): boolean => {
     const result = prestasiScheme.safeParse(formData);
@@ -150,16 +156,7 @@ function PrestasiPage(): JSX.Element {
     // Jika gagal, set error
     if (!result.success) {
       // Reset semua error
-      const newErrors: ErrorForms = {
-        namaPrestasi: '',
-        jenisPrestasi: '',
-        periodePrestasi: '',
-        jenisLomba: '',
-        deskripsiPrestasi: '',
-        fotoSertifikat: '',
-        fotoDiri: '',
-        fotoAwarding: '',
-      };
+      const newErrors: ErrorForms = { ...emptyErrors };
 
       // Set error message dari zod
       result.error.issues.forEach((issue) => {
@@ -172,16 +169,7 @@ function PrestasiPage(): JSX.Element {
     }
 
     // Clear error jika validasi berhasil
-    setErrors({
-      namaPrestasi: '',
-      jenisPrestasi: '',
-      periodePrestasi: '',
-      jenisLomba: '',
-      deskripsiPrestasi: '',
-      fotoSertifikat: '',
-      fotoDiri: '',
-      fotoAwarding: '',
-    });
+    setErrors({ ...emptyErrors });
 
     return true;
   };
@@ -287,6 +275,9 @@ function PrestasiPage(): JSX.Element {
   const handleConfirmSubmit = async () => {
     setIsSubmitting(true);
     try {
+      if (!formData.fotoSertifikat || !formData.fotoDiri) {
+        throw new Error('Sertifikat and Foto Diri are required');
+      }
       const [monthName, yearStr] = formData.periodePrestasi.split(' ');
       const monthMap: Record<string, number> = {
         Januari: 1,
@@ -390,16 +381,7 @@ function PrestasiPage(): JSX.Element {
         fotoAwarding: null as unknown as File,
       });
       setJenisLomba('');
-      setErrors({
-        namaPrestasi: '',
-        jenisPrestasi: '',
-        periodePrestasi: '',
-        jenisLomba: '',
-        deskripsiPrestasi: '',
-        fotoSertifikat: '',
-        fotoDiri: '',
-        fotoAwarding: '',
-      });
+      setErrors({ ...emptyErrors });
       setResetKey((v) => v + 1);
     } catch (error) {
       if (error instanceof ApiError) {
