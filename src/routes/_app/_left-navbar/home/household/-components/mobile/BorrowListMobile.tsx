@@ -36,8 +36,8 @@ function BorrowListMobile({ items, isLoading }: BorrowListMobileProps) {
                   <span className="text-base font-semibold text-[#2A2A2A]">
                     {item.name}
                   </span>
-                  <span className="rounded-full bg-[#2F5C3B] px-4 py-1 text-xs font-semibold text-white">
-                    {item.id}
+                  <span className="rounded-full bg-[#2F5C3B] px-4 py-1 text-center text-xs font-semibold text-white">
+                    {item.status.toUpperCase().replace('_', ' ')}
                   </span>
                 </div>
                 <p className="mt-1 text-sm font-medium text-[#5F5F5F]">

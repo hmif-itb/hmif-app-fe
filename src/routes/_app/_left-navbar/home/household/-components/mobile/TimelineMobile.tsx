@@ -7,18 +7,19 @@ interface TimelineMobileProps {
   isLoading: boolean;
 }
 
-const formatEventTime = (value: Date) => dayjs(value).format('HH.mm');
+const formatEventTime = (value: Date) =>
+  dayjs(value).format('DD/MM/YYYY HH.mm');
 
 function TimelineMobile({ events, isLoading }: TimelineMobileProps) {
   return (
     <section className="flex flex-col gap-4">
       <h2 className="text-xl font-semibold text-[#333333]">Peminjaman</h2>
       <div className="rounded-3xl">
-        <div className="grid grid-cols-[4rem_1fr] items-center gap-4  pb-3 text-[15px] font-medium tracking-wide text-[#BCC1CD]">
+        {/* <div className="grid grid-cols-[4rem_1fr] items-center gap-4  pb-3 text-[15px] font-medium tracking-wide text-[#BCC1CD]">
           <span>Time</span>
           <span>Agenda</span>
-        </div>
-        <div className="mt-4 flex flex-col ">
+        </div> */}
+        <div className="flex flex-col space-y-2">
           {isLoading ? (
             Array.from({ length: 2 }).map((_, idx) => (
               <div
@@ -37,35 +38,25 @@ function TimelineMobile({ events, isLoading }: TimelineMobileProps) {
             ))
           ) : events.length > 0 ? (
             events.map((event, idx) => (
-              <div
-                key={`${event.title}-${idx}`}
-                className="grid grid-cols-[4rem_1fr] items-start gap-4"
-              >
-                <span className="text-sm font-semibold text-[#305138]">
-                  {formatEventTime(event.start_time)}
-                </span>
-                <div className="flex items-stretch gap-3">
-                  <div className="flex flex-col items-center">
-                    <span className="size-[18px] min-h-[18px] rounded-full border-[5px] border-[#305138] bg-[#D9D9D9]" />
-                    {idx !== events.length - 1 && (
-                      <span className="h-full w-[2.5px] bg-[#525352]" />
-                    )}
-                  </div>
-                  <div
-                    className={cn(
-                      'mb-6 flex-1 rounded-2xl p-4 text-white shadow-sm',
-                      event.type === 'properti'
-                        ? 'bg-[#2F5C3B]'
-                        : 'bg-[#2A4F34]',
-                    )}
-                  >
-                    <p className="text-base font-semibold leading-tight">
-                      {event.title}
-                    </p>
-                    <p className="mt-[10px] text-xs text-[#DDE8DF]">
-                      {event.user}
-                    </p>
-                  </div>
+              <div key={`${event.title}-${idx}`} className="flex flex-col">
+                <div
+                  className={cn(
+                    'rounded-2xl p-4 text-white shadow-sm',
+                    event.type === 'properti' ? 'bg-[#2F5C3B]' : 'bg-[#2A4F34]',
+                  )}
+                >
+                  <p className="text-base font-semibold leading-tight">
+                    {event.title}
+                  </p>
+                  <p className="mt-[10px] text-xs text-[#DDE8DF]">
+                    {event.user}
+                  </p>
+                  <p className="mt-[10px] text-xs text-[#DDE8DF]">
+                    Mulai: {formatEventTime(event.start_time)}
+                  </p>
+                  <p className="mt-1 text-xs text-[#DDE8DF]">
+                    Selesai: {formatEventTime(event.end_time)}
+                  </p>
                 </div>
               </div>
             ))

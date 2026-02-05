@@ -16,23 +16,9 @@ function ReportList({
   data,
   isLoading = false,
 }: ReportListProps) {
-  const filteredReports = data.filter((report) => {
-    // Filter by category
-    const matchesCategory =
-      filter.category === 'all' || report.category === filter.category;
-
-    // Filter by search term (search in name and report content)
-    const matchesSearch =
-      report.borrowerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (report.reportContent &&
-        report.reportContent.toLowerCase().includes(searchTerm.toLowerCase()));
-
-    return matchesCategory && matchesSearch;
-  });
-
   if (isLoading) {
     return (
-      <div className="mb-20 flex w-full flex-col gap-3 lg:mb-5 lg:gap-5">
+      <div className="mb-5 flex w-full flex-col gap-3 lg:gap-5">
         {Array.from({ length: 3 }).map((_, index) => (
           <div
             key={index}
@@ -55,13 +41,17 @@ function ReportList({
     );
   }
 
-  if (filteredReports.length === 0) {
-    return <div></div>;
+  if (data.length === 0) {
+    return (
+      <div className="mb-5 flex w-full items-center justify-center py-10">
+        <p className="text-lg text-white/80">Tidak ada data laporan</p>
+      </div>
+    );
   }
 
   return (
-    <div className="mb-20 flex w-full flex-col gap-3 lg:mb-5 lg:gap-5">
-      {filteredReports.map((report) => (
+    <div className="mb-5 flex w-full flex-col gap-3 lg:gap-5">
+      {data.map((report) => (
         <ReportItem key={report.id} request={report} />
       ))}
     </div>

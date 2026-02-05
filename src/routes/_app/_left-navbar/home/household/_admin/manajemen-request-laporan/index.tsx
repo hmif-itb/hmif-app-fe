@@ -6,6 +6,7 @@ import { useNavigate } from '@tanstack/react-router';
 import SearchBar from './-components/SearchBar';
 import RequestList from './-components/RequestList';
 import ReportList from './-components/ReportList';
+import Pagination from './-components/Pagination';
 import { SwitchToggle } from './-components/Switch';
 import { FilterOptions } from './-components/FilterModal';
 import { useGetRequestList, useGetLaporanList } from '~/hooks/household';
@@ -17,10 +18,13 @@ export const Route = createFileRoute(
 
 function HouseholdAdminPage() {
   const navigate = useNavigate();
-  const [activeView, setActiveView] = useState('Laporan');
+  const [activeView, setActiveView] = useState('Request');
   const [isMobile, setIsMobile] = useState(false);
   const [filter, setFilter] = useState<FilterOptions>({ category: 'all' });
   const [searchTerm, setSearchTerm] = useState('');
+  const [requestPage, setRequestPage] = useState(1);
+  const [laporanPage, setLaporanPage] = useState(1);
+  const [pageSize] = useState(3);
 
   useEffect(() => {
     const checkIfMobile = () => {
@@ -32,18 +36,85 @@ function HouseholdAdminPage() {
   }, []);
 
   const queryFilters = useMemo(() => {
+    const statusValue =
+      !filter.status || filter.status === 'all' ? undefined : filter.status;
     return {
       category:
         filter.category === 'all'
           ? undefined
           : (filter.category as 'sekre' | 'properti'),
+      status: statusValue,
+      search: searchTerm || undefined,
     };
-  }, [filter.category]);
+  }, [filter.category, filter.status, searchTerm]);
 
-  const { data: requestData = [], isLoading: isLoadingRequests } =
-    useGetRequestList(queryFilters);
-  const { data: reportData = [], isLoading: isLoadingReports } =
-    useGetLaporanList(queryFilters);
+  const requestQueryParams = useMemo(() => {
+    const validRequestStatus =
+      queryFilters.status &&
+      [
+        'pending',
+        'rejected',
+        'accepted',
+        'pending_return',
+        'completed',
+      ].includes(queryFilters.status)
+        ? (queryFilters.status as
+            | 'pending'
+            | 'rejected'
+            | 'accepted'
+            | 'pending_return'
+            | 'completed')
+        : undefined;
+
+    return {
+      category: queryFilters.category,
+      status: validRequestStatus,
+      search: queryFilters.search,
+      page: requestPage,
+      limit: pageSize,
+    };
+  }, [queryFilters, requestPage, pageSize]);
+
+  const laporanQueryParams = useMemo(() => {
+    const validLaporanStatus =
+      queryFilters.status &&
+      ['pending', 'accepted', 'rejected'].includes(queryFilters.status)
+        ? (queryFilters.status as 'pending' | 'accepted' | 'rejected')
+        : undefined;
+
+    return {
+      category: queryFilters.category,
+      status: validLaporanStatus,
+      search: queryFilters.search,
+      page: laporanPage,
+      limit: pageSize,
+    };
+  }, [queryFilters, laporanPage, pageSize]);
+
+  const { data: requestResponse, isLoading: isLoadingRequests } =
+    useGetRequestList(requestQueryParams);
+  const { data: laporanResponse, isLoading: isLoadingReports } =
+    useGetLaporanList(laporanQueryParams);
+
+  const { requestData, requestTotalPages } = useMemo(() => {
+    const data = requestResponse?.requests || [];
+    const total = requestResponse?.total || 0;
+    const totalPages = Math.ceil(total / pageSize);
+    return {
+      requestData: data,
+      requestTotalPages: totalPages,
+    };
+  }, [requestResponse, pageSize]);
+
+  const { reportData, reportTotalPages } = useMemo(() => {
+    const data = laporanResponse?.laporan || [];
+    const total = laporanResponse?.total || 0;
+    const totalPages = Math.ceil(total / pageSize);
+    return {
+      reportData: data,
+      reportTotalPages: totalPages,
+    };
+  }, [laporanResponse, pageSize]);
 
   const mappedRequestData = useMemo(() => {
     return (requestData || []).map((item) => ({
@@ -54,6 +125,7 @@ function HouseholdAdminPage() {
       reason: item.alasan ?? undefined,
       type: item.jenisPeminjaman,
       borrowTime: item.createdAt ?? undefined,
+      buktiFotoUrl: item.buktiFotoUrl ?? undefined,
     }));
   }, [requestData]);
 
@@ -65,6 +137,7 @@ function HouseholdAdminPage() {
       endDate: item.createdAt ?? '',
       category: item.properti?.category ?? 'General',
       reportContent: item.deskripsi,
+      item: item.properti.name,
       photo: item.fotoUrl ?? undefined,
     }));
   }, [reportData]);
@@ -77,40 +150,76 @@ function HouseholdAdminPage() {
 
   const handleFilterChange = (newFilter: FilterOptions) => {
     setFilter(newFilter);
+    setRequestPage(1);
+    setLaporanPage(1);
   };
 
   const handleSearchChange = (newSearchTerm: string) => {
     setSearchTerm(newSearchTerm);
+    setRequestPage(1);
+    setLaporanPage(1);
+  };
+
+  const handleRequestPageChange = (page: number) => {
+    setRequestPage(page);
+  };
+
+  const handleLaporanPageChange = (page: number) => {
+    setLaporanPage(page);
   };
 
   const renderContent = () => {
     switch (activeView) {
       case 'Request':
         return (
-          <RequestList
-            filter={filter}
-            searchTerm={searchTerm}
-            data={mappedRequestData}
-            isLoading={isLoading}
-          />
+          <>
+            <RequestList
+              filter={filter}
+              searchTerm={searchTerm}
+              data={mappedRequestData}
+              isLoading={isLoading}
+            />
+            <Pagination
+              currentPage={requestPage}
+              totalPages={requestTotalPages}
+              onPageChange={handleRequestPageChange}
+              isLoading={isLoading}
+            />
+          </>
         );
       case 'Laporan':
         return (
-          <ReportList
-            filter={filter}
-            searchTerm={searchTerm}
-            data={mappedReportData}
-            isLoading={isLoading}
-          />
+          <>
+            <ReportList
+              filter={filter}
+              searchTerm={searchTerm}
+              data={mappedReportData}
+              isLoading={isLoading}
+            />
+            <Pagination
+              currentPage={laporanPage}
+              totalPages={reportTotalPages}
+              onPageChange={handleLaporanPageChange}
+              isLoading={isLoading}
+            />
+          </>
         );
       default:
         return (
-          <ReportList
-            filter={filter}
-            searchTerm={searchTerm}
-            data={mappedReportData}
-            isLoading={isLoading}
-          />
+          <>
+            <ReportList
+              filter={filter}
+              searchTerm={searchTerm}
+              data={mappedReportData}
+              isLoading={isLoading}
+            />
+            <Pagination
+              currentPage={laporanPage}
+              totalPages={reportTotalPages}
+              onPageChange={handleLaporanPageChange}
+              isLoading={isLoading}
+            />
+          </>
         );
     }
   };
@@ -159,10 +268,11 @@ function HouseholdAdminPage() {
           onSearchChange={handleSearchChange}
           currentFilter={filter}
           searchTerm={searchTerm}
+          activeView={activeView as 'Request' | 'Laporan'}
         />
         <SwitchToggle
           options={['Request', 'Laporan']}
-          defaultValue="Laporan"
+          defaultValue="Request"
           onValueChange={handleSwitchChange}
         />
         {renderContent()}

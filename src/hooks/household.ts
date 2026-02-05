@@ -23,16 +23,24 @@ type PeminjamanScheduleItem = {
 export const GetRequestParamsSchema = z.object({
   search: z.string().optional(),
   category: z.enum(['sekre', 'properti']).optional(),
+  status: z
+    .enum(['pending', 'rejected', 'accepted', 'pending_return', 'completed'])
+    .optional(),
   startDate: z.string().optional(),
   endDate: z.string().optional(),
+  page: z.number().optional(),
+  limit: z.number().optional(),
 });
 export type GetRequestParamsSchema = z.infer<typeof GetRequestParamsSchema>;
 
 export const GetLaporanParamsSchema = z.object({
   search: z.string().optional(),
   category: z.enum(['sekre', 'properti']).optional(),
+  status: z.enum(['pending', 'accepted', 'rejected']).optional(),
   startDate: z.string().optional(),
   endDate: z.string().optional(),
+  page: z.number().optional(),
+  limit: z.number().optional(),
 });
 export type GetLaporanParamsSchema = z.infer<typeof GetLaporanParamsSchema>;
 
@@ -56,8 +64,10 @@ export function useGetHouseholdEvents(month: number, year: number) {
       return data.map((p: PeminjamanSchema) => ({
         user: p.borrowerName,
         title: p.title,
+        name: p.propertyName,
         type: p.category,
         start_time: new Date(p.startDate),
+        end_time: new Date(p.endDate),
       }));
     },
     enabled: month != null && year != null,
@@ -69,7 +79,7 @@ export function useGetNearingEndItems() {
     queryKey: ['household', 'nearing-end'],
     queryFn: async () => {
       const data = await api.peminjamanDashboard.getPeminjamanNearingEnd({
-        days: '7',
+        days: '30',
       });
       return data.map((p: PeminjamanSchema) => ({
         id: p.id,
@@ -77,6 +87,7 @@ export function useGetNearingEndItems() {
         item: p.propertyName,
         startDate: dayjs(p.startDate).format('DD/MM/YYYY'),
         endDate: dayjs(p.endDate).format('DD/MM/YYYY'),
+        status: p.status,
       }));
     },
   });

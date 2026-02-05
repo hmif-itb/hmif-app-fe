@@ -155,20 +155,6 @@ function SubmissionForm(): JSX.Element {
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="laporan" className="text-sm text-black">
-            Detail Pengembalian
-          </label>
-          <Textarea
-            id="laporan"
-            name="laporan"
-            placeholder="Deskripsikan kondisi barang saat dikembalikan (opsional)..."
-            className="h-[184px]"
-            value={reportText}
-            onChange={handleReportTextChange}
-          />
-        </div>
-
-        <div className="space-y-2">
           <label htmlFor="foto-pendukung" className="text-sm text-black">
             Foto Bukti Pengembalian*
           </label>

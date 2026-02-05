@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { EventType } from './CalendarDay';
+import { EventType } from '../-types';
 
 interface CalendarSidebarProps {
   borrowingEvents: EventType[];

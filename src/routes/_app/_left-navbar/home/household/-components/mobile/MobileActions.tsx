@@ -29,7 +29,7 @@ function MobileActions({ isAdmin }: MobileActionsProps) {
           to: '/home/household/manajemen-properti',
         },
         {
-          label: 'Manajemen Laporan dan Request',
+          label: 'Laporan dan Request',
           icon: NotebookPen,
           to: '/home/household/manajemen-request-laporan',
         },
