@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { MapPin, SquarePen, Trash } from 'lucide-react';
+import { MapPin, SquarePen, Trash, ImageIcon } from 'lucide-react';
 import { DeleteModal } from './DeleteModal';
 import { EditSekreModal } from './EditSekreModal';
 import { SekreData } from '../../../-types';
@@ -72,42 +72,45 @@ export function SekreItem({
     <>
       <div className="flex w-full flex-col rounded-xl bg-white px-4 py-[15px] lg:px-[22px] lg:py-5">
         {/* Top Section */}
-        <div className="mb-5 flex items-center gap-3">
-          <div className="size-9 min-h-9 min-w-9 rounded-lg bg-[#E8C55F]">
-            <img src="" alt="" />
-          </div>
+        <div className="mb-5 flex items-center gap-3 lg:gap-4">
           {/* Information */}
-          <div className="flex flex-col gap-3">
-            <h3 className="text-sm font-semibold text-black lg:text-base">
+          <div className="flex min-w-0 flex-1 flex-col gap-2 lg:gap-3">
+            <h3 className="truncate text-sm font-semibold text-black lg:text-base">
               {sekre.name}
             </h3>
-            <div className="flex items-center gap-4 text-xs text-[#525352] lg:gap-7">
-              <span className="rounded-full bg-[#AAB8AD] px-3 py-1 text-[#1D3122]">
-                {sekre.condition.toUpperCase()}
+            <div className="flex flex-wrap items-center gap-2 text-xs text-[#525352] lg:gap-4">
+              <span className="whitespace-nowrap rounded-full bg-[#AAB8AD] px-2 py-0.5 text-xs text-[#1D3122] lg:px-3 lg:py-1">
+                {sekre.condition === 'good'
+                  ? 'Baik'
+                  : sekre.condition === 'broken'
+                    ? 'Rusak Ringan'
+                    : sekre.condition === 'cant_be_used'
+                      ? 'Rusak Berat'
+                      : 'Hilang'}
               </span>
-              <span className="flex items-center gap-1">
-                <MapPin size={12} />
-                {' ' + sekre.location}
+              <span className="flex items-center gap-1 whitespace-nowrap">
+                <MapPin size={12} className="shrink-0" />
+                <span className="truncate">{sekre.location}</span>
               </span>
             </div>
           </div>
         </div>
         {/* Image Section */}
-        <div className="mb-3 aspect-[2/1] w-full overflow-hidden rounded-lg bg-[#E8C55F]">
+        <div className="mb-3 flex aspect-[2/1] w-full items-center justify-center overflow-hidden rounded-lg bg-[#E8C55F]">
           <img
             src={sekre.photo || '/img/home/calendar-bg.png'}
-            alt=""
+            alt={sekre.name}
             className="size-full rounded-lg object-cover"
           />
         </div>
         {/* Bottom Section */}
-        <div className="flex w-full justify-center gap-[60px]">
+        <div className="flex w-full justify-center gap-12 lg:gap-[60px]">
           <button
             onClick={() => handleOpenModal('edit')}
             disabled={isLoading}
             className="flex w-fit items-center gap-2 text-black transition-opacity hover:opacity-70 disabled:opacity-50"
           >
-            <SquarePen size={20} className="text-black" />
+            <SquarePen size={18} className="text-black lg:size-5" />
             <span className="text-sm">Edit</span>
           </button>
           <button
@@ -115,7 +118,7 @@ export function SekreItem({
             disabled={isLoading}
             className="flex w-fit items-center gap-2 text-black transition-opacity hover:opacity-70 disabled:opacity-50"
           >
-            <Trash size={20} className="text-[#B01212]" />
+            <Trash size={18} className="text-[#B01212] lg:size-5" />
             <span className="text-sm">Hapus</span>
           </button>
         </div>

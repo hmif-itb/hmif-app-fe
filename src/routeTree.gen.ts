@@ -40,9 +40,9 @@ import { Route as AppLeftNavbarHomeTestimoniTypeIndexImport } from './routes/_ap
 import { Route as AppLeftNavbarHomeRekomendasiRekomendasiIdIndexImport } from './routes/_app/_left-navbar/home/rekomendasi/$rekomendasiId/index'
 import { Route as AppLeftNavbarSettingsSettingsItemCoursesAddIndexImport } from './routes/_app/_left-navbar/settings/_settings-item/courses/add/index'
 import { Route as AppLeftNavbarHomeTestimoniTypeSemesterIndexImport } from './routes/_app/_left-navbar/home/testimoni/$type/$semester/index'
-import { Route as AppLeftNavbarHomeHouseholdWargaPengajuanPengembalianIndexImport } from './routes/_app/_left-navbar/home/household/_warga/pengajuan-pengembalian/index'
 import { Route as AppLeftNavbarHomeHouseholdWargaPengajuanPeminjamanIndexImport } from './routes/_app/_left-navbar/home/household/_warga/pengajuan-peminjaman/index'
 import { Route as AppLeftNavbarHomeHouseholdWargaPengajuanLaporanIndexImport } from './routes/_app/_left-navbar/home/household/_warga/pengajuan-laporan/index'
+import { Route as AppLeftNavbarHomeHouseholdWargaPeminjamanIndexImport } from './routes/_app/_left-navbar/home/household/_warga/peminjaman/index'
 import { Route as AppLeftNavbarHomeHouseholdAdminManajemenRequestLaporanIndexImport } from './routes/_app/_left-navbar/home/household/_admin/manajemen-request-laporan/index'
 import { Route as AppLeftNavbarHomeHouseholdAdminManajemenPropertiIndexImport } from './routes/_app/_left-navbar/home/household/_admin/manajemen-properti/index'
 import { Route as AppLeftNavbarHomeTestimoniTypeSemesterCourseIdIndexImport } from './routes/_app/_left-navbar/home/testimoni_/$type/$semester/$courseId/index'
@@ -218,12 +218,6 @@ const AppLeftNavbarHomeTestimoniTypeSemesterIndexRoute =
     getParentRoute: () => AppLeftNavbarHomeTestimoniRoute,
   } as any)
 
-const AppLeftNavbarHomeHouseholdWargaPengajuanPengembalianIndexRoute =
-  AppLeftNavbarHomeHouseholdWargaPengajuanPengembalianIndexImport.update({
-    path: '/home/household/pengajuan-pengembalian/',
-    getParentRoute: () => AppLeftNavbarRoute,
-  } as any)
-
 const AppLeftNavbarHomeHouseholdWargaPengajuanPeminjamanIndexRoute =
   AppLeftNavbarHomeHouseholdWargaPengajuanPeminjamanIndexImport.update({
     path: '/home/household/pengajuan-peminjaman/',
@@ -233,6 +227,12 @@ const AppLeftNavbarHomeHouseholdWargaPengajuanPeminjamanIndexRoute =
 const AppLeftNavbarHomeHouseholdWargaPengajuanLaporanIndexRoute =
   AppLeftNavbarHomeHouseholdWargaPengajuanLaporanIndexImport.update({
     path: '/home/household/pengajuan-laporan/',
+    getParentRoute: () => AppLeftNavbarRoute,
+  } as any)
+
+const AppLeftNavbarHomeHouseholdWargaPeminjamanIndexRoute =
+  AppLeftNavbarHomeHouseholdWargaPeminjamanIndexImport.update({
+    path: '/home/household/peminjaman/',
     getParentRoute: () => AppLeftNavbarRoute,
   } as any)
 
@@ -476,6 +476,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppLeftNavbarHomeHouseholdAdminManajemenRequestLaporanIndexImport
       parentRoute: typeof AppLeftNavbarImport
     }
+    '/_app/_left-navbar/home/household/_warga/peminjaman/': {
+      id: '/_app/_left-navbar/home/household/_warga/peminjaman/'
+      path: '/home/household/peminjaman'
+      fullPath: '/home/household/peminjaman'
+      preLoaderRoute: typeof AppLeftNavbarHomeHouseholdWargaPeminjamanIndexImport
+      parentRoute: typeof AppLeftNavbarImport
+    }
     '/_app/_left-navbar/home/household/_warga/pengajuan-laporan/': {
       id: '/_app/_left-navbar/home/household/_warga/pengajuan-laporan/'
       path: '/home/household/pengajuan-laporan'
@@ -488,13 +495,6 @@ declare module '@tanstack/react-router' {
       path: '/home/household/pengajuan-peminjaman'
       fullPath: '/home/household/pengajuan-peminjaman'
       preLoaderRoute: typeof AppLeftNavbarHomeHouseholdWargaPengajuanPeminjamanIndexImport
-      parentRoute: typeof AppLeftNavbarImport
-    }
-    '/_app/_left-navbar/home/household/_warga/pengajuan-pengembalian/': {
-      id: '/_app/_left-navbar/home/household/_warga/pengajuan-pengembalian/'
-      path: '/home/household/pengajuan-pengembalian'
-      fullPath: '/home/household/pengajuan-pengembalian'
-      preLoaderRoute: typeof AppLeftNavbarHomeHouseholdWargaPengajuanPengembalianIndexImport
       parentRoute: typeof AppLeftNavbarImport
     }
     '/_app/_left-navbar/home/testimoni/$type/$semester/': {
@@ -576,9 +576,9 @@ export const routeTree = rootRoute.addChildren({
       AppLeftNavbarHomeRekomendasiRekomendasiIdIndexRoute,
       AppLeftNavbarHomeHouseholdAdminManajemenPropertiIndexRoute,
       AppLeftNavbarHomeHouseholdAdminManajemenRequestLaporanIndexRoute,
+      AppLeftNavbarHomeHouseholdWargaPeminjamanIndexRoute,
       AppLeftNavbarHomeHouseholdWargaPengajuanLaporanIndexRoute,
       AppLeftNavbarHomeHouseholdWargaPengajuanPeminjamanIndexRoute,
-      AppLeftNavbarHomeHouseholdWargaPengajuanPengembalianIndexRoute,
       AppLeftNavbarHomeHouseholdWargaPengajuanPeminjamanPropertyPropertyIdRoute,
       AppLeftNavbarHomeHouseholdWargaPengajuanPeminjamanSekreSekreIdRoute,
       AppLeftNavbarHomeHouseholdWargaPengajuanPengembalianPengembalianIdIndexRoute,
@@ -632,9 +632,9 @@ export const routeTree = rootRoute.addChildren({
         "/_app/_left-navbar/home/rekomendasi/$rekomendasiId/",
         "/_app/_left-navbar/home/household/_admin/manajemen-properti/",
         "/_app/_left-navbar/home/household/_admin/manajemen-request-laporan/",
+        "/_app/_left-navbar/home/household/_warga/peminjaman/",
         "/_app/_left-navbar/home/household/_warga/pengajuan-laporan/",
         "/_app/_left-navbar/home/household/_warga/pengajuan-peminjaman/",
-        "/_app/_left-navbar/home/household/_warga/pengajuan-pengembalian/",
         "/_app/_left-navbar/home/household/_warga/pengajuan-peminjaman/property/$propertyId",
         "/_app/_left-navbar/home/household/_warga/pengajuan-peminjaman/sekre/$sekreId",
         "/_app/_left-navbar/home/household/_warga/pengajuan-pengembalian/$pengembalianId/",
@@ -757,16 +757,16 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "_app/_left-navbar/home/household/_admin/manajemen-request-laporan/index.tsx",
       "parent": "/_app/_left-navbar"
     },
+    "/_app/_left-navbar/home/household/_warga/peminjaman/": {
+      "filePath": "_app/_left-navbar/home/household/_warga/peminjaman/index.tsx",
+      "parent": "/_app/_left-navbar"
+    },
     "/_app/_left-navbar/home/household/_warga/pengajuan-laporan/": {
       "filePath": "_app/_left-navbar/home/household/_warga/pengajuan-laporan/index.tsx",
       "parent": "/_app/_left-navbar"
     },
     "/_app/_left-navbar/home/household/_warga/pengajuan-peminjaman/": {
       "filePath": "_app/_left-navbar/home/household/_warga/pengajuan-peminjaman/index.tsx",
-      "parent": "/_app/_left-navbar"
-    },
-    "/_app/_left-navbar/home/household/_warga/pengajuan-pengembalian/": {
-      "filePath": "_app/_left-navbar/home/household/_warga/pengajuan-pengembalian/index.tsx",
       "parent": "/_app/_left-navbar"
     },
     "/_app/_left-navbar/home/testimoni/$type/$semester/": {

@@ -24,7 +24,7 @@ function HouseholdAdminPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [requestPage, setRequestPage] = useState(1);
   const [laporanPage, setLaporanPage] = useState(1);
-  const [pageSize] = useState(3);
+  const [pageSize] = useState(10);
 
   useEffect(() => {
     const checkIfMobile = () => {

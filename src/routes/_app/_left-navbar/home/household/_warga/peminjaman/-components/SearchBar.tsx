@@ -30,7 +30,8 @@ function SearchBar({
     onSearchChange(e.target.value);
   };
 
-  const hasActiveFilter = currentFilter.type !== 'all';
+  const hasActiveFilter =
+    currentFilter.type !== 'all' || currentFilter.status !== undefined;
 
   return (
     <>

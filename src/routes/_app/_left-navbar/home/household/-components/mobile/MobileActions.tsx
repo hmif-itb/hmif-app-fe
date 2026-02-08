@@ -46,9 +46,9 @@ function MobileActions({ isAdmin }: MobileActionsProps) {
           to: '/home/household/pengajuan-laporan',
         },
         {
-          label: 'Pengembalian Pinjaman',
+          label: 'Daftar Pinjaman',
           icon: RotateCw,
-          to: '/home/household/pengajuan-pengembalian',
+          to: '/home/household/peminjaman',
         },
       ];
 

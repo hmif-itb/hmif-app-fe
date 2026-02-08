@@ -1,26 +1,48 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Button } from '~/components/ui/button';
 import { ChevronLeft } from 'lucide-react';
 import { useNavigate } from '@tanstack/react-router';
 import SearchBar from './-components/SearchBar';
 import PeminjamanList from './-components/PeminjamanList';
+import Pagination from './-components/Pagination';
 import { FilterOptions } from './-components/FilterModal';
-import { useGetPeminjamanAktif } from '~/hooks/household';
+import { useGetPeminjaman } from '~/hooks/household';
 
 export const Route = createFileRoute(
-  '/_app/_left-navbar/home/household/_warga/pengajuan-pengembalian/',
+  '/_app/_left-navbar/home/household/_warga/peminjaman/',
 )({
-  component: PengembalianPeminjamanPage,
+  component: PeminjamanPage,
 });
 
-function PengembalianPeminjamanPage() {
+function PeminjamanPage() {
   const navigate = useNavigate();
   const [isMobile, setIsMobile] = useState(false);
   const [filter, setFilter] = useState<FilterOptions>({ type: 'all' });
   const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize] = useState(10);
 
-  const { data: peminjamanData = [], isLoading } = useGetPeminjamanAktif();
+  const queryParams = useMemo(() => {
+    const statusValue =
+      !filter.status || filter.status === 'all' ? undefined : filter.status;
+    return {
+      category: filter.type === 'all' ? undefined : filter.type,
+      status: statusValue,
+      search: searchTerm || undefined,
+      page: currentPage,
+      limit: pageSize,
+    };
+  }, [filter.type, filter.status, searchTerm, currentPage, pageSize]);
+
+  const { data: response, isLoading } = useGetPeminjaman(queryParams);
+
+  const { peminjamanData, totalPages } = useMemo(() => {
+    const data = response?.peminjaman || [];
+    const total = response?.total || 0;
+    const pages = Math.ceil(total / pageSize);
+    return { peminjamanData: data, totalPages: pages };
+  }, [response, pageSize]);
 
   useEffect(() => {
     const checkIfMobile = () => {
@@ -35,10 +57,16 @@ function PengembalianPeminjamanPage() {
 
   const handleFilterChange = (newFilter: FilterOptions) => {
     setFilter(newFilter);
+    setCurrentPage(1);
   };
 
   const handleSearchChange = (newSearchTerm: string) => {
     setSearchTerm(newSearchTerm);
+    setCurrentPage(1);
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
   };
 
   const mobileStyles = {
@@ -86,10 +114,11 @@ function PengembalianPeminjamanPage() {
           currentFilter={filter}
           searchTerm={searchTerm}
         />
-        <PeminjamanList
-          filter={filter}
-          searchTerm={searchTerm}
-          data={peminjamanData}
+        <PeminjamanList data={peminjamanData} isLoading={isLoading} />
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
           isLoading={isLoading}
         />
       </main>

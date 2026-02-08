@@ -108,7 +108,9 @@ function SekreDetailPage() {
             </p>
           </div>
           <Button
-            onClick={() => navigate({ to: '/home/household' })}
+            onClick={() =>
+              navigate({ to: '/home/household/pengajuan-peminjaman' })
+            }
             className="bg-[#E8C55F] text-[#333333] hover:opacity-85"
           >
             Kembali
@@ -126,7 +128,7 @@ function SekreDetailPage() {
         variant="link"
         className="my-6 hidden w-full justify-start gap-8 p-0 text-3xl font-medium lg:flex"
         onClick={() => {
-          navigate({ to: '/home/household' });
+          navigate({ to: '/home/household/pengajuan-peminjaman' });
         }}
       >
         <ChevronLeft className="size-8" />
@@ -140,7 +142,7 @@ function SekreDetailPage() {
           <ChevronLeft
             className="size-16 lg:hidden"
             onClick={() => {
-              navigate({ to: '/home/household' });
+              navigate({ to: '/home/household/pengajuan-peminjaman' });
             }}
           />
           Pengajuan Peminjaman

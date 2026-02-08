@@ -9,6 +9,83 @@ import type { BaseHttpRequest } from '../core/BaseHttpRequest';
 export class PengajuanPeminjamanService {
   constructor(public readonly httpRequest: BaseHttpRequest) {}
   /**
+   * @returns any Get list of user's property loans
+   * @throws ApiError
+   */
+  public getUserPeminjaman({
+    category,
+    status,
+    search,
+    page = 1,
+    limit = 10,
+  }: {
+    /**
+     * Filter by category
+     */
+    category?: 'sekre' | 'properti',
+    /**
+     * Filter by status
+     */
+    status?: 'pending' | 'rejected' | 'accepted' | 'pending_return' | 'completed',
+    /**
+     * Search by property name or title
+     */
+    search?: string,
+    /**
+     * Page number
+     */
+    page?: number,
+    /**
+     * Number of items per page
+     */
+    limit?: number,
+  }): CancelablePromise<{
+    peminjaman: Array<(PeminjamanSchema & {
+      alasan: string | null;
+      jenisPeminjaman: 'eksklusif' | 'non-eksklusif';
+      createdAt: string | null;
+      buktiFotoUrl: string | null;
+    })>;
+    total: number;
+    page: number;
+    limit: number;
+  }> {
+    return this.httpRequest.request({
+      method: 'GET',
+      url: '/api/peminjaman',
+      query: {
+        'category': category,
+        'status': status,
+        'search': search,
+        'page': page,
+        'limit': limit,
+      },
+      errors: {
+        400: `Bad request`,
+      },
+    });
+  }
+  /**
+   * @returns PeminjamanSchema Pengajuan peminjaman berhasil dibuat
+   * @throws ApiError
+   */
+  public createPengajuan({
+    requestBody,
+  }: {
+    requestBody?: CreatePengajuanBodySchema,
+  }): CancelablePromise<PeminjamanSchema> {
+    return this.httpRequest.request({
+      method: 'POST',
+      url: '/api/peminjaman',
+      body: requestBody,
+      mediaType: 'application/json',
+      errors: {
+        400: `Bad request`,
+        409: `Konflik jadwal (untuk peminjaman eksklusif)`,
+      },
+    });
+  }
+  /**
    * @returns any Daftar properti yang tersedia untuk dipinjam
    * @throws ApiError
    */
@@ -43,26 +120,6 @@ export class PengajuanPeminjamanService {
         'category': category,
         'condition': condition,
         'sortBy': sortBy,
-      },
-    });
-  }
-  /**
-   * @returns PeminjamanSchema Pengajuan peminjaman berhasil dibuat
-   * @throws ApiError
-   */
-  public createPengajuan({
-    requestBody,
-  }: {
-    requestBody?: CreatePengajuanBodySchema,
-  }): CancelablePromise<PeminjamanSchema> {
-    return this.httpRequest.request({
-      method: 'POST',
-      url: '/api/peminjaman',
-      body: requestBody,
-      mediaType: 'application/json',
-      errors: {
-        400: `Bad request`,
-        409: `Konflik jadwal (untuk peminjaman eksklusif)`,
       },
     });
   }

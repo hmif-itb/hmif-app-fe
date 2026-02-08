@@ -1,5 +1,12 @@
-import { X, ChevronDown, Loader2 } from 'lucide-react';
-import { useState, useRef, DragEvent, MouseEvent, useEffect } from 'react';
+import { X, ChevronDown, Loader2, Upload } from 'lucide-react';
+import {
+  useState,
+  useRef,
+  DragEvent,
+  MouseEvent,
+  useEffect,
+  ChangeEvent,
+} from 'react';
 import { SekreData, SekreFormData } from '../../../-types';
 import type { UpdatePropertiBodySchema } from '~/api/generated';
 import { useUploadFile } from '~/hooks/household';
@@ -28,7 +35,6 @@ export function EditSekreModal({
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { mutateAsync: uploadFile, isPending: isUploading } = useUploadFile();
@@ -46,6 +52,14 @@ export function EditSekreModal({
       setSelectedFile(null);
     }
   }, [data, isOpen]);
+
+  useEffect(() => {
+    return () => {
+      if (imagePreview && imagePreview !== data.photo) {
+        URL.revokeObjectURL(imagePreview);
+      }
+    };
+  }, [imagePreview, data.photo]);
 
   if (!isOpen) return null;
 
@@ -72,59 +86,45 @@ export function EditSekreModal({
     }
   };
 
-  const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setIsDragging(true);
-  };
-
-  const handleDragLeave = (e: DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setIsDragging(false);
-  };
-
-  const handleDrop = (e: DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setIsDragging(false);
-    const files = e.dataTransfer.files;
-    if (files && files[0]) {
-      handleImageFile(files[0]);
-    }
-  };
-
-  const handleImageFile = (file: File) => {
-    if (file.type.startsWith('image/')) {
+  const handleFileSelect = (event: ChangeEvent<HTMLInputElement>): void => {
+    const file = event.target.files?.[0];
+    if (file) {
       setSelectedFile(file);
-      if (imagePreview) {
-        URL.revokeObjectURL(imagePreview);
-      }
       const imageUrl = URL.createObjectURL(file);
       setImagePreview(imageUrl);
     }
   };
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      handleImageFile(file);
+  const handleUploadClick = (): void => {
+    fileInputRef.current?.click();
+  };
+
+  const handleDragOver = (event: DragEvent<HTMLDivElement>): void => {
+    event.preventDefault();
+  };
+
+  const handleDrop = (event: DragEvent<HTMLDivElement>): void => {
+    event.preventDefault();
+    const file = event.dataTransfer.files[0];
+    if (file && (file.type === 'image/jpeg' || file.type === 'image/png')) {
+      setSelectedFile(file);
+      const imageUrl = URL.createObjectURL(file);
+      setImagePreview(imageUrl);
     }
   };
 
-  const clearImage = (e: MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
+  const handleClearImage = (event: MouseEvent<HTMLButtonElement>): void => {
+    event.stopPropagation();
     setSelectedFile(null);
-    if (imagePreview) {
-      URL.revokeObjectURL(imagePreview);
-    }
     setImagePreview(null);
-    setFormData({ ...formData, photo: '' });
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="relative mx-[30px] w-[564px] rounded-[15px] bg-white shadow-xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+      <div className="relative mx-auto flex max-h-[90vh] w-full max-w-[564px] flex-col rounded-[15px] bg-white shadow-xl">
         <button
           onClick={onClose}
           className="absolute right-4 top-4 rounded-full p-1 transition-colors hover:bg-gray-100"
@@ -138,7 +138,7 @@ export function EditSekreModal({
 
         <hr className="border-t-2 border-[#A1A1A1]" />
 
-        <div className="flex flex-col gap-5 p-6">
+        <div className="flex flex-col gap-5 overflow-y-auto p-6">
           <div>
             <label className="mb-2 block text-sm font-medium text-black">
               Nama
@@ -211,43 +211,58 @@ export function EditSekreModal({
 
           <div>
             <label className="mb-2 block text-sm font-medium text-black">
-              Foto
+              Foto (Opsional)
             </label>
             <div
-              className={`relative aspect-[2/1] w-full cursor-pointer overflow-hidden rounded-lg bg-gray-100 ${
-                isDragging ? 'border-2 border-dashed border-gray-400' : ''
-              }`}
+              onClick={handleUploadClick}
               onDragOver={handleDragOver}
-              onDragLeave={handleDragLeave}
               onDrop={handleDrop}
-              onClick={() => fileInputRef.current?.click()}
+              className={`cursor-pointer overflow-hidden rounded-xl border border-dashed border-[#BABABA4D] transition-colors hover:bg-gray-50 ${
+                imagePreview
+                  ? 'h-[184px]'
+                  : 'flex h-[184px] flex-col items-center justify-center'
+              }`}
             >
-              {imagePreview ? (
-                <>
-                  <img
-                    src={imagePreview}
-                    alt="Property"
-                    className="size-full object-cover"
-                  />
-                  <button
-                    onClick={clearImage}
-                    className="absolute bottom-2 right-2 rounded-full bg-red-500 px-3 py-1 text-xs text-white hover:bg-red-600"
-                  >
-                    Clear
-                  </button>
-                </>
-              ) : (
-                <div className="flex h-full items-center justify-center text-gray-400">
-                  <p>Drag & drop image here or click to select</p>
-                </div>
-              )}
               <input
                 ref={fileInputRef}
                 type="file"
-                accept="image/*"
+                accept="image/jpeg,image/png"
                 onChange={handleFileSelect}
                 className="hidden"
               />
+              {imagePreview ? (
+                <div className="relative h-full w-full">
+                  <img
+                    src={imagePreview}
+                    alt="Preview"
+                    className="h-full w-full rounded-xl object-cover"
+                  />
+                  <div className="absolute bottom-2 left-2 rounded bg-blue-500 px-2 py-1 text-xs text-white">
+                    {selectedFile?.name || 'Current Photo'}
+                  </div>
+                  <button
+                    onClick={handleClearImage}
+                    className="absolute bottom-2 right-2 flex size-6 items-center justify-center rounded-full bg-red-500 text-white transition-colors hover:bg-red-600"
+                    type="button"
+                  >
+                    <X size={14} />
+                  </button>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center gap-5">
+                  <div className="flex size-[48px] items-center justify-center rounded-[8px] bg-[#F0F0F0]">
+                    <Upload size={28} className="text-gray-600" />
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <span className="text-sm text-gray-600">
+                      Upload foto sekre
+                    </span>
+                    <span className="text-xs text-gray-500">
+                      Format: JPG, PNG, maksimal 5MB
+                    </span>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -262,11 +277,14 @@ export function EditSekreModal({
           </button>
           <button
             onClick={handleConfirm}
-            className="flex-1 rounded-full bg-[#305138] px-6 py-3 font-medium text-white transition-colors hover:bg-[#305138]/90"
+            className="flex-1 rounded-full bg-[#305138] px-6 py-3 font-medium text-white transition-colors hover:bg-[#305138]/90 disabled:cursor-not-allowed disabled:bg-gray-400"
             disabled={internalIsLoading}
           >
             {internalIsLoading ? (
-              <Loader2 className="mx-auto size-4 animate-spin" />
+              <div className="flex items-center justify-center gap-2">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                <span>Mengupload...</span>
+              </div>
             ) : (
               'Edit'
             )}

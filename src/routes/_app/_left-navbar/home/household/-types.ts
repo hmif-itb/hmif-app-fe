@@ -143,9 +143,11 @@ export interface PeminjamanData {
 
   tanggalSelesai: string;
 
-  status: 'aktif' | 'selesai' | 'pending' | 'pending_return' | 'ditolak';
+  status: 'pending' | 'rejected' | 'accepted' | 'pending_return' | 'completed';
 
   type: 'properti' | 'sekre';
+
+  buktiFotoUrl?: string;
 }
 
 export interface PengembalianFormData {

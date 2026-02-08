@@ -256,25 +256,6 @@ const PENGEMBALIAN_KEYS = {
   list: () => [...PENGEMBALIAN_KEYS.all, 'list'] as const,
 };
 
-const mapStatusToFrontend = (
-  status: string,
-): 'aktif' | 'selesai' | 'pending' | 'pending_return' | 'ditolak' => {
-  switch (status) {
-    case 'accepted':
-      return 'aktif';
-    case 'completed':
-      return 'selesai';
-    case 'pending':
-      return 'pending';
-    case 'pending_return':
-      return 'pending';
-    case 'rejected':
-      return 'ditolak';
-    default:
-      return 'pending';
-  }
-};
-
 export function useGetPeminjamanAktif() {
   return useQuery({
     queryKey: PENGEMBALIAN_KEYS.list(),
@@ -295,10 +276,53 @@ export function useGetPeminjamanAktif() {
           tanggalMulai: startDateFormatted,
           tanggalSelesai: endDateFormatted,
 
-          status: mapStatusToFrontend(p.status),
+          status: p.status,
           type: p.properti?.category || 'properti',
         };
       });
+    },
+  });
+}
+
+export interface GetPeminjamanParams {
+  category?: 'sekre' | 'properti';
+  status?: 'pending' | 'rejected' | 'accepted' | 'pending_return' | 'completed';
+  search?: string;
+  page?: number;
+  limit?: number;
+}
+
+export function useGetPeminjaman(filters: GetPeminjamanParams = {}) {
+  return useQuery({
+    queryKey: [...PENGEMBALIAN_KEYS.list(), filters],
+    queryFn: async () => {
+      const response = await api.pengajuanPeminjaman.getUserPeminjaman(filters);
+      const mappedData = response.peminjaman.map((p) => {
+        const startDateFormatted = dayjs(p.startDate).format('DD/MM/YYYY');
+        const endDateFormatted = dayjs(p.endDate).format('DD/MM/YYYY');
+
+        return {
+          id: p.id,
+          userName: p.borrowerName,
+          properti: p.propertyName || 'Nama Properti Error',
+          jumlah: 1, // Default quantity since it's not in the schema
+
+          startDate: startDateFormatted,
+          endDate: endDateFormatted,
+          tanggalMulai: startDateFormatted,
+          tanggalSelesai: endDateFormatted,
+
+          status: p.status,
+          type: p.category || 'properti',
+          buktiFotoUrl: p.buktiFotoUrl || undefined,
+        };
+      });
+      return {
+        peminjaman: mappedData,
+        total: response.total,
+        page: response.page,
+        limit: response.limit,
+      };
     },
   });
 }

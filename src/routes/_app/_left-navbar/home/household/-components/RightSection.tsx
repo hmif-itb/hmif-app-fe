@@ -35,8 +35,8 @@ function RightSection({
     navigate({ to: '/home/household/pengajuan-laporan' });
   };
 
-  const handlePengembalianPinjaman = () => {
-    navigate({ to: '/home/household/pengajuan-pengembalian' });
+  const handlePeminjaman = () => {
+    navigate({ to: '/home/household/peminjaman' });
   };
 
   return (
@@ -78,17 +78,17 @@ function RightSection({
           </Button>
           <Button
             className="w-full bg-[#E2C66F] text-[#333333]"
-            onClick={handlePengembalianPinjaman}
+            onClick={handlePeminjaman}
           >
             <RotateCw />
-            Pengembalian Pinjaman
+            Daftar Pinjaman
           </Button>
         </div>
       )}
 
       {/* Daftar Peminjaman */}
       <div className="flex h-full flex-col gap-3 rounded-xl bg-white px-3 py-[22px] text-[#333333]">
-        <h3 className="text-xl font-semibold">Daftar Peminjaman</h3>
+        <h3 className="text-xl font-semibold">Peminjaman Terdekat</h3>
         <div className="flex h-full flex-col gap-3">
           {isLoading
             ? // Loading skeleton

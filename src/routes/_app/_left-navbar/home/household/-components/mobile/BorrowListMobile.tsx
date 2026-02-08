@@ -12,7 +12,7 @@ function BorrowListMobile({ items, isLoading }: BorrowListMobileProps) {
       <div className="flex items-center gap-3 text-[#333333]">
         <Package size={24} />
 
-        <h2 className="text-xl font-semibold">Daftar Peminjaman</h2>
+        <h2 className="text-xl font-semibold">Peminjaman Terdekat</h2>
       </div>
       <div className="flex flex-col gap-3">
         {isLoading

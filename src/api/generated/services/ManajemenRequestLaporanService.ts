@@ -15,31 +15,61 @@ export class ManajemenRequestLaporanService {
    */
   public getRequestList({
     category,
+    status,
+    search,
+    page = 1,
+    limit = 10,
   }: {
     category?: 'sekre' | 'properti',
-  }): CancelablePromise<Array<(PeminjamanSchema & {
-    alasan: string | null;
-    jenisPeminjaman: 'eksklusif' | 'non-eksklusif';
-    properti: {
-      id: string;
-      name: string;
-      description: string | null;
-      category: 'sekre' | 'properti';
-      condition: 'good' | 'broken' | 'cant_be_used' | 'lost';
-      quantity: number;
-      location: 'Sekretariat 1' | 'Sekretariat 2' | 'Jatinangor';
-      photo: string | null;
-      createdAt: string;
-      updatedAt: string;
-      status: 'in_use' | 'available';
-    };
-    createdAt: string | null;
-  })>> {
+    /**
+     * Filter by status
+     */
+    status?: 'pending' | 'rejected' | 'accepted' | 'pending_return' | 'completed',
+    /**
+     * Search by borrower name or title
+     */
+    search?: string,
+    /**
+     * Page number
+     */
+    page?: number,
+    /**
+     * Number of items per page
+     */
+    limit?: number,
+  }): CancelablePromise<{
+    requests: Array<(PeminjamanSchema & {
+      alasan: string | null;
+      jenisPeminjaman: 'eksklusif' | 'non-eksklusif';
+      properti: {
+        id: string;
+        name: string;
+        description: string | null;
+        category: 'sekre' | 'properti';
+        condition: 'good' | 'broken' | 'cant_be_used' | 'lost';
+        quantity: number;
+        location: 'Sekretariat 1' | 'Sekretariat 2' | 'Jatinangor';
+        photo: string | null;
+        createdAt: string;
+        updatedAt: string;
+        status: 'in_use' | 'available';
+      };
+      createdAt: string | null;
+      buktiFotoUrl: string | null;
+    })>;
+    total: number;
+    page: number;
+    limit: number;
+  }> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/api/request',
       query: {
         'category': category,
+        'status': status,
+        'search': search,
+        'page': page,
+        'limit': limit,
       },
     });
   }
@@ -97,6 +127,7 @@ export class ManajemenRequestLaporanService {
       status: 'in_use' | 'available';
     };
     createdAt: string | null;
+    buktiFotoUrl: string | null;
   })> {
     return this.httpRequest.request({
       method: 'PUT',
@@ -118,40 +149,69 @@ export class ManajemenRequestLaporanService {
    */
   public getLaporanList({
     category,
+    status,
+    search,
+    page = 1,
+    limit = 10,
   }: {
     category?: 'sekre' | 'properti',
-  }): CancelablePromise<Array<{
-    id: string;
-    propertiId: string;
-    pelaporId: string;
-    deskripsi: string;
-    fotoUrl: string | null;
-    status: 'pending' | 'accepted' | 'rejected';
-    createdAt: string | null;
-    properti: {
+    /**
+     * Filter by status
+     */
+    status?: 'pending' | 'accepted' | 'rejected',
+    /**
+     * Search by description
+     */
+    search?: string,
+    /**
+     * Page number
+     */
+    page?: number,
+    /**
+     * Number of items per page
+     */
+    limit?: number,
+  }): CancelablePromise<{
+    laporan: Array<{
       id: string;
-      name: string;
-      description: string | null;
-      category: 'sekre' | 'properti';
-      condition: 'good' | 'broken' | 'cant_be_used' | 'lost';
-      quantity: number;
-      location: 'Sekretariat 1' | 'Sekretariat 2' | 'Jatinangor';
-      photo: string | null;
-      createdAt: string;
-      updatedAt: string;
-      status: 'in_use' | 'available';
-    };
-    pelapor: {
-      id: string;
-      fullName: string;
-      nim: string;
-    };
-  }>> {
+      propertiId: string;
+      pelaporId: string;
+      deskripsi: string;
+      fotoUrl: string | null;
+      status: 'pending' | 'accepted' | 'rejected';
+      createdAt: string | null;
+      properti: {
+        id: string;
+        name: string;
+        description: string | null;
+        category: 'sekre' | 'properti';
+        condition: 'good' | 'broken' | 'cant_be_used' | 'lost';
+        quantity: number;
+        location: 'Sekretariat 1' | 'Sekretariat 2' | 'Jatinangor';
+        photo: string | null;
+        createdAt: string;
+        updatedAt: string;
+        status: 'in_use' | 'available';
+      };
+      pelapor: {
+        id: string;
+        fullName: string;
+        nim: string;
+      };
+    }>;
+    total: number;
+    page: number;
+    limit: number;
+  }> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/api/laporan',
       query: {
         'category': category,
+        'status': status,
+        'search': search,
+        'page': page,
+        'limit': limit,
       },
     });
   }

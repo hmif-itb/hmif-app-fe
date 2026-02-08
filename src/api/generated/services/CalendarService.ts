@@ -164,8 +164,8 @@ export class CalendarService {
    * @throws ApiError
    */
   public getPersonalCalendar({
-    month = 11,
-    year = 2025,
+    month = 2,
+    year = 2026,
   }: {
     month?: number,
     year?: number,

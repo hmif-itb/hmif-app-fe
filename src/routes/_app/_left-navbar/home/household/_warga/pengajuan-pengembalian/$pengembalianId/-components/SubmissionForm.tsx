@@ -124,7 +124,7 @@ function SubmissionForm(): JSX.Element {
 
   const handleCloseSuccessModal = (): void => {
     setShowSuccessModal(false);
-    navigate({ to: '/home/household/pengajuan-pengembalian' });
+    navigate({ to: '/home/household/peminjaman' });
   };
 
   const handleReportTextChange = (

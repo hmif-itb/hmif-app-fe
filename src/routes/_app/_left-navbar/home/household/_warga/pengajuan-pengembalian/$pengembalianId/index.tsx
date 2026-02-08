@@ -26,10 +26,7 @@ export const Route = createFileRoute(
 
 function HouseholdAdminPage() {
   const navigate = useNavigate();
-  const [activeView, setActiveView] = useState('Properti');
   const [isMobile, setIsMobile] = useState(false);
-  const [filter, setFilter] = useState<FilterOptions>({ condition: 'all' });
-  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     const checkIfMobile = () => {
@@ -63,7 +60,7 @@ function HouseholdAdminPage() {
         variant="link"
         className="my-6 hidden w-full justify-start gap-8 p-0 text-3xl font-medium lg:flex"
         onClick={() => {
-          navigate({ to: '/home/household' });
+          navigate({ to: '/home/household/peminjaman' });
         }}
       >
         <ChevronLeft className="size-8" />
@@ -77,7 +74,7 @@ function HouseholdAdminPage() {
           <ChevronLeft
             className="size-5 lg:hidden"
             onClick={() => {
-              navigate({ to: '/home/household' });
+              navigate({ to: '/home/household/peminjaman' });
             }}
           />
           Pengajuan Pengembalian
