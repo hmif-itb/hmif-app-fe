@@ -1,11 +1,17 @@
+import dayjs from 'dayjs';
 import { Check, X } from 'lucide-react';
 import { useState } from 'react';
+
+const formatReadableDate = (dateString: string): string => {
+  const date = dayjs(dateString);
+  return date.format('D MMM YYYY HH:mm');
+};
 
 interface ConfirmationModalProps {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: () => void;
-  type: 'approve' | 'reject';
+  type: 'approve' | 'reject' | 'complete';
   requestData: {
     borrowerName: string;
     item: string;
@@ -27,6 +33,8 @@ export default function ConfirmationModal({
   if (!isOpen) return null;
 
   const isApprove = type === 'approve';
+  const isComplete = type === 'complete';
+  const isReject = type === 'reject';
 
   const handleConfirm = () => {
     setShowSuccess(true);
@@ -62,7 +70,9 @@ export default function ConfirmationModal({
           <p className="text-center text-xl font-semibold text-black">
             {isApprove
               ? 'Permohonan peminjaman berhasil diterima dan disetujui.'
-              : 'Permohonan peminjaman berhasil ditolak.'}
+              : isComplete
+                ? 'Pengembalian berhasil dikonfirmasi.'
+                : 'Permohonan peminjaman berhasil ditolak.'}
           </p>
         </div>
       </div>
@@ -92,15 +102,23 @@ export default function ConfirmationModal({
         <h2 className="mb-2 text-center text-xl font-semibold text-black">
           {isApprove
             ? 'Apakah Anda yakin ingin menyetujui permohonan peminjaman'
-            : 'Apakah Anda yakin ingin menolak permohonan peminjaman'}
+            : isComplete
+              ? 'Apakah Anda yakin ingin mengkonfirmasi pengembalian'
+              : 'Apakah Anda yakin ingin menolak permohonan peminjaman'}
         </h2>
 
         {/* Details */}
         <p className="mb-6 text-center text-gray-500">
           {requestData.item} oleh {requestData.borrowerName}
-          <br />
-          untuk {requestData.reason} pada {requestData.startDate} -{' '}
-          {requestData.endDate}?
+          {!isComplete && (
+            <>
+              <br />
+              untuk {requestData.reason} pada{' '}
+              {formatReadableDate(requestData.startDate)} -{' '}
+              {formatReadableDate(requestData.endDate)}
+            </>
+          )}
+          ?
         </p>
 
         {/* Buttons */}
@@ -114,12 +132,12 @@ export default function ConfirmationModal({
           <button
             onClick={handleConfirm}
             className={`flex-1 rounded-full px-6 py-3 font-medium text-white transition-colors ${
-              isApprove
-                ? 'bg-[#305138] hover:bg-[#305138]/90'
-                : 'bg-[#B01212] hover:bg-[#B01212]/90'
+              isReject
+                ? 'bg-[#B01212] hover:bg-[#B01212]/90'
+                : 'bg-[#305138] hover:bg-[#305138]/90'
             }`}
           >
-            {isApprove ? 'Setujui' : 'Tolak'}
+            {isApprove ? 'Setujui' : isComplete ? 'Konfirmasi' : 'Tolak'}
           </button>
         </div>
       </div>

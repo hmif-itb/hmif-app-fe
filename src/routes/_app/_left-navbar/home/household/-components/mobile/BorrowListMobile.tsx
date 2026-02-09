@@ -12,7 +12,7 @@ function BorrowListMobile({ items, isLoading }: BorrowListMobileProps) {
       <div className="flex items-center gap-3 text-[#333333]">
         <Package size={24} />
 
-        <h2 className="text-xl font-semibold">Daftar Peminjaman</h2>
+        <h2 className="text-xl font-semibold">Peminjaman Terdekat</h2>
       </div>
       <div className="flex flex-col gap-3">
         {isLoading
@@ -36,8 +36,8 @@ function BorrowListMobile({ items, isLoading }: BorrowListMobileProps) {
                   <span className="text-base font-semibold text-[#2A2A2A]">
                     {item.name}
                   </span>
-                  <span className="rounded-full bg-[#2F5C3B] px-4 py-1 text-xs font-semibold text-white">
-                    {item.id}
+                  <span className="rounded-full bg-[#2F5C3B] px-4 py-1 text-center text-xs font-semibold text-white">
+                    {item.status.toUpperCase().replace('_', ' ')}
                   </span>
                 </div>
                 <p className="mt-1 text-sm font-medium text-[#5F5F5F]">

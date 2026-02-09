@@ -6,11 +6,10 @@ interface FilterModalProps {
   onClose: () => void;
   onApplyFilter: (filter: FilterOptions) => void;
   currentFilter: FilterOptions;
-  activeView: 'Request' | 'Laporan';
 }
 
 export interface FilterOptions {
-  category: 'all' | 'sekre' | 'properti';
+  type: 'all' | 'properti' | 'sekre';
   status?:
     | 'all'
     | 'pending'
@@ -25,11 +24,10 @@ export function FilterModal({
   onClose,
   onApplyFilter,
   currentFilter,
-  activeView,
 }: FilterModalProps) {
-  const [selectedCategory, setSelectedCategory] = useState<
-    'all' | 'sekre' | 'properti'
-  >(currentFilter.category);
+  const [selectedType, setSelectedType] = useState<
+    'all' | 'properti' | 'sekre'
+  >(currentFilter.type);
   const [selectedStatus, setSelectedStatus] = useState<
     'all' | 'pending' | 'rejected' | 'accepted' | 'pending_return' | 'completed'
   >(currentFilter.status || 'all');
@@ -38,13 +36,13 @@ export function FilterModal({
 
   const handleApply = () => {
     onApplyFilter({
-      category: selectedCategory,
+      type: selectedType,
       status: selectedStatus === 'all' ? undefined : selectedStatus,
     });
     onClose();
   };
 
-  const requestStatuses = [
+  const statusOptions = [
     { value: 'all' as const, label: 'Semua Status' },
     { value: 'pending' as const, label: 'Pending' },
     { value: 'accepted' as const, label: 'Accepted' },
@@ -53,19 +51,9 @@ export function FilterModal({
     { value: 'completed' as const, label: 'Completed' },
   ];
 
-  const laporanStatuses = [
-    { value: 'all' as const, label: 'Semua Status' },
-    { value: 'pending' as const, label: 'Pending' },
-    { value: 'accepted' as const, label: 'Accepted' },
-    { value: 'rejected' as const, label: 'Rejected' },
-  ];
-
-  const statusOptions =
-    activeView === 'Request' ? requestStatuses : laporanStatuses;
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="relative mx-[30px] max-h-[70vh] w-[320px] overflow-y-auto rounded-[15px] bg-white p-6 shadow-xl">
+      <div className="relative mx-[30px] max-h-[80vh] w-[320px] overflow-y-auto rounded-[15px] bg-white p-6 shadow-xl">
         {/* Close Button */}
         <button
           onClick={onClose}
@@ -99,41 +87,41 @@ export function FilterModal({
           </div>
         </div>
 
-        {/* Category Filter */}
+        {/* Type Filter */}
         <div className="mb-4">
-          <h3 className="mb-2 text-sm font-medium text-gray-700">Kategori</h3>
+          <h3 className="mb-2 text-sm font-medium text-gray-700">Tipe</h3>
           <div className="flex flex-col gap-2">
             <button
-              onClick={() => setSelectedCategory('all')}
+              onClick={() => setSelectedType('all')}
               className={`rounded-lg border px-4 py-2.5 text-left text-sm transition-colors ${
-                selectedCategory === 'all'
+                selectedType === 'all'
                   ? 'border-[#305138] bg-[#305138] text-white'
                   : 'border-gray-300 text-black hover:bg-gray-50'
               }`}
             >
-              Semua Kategori
+              Semua Tipe
             </button>
 
             <button
-              onClick={() => setSelectedCategory('sekre')}
+              onClick={() => setSelectedType('properti')}
               className={`rounded-lg border px-4 py-2.5 text-left text-sm transition-colors ${
-                selectedCategory === 'sekre'
-                  ? 'border-[#305138] bg-[#305138] text-white'
-                  : 'border-gray-300 text-black hover:bg-gray-50'
-              }`}
-            >
-              Sekre
-            </button>
-
-            <button
-              onClick={() => setSelectedCategory('properti')}
-              className={`rounded-lg border px-4 py-2.5 text-left text-sm transition-colors ${
-                selectedCategory === 'properti'
+                selectedType === 'properti'
                   ? 'border-[#305138] bg-[#305138] text-white'
                   : 'border-gray-300 text-black hover:bg-gray-50'
               }`}
             >
               Properti
+            </button>
+
+            <button
+              onClick={() => setSelectedType('sekre')}
+              className={`rounded-lg border px-4 py-2.5 text-left text-sm transition-colors ${
+                selectedType === 'sekre'
+                  ? 'border-[#305138] bg-[#305138] text-white'
+                  : 'border-gray-300 text-black hover:bg-gray-50'
+              }`}
+            >
+              Sekre
             </button>
           </div>
         </div>

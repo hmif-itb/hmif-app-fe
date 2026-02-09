@@ -16,25 +16,9 @@ function RequestList({
   data,
   isLoading = false,
 }: RequestListProps) {
-  const filteredRequests = data.filter((request) => {
-    // Filter by category
-    const matchesCategory =
-      filter.category === 'all' || request.category === filter.category;
-
-    // Filter by search term (search in name, item, and reason)
-    const matchesSearch =
-      request.borrowerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (request.item &&
-        request.item.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      (request.reason &&
-        request.reason.toLowerCase().includes(searchTerm.toLowerCase()));
-
-    return matchesCategory && matchesSearch;
-  });
-
   if (isLoading) {
     return (
-      <div className="mb-20 flex w-full flex-col gap-3 lg:mb-5 lg:gap-5">
+      <div className="mb-5 flex w-full flex-col gap-3 lg:gap-5">
         {Array.from({ length: 3 }).map((_, index) => (
           <div
             key={index}
@@ -54,13 +38,17 @@ function RequestList({
     );
   }
 
-  if (filteredRequests.length === 0) {
-    return <div></div>;
+  if (data.length === 0) {
+    return (
+      <div className="mb-5 flex w-full items-center justify-center py-10">
+        <p className="text-lg text-white/80">Tidak ada data request</p>
+      </div>
+    );
   }
 
   return (
-    <div className="mb-20 flex w-full flex-col gap-3 lg:mb-5 lg:gap-5">
-      {filteredRequests.map((request) => (
+    <div className="mb-5 flex w-full flex-col gap-3 lg:gap-5">
+      {data.map((request) => (
         <RequestItem key={request.id} request={request} />
       ))}
     </div>

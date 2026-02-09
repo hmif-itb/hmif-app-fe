@@ -31,17 +31,37 @@ export function PeminjamanItem({ item }: PeminjamanItemProps) {
       .toUpperCase();
   };
 
-  //   TODO: Status not fixed yey
   const getStatusColor = (status: string) => {
-    switch (status.toLowerCase()) {
-      case 'aktif':
+    switch (status) {
+      case 'accepted':
         return 'bg-[#305138]';
-      case 'selesai':
+      case 'completed':
         return 'bg-gray-500';
       case 'pending':
         return 'bg-yellow-500';
+      case 'pending_return':
+        return 'bg-[#FFA500]';
+      case 'rejected':
+        return 'bg-red-500';
       default:
         return 'bg-[#305138]';
+    }
+  };
+
+  const getStatusText = (status: string) => {
+    switch (status) {
+      case 'accepted':
+        return 'Aktif';
+      case 'completed':
+        return 'Selesai';
+      case 'pending':
+        return 'Pending';
+      case 'pending_return':
+        return 'Pengembalian';
+      case 'rejected':
+        return 'Ditolak';
+      default:
+        return status;
     }
   };
 
@@ -68,6 +88,9 @@ export function PeminjamanItem({ item }: PeminjamanItemProps) {
             <div>
               <h3 className="font-semibold text-black">{item.userName}</h3>
               <p className="text-[12px] text-[#525352] lg:text-sm">
+                {item.properti}
+              </p>
+              <p className="mt-1 text-[12px] text-[#525352] lg:text-sm">
                 Mulai: {item.startDate} Selesai: {item.endDate}
               </p>
             </div>
@@ -77,7 +100,7 @@ export function PeminjamanItem({ item }: PeminjamanItemProps) {
             <div
               className={`flex h-fit items-center rounded-full px-3 py-1 text-xs text-white lg:text-sm ${getStatusColor(item.status)}`}
             >
-              {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
+              {getStatusText(item.status)}
             </div>
             <button
               onClick={toggleExpanded}
@@ -128,8 +151,24 @@ export function PeminjamanItem({ item }: PeminjamanItemProps) {
               </div>
             </div>
 
-            {/* Return Button - Only show if status is aktif */}
-            {item.status.toLowerCase() === 'aktif' && (
+            {/* Proof Photo Section - Only show for pending_return */}
+            {item.buktiFotoUrl && (
+              <div className="transition-all duration-300">
+                <p className=" text-sm font-medium text-black">
+                  Bukti Pengembalian:
+                </p>
+                <div className="mt-2">
+                  <img
+                    src={item.buktiFotoUrl}
+                    alt="Bukti Pengembalian"
+                    className="h-auto max-h-[300px] w-full rounded-lg object-contain"
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* Return Button - Only show if status is accepted */}
+            {item.status.toLowerCase() === 'accepted' && (
               <div className="flex justify-end pt-4">
                 <button
                   onClick={handleReturnClick}

@@ -29,7 +29,7 @@ function MobileActions({ isAdmin }: MobileActionsProps) {
           to: '/home/household/manajemen-properti',
         },
         {
-          label: 'Manajemen Laporan dan Request',
+          label: 'Laporan dan Request',
           icon: NotebookPen,
           to: '/home/household/manajemen-request-laporan',
         },
@@ -46,9 +46,9 @@ function MobileActions({ isAdmin }: MobileActionsProps) {
           to: '/home/household/pengajuan-laporan',
         },
         {
-          label: 'Pengembalian Pinjaman',
+          label: 'Daftar Pinjaman',
           icon: RotateCw,
-          to: '/home/household/pengajuan-pengembalian',
+          to: '/home/household/peminjaman',
         },
       ];
 

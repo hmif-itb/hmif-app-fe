@@ -45,6 +45,7 @@ function MobileSection({
   return (
     <div className="flex flex-col gap-6 bg-[#FBFBFB] px-9 pb-24 pt-[60px]">
       <MobileHeader isAdmin={isAdmin} />
+      <MobileActions isAdmin={isAdmin} />
       <CalendarMobile
         monthLabel={monthLabel}
         daysOfWeek={daysOfWeek}
@@ -59,7 +60,6 @@ function MobileSection({
       />
       <TimelineMobile events={eventsForSelectedDate} isLoading={isLoading} />
       <BorrowListMobile items={peminjamanItems} isLoading={isLoading} />
-      <MobileActions isAdmin={isAdmin} />
     </div>
   );
 }

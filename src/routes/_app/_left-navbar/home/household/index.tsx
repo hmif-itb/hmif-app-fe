@@ -43,7 +43,16 @@ function HouseholdPage() {
 
   const eventsForSelectedDate = useMemo(() => {
     return events
-      .filter((event) => dayjs(event.start_time).isSame(selectedDate, 'day'))
+      .filter((event) => {
+        const eventDate = dayjs(event.start_time);
+        const endDate = dayjs(event.end_time);
+        return (
+          (selectedDate.isSame(eventDate, 'day') ||
+            selectedDate.isAfter(eventDate, 'day')) &&
+          (selectedDate.isSame(endDate, 'day') ||
+            selectedDate.isBefore(endDate, 'day'))
+        );
+      })
       .sort(
         (a, b) => dayjs(a.start_time).valueOf() - dayjs(b.start_time).valueOf(),
       );
@@ -68,6 +77,7 @@ function HouseholdPage() {
     backgroundPosition: 'left top',
     backgroundRepeat: 'no-repeat',
     backgroundSize: '100% auto',
+    overflowY: 'auto',
   };
 
   const desktopStyles = {
@@ -117,7 +127,7 @@ function HouseholdPage() {
     }
   };
   return (
-    <div className="flex h-full flex-col md:px-10 md:pb-[60px]">
+    <div className="flex flex-col md:px-10 md:pb-[60px]">
       {/* Back Button */}
       <Button
         variant="link"
@@ -134,7 +144,7 @@ function HouseholdPage() {
         style={isMobile ? mobileStyles : desktopStyles}
       >
         {/* Desktop */}
-        <div className="hidden h-full w-full justify-center gap-5 lg:flex">
+        <div className="hidden size-full justify-center gap-5 lg:flex">
           <LeftSection
             selectedMonth={selectedMonth}
             selectedYear={selectedYear}

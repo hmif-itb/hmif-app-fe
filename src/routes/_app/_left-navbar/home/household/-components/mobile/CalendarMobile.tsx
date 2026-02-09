@@ -75,9 +75,16 @@ function CalendarMobile({
           const isCurrentMonth = dateObj.currentMonth;
           const isSelected = dateValue.isSame(selectedDate, 'day');
           const isToday = dateValue.isSame(today, 'day');
-          const dots = events.filter((event) =>
-            dayjs(event.start_time).isSame(dateValue, 'day'),
-          );
+          const dots = events.filter((event) => {
+            const eventDate = dayjs(event.start_time);
+            const endDate = dayjs(event.end_time);
+            return (
+              (dateValue.isSame(eventDate, 'day') ||
+                dateValue.isAfter(eventDate, 'day')) &&
+              (dateValue.isSame(endDate, 'day') ||
+                dateValue.isBefore(endDate, 'day'))
+            );
+          });
 
           return (
             <button

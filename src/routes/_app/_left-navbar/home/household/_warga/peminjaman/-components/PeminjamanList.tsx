@@ -1,21 +1,12 @@
-import React from 'react';
-import { ReportItem } from './ReportItem';
-import { ReportData } from '../../../-types';
-import { FilterOptions } from './FilterModal';
+import { PeminjamanItem } from './PeminjamanItem';
+import { PeminjamanData } from '../../../-types';
 
-interface ReportListProps {
-  filter: FilterOptions;
-  searchTerm: string;
-  data: ReportData[];
+interface PeminjamanListProps {
+  data: PeminjamanData[];
   isLoading?: boolean;
 }
 
-function ReportList({
-  filter,
-  searchTerm,
-  data,
-  isLoading = false,
-}: ReportListProps) {
+function PeminjamanList({ data, isLoading = false }: PeminjamanListProps) {
   if (isLoading) {
     return (
       <div className="mb-5 flex w-full flex-col gap-3 lg:gap-5">
@@ -30,10 +21,7 @@ function ReportList({
                 <div className="h-4 w-32 animate-pulse rounded bg-gray-200" />
                 <div className="h-3 w-48 animate-pulse rounded bg-gray-200" />
               </div>
-            </div>
-            <div className="mt-4 space-y-2">
-              <div className="h-3 w-full animate-pulse rounded bg-gray-200" />
-              <div className="h-3 w-3/4 animate-pulse rounded bg-gray-200" />
+              <div className="h-6 w-16 animate-pulse rounded-full bg-gray-200" />
             </div>
           </div>
         ))}
@@ -44,18 +32,18 @@ function ReportList({
   if (data.length === 0) {
     return (
       <div className="mb-5 flex w-full items-center justify-center py-10">
-        <p className="text-lg text-white/80">Tidak ada data laporan</p>
+        <p className="text-lg text-white/80">Tidak ada data peminjaman</p>
       </div>
     );
   }
 
   return (
     <div className="mb-5 flex w-full flex-col gap-3 lg:gap-5">
-      {data.map((report) => (
-        <ReportItem key={report.id} request={report} />
+      {data.map((peminjaman) => (
+        <PeminjamanItem key={peminjaman.id} item={peminjaman} />
       ))}
     </div>
   );
 }
 
-export default ReportList;
+export default PeminjamanList;

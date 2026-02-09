@@ -1,11 +1,12 @@
 import { useMemo, useState } from 'react';
 import { RequestData } from '../../../-types';
-import { ChevronDown, X } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import Avatar from '~/components/user/avatar';
 import ConfirmationModal from './ConfirmationModal';
 import Status, { StatusType } from './Status';
 import { useUpdateRequestStatus } from '~/hooks/household';
 import dayjs from 'dayjs';
+import toast from 'react-hot-toast';
 
 interface PeminjamanItemProps {
   request: RequestData;
@@ -16,7 +17,7 @@ export function RequestItem({ request }: PeminjamanItemProps) {
   const [currentStatus, setCurrentStatus] = useState(request.status);
   const [modalState, setModalState] = useState<{
     isOpen: boolean;
-    type: 'approve' | 'reject' | null;
+    type: 'approve' | 'reject' | 'complete' | null;
   }>({
     isOpen: false,
     type: null,
@@ -41,6 +42,10 @@ export function RequestItem({ request }: PeminjamanItemProps) {
     setModalState({ isOpen: true, type: 'reject' });
   };
 
+  const handleComplete = () => {
+    setModalState({ isOpen: true, type: 'complete' });
+  };
+
   const handleConfirm = () => {
     if (modalState.type === 'approve') {
       console.log('Approving request:', request.id);
@@ -54,9 +59,9 @@ export function RequestItem({ request }: PeminjamanItemProps) {
             // Update status di UI secara lokal untuk respons instan
             setCurrentStatus('accepted');
           },
-          onError: (error) => {
-            // (Opsional) Tampilkan notifikasi error
-            console.error('Gagal menyetujui request:', error);
+          onError: () => {
+            toast.error('Gagal menyetujui request. Silakan coba lagi.');
+            setCurrentStatus(request.status);
           },
         },
       );
@@ -71,8 +76,28 @@ export function RequestItem({ request }: PeminjamanItemProps) {
           onSuccess: () => {
             setCurrentStatus('rejected');
           },
-          onError: (error) => {
-            console.error('Gagal menolak request:', error);
+          onError: () => {
+            toast.error('Gagal menolak request. Silakan coba lagi.');
+            setCurrentStatus(request.status);
+          },
+        },
+      );
+    } else if (modalState.type === 'complete') {
+      console.log('Completing request:', request.id);
+      updateStatusMutation.mutate(
+        {
+          peminjamanId: request.id,
+          data: { status: 'completed' },
+        },
+        {
+          onSuccess: () => {
+            setCurrentStatus('completed');
+          },
+          onError: () => {
+            toast.error(
+              'Gagal mengkonfirmasi pengembalian. Silakan coba lagi.',
+            );
+            setCurrentStatus(request.status);
           },
         },
       );
@@ -132,7 +157,10 @@ export function RequestItem({ request }: PeminjamanItemProps) {
                 <h3 className="font-semibold text-black">
                   {request.borrowerName}
                 </h3>
-                <p className="flex flex-col text-[12px] text-[#525352] lg:flex-row lg:gap-2 lg:text-sm">
+                <p className="text-[12px] font-semibold text-[#525352] lg:text-sm">
+                  {request.item}
+                </p>
+                <p className="mt-1 flex flex-col text-[12px] text-[#525352] lg:flex-row lg:gap-2 lg:text-sm">
                   <span>Mulai: {startDateFormatted}</span>
                   <span>Selesai: {endDateFormatted}</span>
                 </p>
@@ -156,7 +184,7 @@ export function RequestItem({ request }: PeminjamanItemProps) {
           {/* Expanded Content with Smooth Transition */}
           <div
             className={`overflow-hidden transition-all duration-500 ease-in-out ${
-              isExpanded ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
+              isExpanded ? 'max-h-none opacity-100' : 'max-h-0 opacity-0'
             }`}
           >
             {request.item && (
@@ -198,6 +226,23 @@ export function RequestItem({ request }: PeminjamanItemProps) {
                   </div>
                 )}
 
+                {/* Proof Photo Section - Only show for pending_return */}
+                {currentStatus.toLowerCase() === 'pending_return' &&
+                  request.buktiFotoUrl && (
+                    <div className="transition-all duration-300">
+                      <p className=" text-sm font-medium text-black">
+                        Bukti Pengembalian:
+                      </p>
+                      <div className="mt-2">
+                        <img
+                          src={request.buktiFotoUrl}
+                          alt="Bukti Pengembalian"
+                          className="h-auto max-h-[300px] w-full rounded-lg object-contain"
+                        />
+                      </div>
+                    </div>
+                  )}
+
                 {/* Action Buttons - Only show if status is pending */}
                 {currentStatus.toLowerCase() === 'pending' && (
                   <div className="flex gap-3 pt-4">
@@ -212,6 +257,18 @@ export function RequestItem({ request }: PeminjamanItemProps) {
                       className="flex-1 rounded-full bg-[#305138] px-4 py-2 text-white transition-all duration-300  hover:bg-[#305138]/90 hover:shadow-lg"
                     >
                       Setujui
+                    </button>
+                  </div>
+                )}
+
+                {/* Action Button - For pending_return status */}
+                {currentStatus.toLowerCase() === 'pending_return' && (
+                  <div className="flex pt-4">
+                    <button
+                      onClick={handleComplete}
+                      className="w-full rounded-full bg-[#305138] px-4 py-2 text-white transition-all duration-300  hover:bg-[#305138]/90 hover:shadow-lg"
+                    >
+                      Konfirmasi Pengembalian
                     </button>
                   </div>
                 )}

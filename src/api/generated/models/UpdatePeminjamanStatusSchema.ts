@@ -3,6 +3,6 @@
 /* tslint:disable */
 /* eslint-disable */
 export type UpdatePeminjamanStatusSchema = {
-  status: 'accepted' | 'rejected';
+  status: 'accepted' | 'rejected' | 'completed';
 };
 

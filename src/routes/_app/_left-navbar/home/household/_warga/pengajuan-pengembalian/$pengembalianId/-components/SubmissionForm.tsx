@@ -124,7 +124,7 @@ function SubmissionForm(): JSX.Element {
 
   const handleCloseSuccessModal = (): void => {
     setShowSuccessModal(false);
-    navigate({ to: '/home/household/pengajuan-pengembalian' });
+    navigate({ to: '/home/household/peminjaman' });
   };
 
   const handleReportTextChange = (
@@ -152,20 +152,6 @@ function SubmissionForm(): JSX.Element {
             <NotebookPen size={24} />
           </div>
           <h2 className="text-base font-semibold">Formulir Pengembalian</h2>
-        </div>
-
-        <div className="space-y-2">
-          <label htmlFor="laporan" className="text-sm text-black">
-            Detail Pengembalian
-          </label>
-          <Textarea
-            id="laporan"
-            name="laporan"
-            placeholder="Deskripsikan kondisi barang saat dikembalikan (opsional)..."
-            className="h-[184px]"
-            value={reportText}
-            onChange={handleReportTextChange}
-          />
         </div>
 
         <div className="space-y-2">

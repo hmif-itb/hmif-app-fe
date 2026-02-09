@@ -9,10 +9,10 @@ function PeminjamanItem({ data }: PeminjamanItemProps) {
   return (
     <div className="flex flex-col gap-2 rounded-[10px] bg-[#E2C66F]/30 px-4 py-[14px]">
       {/* Header */}
-      <div className="flex justify-between">
+      <div className="flex items-center justify-between gap-2">
         <span className="font-medium text-black">{data.name}</span>
-        <span className="items-center rounded-full bg-[#305138] px-4 py-1 text-xs text-white">
-          {data.id}
+        <span className="flex items-center rounded-full bg-[#305138] p-2 text-center text-xs text-white">
+          {data.status.toUpperCase().replace('_', ' ')}
         </span>
       </div>
       {/* Item */}

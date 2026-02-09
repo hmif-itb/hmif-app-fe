@@ -8,6 +8,7 @@ interface SearchBarProps {
   onSearchChange: (searchTerm: string) => void;
   currentFilter: FilterOptions;
   searchTerm: string;
+  activeView: 'Request' | 'Laporan';
 }
 
 function SearchBar({
@@ -15,6 +16,7 @@ function SearchBar({
   onSearchChange,
   currentFilter,
   searchTerm,
+  activeView,
 }: SearchBarProps) {
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
 
@@ -30,7 +32,8 @@ function SearchBar({
     onSearchChange(e.target.value);
   };
 
-  const hasActiveFilter = currentFilter.category !== 'all';
+  const hasActiveFilter =
+    currentFilter.category !== 'all' || currentFilter.status !== undefined;
 
   return (
     <>
@@ -68,6 +71,7 @@ function SearchBar({
         onClose={() => setIsFilterModalOpen(false)}
         onApplyFilter={handleFilterApply}
         currentFilter={currentFilter}
+        activeView={activeView}
       />
     </>
   );

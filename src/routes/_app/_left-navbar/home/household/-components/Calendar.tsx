@@ -2,8 +2,9 @@ import React, { useMemo } from 'react';
 import dayjs from 'dayjs';
 import { ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import { generateDate } from '~/lib/calendar';
-import CalendarDay, { EventType } from './CalendarDay';
+import CalendarDay from './CalendarDay';
 import CalendarSidebar from './CalendarSidebar';
+import { EventType } from '../-types';
 
 interface HouseholdCalendarProps {
   selectedMonth: number;
@@ -39,10 +40,16 @@ const HouseholdCalendar = ({
 
     return events.filter((event) => {
       const eventDate = dayjs(event.start_time);
+      const endDate = dayjs(event.end_time);
+      const currentDay = dayjs()
+        .year(selectedYear)
+        .month(selectedMonth)
+        .date(day);
       return (
-        eventDate.date() === day &&
-        eventDate.month() === selectedMonth &&
-        eventDate.year() === selectedYear
+        (currentDay.isSame(eventDate, 'day') ||
+          currentDay.isAfter(eventDate, 'day')) &&
+        (currentDay.isSame(endDate, 'day') ||
+          currentDay.isBefore(endDate, 'day'))
       );
     });
   };
@@ -70,27 +77,24 @@ const HouseholdCalendar = ({
       {/* Main Calendar */}
       <div className="flex flex-1 flex-col">
         {/* Calendar Header */}
-        <div className="flex items-center justify-between p-4">
-          <h1 className="text-[28px] font-medium text-gray-800">
+        <div className="flex items-center justify-between p-3">
+          <h1 className="text-[24px] font-medium text-gray-800">
             {currentMonthName}
           </h1>
           <div className="flex items-center space-x-2">
             <button
               onClick={handlePrevMonth}
               disabled={isLoading}
-              className="rounded-full p-2 hover:bg-gray-100 disabled:opacity-50"
+              className="rounded-full px-2 hover:bg-gray-100 disabled:opacity-50"
             >
               <ChevronLeft className="size-5 text-gray-500" />
             </button>
             <button
               onClick={handleNextMonth}
               disabled={isLoading}
-              className="rounded-full p-2 hover:bg-gray-100 disabled:opacity-50"
+              className="rounded-full px-2 hover:bg-gray-100 disabled:opacity-50"
             >
               <ChevronRight className="size-5 text-gray-500" />
-            </button>
-            <button className="rounded-full p-2 hover:bg-gray-100">
-              <Search className="size-5 text-gray-500" />
             </button>
           </div>
         </div>
@@ -108,7 +112,7 @@ const HouseholdCalendar = ({
         </div>
 
         {/* Calendar Grid */}
-        <div className="grid flex-1 grid-cols-7 grid-rows-6 gap-px overflow-hidden rounded-lg bg-[#DADCE099] ">
+        <div className="grid flex-1 grid-cols-7 grid-rows-[repeat(6,minmax(60px,1fr))] gap-px overflow-hidden rounded-lg bg-[#DADCE099]">
           {isLoading
             ? // Loading state
               Array.from({ length: 42 }).map((_, index) => (
