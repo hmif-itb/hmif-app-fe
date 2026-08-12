@@ -37,14 +37,14 @@ function Index() {
             className="mt-1 w-full p-1 max-lg:border-white max-lg:text-white"
             asChild
           >
-            <a href="/sparta">
+            <Link to="/home/internship">
               <img
                 src="/img/sparta.png"
                 alt="Logo sparta"
                 width={80}
                 height={46}
               />
-            </a>
+            </Link>
           </Button>
         </div>
       </div>

@@ -98,6 +98,13 @@ function MobileView() {
             (window.location.href = 'https://s.hmif.dev/LowonginAja!')
           }
         />
+
+        <NavigationItem
+          src="/img/sparta.png"
+          alt="SPARTA"
+          title="SPARTA"
+          onClick={() => navigate({ to: '/home/internship' })}
+        />
       </section>
 
       <a href="https://pemilu.hmif.dev" className="m-4">

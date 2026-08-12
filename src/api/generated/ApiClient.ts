@@ -13,6 +13,7 @@ import { CompetitionsService } from './services/CompetitionsService';
 import { CourseService } from './services/CourseService';
 import { CurhatService } from './services/CurhatService';
 import { InfoService } from './services/InfoService';
+import { InternshipService } from './services/InternshipService';
 import { MarkdownService } from './services/MarkdownService';
 import { MediaService } from './services/MediaService';
 import { OpenGraphService } from './services/OpenGraphService';
@@ -33,6 +34,7 @@ export class ApiClient {
   public readonly course: CourseService;
   public readonly curhat: CurhatService;
   public readonly info: InfoService;
+  public readonly internship: InternshipService;
   public readonly markdown: MarkdownService;
   public readonly media: MediaService;
   public readonly openGraph: OpenGraphService;
@@ -64,6 +66,7 @@ export class ApiClient {
     this.course = new CourseService(this.request);
     this.curhat = new CurhatService(this.request);
     this.info = new InfoService(this.request);
+    this.internship = new InternshipService(this.request);
     this.markdown = new MarkdownService(this.request);
     this.media = new MediaService(this.request);
     this.openGraph = new OpenGraphService(this.request);
