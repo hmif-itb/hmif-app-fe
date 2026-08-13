@@ -39,7 +39,12 @@ function Timeline() {
     setSearchInput(value);
     timeoutRef.current = setTimeout(() => {
       navigate({
-        search: (prev) => ({
+        search: (prev: {
+          search?: string;
+          unread?: boolean;
+          excludeCategories?: string[];
+          sort?: string;
+        }) => ({
           ...prev,
           search: value || undefined,
         }),
@@ -54,7 +59,12 @@ function Timeline() {
       }
     });
     navigate({
-      search: (prev) => ({
+      search: (prev: {
+        search?: string;
+        unread?: boolean;
+        excludeCategories?: string[];
+        sort?: string;
+      }) => ({
         ...prev,
         ...data,
       }),

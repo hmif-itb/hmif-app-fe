@@ -130,7 +130,7 @@ function TestimoniListPage(): JSX.Element {
 
       <div className="mt-10 flex w-full items-center justify-between">
         <Link
-          search={(prev) => ({
+          search={(prev: { page?: number }) => ({
             ...prev,
             page: currentPage > 1 ? currentPage - 1 : currentPage,
           })}
@@ -180,7 +180,7 @@ function TestimoniListPage(): JSX.Element {
         </div>
 
         <Link
-          search={(prev) => ({
+          search={(prev: { page?: number }) => ({
             ...prev,
             page: currentPage < testiLength ? currentPage + 1 : currentPage,
           })}

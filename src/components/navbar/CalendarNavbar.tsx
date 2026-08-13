@@ -26,7 +26,7 @@ export default function CalendarNavbar() {
     if (newMonth < 0) {
       if (isQueryParamSet) {
         navigate({
-          search: (prev) => ({
+          search: (prev: { selectedDate?: number; selectedMonth?: number; selectedYear?: number }) => ({
             ...prev,
             selectedYear: selectedYear - 1,
             selectedMonth: 11,
@@ -44,7 +44,7 @@ export default function CalendarNavbar() {
     } else if (newMonth > 11) {
       if (isQueryParamSet) {
         navigate({
-          search: (prev) => ({
+          search: (prev: { selectedDate?: number; selectedMonth?: number; selectedYear?: number }) => ({
             ...prev,
             selectedYear: selectedYear + 1,
             selectedMonth: 0,
@@ -62,7 +62,7 @@ export default function CalendarNavbar() {
     } else {
       if (isQueryParamSet) {
         navigate({
-          search: (prev) => ({
+          search: (prev: { selectedDate?: number; selectedMonth?: number; selectedYear?: number }) => ({
             ...prev,
             selectedMonth: newMonth,
           }),
