@@ -5,9 +5,12 @@ import Profile from '~/components/navbar/profile';
 import NavigationItem from './navigation-item';
 import Timeline from '~/components/schedule/timeline';
 import MessageIcon from '~/assets/icons/curhat/message.svg';
+import useSpartaLock from '~/hooks/useSpartaLock';
+import LockedFeature from '~/components/locked-feature';
 
 function MobileView() {
   const navigate = useNavigate();
+  const isSpartaLocked = useSpartaLock();
 
   // const handleNavigation = (path: string) => {
   //   navigate({ to: path });
@@ -15,117 +18,135 @@ function MobileView() {
 
   return (
     <div className="flex flex-col items-center gap-4 font-inter lg:hidden">
-      {/* Profile Section */}
-      <Profile />
+      {isSpartaLocked && (
+        <div className="mt-4 w-full max-w-screen-md px-8">
+          <NavigationItem
+            src="/img/sparta.png"
+            alt="SPARTA"
+            title="SPARTA"
+            onClick={() => navigate({ to: '/home/internship' })}
+          />
+        </div>
+      )}
 
-      {/* Top Navigation Section */}
-      <section className="mt-4 flex w-full max-w-screen-md flex-wrap justify-center gap-x-6 gap-y-4 px-8">
-        <NavigationItem
-          src="/img/home/folder.svg"
-          alt="Ding Dong"
-          title="Ding Dong"
-          onClick={() => navigate({ to: '/home/dingdong' })}
-        />
+      <LockedFeature
+        locked={isSpartaLocked}
+        className="flex w-full flex-col items-center gap-4"
+      >
+        {/* Profile Section */}
+        <Profile />
 
-        <NavigationItem
-          src="/img/home/calendar.svg"
-          alt="Calendar"
-          title="Calendar"
-          onClick={() => navigate({ to: '/calendar' })}
-        />
+        {/* Top Navigation Section */}
+        <section className="mt-4 flex w-full max-w-screen-md flex-wrap justify-center gap-x-6 gap-y-4 px-8">
+          <NavigationItem
+            src="/img/home/folder.svg"
+            alt="Ding Dong"
+            title="Ding Dong"
+            onClick={() => navigate({ to: '/home/dingdong' })}
+          />
 
-        <NavigationItem
-          src="/img/home/nim-finder.svg"
-          alt="NIM Finder"
-          title="NIM Finder"
-          onClick={() => navigate({ to: '/home/nim-finder' })}
-        />
+          <NavigationItem
+            src="/img/home/calendar.svg"
+            alt="Calendar"
+            title="Calendar"
+            onClick={() => navigate({ to: '/calendar' })}
+          />
 
-        <NavigationItem
-          src="/img/home/file.svg"
-          alt="Testi Matkul"
-          title="Testi Matkul"
-          onClick={() => navigate({ to: '/home/testimoni' })}
-        />
+          <NavigationItem
+            src="/img/home/nim-finder.svg"
+            alt="NIM Finder"
+            title="NIM Finder"
+            onClick={() => navigate({ to: '/home/nim-finder' })}
+          />
 
-        <NavigationItem
-          src="/img/home/badge.svg"
-          alt="Info Lomba"
-          title="Info Lomba"
-          onClick={() => navigate({ to: '/home/competition' })}
-        />
+          <NavigationItem
+            src="/img/home/file.svg"
+            alt="Testi Matkul"
+            title="Testi Matkul"
+            onClick={() => navigate({ to: '/home/testimoni' })}
+          />
 
-        <NavigationItem
-          src={MessageIcon}
-          alt="Curhat Yuk"
-          title="Curhat Yuk!"
-          onClick={() => navigate({ to: '/home/curhat' })}
-        />
+          <NavigationItem
+            src="/img/home/badge.svg"
+            alt="Info Lomba"
+            title="Info Lomba"
+            onClick={() => navigate({ to: '/home/competition' })}
+          />
 
-        <NavigationItem
-          src="/img/home/scholarship.svg"
-          alt="Mading Beasiswa"
-          title="Beasiswa"
-          onClick={() =>
-            (window.location.href = 'http://s.hmif.dev/MadingBeasiswa')
-          }
-        />
+          <NavigationItem
+            src={MessageIcon}
+            alt="Curhat Yuk"
+            title="Curhat Yuk!"
+            onClick={() => navigate({ to: '/home/curhat' })}
+          />
 
-        <NavigationItem
-          src="/img/home/cash-flow.svg"
-          alt="Bayar Kas"
-          title="Bayar Kas!"
-          onClick={() =>
-            (window.location.href = 'http://s.hmif.dev/BayarKasHMIF')
-          }
-        />
+          <NavigationItem
+            src="/img/home/scholarship.svg"
+            alt="Mading Beasiswa"
+            title="Beasiswa"
+            onClick={() =>
+              (window.location.href = 'http://s.hmif.dev/MadingBeasiswa')
+            }
+          />
 
-        <NavigationItem
-          src="/img/home/proposal.svg"
-          alt="Pengajuan Surat dan Proposal"
-          title="Surat & Proposal"
-          onClick={() =>
-            (window.location.href =
-              'https://s.hmif.dev/LayananAdministrasiHMIF2526')
-          }
-        />
+          <NavigationItem
+            src="/img/home/cash-flow.svg"
+            alt="Bayar Kas"
+            title="Bayar Kas!"
+            onClick={() =>
+              (window.location.href = 'http://s.hmif.dev/BayarKasHMIF')
+            }
+          />
 
-        <NavigationItem
-          src="/img/home/jobs.svg"
-          alt="LowonginAja!"
-          title="LowonginAja!"
-          onClick={() =>
-            (window.location.href = 'https://s.hmif.dev/LowonginAja!')
-          }
-        />
+          <NavigationItem
+            src="/img/home/proposal.svg"
+            alt="Pengajuan Surat dan Proposal"
+            title="Surat & Proposal"
+            onClick={() =>
+              (window.location.href =
+                'https://s.hmif.dev/LayananAdministrasiHMIF2526')
+            }
+          />
 
-        <NavigationItem
-          src="/img/sparta.png"
-          alt="SPARTA"
-          title="SPARTA"
-          onClick={() => navigate({ to: '/home/internship' })}
-        />
-      </section>
+          <NavigationItem
+            src="/img/home/jobs.svg"
+            alt="LowonginAja!"
+            title="LowonginAja!"
+            onClick={() =>
+              (window.location.href = 'https://s.hmif.dev/LowonginAja!')
+            }
+          />
 
-      <a href="https://pemilu.hmif.dev" className="m-4">
-        <img
-          src="/img/pemilu-banner.png"
-          alt="Calendar"
-          className="rounded-xl"
-          width={2902}
-          height={1980}
-        />
-      </a>
+          {!isSpartaLocked && (
+            <NavigationItem
+              src="/img/sparta.png"
+              alt="SPARTA"
+              title="SPARTA"
+              onClick={() => navigate({ to: '/home/internship' })}
+            />
+          )}
+        </section>
 
-      {/* Calendar Section */}
-      {/* <section className="flex size-full justify-center px-4">
-        <Calendar />
-      </section> */}
+        <a href="https://pemilu.hmif.dev" className="m-4">
+          <img
+            src="/img/pemilu-banner.png"
+            alt="Calendar"
+            className="rounded-xl"
+            width={2902}
+            height={1980}
+          />
+        </a>
 
-      <Separator />
+        {/* Calendar Section */}
+        {/* <section className="flex size-full justify-center px-4">
+          <Calendar />
+        </section> */}
 
-      {/* Schedule Section */}
-      <Timeline />
+        <Separator />
+
+        {/* Schedule Section */}
+        <Timeline />
+      </LockedFeature>
     </div>
   );
 }

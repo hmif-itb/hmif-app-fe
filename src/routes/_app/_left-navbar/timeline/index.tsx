@@ -7,6 +7,8 @@ import { INFO_LIST_QUERY_KEY, INFO_QUERY_KEY } from '~/api/constants';
 import MegaphoneIcon from '~/assets/icons/megaphone.svg';
 import useWindowSize from '~/hooks/useWindowSize';
 import { DEBOUNCE_TIME } from '~/lib/constants';
+import useSpartaLock from '~/hooks/useSpartaLock';
+import LockedFeature from '~/components/locked-feature';
 import DesktopView from './-components/desktop-view';
 import MobileView from './-components/mobile-view';
 import { FilterProps } from './-types';
@@ -27,6 +29,7 @@ function Timeline() {
   const PAGE_SIZE = 10;
   const windowSize = useWindowSize();
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const isSpartaLocked = useSpartaLock();
 
   const navigate = useNavigate({ from: Route.fullPath });
   const { search, unread, excludeCategories, sort } = Route.useSearch();
@@ -106,7 +109,7 @@ function Timeline() {
 
   // TODO: fetching next page loading
   return (
-    <>
+    <LockedFeature locked={isSpartaLocked} className="flex size-full flex-col">
       {windowSize.width < 1024 ? (
         <MobileView
           isFetching={isLoading}
@@ -137,12 +140,14 @@ function Timeline() {
         />
       )}
 
-      <Link
-        to="/add-announcement"
-        className="fixed bottom-[120px] right-4 z-20 flex size-[4.5625rem] flex-col items-center justify-center rounded-full border-2 border-green-300 bg-yellow-75 lg:hidden"
-      >
-        <img src={MegaphoneIcon} className="mr-1 size-7" alt="" />
-      </Link>
-    </>
+      {!isSpartaLocked && (
+        <Link
+          to="/add-announcement"
+          className="fixed bottom-[120px] right-4 z-20 flex size-[4.5625rem] flex-col items-center justify-center rounded-full border-2 border-green-300 bg-yellow-75 lg:hidden"
+        >
+          <img src={MegaphoneIcon} className="mr-1 size-7" alt="" />
+        </Link>
+      )}
+    </LockedFeature>
   );
 }

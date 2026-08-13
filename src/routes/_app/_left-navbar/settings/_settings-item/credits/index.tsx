@@ -2,6 +2,8 @@ import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import Markdown from 'markdown-to-jsx';
 import { api } from '~/api/client';
+import useSpartaLock from '~/hooks/useSpartaLock';
+import LockedFeature from '~/components/locked-feature';
 
 export const Route = createFileRoute(
   '/_app/_left-navbar/settings/_settings-item/credits/',
@@ -10,6 +12,7 @@ export const Route = createFileRoute(
 });
 
 function CreditsPage() {
+  const isSpartaLocked = useSpartaLock();
   const { data: credits } = useQuery({
     queryKey: ['credits'],
     queryFn: () => api.markdown.getCredits(),
@@ -21,8 +24,10 @@ function CreditsPage() {
 
   if (!credits) return null;
   return (
-    <div className="prose prose-sm prose-invert relative text-center prose-h4:mt-2 prose-p:my-0 prose-p:text-white">
-      <Markdown>{credits.content}</Markdown>
-    </div>
+    <LockedFeature locked={isSpartaLocked}>
+      <div className="prose prose-sm prose-invert relative text-center prose-h4:mt-2 prose-p:my-0 prose-p:text-white">
+        <Markdown>{credits.content}</Markdown>
+      </div>
+    </LockedFeature>
   );
 }
