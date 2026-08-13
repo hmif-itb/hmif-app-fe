@@ -1,8 +1,9 @@
+import LockedFeature from '~/components/locked-feature';
 import UserInfo from '~/components/user/user-info';
 import useSession from '~/hooks/auth/useSession';
 import { useUserAcademic } from '~/hooks/useUserAcademic';
 
-function SettingsDekstop() {
+function SettingsDekstop({ locked = false }: { locked?: boolean }) {
   const user = useSession();
   const { userAcademic } = useUserAcademic();
   return (
@@ -16,12 +17,17 @@ function SettingsDekstop() {
         nameClassName="font-bold lg:text-heading-md"
         emailClassName="text-[#B0B3B0] lg:text-body-xl lg:text-neutral-darker"
       />
-      <ul className="mt-9 rounded-md border border-[#D2D5DA] p-6">
-        <ProfileItem title="NIM" text={user.nim} />
-        <ProfileItem title="Jenis Keanggotaan" text={user.membershipStatus} />
-        <ProfileItem title="Angkatan" text={`${user.major}'${user.angkatan}`} />
-        <ProfileItem title="Semester" text={`${userAcademic?.semester}`} />
-      </ul>
+      <LockedFeature locked={locked} className="mt-9">
+        <ul className="rounded-md border border-[#D2D5DA] p-6">
+          <ProfileItem title="NIM" text={user.nim} />
+          <ProfileItem title="Jenis Keanggotaan" text={user.membershipStatus} />
+          <ProfileItem
+            title="Angkatan"
+            text={`${user.major}'${user.angkatan}`}
+          />
+          <ProfileItem title="Semester" text={`${userAcademic?.semester}`} />
+        </ul>
+      </LockedFeature>
     </div>
   );
 }

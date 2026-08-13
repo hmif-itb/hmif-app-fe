@@ -42,7 +42,8 @@ function Index() {
                 src="/img/sparta.png"
                 alt="Logo sparta"
                 width={80}
-                height={46}
+                height={33}
+                className="mx-auto object-contain"
               />
             </Link>
           </Button>
