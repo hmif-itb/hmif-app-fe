@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.1",
   "type": "module",
+  "packageManager": "pnpm@9.15.0",
   "scripts": {
     "api": "openapi --input http://127.0.0.1:5001/doc --output src/api/generated --indent 2 --useUnionTypes --useOptions --name ApiClient",
     "api-staging": "openapi --input https://api.app-staging.hmif.dev/doc --output src/api/generated --indent 2 --useUnionTypes --useOptions --name ApiClient",
