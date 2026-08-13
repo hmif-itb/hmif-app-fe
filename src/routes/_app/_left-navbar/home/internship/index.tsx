@@ -162,13 +162,14 @@ function InternshipPage() {
                 />
               )}
 
-              <div className="flex items-center justify-between gap-3 border-t border-gray-200 pt-4">
+              <div className="flex flex-col items-stretch gap-2 border-t border-gray-200 pt-4 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
                 <Button
                   type="button"
                   variant="outlined"
                   size="sm"
                   disabled={step === 0}
                   onClick={() => setStep((s) => Math.max(0, s - 1))}
+                  className="w-full sm:w-auto"
                 >
                   Sebelumnya
                 </Button>
@@ -180,18 +181,20 @@ function InternshipPage() {
                     onClick={() =>
                       setStep((s) => Math.min(STEPS.length - 1, s + 1))
                     }
+                    className="w-full sm:w-auto"
                   >
                     Selanjutnya
                   </Button>
                 ) : (
                   !isLocked && (
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
                       <Button
                         type="button"
                         variant="outlined"
                         size="sm"
                         disabled={saveDraft.isPending}
                         onClick={handleSaveDraft}
+                        className="w-full sm:w-auto"
                       >
                         Simpan Draft
                       </Button>
@@ -200,6 +203,7 @@ function InternshipPage() {
                         size="sm"
                         disabled={submitFinal.isPending}
                         onClick={() => setConfirmOpen(true)}
+                        className="w-full sm:w-auto"
                       >
                         Kirim Pilihan
                       </Button>
