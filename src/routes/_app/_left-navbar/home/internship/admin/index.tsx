@@ -1,9 +1,6 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
 import { createFileRoute, Link, useRouter } from '@tanstack/react-router';
 import { ChevronLeft } from 'lucide-react';
-import { useState } from 'react';
-import { InView } from 'react-intersection-observer';
-import { api } from '~/api/client';
+import { useMemo, useState } from 'react';
 import { Button } from '~/components/ui/button';
 import {
   Select,
@@ -14,7 +11,11 @@ import {
 } from '~/components/ui/select';
 import useSession from '~/hooks/auth/useSession';
 import { isInRoles } from '~/lib/roles';
-import { useInternshipDepartments } from '../-useInternshipData';
+import {
+  useAllInternshipSubmissions,
+  useInternshipDepartments,
+} from '../-useInternshipData';
+import { InternshipStatsCharts } from './-components/InternshipStatsCharts';
 
 export const Route = createFileRoute(
   '/_app/_left-navbar/home/internship/admin/',
@@ -22,7 +23,7 @@ export const Route = createFileRoute(
   component: InternshipAdminPage,
 });
 
-const PAGE_SIZE = 20;
+const PRIORITY_OPTIONS = [1, 2, 3, 4] as const;
 
 function InternshipAdminPage() {
   const router = useRouter();
@@ -31,33 +32,48 @@ function InternshipAdminPage() {
 
   const [divisionId, setDivisionId] = useState<string>('all');
   const [locked, setLocked] = useState<'all' | 'true' | 'false'>('all');
+  const [priority, setPriority] = useState<string>('all');
 
-  const { data: departments } = useInternshipDepartments();
-  const divisions = (departments?.departments ?? []).flatMap((d) =>
-    (d.divisions ?? []).map((div) => ({ ...div, departmentName: d.name })),
+  const { data: departmentsData } = useInternshipDepartments();
+  const departments = departmentsData?.departments ?? [];
+  const divisions = departments.flatMap((d) =>
+    (d.divisions ?? []).map((div) => ({
+      id: div.id,
+      name: div.name,
+      departmentId: div.departmentId,
+      departmentName: d.name,
+    })),
+  );
+  const divisionById = new Map(divisions.map((d) => [d.id, d]));
+
+  const { data: allSubmissions, isLoading } = useAllInternshipSubmissions(
+    locked,
+    isAdmin,
   );
 
-  const {
-    data: submissions,
-    fetchNextPage,
-    isFetchingNextPage,
-  } = useInfiniteQuery({
-    queryKey: ['internship', 'admin', 'submissions', divisionId, locked],
-    queryFn: ({ pageParam }) =>
-      api.internship
-        .listInternshipSubmissions({
-          offset: pageParam,
-          divisionId: divisionId === 'all' ? undefined : divisionId,
-          locked: locked === 'all' ? undefined : locked,
-        })
-        .then((res) => res.submissions),
-    initialPageParam: 0,
-    getNextPageParam: (lastPage, _pages, lastOffset) =>
-      lastPage.length < PAGE_SIZE ? undefined : lastOffset + PAGE_SIZE,
-    enabled: isAdmin,
-  });
+  const filteredSubmissions = useMemo(() => {
+    const submissions = allSubmissions ?? [];
+    const priorityNum = priority === 'all' ? undefined : Number(priority);
 
-  const fetchWhenInView = () => !isFetchingNextPage && fetchNextPage();
+    return submissions.filter((sub) => {
+      if (priorityNum !== undefined) {
+        const choiceAtPriority = sub.choices?.find(
+          (c) => c.priorityOrder === priorityNum,
+        );
+        if (!choiceAtPriority) return false;
+        if (
+          divisionId !== 'all' &&
+          choiceAtPriority.divisionId !== divisionId
+        ) {
+          return false;
+        }
+      } else if (divisionId !== 'all') {
+        if (!sub.choices?.some((c) => c.divisionId === divisionId))
+          return false;
+      }
+      return true;
+    });
+  }, [allSubmissions, divisionId, priority]);
 
   if (!isAdmin) {
     return (
@@ -69,8 +85,6 @@ function InternshipAdminPage() {
       </div>
     );
   }
-
-  const flatSubmissions = submissions?.pages.flatMap((p) => p) ?? [];
 
   return (
     <div className="flex size-full h-screen flex-col overflow-hidden bg-green-50">
@@ -87,6 +101,12 @@ function InternshipAdminPage() {
         <div className="flex w-full flex-col gap-4 px-4 pb-24 lg:px-0">
           <h1 className="text-3xl font-bold">Data Pilihan Magang SPARTA</h1>
 
+          <InternshipStatsCharts
+            submissions={allSubmissions ?? []}
+            divisions={divisions}
+            departments={departments.map((d) => ({ id: d.id, name: d.name }))}
+          />
+
           <div className="flex flex-wrap items-center gap-3">
             <Select value={divisionId} onValueChange={setDivisionId}>
               <SelectTrigger className="w-64">
@@ -97,6 +117,20 @@ function InternshipAdminPage() {
                 {divisions.map((div) => (
                   <SelectItem key={div.id} value={div.id}>
                     {div.departmentName} - {div.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <Select value={priority} onValueChange={setPriority}>
+              <SelectTrigger className="w-44">
+                <SelectValue placeholder="Filter pilihan ke-" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Semua Pilihan</SelectItem>
+                {PRIORITY_OPTIONS.map((p) => (
+                  <SelectItem key={p} value={String(p)}>
+                    Pilihan {p}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -115,6 +149,10 @@ function InternshipAdminPage() {
                 <SelectItem value="false">Draft</SelectItem>
               </SelectContent>
             </Select>
+
+            <span className="text-sm text-neutral-darker">
+              {filteredSubmissions.length} submission
+            </span>
           </div>
 
           <div className="overflow-x-auto rounded-xl border border-gray-300">
@@ -126,64 +164,75 @@ function InternshipAdminPage() {
                   <th className="p-3">Jurusan</th>
                   <th className="p-3">Kelas</th>
                   <th className="p-3">Status</th>
+                  {PRIORITY_OPTIONS.map((p) => (
+                    <th key={p} className="p-3">
+                      Pilihan {p}
+                    </th>
+                  ))}
                   <th className="p-3"></th>
                 </tr>
               </thead>
               <tbody>
-                {flatSubmissions.map((sub, idx) => {
-                  const cells = (
-                    <>
-                      <td className="p-3">{sub.fullName}</td>
-                      <td className="p-3">{sub.nim}</td>
-                      <td className="p-3">{sub.jurusan}</td>
-                      <td className="p-3">{sub.kelas}</td>
-                      <td className="p-3">
-                        {sub.isLocked ? (
-                          <span className="rounded-full bg-green-200 px-2 py-1 text-xs">
-                            Terkunci
-                          </span>
-                        ) : (
-                          <span className="rounded-full bg-yellow-200 px-2 py-1 text-xs">
-                            Draft
-                          </span>
-                        )}
-                      </td>
-                      <td className="p-3">
-                        <Link
-                          to="/home/internship/admin/$submissionId"
-                          params={{ submissionId: sub.id }}
-                          className="text-blue-600 underline"
+                {filteredSubmissions.map((sub) => (
+                  <tr key={sub.id} className="border-t border-gray-200">
+                    <td className="p-3">{sub.fullName}</td>
+                    <td className="p-3">{sub.nim}</td>
+                    <td className="p-3">{sub.jurusan}</td>
+                    <td className="p-3">{sub.kelas}</td>
+                    <td className="p-3">
+                      {sub.isLocked ? (
+                        <span className="rounded-full bg-green-200 px-2 py-1 text-xs">
+                          Terkunci
+                        </span>
+                      ) : (
+                        <span className="rounded-full bg-yellow-200 px-2 py-1 text-xs">
+                          Draft
+                        </span>
+                      )}
+                    </td>
+                    {PRIORITY_OPTIONS.map((p) => {
+                      const choice = sub.choices?.find(
+                        (c) => c.priorityOrder === p,
+                      );
+                      const division = choice
+                        ? divisionById.get(choice.divisionId)
+                        : undefined;
+                      return (
+                        <td
+                          key={p}
+                          className="p-3 text-xs"
+                          title={
+                            division
+                              ? `${division.departmentName} - ${division.name}`
+                              : undefined
+                          }
                         >
-                          Detail
-                        </Link>
-                      </td>
-                    </>
-                  );
-
-                  if (idx === flatSubmissions.length - 1) {
-                    return (
-                      <InView
-                        key={sub.id}
-                        as="tr"
-                        className="border-t border-gray-200"
-                        onChange={(inView) => inView && fetchWhenInView()}
+                          {division ? division.name : '-'}
+                        </td>
+                      );
+                    })}
+                    <td className="p-3">
+                      <Link
+                        to="/home/internship/admin/$submissionId"
+                        params={{ submissionId: sub.id }}
+                        className="text-blue-600 underline"
                       >
-                        {cells}
-                      </InView>
-                    );
-                  }
-                  return (
-                    <tr key={sub.id} className="border-t border-gray-200">
-                      {cells}
-                    </tr>
-                  );
-                })}
+                        Detail
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
 
-            {flatSubmissions.length === 0 && (
+            {!isLoading && filteredSubmissions.length === 0 && (
               <p className="p-4 text-center text-sm text-neutral-darker">
                 Belum ada submission.
+              </p>
+            )}
+            {isLoading && (
+              <p className="p-4 text-center text-sm text-neutral-darker">
+                Memuat data...
               </p>
             )}
           </div>
