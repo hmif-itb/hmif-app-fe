@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useRouter } from '@tanstack/react-router';
-import { ChevronLeft } from 'lucide-react';
+import { ChevronLeft, Download } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { Button } from '~/components/ui/button';
 import {
@@ -16,6 +16,7 @@ import {
   useInternshipDepartments,
 } from '../-useInternshipData';
 import { InternshipStatsCharts } from './-components/InternshipStatsCharts';
+import { exportSubmissionsToCsv } from './-exportSubmissions';
 
 export const Route = createFileRoute(
   '/_app/_left-navbar/home/internship/admin/',
@@ -45,6 +46,11 @@ function InternshipAdminPage() {
     })),
   );
   const divisionById = new Map(divisions.map((d) => [d.id, d]));
+  const divisionEntityById = new Map(
+    departments.flatMap((d) =>
+      (d.divisions ?? []).map((div) => [div.id, div] as const),
+    ),
+  );
 
   const { data: allSubmissions, isLoading } = useAllInternshipSubmissions(
     locked,
@@ -153,6 +159,24 @@ function InternshipAdminPage() {
             <span className="text-sm text-neutral-darker">
               {filteredSubmissions.length} submission
             </span>
+
+            <Button
+              type="button"
+              variant="outlined"
+              size="sm"
+              className="ml-auto gap-2"
+              disabled={filteredSubmissions.length === 0}
+              onClick={() =>
+                exportSubmissionsToCsv(
+                  filteredSubmissions,
+                  divisions,
+                  divisionEntityById,
+                )
+              }
+            >
+              <Download className="size-4" />
+              Export CSV
+            </Button>
           </div>
 
           <div className="overflow-x-auto rounded-xl border border-gray-300">

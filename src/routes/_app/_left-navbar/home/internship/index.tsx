@@ -12,6 +12,7 @@ import {
 } from '~/components/ui/dialog';
 import useSession from '~/hooks/auth/useSession';
 import { isInRoles } from '~/lib/roles';
+import CountdownTimer from './-components/CountdownTimer';
 import DivisionQuestions from './-components/DivisionQuestions';
 import DivisionSelector from './-components/DivisionSelector';
 import GeneralInfoSection from './-components/GeneralInfoSection';
@@ -122,6 +123,8 @@ function InternshipPage() {
               mengubah jawaban lagi.
             </p>
           )}
+
+          {!isLocked && <CountdownTimer />}
 
           {isLoading || !departments ? (
             <p className="text-white">Memuat data...</p>

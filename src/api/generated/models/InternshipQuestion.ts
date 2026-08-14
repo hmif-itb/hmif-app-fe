@@ -5,7 +5,7 @@
 export type InternshipQuestion = {
   id: string;
   label: string;
-  type: 'text' | 'textarea' | 'select';
+  type: 'text' | 'textarea' | 'select' | 'radio' | 'checkbox' | 'file';
   options?: Array<string>;
   required: boolean;
 };

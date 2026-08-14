@@ -1,6 +1,9 @@
 import { useWatch, UseFormReturn } from 'react-hook-form';
 import { useState } from 'react';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { useMutation } from '@tanstack/react-query';
+import { ChevronDown, ChevronUp, Loader2, Paperclip } from 'lucide-react';
+import toast from 'react-hot-toast';
+import { api } from '~/api/client';
 import { InternshipDepartment } from '~/api/generated';
 import {
   Form,
@@ -13,6 +16,8 @@ import {
 import { Input } from '~/components/ui/input';
 import { Textarea } from '~/components/ui/textarea';
 import { Button } from '~/components/ui/button';
+import { RadioGroup, RadioGroupItem } from '~/components/ui/radio-group';
+import { CheckboxGroup } from '~/components/ui/checkbox';
 import {
   Select,
   SelectContent,
@@ -21,6 +26,65 @@ import {
   SelectValue,
 } from '~/components/ui/select';
 import { InternshipFormValues } from '../-constants';
+
+const CHECKBOX_ANSWER_SEPARATOR = ', ';
+
+function FileAnswerInput(
+  props: Readonly<{
+    value: string;
+    onChange: (value: string) => void;
+    disabled?: boolean;
+  }>,
+) {
+  const { value, onChange, disabled } = props;
+  const postMediaUpload = useMutation({
+    mutationFn: api.media.createPresignedUrl.bind(api.media),
+  });
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) return;
+    try {
+      const presigned = await postMediaUpload.mutateAsync({
+        requestBody: {
+          fileName: file.name.split('.')[0],
+          fileType: file.name.split('.').at(-1) ?? '',
+        },
+      });
+      await fetch(presigned.presignedUrl, { method: 'PUT', body: file });
+      onChange(presigned.mediaUrl);
+    } catch (err) {
+      console.error(err);
+      toast.error('Gagal mengunggah file');
+    }
+  };
+
+  return (
+    <div className="flex flex-col gap-2">
+      <Input
+        type="file"
+        onChange={handleFileChange}
+        disabled={disabled || postMediaUpload.isPending}
+      />
+      {postMediaUpload.isPending && (
+        <p className="flex items-center gap-1 text-xs text-neutral-darker">
+          <Loader2 className="size-3 animate-spin" /> Mengunggah...
+        </p>
+      )}
+      {value && !postMediaUpload.isPending && (
+        <a
+          href={value}
+          target="_blank"
+          rel="noreferrer"
+          className="flex items-center gap-1 text-xs text-green-800 underline"
+        >
+          <Paperclip className="size-3" /> Lihat file terunggah
+        </a>
+      )}
+    </div>
+  );
+}
 
 type ComponentProps = {
   form: UseFormReturn<InternshipFormValues>;
@@ -130,6 +194,44 @@ export default function DivisionQuestions(props: Readonly<ComponentProps>) {
                               ))}
                             </SelectContent>
                           </Select>
+                        ) : question.type === 'radio' ? (
+                          <RadioGroup
+                            value={field.value}
+                            onValueChange={field.onChange}
+                            disabled={disabled}
+                          >
+                            {(question.options ?? []).map((option) => (
+                              <label
+                                key={option}
+                                className="flex items-center gap-2 text-sm"
+                              >
+                                <RadioGroupItem value={option} />
+                                {option}
+                              </label>
+                            ))}
+                          </RadioGroup>
+                        ) : question.type === 'checkbox' ? (
+                          <CheckboxGroup
+                            choices={question.options ?? []}
+                            selectedValues={
+                              field.value
+                                ? field.value
+                                    .split(CHECKBOX_ANSWER_SEPARATOR)
+                                    .filter(Boolean)
+                                : []
+                            }
+                            onChange={(checked) =>
+                              field.onChange(
+                                checked.join(CHECKBOX_ANSWER_SEPARATOR),
+                              )
+                            }
+                          />
+                        ) : question.type === 'file' ? (
+                          <FileAnswerInput
+                            value={field.value}
+                            onChange={field.onChange}
+                            disabled={disabled}
+                          />
                         ) : question.type === 'text' ? (
                           <Input {...field} disabled={disabled} />
                         ) : (
