@@ -20,12 +20,6 @@ export default function DivisionSelector(props: Readonly<ComponentProps>) {
 
   const selectedIds = fields.map((f) => f.divisionId);
 
-  const normalizePriorities = () => {
-    fields.forEach((_, idx) => {
-      form.setValue(`choices.${idx}.priorityOrder`, idx + 1);
-    });
-  };
-
   const handleAdd = (division: InternshipDivision) => {
     if (fields.length >= MAX_DIVISION_CHOICES) return;
     append({
@@ -40,14 +34,23 @@ export default function DivisionSelector(props: Readonly<ComponentProps>) {
 
   const handleRemove = (idx: number) => {
     remove(idx);
-    setTimeout(normalizePriorities, 0);
+    fields
+      .filter((_, i) => i !== idx)
+      .forEach((_, i) => {
+        form.setValue(`choices.${i}.priorityOrder`, i + 1);
+      });
   };
 
   const handleMove = (idx: number, direction: -1 | 1) => {
     const target = idx + direction;
     if (target < 0 || target >= fields.length) return;
     move(idx, target);
-    setTimeout(normalizePriorities, 0);
+    const reordered = [...fields];
+    const [moved] = reordered.splice(idx, 1);
+    reordered.splice(target, 0, moved);
+    reordered.forEach((_, i) => {
+      form.setValue(`choices.${i}.priorityOrder`, i + 1);
+    });
   };
 
   const findDivision = (id: string) => {
