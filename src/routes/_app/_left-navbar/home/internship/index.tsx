@@ -1,6 +1,8 @@
 import { createFileRoute, Link, useRouter } from '@tanstack/react-router';
-import { ChevronLeft } from 'lucide-react';
+import { CheckCircle2, ChevronLeft, XCircle } from 'lucide-react';
 import { useState } from 'react';
+import { useWatch } from 'react-hook-form';
+import toast from 'react-hot-toast';
 import { Button } from '~/components/ui/button';
 import {
   Dialog,
@@ -17,7 +19,7 @@ import DivisionDescriptions from './-components/DivisionDescriptions';
 import DivisionQuestions from './-components/DivisionQuestions';
 import DivisionSelector from './-components/DivisionSelector';
 import GeneralInfoSection from './-components/GeneralInfoSection';
-import { ELIGIBLE_SPARTA_ANGKATAN } from './-constants';
+import { ELIGIBLE_SPARTA_ANGKATAN, MAX_DIVISION_CHOICES } from './-constants';
 import {
   useInternshipDepartments,
   useMyInternshipSubmission,
@@ -63,6 +65,66 @@ function InternshipPage() {
       onSuccess: () => setConfirmOpen(false),
     });
   });
+
+  const deptList = departments?.departments ?? [];
+  const findDivision = (id: string) =>
+    deptList.flatMap((d) => d.divisions ?? []).find((d) => d.id === id);
+
+  const watchedKelas = useWatch({ control: form.control, name: 'kelas' });
+  const watchedIdLine = useWatch({ control: form.control, name: 'idLine' });
+  const watchedChoices = useWatch({ control: form.control, name: 'choices' });
+
+  const isGeneralComplete = !!watchedKelas?.trim() && !!watchedIdLine?.trim();
+  const isDivisionComplete =
+    (watchedChoices?.length ?? 0) === MAX_DIVISION_CHOICES;
+  const isQuestionsComplete = (watchedChoices ?? []).every((choice) => {
+    const division = findDivision(choice.divisionId);
+    return (division?.questions ?? []).every(
+      (q, qIdx) => !q.required || !!choice.answers[qIdx]?.answer?.trim(),
+    );
+  });
+
+  const validateSubmission = async () => {
+    const isFormValid = await form.trigger();
+
+    const values = form.getValues();
+    let missingRequired = false;
+    values.choices.forEach((choice, choiceIdx) => {
+      const division = findDivision(choice.divisionId);
+      (division?.questions ?? []).forEach((q, qIdx) => {
+        if (q.required) {
+          const answer = choice.answers[qIdx]?.answer?.trim();
+          if (!answer) {
+            form.setError(`choices.${choiceIdx}.answers.${qIdx}.answer`, {
+              type: 'required',
+              message: 'Pertanyaan ini wajib diisi',
+            });
+            missingRequired = true;
+          }
+        }
+      });
+    });
+
+    if (!isFormValid || missingRequired) {
+      const errors = form.formState.errors;
+      const problemSteps: number[] = [];
+      if (errors.kelas || errors.idLine || errors.kesibukan)
+        problemSteps.push(0);
+      if (errors.choices) problemSteps.push(1);
+      if (missingRequired) problemSteps.push(3);
+      if (problemSteps.length > 0) setStep(Math.min(...problemSteps));
+      toast.error(
+        'Masih ada data yang wajib diisi. Periksa kembali formulir kamu.',
+      );
+      return false;
+    }
+    return true;
+  };
+
+  const handleOpenConfirm = async () => {
+    const ok = await validateSubmission();
+    if (ok) setConfirmOpen(true);
+  };
 
   if (!isEligible) {
     return (
@@ -213,7 +275,7 @@ function InternshipPage() {
                         type="button"
                         size="sm"
                         disabled={submitFinal.isPending}
-                        onClick={() => setConfirmOpen(true)}
+                        onClick={handleOpenConfirm}
                         className="w-full sm:w-auto"
                       >
                         Kirim Pilihan
@@ -222,6 +284,63 @@ function InternshipPage() {
                   )
                 )}
               </div>
+
+              {!isLocked && (
+                <div className="flex flex-col gap-1.5 rounded-lg border border-gray-200 bg-gray-50 p-3 text-sm">
+                  <p className="font-semibold text-neutral-black">
+                    Status Kelengkapan
+                  </p>
+                  <div className="flex items-center gap-2">
+                    {isGeneralComplete ? (
+                      <CheckCircle2 className="size-4 shrink-0 text-green-600" />
+                    ) : (
+                      <XCircle className="size-4 shrink-0 text-red-500" />
+                    )}
+                    <span
+                      className={
+                        isGeneralComplete
+                          ? 'text-neutral-darker'
+                          : 'text-red-600'
+                      }
+                    >
+                      Info Umum (Kelas & ID Line)
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {isDivisionComplete ? (
+                      <CheckCircle2 className="size-4 shrink-0 text-green-600" />
+                    ) : (
+                      <XCircle className="size-4 shrink-0 text-red-500" />
+                    )}
+                    <span
+                      className={
+                        isDivisionComplete
+                          ? 'text-neutral-darker'
+                          : 'text-red-600'
+                      }
+                    >
+                      Pilihan Divisi ({watchedChoices?.length ?? 0}/
+                      {MAX_DIVISION_CHOICES})
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {isQuestionsComplete ? (
+                      <CheckCircle2 className="size-4 shrink-0 text-green-600" />
+                    ) : (
+                      <XCircle className="size-4 shrink-0 text-red-500" />
+                    )}
+                    <span
+                      className={
+                        isQuestionsComplete
+                          ? 'text-neutral-darker'
+                          : 'text-red-600'
+                      }
+                    >
+                      Pertanyaan Wajib Tiap Divisi
+                    </span>
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </main>

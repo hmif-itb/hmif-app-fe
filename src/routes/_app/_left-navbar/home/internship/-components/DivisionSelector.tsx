@@ -1,4 +1,4 @@
-import { useFieldArray, UseFormReturn } from 'react-hook-form';
+import { useFieldArray, useFormState, UseFormReturn } from 'react-hook-form';
 import { ChevronDown, ChevronUp, X } from 'lucide-react';
 import { InternshipDepartment, InternshipDivision } from '~/api/generated';
 import { Button } from '~/components/ui/button';
@@ -17,6 +17,8 @@ export default function DivisionSelector(props: Readonly<ComponentProps>) {
     control: form.control,
     name: 'choices',
   });
+
+  const { errors } = useFormState({ control: form.control, name: 'choices' });
 
   const selectedIds = fields.map((f) => f.divisionId);
 
@@ -69,6 +71,10 @@ export default function DivisionSelector(props: Readonly<ComponentProps>) {
             Pilihan Kamu ({fields.length}/{MAX_DIVISION_CHOICES})
           </p>
         </div>
+
+        {errors.choices && (
+          <p className="text-sm text-red-600">{errors.choices.message}</p>
+        )}
 
         {fields.length === 0 && (
           <p className="text-sm text-neutral-darker">
