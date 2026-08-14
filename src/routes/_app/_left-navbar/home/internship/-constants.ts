@@ -29,8 +29,10 @@ export const internshipFormSchema = z.object({
   kesibukan: z.array(kesibukanSchema),
   choices: z
     .array(choiceSchema)
-    .min(1, 'Pilih minimal 1 divisi')
-    .max(MAX_DIVISION_CHOICES, `Pilih maksimal ${MAX_DIVISION_CHOICES} divisi`),
+    .length(
+      MAX_DIVISION_CHOICES,
+      `Wajib memilih ${MAX_DIVISION_CHOICES} divisi`,
+    ),
 });
 
 export type InternshipFormValues = z.infer<typeof internshipFormSchema>;

@@ -152,13 +152,6 @@ export default function DivisionSelector(props: Readonly<ComponentProps>) {
                     >
                       <div>
                         <p className="text-sm font-medium">{div.name}</p>
-                        {(div.quotaMin || div.quotaIdeal || div.quotaMax) && (
-                          <p className="text-xs text-neutral-darker">
-                            Kuota: {div.quotaMin ?? '-'} /{' '}
-                            {div.quotaIdeal ?? '-'} / {div.quotaMax ?? '-'}{' '}
-                            (min/ideal/max)
-                          </p>
-                        )}
                       </div>
                       <Button
                         type="button"

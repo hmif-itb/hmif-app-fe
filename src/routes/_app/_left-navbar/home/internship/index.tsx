@@ -13,6 +13,7 @@ import {
 import useSession from '~/hooks/auth/useSession';
 import { isInRoles } from '~/lib/roles';
 import CountdownTimer from './-components/CountdownTimer';
+import DivisionDescriptions from './-components/DivisionDescriptions';
 import DivisionQuestions from './-components/DivisionQuestions';
 import DivisionSelector from './-components/DivisionSelector';
 import GeneralInfoSection from './-components/GeneralInfoSection';
@@ -30,6 +31,7 @@ export const Route = createFileRoute('/_app/_left-navbar/home/internship/')({
 const STEPS = [
   { key: 'general', label: 'Info Umum' },
   { key: 'division', label: 'Pilih Divisi' },
+  { key: 'description', label: 'Penjelasan Divisi' },
   { key: 'questions', label: 'Pertanyaan Divisi' },
 ] as const;
 
@@ -158,6 +160,12 @@ function InternshipPage() {
                 />
               )}
               {step === 2 && (
+                <DivisionDescriptions
+                  form={form}
+                  departments={departments.departments ?? []}
+                />
+              )}
+              {step === 3 && (
                 <DivisionQuestions
                   form={form}
                   departments={departments.departments ?? []}

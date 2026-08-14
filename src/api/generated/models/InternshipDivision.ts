@@ -12,5 +12,6 @@ export type InternshipDivision = {
   quotaMax: number | null;
   questions: Array<InternshipQuestion>;
   questionsRaw: string | null;
+  description: string | null;
   order: number;
 };
