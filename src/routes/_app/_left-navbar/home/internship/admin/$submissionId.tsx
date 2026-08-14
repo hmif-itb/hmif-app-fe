@@ -19,14 +19,17 @@ function InternshipAdminDetailPage() {
   const user = useSession();
   const isAdmin = isInRoles(user, ['peoplemanage']);
 
-  const { data: departments } = useInternshipDepartments();
+  const { data: departments, isLoading: isLoadingDepartments } =
+    useInternshipDepartments();
 
-  const { data: submission, isLoading } = useQuery({
+  const { data: submission, isLoading: isLoadingSubmission } = useQuery({
     queryKey: ['internship', 'admin', 'submission', submissionId],
     queryFn: () =>
       api.internship.getInternshipSubmissionById({ id: submissionId }),
     enabled: isAdmin,
   });
+
+  const isLoading = isLoadingDepartments || isLoadingSubmission;
 
   const findDivision = (id: string) => {
     for (const dept of departments?.departments ?? []) {
