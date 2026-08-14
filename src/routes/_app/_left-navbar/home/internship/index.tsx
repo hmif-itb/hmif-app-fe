@@ -32,8 +32,8 @@ export const Route = createFileRoute('/_app/_left-navbar/home/internship/')({
 
 const STEPS = [
   { key: 'general', label: 'Info Umum' },
-  { key: 'division', label: 'Pilih Divisi' },
   { key: 'description', label: 'Penjelasan Divisi' },
+  { key: 'division', label: 'Pilih Divisi' },
   { key: 'questions', label: 'Pertanyaan Divisi' },
 ] as const;
 
@@ -110,7 +110,7 @@ function InternshipPage() {
       const problemSteps: number[] = [];
       if (errors.kelas || errors.idLine || errors.kesibukan)
         problemSteps.push(0);
-      if (errors.choices) problemSteps.push(1);
+      if (errors.choices) problemSteps.push(2);
       if (missingRequired) problemSteps.push(3);
       if (problemSteps.length > 0) setStep(Math.min(...problemSteps));
       toast.error(
@@ -215,16 +215,15 @@ function InternshipPage() {
                 <GeneralInfoSection form={form} disabled={isLocked} />
               )}
               {step === 1 && (
+                <DivisionDescriptions
+                  departments={departments.departments ?? []}
+                />
+              )}
+              {step === 2 && (
                 <DivisionSelector
                   form={form}
                   departments={departments.departments ?? []}
                   disabled={isLocked}
-                />
-              )}
-              {step === 2 && (
-                <DivisionDescriptions
-                  form={form}
-                  departments={departments.departments ?? []}
                 />
               )}
               {step === 3 && (
