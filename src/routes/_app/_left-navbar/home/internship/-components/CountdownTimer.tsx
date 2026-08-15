@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Clock } from 'lucide-react';
 
-const DEADLINE = new Date('2026-08-21T23:59:00+07:00');
+const DEADLINE = new Date('2026-08-23T23:59:00+07:00');
 
 function getTimeLeft() {
   const diff = DEADLINE.getTime() - Date.now();
@@ -49,7 +49,7 @@ export default function CountdownTimer() {
     <div className="flex w-full flex-col gap-2 rounded-lg bg-white/90 p-3">
       <p className="flex items-center gap-2 text-xs font-semibold text-neutral-black">
         <Clock className="size-4 shrink-0" />
-        Batas waktu pengisian: 21 Agustus 2026, 23.59 WIB
+        Batas waktu pengisian: 23 Agustus 2026, 23.59 WIB
       </p>
       <div className="flex items-center gap-2">
         {units.map((u) => (
