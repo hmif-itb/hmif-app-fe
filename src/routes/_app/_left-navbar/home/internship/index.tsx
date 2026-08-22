@@ -19,7 +19,8 @@ import DivisionDescriptions from './-components/DivisionDescriptions';
 import DivisionQuestions from './-components/DivisionQuestions';
 import DivisionSelector from './-components/DivisionSelector';
 import GeneralInfoSection from './-components/GeneralInfoSection';
-import { ELIGIBLE_SPARTA_ANGKATAN, MAX_DIVISION_CHOICES } from './-constants';
+import { isEligibleForSpartaInternship } from '~/lib/sparta';
+import { MAX_DIVISION_CHOICES } from './-constants';
 import {
   useInternshipDepartments,
   useMyInternshipSubmission,
@@ -40,7 +41,7 @@ const STEPS = [
 function InternshipPage() {
   const router = useRouter();
   const user = useSession();
-  const isEligible = ELIGIBLE_SPARTA_ANGKATAN.includes(user.angkatan);
+  const isEligible = isEligibleForSpartaInternship(user);
 
   const { data: departments, isLoading: isLoadingDepartments } =
     useInternshipDepartments();

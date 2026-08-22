@@ -1,7 +1,4 @@
 import { z } from 'zod';
-import { ELIGIBLE_SPARTA_ANGKATAN } from '~/lib/sparta';
-
-export { ELIGIBLE_SPARTA_ANGKATAN };
 
 export const MAX_DIVISION_CHOICES = 4;
 
