@@ -8,6 +8,7 @@ export const ELIGIBLE_SPARTA_NIM_OVERRIDES = [
   '13524108', // Daffa Mutaqin Tetaputra
   '18224053', // Nathan Pasha Athallah
   '18224112', // Muhammad Reyna Athallah Agoes
+  '18225025', // Rulyansyah
 ];
 
 export function isSpartaOnlyAngkatan(angkatan: number) {
