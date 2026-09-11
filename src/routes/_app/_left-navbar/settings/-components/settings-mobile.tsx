@@ -1,16 +1,11 @@
 import { Link } from '@tanstack/react-router';
-import LockedFeature from '~/components/locked-feature';
 import { Button } from '~/components/ui/button';
 import Avatar from '~/components/user/avatar';
 import useLogout from '~/hooks/auth/useLogout';
 import useSession from '~/hooks/auth/useSession';
 import { settingsOptions } from '../-config/settings-options';
 
-export default function SettingsMobile({
-  locked = false,
-}: {
-  locked?: boolean;
-}) {
+export default function SettingsMobile() {
   const user = useSession();
   const { logout } = useLogout();
   return (
@@ -35,10 +30,7 @@ export default function SettingsMobile({
             text={`${user.major}'${user.angkatan}`}
           />
         </ul>
-        <LockedFeature
-          locked={locked}
-          className="mt-6 flex flex-col gap-1 rounded-[0.375rem] bg-white"
-        >
+        <div className="mt-6 flex flex-col gap-1 rounded-[0.375rem] bg-white">
           {settingsOptions.map((option) => (
             <Link
               to={option.href}
@@ -49,7 +41,7 @@ export default function SettingsMobile({
               <span>{option.title}</span>
             </Link>
           ))}
-        </LockedFeature>
+        </div>
         <div className="mt-4 flex flex-1 items-center">
           <Button
             variant={'link'}

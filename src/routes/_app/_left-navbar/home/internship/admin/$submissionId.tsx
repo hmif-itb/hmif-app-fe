@@ -17,7 +17,7 @@ function InternshipAdminDetailPage() {
   const router = useRouter();
   const { submissionId } = Route.useParams();
   const user = useSession();
-  const isAdmin = isInRoles(user, ['peoplemanage']);
+  const isAdmin = isInRoles(user, ['peoplemanage', 'admin']);
 
   const { data: departments, isLoading: isLoadingDepartments } =
     useInternshipDepartments();

@@ -1,15 +1,19 @@
+import { ReactNode } from 'react';
 import { cn } from '~/lib/utils';
 import { Button } from '~/components/ui/button';
 
 function NavigationItem({
   src,
   alt,
+  icon,
   title,
   onClick,
   highlighted = false,
 }: {
-  src: string;
-  alt: string;
+  src?: string;
+  alt?: string;
+  /** Alternative to `src`/`alt` — render a component (e.g. a lucide-react icon) instead of an <img>. */
+  icon?: ReactNode;
   title: string;
   onClick: () => void;
   highlighted?: boolean;
@@ -31,11 +35,13 @@ function NavigationItem({
           )}
           onClick={onClick}
         >
-          <img
-            src={src}
-            alt={alt}
-            className="size-7 shrink-0 object-contain md:size-8"
-          />
+          {icon ?? (
+            <img
+              src={src}
+              alt={alt}
+              className="size-7 shrink-0 object-contain md:size-8"
+            />
+          )}
         </Button>
       </div>
       <p className={cn(highlighted && 'font-bold text-green-800')}>{title}</p>

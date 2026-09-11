@@ -7,3 +7,4 @@ export type InternshipKesibukan = {
   organisasi: string;
   periode: string;
 };
+

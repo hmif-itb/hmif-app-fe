@@ -12,3 +12,4 @@ export type InternshipSubmissionChoice = {
   answers: Array<InternshipAnswer>;
   division?: InternshipDivision;
 };
+

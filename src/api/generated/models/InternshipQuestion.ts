@@ -9,3 +9,4 @@ export type InternshipQuestion = {
   options?: Array<string>;
   required: boolean;
 };
+

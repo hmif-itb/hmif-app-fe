@@ -15,3 +15,4 @@ export type InternshipDivision = {
   description: string | null;
   order: number;
 };
+

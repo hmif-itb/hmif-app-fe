@@ -9,3 +9,4 @@ export type InternshipDepartment = {
   order: number;
   divisions?: Array<InternshipDivision>;
 };
+

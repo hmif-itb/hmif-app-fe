@@ -1,36 +1,24 @@
 import { useNavigate } from '@tanstack/react-router';
-import Calendar from '~/components/calendar';
+import { ShieldCheck } from 'lucide-react';
 import HeaderTitle from '~/components/header-title';
 import NavigationItem from './navigation-item';
 import Timeline from '~/components/schedule/timeline';
 import MessageIcon from '~/assets/icons/curhat/message.svg';
-import useSpartaLock from '~/hooks/useSpartaLock';
-import LockedFeature from '~/components/locked-feature';
+import FormIcon from '~/assets/icons/home/form.svg';
+import useSession from '~/hooks/auth/useSession';
+import { isInRoles } from '~/lib/roles';
 
 function DesktopView() {
   const navigate = useNavigate();
-  const isSpartaLocked = useSpartaLock();
+  const user = useSession();
+  const isAdminHub = isInRoles(user, ['admin', 'peoplemanage']);
 
   return (
     <div className="hidden size-full max-h-full flex-col overflow-hidden lg:flex">
       <HeaderTitle />
       <div className="flex h-0 flex-1 overflow-hidden">
         <div className="flex min-h-full flex-1 flex-col items-center gap-8 border-r border-gray-300 py-8">
-          {isSpartaLocked && (
-            <div className="w-full max-w-screen-md px-8">
-              <NavigationItem
-                src="/img/sparta.png"
-                alt="SPARTA"
-                title="SPARTA"
-                onClick={() => navigate({ to: '/home/internship' })}
-              />
-            </div>
-          )}
-
-          <LockedFeature
-            locked={isSpartaLocked}
-            className="flex w-full flex-col items-center gap-8"
-          >
+          <div className="flex w-full flex-col items-center gap-8">
             {/* Top Navigation Section */}
             <section className="flex h-[220px] w-full max-w-screen-md flex-wrap justify-center gap-x-12 gap-y-4 overflow-y-scroll px-8">
               <NavigationItem
@@ -112,12 +100,20 @@ function DesktopView() {
                 }
               />
 
-              {!isSpartaLocked && (
+              <NavigationItem
+                src={FormIcon}
+                alt="Form"
+                title="Form"
+                onClick={() => navigate({ to: '/home/form' })}
+              />
+
+              {isAdminHub && (
                 <NavigationItem
-                  src="/img/sparta.png"
-                  alt="SPARTA"
-                  title="SPARTA"
-                  onClick={() => navigate({ to: '/home/internship' })}
+                  icon={
+                    <ShieldCheck className="size-7 shrink-0 text-[#3C5B40] md:size-8" />
+                  }
+                  title="Admin"
+                  onClick={() => navigate({ to: '/home/admin' })}
                 />
               )}
             </section>
@@ -131,22 +127,12 @@ function DesktopView() {
                 height={1980}
               />
             </a>
-
-            {/* Calendar */}
-            {/* <div className="">
-              <Calendar />
-            </div> */}
-          </LockedFeature>
+          </div>
         </div>
 
         {/* Schedule Section */}
         <div className="flex flex-1 flex-col self-stretch overflow-y-auto py-8">
-          <LockedFeature
-            locked={isSpartaLocked}
-            className="flex size-full flex-col"
-          >
-            <Timeline />
-          </LockedFeature>
+          <Timeline />
         </div>
       </div>
     </div>

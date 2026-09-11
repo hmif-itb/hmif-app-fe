@@ -6,3 +6,4 @@ export type InternshipAnswer = {
   questionId: string;
   answer: string;
 };
+

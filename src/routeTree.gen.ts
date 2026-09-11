@@ -30,18 +30,23 @@ import { Route as AppLeftNavbarTimelineInfoIdIndexImport } from './routes/_app/_
 import { Route as AppLeftNavbarHomeTestimoniIndexImport } from './routes/_app/_left-navbar/home/testimoni/index'
 import { Route as AppLeftNavbarHomeNimFinderIndexImport } from './routes/_app/_left-navbar/home/nim-finder/index'
 import { Route as AppLeftNavbarHomeInternshipIndexImport } from './routes/_app/_left-navbar/home/internship/index'
+import { Route as AppLeftNavbarHomeFormIndexImport } from './routes/_app/_left-navbar/home/form/index'
 import { Route as AppLeftNavbarHomeDingdongIndexImport } from './routes/_app/_left-navbar/home/dingdong/index'
 import { Route as AppLeftNavbarHomeCurhatIndexImport } from './routes/_app/_left-navbar/home/curhat/index'
 import { Route as AppLeftNavbarHomeCompetitionIndexImport } from './routes/_app/_left-navbar/home/competition/index'
+import { Route as AppLeftNavbarHomeAdminIndexImport } from './routes/_app/_left-navbar/home/admin/index'
+import { Route as AppLeftNavbarHomeFormFormIdImport } from './routes/_app/_left-navbar/home/form/$formId'
 import { Route as AppLeftNavbarSettingsSettingsItemSubscriptionsIndexImport } from './routes/_app/_left-navbar/settings/_settings-item/subscriptions/index'
 import { Route as AppLeftNavbarSettingsSettingsItemCreditsIndexImport } from './routes/_app/_left-navbar/settings/_settings-item/credits/index'
 import { Route as AppLeftNavbarSettingsSettingsItemCoursesIndexImport } from './routes/_app/_left-navbar/settings/_settings-item/courses/index'
 import { Route as AppLeftNavbarHomeTestimoniTypeIndexImport } from './routes/_app/_left-navbar/home/testimoni/$type/index'
 import { Route as AppLeftNavbarHomeRekomendasiRekomendasiIdIndexImport } from './routes/_app/_left-navbar/home/rekomendasi/$rekomendasiId/index'
 import { Route as AppLeftNavbarHomeInternshipAdminIndexImport } from './routes/_app/_left-navbar/home/internship/admin/index'
+import { Route as AppLeftNavbarHomeAdminFormsIndexImport } from './routes/_app/_left-navbar/home/admin/forms/index'
 import { Route as AppLeftNavbarHomeInternshipAdminSubmissionIdImport } from './routes/_app/_left-navbar/home/internship/admin/$submissionId'
 import { Route as AppLeftNavbarSettingsSettingsItemCoursesAddIndexImport } from './routes/_app/_left-navbar/settings/_settings-item/courses/add/index'
 import { Route as AppLeftNavbarHomeTestimoniTypeSemesterIndexImport } from './routes/_app/_left-navbar/home/testimoni/$type/$semester/index'
+import { Route as AppLeftNavbarHomeAdminFormsFormIdIndexImport } from './routes/_app/_left-navbar/home/admin/forms/$formId/index'
 import { Route as AppLeftNavbarHomeTestimoniTypeSemesterCourseIdIndexImport } from './routes/_app/_left-navbar/home/testimoni_/$type/$semester/$courseId/index'
 
 // Create Virtual Routes
@@ -152,6 +157,13 @@ const AppLeftNavbarHomeInternshipIndexRoute =
     getParentRoute: () => AppLeftNavbarRoute,
   } as any)
 
+const AppLeftNavbarHomeFormIndexRoute = AppLeftNavbarHomeFormIndexImport.update(
+  {
+    path: '/home/form/',
+    getParentRoute: () => AppLeftNavbarRoute,
+  } as any,
+)
+
 const AppLeftNavbarHomeDingdongIndexRoute =
   AppLeftNavbarHomeDingdongIndexImport.update({
     path: '/home/dingdong/',
@@ -167,6 +179,18 @@ const AppLeftNavbarHomeCurhatIndexRoute =
 const AppLeftNavbarHomeCompetitionIndexRoute =
   AppLeftNavbarHomeCompetitionIndexImport.update({
     path: '/home/competition/',
+    getParentRoute: () => AppLeftNavbarRoute,
+  } as any)
+
+const AppLeftNavbarHomeAdminIndexRoute =
+  AppLeftNavbarHomeAdminIndexImport.update({
+    path: '/home/admin/',
+    getParentRoute: () => AppLeftNavbarRoute,
+  } as any)
+
+const AppLeftNavbarHomeFormFormIdRoute =
+  AppLeftNavbarHomeFormFormIdImport.update({
+    path: '/home/form/$formId',
     getParentRoute: () => AppLeftNavbarRoute,
   } as any)
 
@@ -206,6 +230,12 @@ const AppLeftNavbarHomeInternshipAdminIndexRoute =
     getParentRoute: () => AppLeftNavbarRoute,
   } as any)
 
+const AppLeftNavbarHomeAdminFormsIndexRoute =
+  AppLeftNavbarHomeAdminFormsIndexImport.update({
+    path: '/home/admin/forms/',
+    getParentRoute: () => AppLeftNavbarRoute,
+  } as any)
+
 const AppLeftNavbarHomeInternshipAdminSubmissionIdRoute =
   AppLeftNavbarHomeInternshipAdminSubmissionIdImport.update({
     path: '/home/internship/admin/$submissionId',
@@ -222,6 +252,12 @@ const AppLeftNavbarHomeTestimoniTypeSemesterIndexRoute =
   AppLeftNavbarHomeTestimoniTypeSemesterIndexImport.update({
     path: '/$type/$semester/',
     getParentRoute: () => AppLeftNavbarHomeTestimoniRoute,
+  } as any)
+
+const AppLeftNavbarHomeAdminFormsFormIdIndexRoute =
+  AppLeftNavbarHomeAdminFormsFormIdIndexImport.update({
+    path: '/home/admin/forms/$formId/',
+    getParentRoute: () => AppLeftNavbarRoute,
   } as any)
 
 const AppLeftNavbarHomeTestimoniTypeSemesterCourseIdIndexRoute =
@@ -332,6 +368,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppLeftNavbarTimelineIndexImport
       parentRoute: typeof AppLeftNavbarImport
     }
+    '/_app/_left-navbar/home/form/$formId': {
+      id: '/_app/_left-navbar/home/form/$formId'
+      path: '/home/form/$formId'
+      fullPath: '/home/form/$formId'
+      preLoaderRoute: typeof AppLeftNavbarHomeFormFormIdImport
+      parentRoute: typeof AppLeftNavbarImport
+    }
+    '/_app/_left-navbar/home/admin/': {
+      id: '/_app/_left-navbar/home/admin/'
+      path: '/home/admin'
+      fullPath: '/home/admin'
+      preLoaderRoute: typeof AppLeftNavbarHomeAdminIndexImport
+      parentRoute: typeof AppLeftNavbarImport
+    }
     '/_app/_left-navbar/home/competition/': {
       id: '/_app/_left-navbar/home/competition/'
       path: '/home/competition'
@@ -351,6 +401,13 @@ declare module '@tanstack/react-router' {
       path: '/home/dingdong'
       fullPath: '/home/dingdong'
       preLoaderRoute: typeof AppLeftNavbarHomeDingdongIndexImport
+      parentRoute: typeof AppLeftNavbarImport
+    }
+    '/_app/_left-navbar/home/form/': {
+      id: '/_app/_left-navbar/home/form/'
+      path: '/home/form'
+      fullPath: '/home/form'
+      preLoaderRoute: typeof AppLeftNavbarHomeFormIndexImport
       parentRoute: typeof AppLeftNavbarImport
     }
     '/_app/_left-navbar/home/internship/': {
@@ -386,6 +443,13 @@ declare module '@tanstack/react-router' {
       path: '/home/internship/admin/$submissionId'
       fullPath: '/home/internship/admin/$submissionId'
       preLoaderRoute: typeof AppLeftNavbarHomeInternshipAdminSubmissionIdImport
+      parentRoute: typeof AppLeftNavbarImport
+    }
+    '/_app/_left-navbar/home/admin/forms/': {
+      id: '/_app/_left-navbar/home/admin/forms/'
+      path: '/home/admin/forms'
+      fullPath: '/home/admin/forms'
+      preLoaderRoute: typeof AppLeftNavbarHomeAdminFormsIndexImport
       parentRoute: typeof AppLeftNavbarImport
     }
     '/_app/_left-navbar/home/internship/admin/': {
@@ -429,6 +493,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/settings/subscriptions'
       preLoaderRoute: typeof AppLeftNavbarSettingsSettingsItemSubscriptionsIndexImport
       parentRoute: typeof AppLeftNavbarSettingsSettingsItemImport
+    }
+    '/_app/_left-navbar/home/admin/forms/$formId/': {
+      id: '/_app/_left-navbar/home/admin/forms/$formId/'
+      path: '/home/admin/forms/$formId'
+      fullPath: '/home/admin/forms/$formId'
+      preLoaderRoute: typeof AppLeftNavbarHomeAdminFormsFormIdIndexImport
+      parentRoute: typeof AppLeftNavbarImport
     }
     '/_app/_left-navbar/home/testimoni/$type/$semester/': {
       id: '/_app/_left-navbar/home/testimoni/$type/$semester/'
@@ -479,15 +550,20 @@ export const routeTree = rootRoute.addChildren({
       AppLeftNavbarAddAnnouncementIndexRoute,
       AppLeftNavbarHomeIndexRoute,
       AppLeftNavbarTimelineIndexRoute,
+      AppLeftNavbarHomeFormFormIdRoute,
+      AppLeftNavbarHomeAdminIndexRoute,
       AppLeftNavbarHomeCompetitionIndexRoute,
       AppLeftNavbarHomeCurhatIndexRoute,
       AppLeftNavbarHomeDingdongIndexRoute,
+      AppLeftNavbarHomeFormIndexRoute,
       AppLeftNavbarHomeInternshipIndexRoute,
       AppLeftNavbarHomeNimFinderIndexRoute,
       AppLeftNavbarTimelineInfoIdIndexRoute,
       AppLeftNavbarHomeInternshipAdminSubmissionIdRoute,
+      AppLeftNavbarHomeAdminFormsIndexRoute,
       AppLeftNavbarHomeInternshipAdminIndexRoute,
       AppLeftNavbarHomeRekomendasiRekomendasiIdIndexRoute,
+      AppLeftNavbarHomeAdminFormsFormIdIndexRoute,
       AppLeftNavbarHomeTestimoniTypeSemesterCourseIdIndexRoute,
     }),
     AppCalendarRoute: AppCalendarRoute.addChildren({ AppCalendarIndexRoute }),
@@ -529,15 +605,20 @@ export const routeTree = rootRoute.addChildren({
         "/_app/_left-navbar/add-announcement/",
         "/_app/_left-navbar/home/",
         "/_app/_left-navbar/timeline/",
+        "/_app/_left-navbar/home/form/$formId",
+        "/_app/_left-navbar/home/admin/",
         "/_app/_left-navbar/home/competition/",
         "/_app/_left-navbar/home/curhat/",
         "/_app/_left-navbar/home/dingdong/",
+        "/_app/_left-navbar/home/form/",
         "/_app/_left-navbar/home/internship/",
         "/_app/_left-navbar/home/nim-finder/",
         "/_app/_left-navbar/timeline/$infoId/",
         "/_app/_left-navbar/home/internship/admin/$submissionId",
+        "/_app/_left-navbar/home/admin/forms/",
         "/_app/_left-navbar/home/internship/admin/",
         "/_app/_left-navbar/home/rekomendasi/$rekomendasiId/",
+        "/_app/_left-navbar/home/admin/forms/$formId/",
         "/_app/_left-navbar/home/testimoni/$type/$semester/$courseId/"
       ]
     },
@@ -601,6 +682,14 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "_app/_left-navbar/timeline/index.tsx",
       "parent": "/_app/_left-navbar"
     },
+    "/_app/_left-navbar/home/form/$formId": {
+      "filePath": "_app/_left-navbar/home/form/$formId.tsx",
+      "parent": "/_app/_left-navbar"
+    },
+    "/_app/_left-navbar/home/admin/": {
+      "filePath": "_app/_left-navbar/home/admin/index.tsx",
+      "parent": "/_app/_left-navbar"
+    },
     "/_app/_left-navbar/home/competition/": {
       "filePath": "_app/_left-navbar/home/competition/index.tsx",
       "parent": "/_app/_left-navbar"
@@ -611,6 +700,10 @@ export const routeTree = rootRoute.addChildren({
     },
     "/_app/_left-navbar/home/dingdong/": {
       "filePath": "_app/_left-navbar/home/dingdong/index.tsx",
+      "parent": "/_app/_left-navbar"
+    },
+    "/_app/_left-navbar/home/form/": {
+      "filePath": "_app/_left-navbar/home/form/index.tsx",
       "parent": "/_app/_left-navbar"
     },
     "/_app/_left-navbar/home/internship/": {
@@ -631,6 +724,10 @@ export const routeTree = rootRoute.addChildren({
     },
     "/_app/_left-navbar/home/internship/admin/$submissionId": {
       "filePath": "_app/_left-navbar/home/internship/admin/$submissionId.tsx",
+      "parent": "/_app/_left-navbar"
+    },
+    "/_app/_left-navbar/home/admin/forms/": {
+      "filePath": "_app/_left-navbar/home/admin/forms/index.tsx",
       "parent": "/_app/_left-navbar"
     },
     "/_app/_left-navbar/home/internship/admin/": {
@@ -656,6 +753,10 @@ export const routeTree = rootRoute.addChildren({
     "/_app/_left-navbar/settings/_settings-item/subscriptions/": {
       "filePath": "_app/_left-navbar/settings/_settings-item/subscriptions/index.tsx",
       "parent": "/_app/_left-navbar/settings/_settings-item"
+    },
+    "/_app/_left-navbar/home/admin/forms/$formId/": {
+      "filePath": "_app/_left-navbar/home/admin/forms/$formId/index.tsx",
+      "parent": "/_app/_left-navbar"
     },
     "/_app/_left-navbar/home/testimoni/$type/$semester/": {
       "filePath": "_app/_left-navbar/home/testimoni/$type/$semester/index.tsx",

@@ -27,27 +27,6 @@ function Index() {
         >
           <Link to="/login">Log in</Link>
         </Button>
-
-        <div className="flex flex-col gap-1">
-          <p className="w-full text-center text-xs font-light max-lg:text-white">
-            Are you a SPARTAN?
-          </p>
-          <Button
-            variant="outlined"
-            className="mt-1 w-full p-1 max-lg:border-white max-lg:text-white"
-            asChild
-          >
-            <Link to="/home/internship">
-              <img
-                src="/img/sparta.png"
-                alt="Logo sparta"
-                width={80}
-                height={33}
-                className="mx-auto object-contain"
-              />
-            </Link>
-          </Button>
-        </div>
       </div>
     </LoginLayout>
   );

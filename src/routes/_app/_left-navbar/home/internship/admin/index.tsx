@@ -1,6 +1,10 @@
 import { createFileRoute, Link, useRouter } from '@tanstack/react-router';
 import { ChevronLeft, Download } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import { InternshipSubmission } from '~/api/generated';
+import AdminResponsiveTable, {
+  AdminTableColumn,
+} from '~/components/admin/AdminResponsiveTable';
 import { Button } from '~/components/ui/button';
 import {
   Select,
@@ -29,7 +33,7 @@ const PRIORITY_OPTIONS = [1, 2, 3, 4] as const;
 function InternshipAdminPage() {
   const router = useRouter();
   const user = useSession();
-  const isAdmin = isInRoles(user, ['peoplemanage']);
+  const isAdmin = isInRoles(user, ['peoplemanage', 'admin']);
 
   const [divisionId, setDivisionId] = useState<string>('all');
   const [locked, setLocked] = useState<'all' | 'true' | 'false'>('all');
@@ -179,87 +183,60 @@ function InternshipAdminPage() {
             </Button>
           </div>
 
-          <div className="overflow-x-auto rounded-xl border border-gray-300">
-            <table className="w-full text-left text-sm">
-              <thead className="bg-gray-100">
-                <tr>
-                  <th className="p-3">Nama</th>
-                  <th className="p-3">NIM</th>
-                  <th className="p-3">Jurusan</th>
-                  <th className="p-3">Kelas</th>
-                  <th className="p-3">Status</th>
-                  {PRIORITY_OPTIONS.map((p) => (
-                    <th key={p} className="p-3">
-                      Pilihan {p}
-                    </th>
-                  ))}
-                  <th className="p-3"></th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredSubmissions.map((sub) => (
-                  <tr key={sub.id} className="border-t border-gray-200">
-                    <td className="p-3">{sub.fullName}</td>
-                    <td className="p-3">{sub.nim}</td>
-                    <td className="p-3">{sub.jurusan}</td>
-                    <td className="p-3">{sub.kelas}</td>
-                    <td className="p-3">
-                      {sub.isLocked ? (
-                        <span className="rounded-full bg-green-200 px-2 py-1 text-xs">
-                          Terkunci
-                        </span>
-                      ) : (
-                        <span className="rounded-full bg-yellow-200 px-2 py-1 text-xs">
-                          Draft
-                        </span>
-                      )}
-                    </td>
-                    {PRIORITY_OPTIONS.map((p) => {
-                      const choice = sub.choices?.find(
-                        (c) => c.priorityOrder === p,
-                      );
-                      const division = choice
-                        ? divisionById.get(choice.divisionId)
-                        : undefined;
-                      return (
-                        <td
-                          key={p}
-                          className="p-3 text-xs"
-                          title={
-                            division
-                              ? `${division.departmentName} - ${division.name}`
-                              : undefined
-                          }
-                        >
-                          {division ? division.name : '-'}
-                        </td>
-                      );
-                    })}
-                    <td className="p-3">
-                      <Link
-                        to="/home/internship/admin/$submissionId"
-                        params={{ submissionId: sub.id }}
-                        className="text-blue-600 underline"
-                      >
-                        Detail
-                      </Link>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-
-            {!isLoading && filteredSubmissions.length === 0 && (
-              <p className="p-4 text-center text-sm text-neutral-darker">
-                Belum ada submission.
-              </p>
-            )}
-            {isLoading && (
-              <p className="p-4 text-center text-sm text-neutral-darker">
-                Memuat data...
-              </p>
-            )}
-          </div>
+          <AdminResponsiveTable
+            columns={
+              [
+                { key: 'fullName', header: 'Nama', render: (s) => s.fullName },
+                { key: 'nim', header: 'NIM', render: (s) => s.nim },
+                { key: 'jurusan', header: 'Jurusan', render: (s) => s.jurusan },
+                { key: 'kelas', header: 'Kelas', render: (s) => s.kelas },
+                {
+                  key: 'status',
+                  header: 'Status',
+                  render: (s) =>
+                    s.isLocked ? (
+                      <span className="rounded-full bg-green-200 px-2 py-1 text-xs">
+                        Terkunci
+                      </span>
+                    ) : (
+                      <span className="rounded-full bg-yellow-200 px-2 py-1 text-xs">
+                        Draft
+                      </span>
+                    ),
+                },
+                ...PRIORITY_OPTIONS.map((p) => ({
+                  key: `priority-${p}`,
+                  header: `Pilihan ${p}`,
+                  render: (s: InternshipSubmission) => {
+                    const choice = s.choices?.find(
+                      (c) => c.priorityOrder === p,
+                    );
+                    const division = choice
+                      ? divisionById.get(choice.divisionId)
+                      : undefined;
+                    return division ? division.name : '-';
+                  },
+                })),
+                {
+                  key: 'detail',
+                  header: '',
+                  render: (s) => (
+                    <Link
+                      to="/home/internship/admin/$submissionId"
+                      params={{ submissionId: s.id }}
+                      className="text-blue-600 underline"
+                    >
+                      Detail
+                    </Link>
+                  ),
+                },
+              ] satisfies AdminTableColumn<InternshipSubmission>[]
+            }
+            rows={filteredSubmissions}
+            rowKey={(s) => s.id}
+            isLoading={isLoading}
+            emptyMessage="Belum ada submission."
+          />
         </div>
       </div>
     </div>

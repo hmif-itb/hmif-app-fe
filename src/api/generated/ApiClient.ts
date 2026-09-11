@@ -12,6 +12,7 @@ import { CommentService } from './services/CommentService';
 import { CompetitionsService } from './services/CompetitionsService';
 import { CourseService } from './services/CourseService';
 import { CurhatService } from './services/CurhatService';
+import { FormService } from './services/FormService';
 import { InfoService } from './services/InfoService';
 import { InternshipService } from './services/InternshipService';
 import { MarkdownService } from './services/MarkdownService';
@@ -33,6 +34,7 @@ export class ApiClient {
   public readonly competitions: CompetitionsService;
   public readonly course: CourseService;
   public readonly curhat: CurhatService;
+  public readonly form: FormService;
   public readonly info: InfoService;
   public readonly internship: InternshipService;
   public readonly markdown: MarkdownService;
@@ -65,6 +67,7 @@ export class ApiClient {
     this.competitions = new CompetitionsService(this.request);
     this.course = new CourseService(this.request);
     this.curhat = new CurhatService(this.request);
+    this.form = new FormService(this.request);
     this.info = new InfoService(this.request);
     this.internship = new InternshipService(this.request);
     this.markdown = new MarkdownService(this.request);

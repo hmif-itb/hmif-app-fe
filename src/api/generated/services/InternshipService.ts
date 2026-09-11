@@ -57,6 +57,9 @@ export class InternshipService {
     id,
     requestBody,
   }: {
+    /**
+     * Id
+     */
     id: string,
     requestBody?: {
       name?: string;
@@ -83,6 +86,9 @@ export class InternshipService {
   public deleteInternshipDepartment({
     id,
   }: {
+    /**
+     * Id
+     */
     id: string,
   }): CancelablePromise<InternshipDepartment> {
     return this.httpRequest.request({
@@ -111,6 +117,7 @@ export class InternshipService {
       quotaMax?: number | null;
       questions?: Array<InternshipQuestion>;
       questionsRaw?: string | null;
+      description?: string | null;
       order?: number;
     },
   }): CancelablePromise<InternshipDivision> {
@@ -132,6 +139,9 @@ export class InternshipService {
     id,
     requestBody,
   }: {
+    /**
+     * Id
+     */
     id: string,
     requestBody?: {
       departmentId?: string;
@@ -141,6 +151,7 @@ export class InternshipService {
       quotaMax?: number | null;
       questions?: Array<InternshipQuestion>;
       questionsRaw?: string | null;
+      description?: string | null;
       order?: number;
     },
   }): CancelablePromise<InternshipDivision> {
@@ -164,6 +175,9 @@ export class InternshipService {
   public deleteInternshipDivision({
     id,
   }: {
+    /**
+     * Id
+     */
     id: string,
   }): CancelablePromise<InternshipDivision> {
     return this.httpRequest.request({
@@ -178,10 +192,10 @@ export class InternshipService {
     });
   }
   /**
-   * @returns any My submission (null if not yet created)
+   * @returns InternshipSubmission My submission (null if not yet created)
    * @throws ApiError
    */
-  public getMyInternshipSubmission(): CancelablePromise<InternshipSubmission | null> {
+  public getMyInternshipSubmission(): CancelablePromise<InternshipSubmission> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/api/internship/submission',
@@ -201,7 +215,10 @@ export class InternshipService {
       kelas: string;
       idLine: string;
       pengalamanOrganisasi?: string;
-      kesibukan: Array<InternshipKesibukan>;
+      kesibukan?: Array<InternshipKesibukan>;
+      /**
+       * Pilihan divisi berdasarkan prioritas, wajib tepat 4
+       */
       choices: Array<{
         divisionId: string;
         priorityOrder: number;
@@ -232,7 +249,10 @@ export class InternshipService {
       kelas: string;
       idLine: string;
       pengalamanOrganisasi?: string;
-      kesibukan: Array<InternshipKesibukan>;
+      kesibukan?: Array<InternshipKesibukan>;
+      /**
+       * Pilihan divisi berdasarkan prioritas, wajib tepat 4
+       */
       choices: Array<{
         divisionId: string;
         priorityOrder: number;
@@ -269,7 +289,7 @@ export class InternshipService {
      * Filter by lock status
      */
     locked?: 'true' | 'false',
-    offset?: number,
+    offset?: number | null,
   }): CancelablePromise<{
     submissions: Array<InternshipSubmission>;
   }> {
@@ -282,7 +302,7 @@ export class InternshipService {
         'offset': offset,
       },
       errors: {
-        400: `Bad request`,
+        400: `Bad request: validation error`,
         401: `Error`,
       },
     });
@@ -294,6 +314,9 @@ export class InternshipService {
   public getInternshipSubmissionById({
     id,
   }: {
+    /**
+     * Id
+     */
     id: string,
   }): CancelablePromise<InternshipSubmission> {
     return this.httpRequest.request({
