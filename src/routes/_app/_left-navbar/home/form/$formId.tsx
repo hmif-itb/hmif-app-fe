@@ -72,9 +72,9 @@ function FormFillPage() {
   }, [bungkusStatus, savedAnswers]);
 
   const opensAt = form ? new Date(form.opensAt) : null;
-  const hasOpened =
-    opened || (opensAt ? opensAt.getTime() <= Date.now() : false);
   const sections = form?.sections ?? null;
+  const hasOpened =
+    opened || (opensAt ? opensAt.getTime() <= Date.now() : false) || !!sections;
 
   const handleAnswerChange = (questionId: string, value: AnswerValue) => {
     setAnswers((prev) => ({ ...prev, [questionId]: value }));
