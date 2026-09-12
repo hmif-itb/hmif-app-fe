@@ -3,7 +3,11 @@ import { FormQuestion, FormSection } from '~/api/generated';
 export type AnswerValue = string | string[];
 export type AnswersRecord = Record<string, AnswerValue>;
 
-export function isQuestionRequired(
+// Whether a question should be shown at all — independent of whether it's
+// required. A question is only hidden when it has an unsatisfied
+// `dependsOn` condition; `optional` questions are still visible, just not
+// mandatory (see isQuestionRequired).
+export function isQuestionVisible(
   question: FormQuestion,
   answers: AnswersRecord,
 ): boolean {
@@ -13,6 +17,14 @@ export function isQuestionRequired(
     return dependsAnswer.includes(question.dependsOn.value);
   }
   return dependsAnswer === question.dependsOn.value;
+}
+
+export function isQuestionRequired(
+  question: FormQuestion,
+  answers: AnswersRecord,
+): boolean {
+  if (question.optional) return false;
+  return isQuestionVisible(question, answers);
 }
 
 export function isQuestionAnswered(

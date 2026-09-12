@@ -12,16 +12,19 @@ type ComponentProps = {
   onChange: (value: AnswerValue) => void;
   error?: string;
   disabled?: boolean;
+  required?: boolean;
 };
 
+const RATING_OPTIONS = ['1', '2', '3', '4', '5'];
+
 export default function QuestionField(props: Readonly<ComponentProps>) {
-  const { question, value, onChange, error, disabled } = props;
+  const { question, value, onChange, error, disabled, required = true } = props;
 
   return (
     <div className="flex w-full flex-col gap-2 break-words">
       <Label className="break-words text-sm">
         {question.label}
-        <span className="text-red-500"> *</span>
+        {required && <span className="text-red-500"> *</span>}
       </Label>
 
       {question.type === 'text' && (
@@ -66,6 +69,25 @@ export default function QuestionField(props: Readonly<ComponentProps>) {
           onChange={(checked) => onChange(checked)}
           className="w-full"
         />
+      )}
+
+      {question.type === 'rating' && (
+        <RadioGroup
+          value={(value as string) ?? ''}
+          onValueChange={onChange}
+          disabled={disabled}
+          className="flex flex-row gap-4"
+        >
+          {RATING_OPTIONS.map((option) => (
+            <label
+              key={option}
+              className="flex flex-col items-center gap-1 text-sm"
+            >
+              <RadioGroupItem value={option} className="size-6" />
+              <span>{option}</span>
+            </label>
+          ))}
+        </RadioGroup>
       )}
 
       {error && <p className="text-xs text-red-600">{error}</p>}

@@ -5,11 +5,12 @@
 export type FormQuestion = {
   id: string;
   label: string;
-  type: 'text' | 'textarea' | 'radio' | 'checkbox';
+  type: 'text' | 'textarea' | 'radio' | 'checkbox' | 'rating';
   options?: Array<string>;
   dependsOn?: {
     questionId: string;
     value: string;
   };
+  optional?: boolean;
 };
 

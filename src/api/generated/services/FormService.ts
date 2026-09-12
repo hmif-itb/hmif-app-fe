@@ -207,7 +207,7 @@ export class FormService {
     questions: Array<{
       questionId: string;
       label: string;
-      type: 'radio' | 'checkbox';
+      type: 'radio' | 'checkbox' | 'rating';
       options: Array<{
         value: string;
         count: number;

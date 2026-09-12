@@ -23,6 +23,7 @@ import {
   findFirstIncompleteSection,
   isQuestionAnswered,
   isQuestionRequired,
+  isQuestionVisible,
   isSectionComplete,
 } from './-constants';
 import {
@@ -226,7 +227,7 @@ function FormFillPage() {
                       {sections[sectionIndex].title}
                     </h2>
                     {sections[sectionIndex].questions
-                      .filter((q) => isQuestionRequired(q, answers))
+                      .filter((q) => isQuestionVisible(q, answers))
                       .map((question) => (
                         <QuestionField
                           key={question.id}
@@ -236,6 +237,7 @@ function FormFillPage() {
                             handleAnswerChange(question.id, value)
                           }
                           error={fieldErrors[question.id]}
+                          required={isQuestionRequired(question, answers)}
                         />
                       ))}
                   </div>
