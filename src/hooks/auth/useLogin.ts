@@ -28,5 +28,33 @@ export default function useLogin() {
     },
   });
 
-  return { login };
+  const devLogin = useMutation({
+    async mutationFn(credentials: {
+      email: string;
+      password: string;
+    }): Promise<User> {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL || ''}/api/auth/login/dev`,
+        {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(credentials),
+        },
+      );
+      if (!response.ok)
+        throw new Error(
+          response.status === 401
+            ? 'Invalid email or password'
+            : 'Development login unavailable',
+        );
+      return response.json();
+    },
+    onSuccess(data) {
+      invalidateSession(data);
+      navigate({ to: '/home' });
+    },
+  });
+
+  return { login, devLogin };
 }
