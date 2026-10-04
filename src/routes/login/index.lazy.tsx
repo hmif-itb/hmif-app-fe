@@ -38,7 +38,7 @@ function LoginPage(): JSX.Element {
         <img src={GoogleLogo} className="size-5" alt="" />
         Log in with Google
       </Button>
-      {import.meta.env.DEV && (
+      {__TEST_LOGIN_ENABLED__ && (
         <form
           className="flex w-full flex-col gap-3"
           onSubmit={(event) => {
@@ -50,7 +50,7 @@ function LoginPage(): JSX.Element {
             });
           }}
         >
-          <p className="text-white lg:text-black">Development test login</p>
+          <p className="text-white lg:text-black">Test account login</p>
           <input
             className="rounded border p-3 text-black"
             name="email"
