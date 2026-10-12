@@ -22,7 +22,7 @@ export default defineConfig(({ mode }) => {
       host: '127.0.0.1',
       port: 5173,
       strictPort: true,
-      allowedHosts: ['development.hmif.dev'],
+      allowedHosts: ['staging.hmif.dev'],
       proxy: {
         '/api': 'http://127.0.0.1:5000',
         '/socket.io': { target: 'http://127.0.0.1:5000', ws: true },
