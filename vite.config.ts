@@ -12,6 +12,24 @@ export default defineConfig(({ mode }) => {
   const appName = env.VITE_APP_NAME || 'PIPS!';
   const analyticsId = env.VITE_ANALYTICS_ID || null;
   return {
+    define: {
+      __TEST_LOGIN_ENABLED__: JSON.stringify(
+        (mode === 'development' || mode === 'staging') &&
+          env.VITE_ENABLE_TEST_LOGIN === 'true',
+      ),
+    },
+    server: {
+      host: '127.0.0.1',
+      port: 5173,
+      strictPort: true,
+      allowedHosts: ['staging.hmif.dev'],
+      proxy: {
+        '/api': 'http://127.0.0.1:5000',
+        '/socket.io': { target: 'http://127.0.0.1:5000', ws: true },
+        '/swagger': 'http://127.0.0.1:5000',
+        '/doc': 'http://127.0.0.1:5000',
+      },
+    },
     resolve: {
       alias: {
         '~': path.resolve(__dirname, './src'),

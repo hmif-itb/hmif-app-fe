@@ -28,5 +28,42 @@ export default function useLogin() {
     },
   });
 
-  return { login };
+  const devLogin = useMutation<User, Error, DevCredentials>({
+    // Production builds set __TEST_LOGIN_ENABLED__ to false, so the request below is compiled out of them.
+    mutationFn: __TEST_LOGIN_ENABLED__ ? requestDevLogin : testLoginUnavailable,
+    onSuccess(data) {
+      invalidateSession(data);
+      navigate({ to: '/home' });
+    },
+  });
+
+  return { login, devLogin };
+}
+
+interface DevCredentials {
+  email: string;
+  password: string;
+}
+
+async function requestDevLogin(credentials: DevCredentials): Promise<User> {
+  const response = await fetch(
+    `${import.meta.env.VITE_API_URL || ''}/api/auth/login/dev`,
+    {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(credentials),
+    },
+  );
+  if (!response.ok)
+    throw new Error(
+      response.status === 401
+        ? 'Invalid email or password'
+        : 'Development login unavailable',
+    );
+  return response.json();
+}
+
+function testLoginUnavailable(): Promise<User> {
+  return Promise.reject(new Error('Test login is off in this build'));
 }

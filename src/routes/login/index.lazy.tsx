@@ -9,7 +9,7 @@ export const Route = createLazyFileRoute('/login/')({
 });
 
 function LoginPage(): JSX.Element {
-  const { login } = useLogin();
+  const { login, devLogin } = useLogin();
 
   return (
     <LoginLayout>
@@ -38,6 +38,50 @@ function LoginPage(): JSX.Element {
         <img src={GoogleLogo} className="size-5" alt="" />
         Log in with Google
       </Button>
+      {__TEST_LOGIN_ENABLED__ && (
+        <form
+          className="flex w-full flex-col gap-3"
+          onSubmit={(event) => {
+            event.preventDefault();
+            const data = new FormData(event.currentTarget);
+            devLogin.mutate({
+              email: String(data.get('email')),
+              password: String(data.get('password')),
+            });
+          }}
+        >
+          <p className="text-white lg:text-black">Test account login</p>
+          <input
+            className="rounded border p-3 text-black"
+            name="email"
+            type="email"
+            placeholder="Email"
+            aria-label="Email"
+            autoComplete="username"
+            required
+          />
+          <input
+            className="rounded border p-3 text-black"
+            name="password"
+            type="password"
+            placeholder="Password"
+            aria-label="Password"
+            autoComplete="current-password"
+            required
+            maxLength={256}
+          />
+          {devLogin.error && (
+            <p role="alert" className="text-red-500">
+              {devLogin.error.message}
+            </p>
+          )}
+          <Button type="submit" disabled={devLogin.isPending}>
+            {devLogin.isPending
+              ? 'Logging in…'
+              : 'Log in with test credentials'}
+          </Button>
+        </form>
+      )}
     </LoginLayout>
   );
 }
